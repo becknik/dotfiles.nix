@@ -1,0 +1,8 @@
+keys:
+  - &secrets_jnnk age1xtmhyy5p0praad7k8wf8jejhapcj5dnm9hsq43amzwh76vhj9pxqd6mcju
+creation_rules:
+  - path_regex: desktop-env/secrets/[^/]+\.(yaml|key)$
+    key_groups:
+    - age:
+      - *secrets_jnnk
+    #- pgp:
