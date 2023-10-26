@@ -103,10 +103,9 @@
 				openFilesInNewWindow = "default";
 			};
 			telemetry.telemetryLevel = "error";
-			## Sync:
 			#settingsSync.ignoredSettings = ["-window.zoomLevel"];
 
-			# Security:
+			# Security/ Project Trust:
 			security.workspace.trust = {
 				untrustedFiles = "open";
 				enabled = false;
@@ -115,18 +114,25 @@
 
 			# Workbench Settings:
 			workbench = {
-				sideBar.location = "right";
 				startupEditor = "none";
 				reduceMotion = "on";
+				sideBar.location = "right";
+
 				tips.enabled = false;
-				editor.autoLockGroups = {};
-				editor.defaultBinaryEditor = "hexEditor.hexedit";
-				commandPalette.history = 0;
+
+				#editor.autoLockGroups = {};
+				#commandPalette.history = 0; # defaults to 50
 				enableExperiments = false;
 				sash.hoverDelay = 250;
-				editorAssociations."*.pdf" = "latex-workshop-pdf-hook";
-				editor.enablePreview = false; # Don't know if this was good, removed recursive fonts
-				editor.highlightModifiedTabs = true;
+
+				editor = {
+					enablePreview = false; # Don't know if this was good, removed recursive fonts
+				  highlightModifiedTabs = true;
+				};
+
+				editorAssociations = {
+					"*.pdf" = "latex-workshop-pdf-hook";
+				};
 			};
 
 			# Explorer settings:
@@ -134,7 +140,7 @@
 				confirmDelete = false;
 				confirmDragAndDrop = false;
 				incrementalNaming = "smart";
-				openEditors.sortOrder = "alphabetical";
+				#openEditors.sortOrder = "alphabetical"; # defaults to editorOrder
 			};
 
 			# Editor Settings:
@@ -143,22 +149,29 @@
 				hideLineNumbers = false;
 				restore = false;
 			};
+
 			editor = {
 				wordWrap = "on";
-				insertSpaces = false;
-				accessibilitySupport = "off";
-				autoClosingDelete = "always";
-				codeActionsOnSave.source.organizeImports = true;
-				formatOnSave = false;
-				formatOnSaveMode = "modificationsIfAvailable";
-				definitionLinkOpensInPeek = true;
-				linkedEditing = true;
+				rulers = [ { column = 80; } { column = 120; } ];
+				autoClosingDelete = "always"; # delete adjacent braces or "
+				stickyTabStops = true;
+
 				parameterHints.cycle = true;
-				unfoldOnClickAfterEndOfLine = true;
-				unicodeHighlight.includeComments = false;
-				formatOnPaste = true;
-				copyWithSyntaxHighlighting = true;
 				dragAndDrop = false;
+				copyWithSyntaxHighlighting = true;
+
+				definitionLinkOpensInPeek = true;
+
+				linkedEditing = true;
+				formatOnSave = false;
+				formatOnPaste = true;
+				formatOnSaveMode = "modifications"; # modificationsIfAvailable
+				codeActionsOnSave = {
+					source.organizeImports = true;
+				};
+
+				accessibilitySupport = "off";
+				unfoldOnClickAfterEndOfLine = true;
 				fastScrollSensitivity = 3;
 				glyphMargin = false;
 				hover.delay = 350;
@@ -167,25 +180,26 @@
 				multiCursorPaste = "full";
 				renderLineHighlight = "all";
 				renderWhitespace = "boundary";
-				rulers = [ { column = 80; } { column = 120; } ];
-				stickyTabStops = true;
 				fontSize = 13;
 				lineNumbers = "on";
-				unicodeHighlight.nonBasicASCII = false;
+
+				#insertSpaces = false; # overwritten by editor.detectIndentation
+				#unicodeHighlight.nonBasicASCII = false;
+				#unicodeHighlight.includeComments = false;
 
 				## Eye Candy
 				cursorBlinking = "smooth";
-				roundedSelection = false;
         minimap.renderCharacters = false;
+				#roundedSelection = false; # Defaults to true
 
 				## Typography & Fonts
 				lineHeight = 0;
 				fontFamily = "'Fira Code Nerd'";
-				fontVariations = true;
-				fontWeight = "400"; # Does not work properly
 				fontLigatures = true;
+				fontVariations = true;
 				guides.bracketPairs = "active";
 				guides.highlightActiveBracketPair = false;
+				#fontWeight = "400"; # Does not work properly
 
 				## Suggestions
 				suggest.preview = true;
@@ -206,7 +220,7 @@
 			## Files
 			files = {
 				trimFinalNewlines = true;
-				autoSave = "afterDelay";
+				autoSave = "afterDelay"; # autoSaveDelay = 1000ms
 				restoreUndoStack = false;
 				simpleDialog.enable = true;
 				hotExit = "off";
@@ -230,23 +244,30 @@
 			};
 
 			projectManager = {
-				git.baseFolders = [ "~/git-own" "~/git-foreign" ];
+				git.baseFolders = [ "~/devel/own" "~/devel/foreign" "~/devel/ide" ];
 				confirmSwitchOnActiveWindow = "onlyUsingSideBar";
 			};
 
 			path-intellisense = {
 				autoTriggerNextSuggestion = true;
+				extensionOnImport = true;
 				showHiddenFiles = true;
 			};
 
 			## cSpell:
 			cSpell = {
 				enabled = true;
-				enableFiletypes = [ "nix" "toml" "dockerfile" "tex" "xml" "shellscript" ];
 				caseSensitive = true;
-				suggestionsTimeout = 800;
+				#enableCompoundWords = true;
+				experimental.enableSettingsViewerV2 = false;
+
 				language = "en,de-DE";
+				enableFiletypes = [ "nix" "toml" "dockerfile" "tex" "xml" "shellscript" ];
+				#suggestionsTimeout = 800;
+				#diagnosticLevel = "Hint";
+
 				userWords = [ "UTF" "UTF-8" ];
+
 				ignorePaths = [
 					"package-lock.json"
 					"node_modules"
@@ -257,7 +278,6 @@
 					"*.conf"
 					"settings.json"
 				];
-				diagnosticLevel = "Hint"; # TODO
 			};
 
 			## Prettier # TODO
@@ -269,19 +289,22 @@
 			#editor.defaultFormatter = "esbenp.prettier-vscode";
 
 			## Neovim
-			vscode-neovim = {
-				logLevel = "warn";
-				mouseSelectionStartVisualMode = true;
-				#neovimExecutablePaths.darwin = "";
-			};
 			# Source: https://github.com/vscode-neovim/vscode-neovim
 			extensions.experimental.affinity = { asvetliakov.vscode-neovim = 1; };
+			vscode-neovim = {
+				logLevel = "warn";
+				mouseSelectionStartVisualMode = false; # TODO changed this
+				neovimClean = true;
+				#neovimExecutablePaths.darwin = "";
+			};
 
 			## Project Manager
 			projectManager = {
+				groupList = true;
 				ignoreProjectsWithinProjects = true;
 				openInNewWindowWhenClickingInStatusBar = true;
 				showParentFolderInfoOnDuplicates = true;
+				sortList = "Recent";
 			};
 
 			## Todo Tree
@@ -289,22 +312,43 @@
 				general = {
 					showActivityBarBadge = true;
 					statusBar = "current file";
-					tags = ["BUG" "HACK" "FIXME" "TODO" "XXX" "[ ]" "[x]" "todo"];
 					statusBarClickBehaviour = "cycle";
+					#tags = [ "BUG" "HACK" "FIXME" "TODO" "XXX" "[ ]" ];
+					tagGroups = {
+						FIX = [ "FIXME" "FIXIT" ];
+						"TODO" = [ "TODO" ];
+					};
 				};
 				tree = {
-					expanded = true;
+					expanded = false;
 					showCountsInTree = true;
-					buttons.reveal = false;
-					buttons.scanMode = true;
-					buttons.viewStyle = false;
 					scanMode = "workspace only";
-					buttons.export = true;
+					buttons = {
+						reveal = false;
+						scanMode = true;
+						viewStyle = false;
+						export = true;
+					};
 				};
 				regex.enableMultiLine = true;
 			};
 
-			## Language
+			# Code Snap
+			codesnap = {
+				realLineNumbers = true;
+				showWindowTitle = true;
+				transparentBackground = true;
+				shutterAction = "copy";
+			};
+
+			# Marp
+			markdown.marp = {
+				enableHtml = true;
+				pdf.noteAnnotations = true;
+				pdf.outlines = "headings";
+			};
+
+			## Languages
 
 			### Markdown
 			"[markdown]" = {
@@ -323,27 +367,25 @@
 			markdownlint.run = "onSave";
 
 			### Bash:
-			bashIde = {
-				highlightParsingErrors = true;
-				#shellcheckPath = "/usr/bin/shellcheck";
-			};
+			bashIde.highlightParsingErrors = true;
 			shellcheck.disableVersionCheck = true;
 
 			### Java
 			redhat.telemetry.enabled = false;
 			java = {
 				autobuild.enabled = false;
-				codeGeneration.generateComments = true;
-				codeGeneration.hashCodeEquals.useInstanceof = true;
-				codeGeneration.useBlocks = true;
+				codeGeneration = {
+					generateComments = true;
+					hashCodeEquals.useInstanceof = true;
+					useBlocks = true;
+				};
+				project = {
+					encoding = "setDefault";
+					importOnFirstTimeStartup = "automatic";
+				};
 				jdt.ls.androidSupport.enabled = "off";
-				project.encoding = "setDefault";
-				project.importOnFirstTimeStartup = "automatic";
 				sharedIndexes.enabled = "off";
 			};
-			#java.jdt.ls.java.home = "/usr/lib/jvm/java-17-openjdk/";
-			#"java.format.settings.profile": "Custom Settings",
-			#"java.format.settings.url": "~/settings/idea-java-formatter-settings.xml",
 			"[java]" = {
 				editor.defaultFormatter = "redhat.java";
 			};
@@ -365,21 +407,22 @@
         latex.recipe.default = "lastUsed";
 			};
 
-			# Messy Settings Part
+			### Rust
+			rust-analyzer.restartServerOnConfigChange = true;
+			"[rust]".editor.defaultFormatter = "rust-lang.rust-analyzer";
 
+			### Nix
       nix = {
         enableLanguageServer = true;
         serverPath = "nil";
       };
-			rust-analyzer.restartServerOnConfigChange = true;
-			"[rust]" = { editor.defaultFormatter = "rust-lang.rust-analyzer"; };
+
+			# Messy Settings Part
+
 			lldb.suppressUpdateNotifications = true;
-			codesnap.realLineNumbers = true;
-			codesnap.showWindowTitle = true;
-			codesnap.transparentBackground = true;
-			codesnap.shutterAction = "copy";
 			terminal.integrated.scrollback = 5000;
-			files.watcherExclude = {
+			outline.collapseItems = "alwaysCollapse";
+			files.watcherExclude = { # Scala Metals
 				"**/.bloop" = true;
 				"**/.metals" = true;
 				"**/.ammonite" = true;
