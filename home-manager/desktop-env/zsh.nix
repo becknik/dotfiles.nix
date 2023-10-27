@@ -28,7 +28,7 @@
         extended = false; # Write the history file in the ":start:elapsed;command" format
         #ignoreAllDups = true; # Delete old recorded entry if new entry is a duplicate # TODO not yet available
         ignoreDups = true; # Don't record an entry that was just recorded again
-        ignorePatterns = [ "git" "gcl" "alias" ];
+        ignorePatterns = [ "git" "gcl" "alias" "cd" "gcsm" "ls" "la" ];
         ignoreSpace = true; # Share history between all sessions.
         path = "${config.programs.zsh.dotDir}/.zhistroy";
         save = 10000; # Amount of lines to save
@@ -73,7 +73,7 @@
       oh-my-zsh = {
         enable = true;
         theme = "bullet-train"; # TODO This repo (is) should be synced via program.git.repositories in the devel.nix file
-        custom = "${config.programs.zsh.dotDir}/oh-my-zsh/custom";
+        custom = "${config.home.homeDirectory}/.config/oh-my-zsh/custom";
         extraConfig =  # oh-my-zsh extra settings for plugins
 # $1=exit_status, $2=command, $3=elapsed_time
 ''function bgnotify_formatted {
