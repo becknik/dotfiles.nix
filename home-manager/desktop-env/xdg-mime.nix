@@ -12,6 +12,10 @@
 
   xdg.mimeApps = {
     enable = true;
+    associations.added = {
+      "x-scheme-handler/sms" = "org.gnome.Shell.Extensions.GSConnect.desktop";
+      "x-scheme-handler/tel" = "org.gnome.Shell.Extensions.GSConnect.desktop";
+    };
     defaultApplications = {
       "text/plain" = [ "nvim.desktop" ]; # TODO might this cause dolphin to not open neovim properly?
       #"application/pdf" = ["org.gnome.Evince.desktop"];

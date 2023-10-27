@@ -130,10 +130,10 @@ in {
       #move-to-side-w = [ "<Super><Alt>H" ];
 
       # TODO Collides with the "open multiple instances" shortcuts
-      #move-to-workspace-1 = [ "<Shift><Super>1" ];
-      #move-to-workspace-2 = [ "<Shift><Super>2" ];
-      #move-to-workspace-3 = [ "<Shift><Super>3" ];
-      #move-to-workspace-4 = [ "<Shift><Super>4" ];
+      move-to-workspace-1 = [ "<Shift><Super>1" ];
+      move-to-workspace-2 = [ "<Shift><Super>2" ];
+      move-to-workspace-3 = [ "<Shift><Super>3" ];
+      move-to-workspace-4 = [ "<Shift><Super>4" ];
       #move-to-workspace-5 = [ "<Shift><Super>5" ];
 
       move-to-workspace-down =[ "<Shift><Super>j" ];
