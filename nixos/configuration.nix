@@ -16,6 +16,9 @@
       ./virtualisation.nix
 
       <home-manager/nixos>
+
+      #<disko/modules/disko.nix>
+      #./disko/ext4-unencrypted.nix
   ];
 
   system.autoUpgrade.enable = true;

@@ -67,6 +67,9 @@ $ tree
 - Clone this repo anywhere
 
 ```bash
+# Creating the partition layout
+sudo nix run github:nix-community/disko -- --mode disko $HOME/devel/own/dotfiles.nix/disko/ext4-unencrypted.nix --arg disks '[ "/dev/nvme0n1" ]'
+
 # Add Module-Channels for NixOS (can also be used for home-manager standalone, but need different channel urls)
 sudo nix-channel --add https://nixos.org/channels/nixos-23.05 nixos
 sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
@@ -87,6 +90,7 @@ Things I have to do after the installation...
 
 - [ ] Enable the installed GNOME-extensions
 - [ ] `ssh-add -v ~/.ssh/<ssh-key-name>`
+- [ ] `git clone https://github.com/caiogondim/bullet-train.zsh $HOME/devel/foreign/bullet-train.zsh/bullet-train.zsh-theme`
 
 ### Logins
 
