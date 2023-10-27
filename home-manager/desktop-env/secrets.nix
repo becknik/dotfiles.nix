@@ -1,6 +1,23 @@
 { config, ... }:
 
-{
+let
+  createMailSecret = providerName: {
+    "mail/${providerName}/address" = {
+      sopsFile = ./secrets/mail.yaml;
+      key = "${providerName}/address";
+    };
+
+    "mail/${providerName}/password" = {
+      sopsFile = ./secrets/mail.yaml;
+      key = "${providerName}/password";
+    };
+  };
+
+  mailSecretPosteo = createMailSecret "posteo";
+  mailSecretGmx = createMailSecret "gmx";
+  mailSecretUni = createMailSecret "uni";
+  mailSecretWork1 = createMailSecret "work1";
+in {
   # Sources:
   # https://github.com/Mic92/sops-nix
   # https://github.com/FiloSottile/age
@@ -21,7 +38,7 @@
       # The name of the secret file in `/run/...`, which must be an element of this secrets sopsFile attribute
       # (or element of the defaultSopsFile, if it's set above)
 
-      githubPersonalPub = {
+      "github_personal.pub" = {
         sopsFile = ./secrets/git.yaml;
         format = "yaml";
         key = "github/personal/pub.ed25519"; # "No tested [yaml]-data structures [apart from strings] are supported right now" - even directories aren't?! # TODO
@@ -31,7 +48,7 @@
 
       # DON'T FORGET TO RUN `systemctl --user restart sops-nix.service` AFTER CHANGING THE CONFIGURATION OF ONE SECRET!!!
 
-      githubPersonal = {
+      "github_personal" = {
         sopsFile = ./secrets/git.yaml;
         key = "github/personal/.ed25519";
         path = "${config.home.homeDirectory}/.ssh/github_personal";
@@ -44,7 +61,10 @@
         format = "binary";
         sopsFile = ./secrets/keepassxc.yaml;
       };
-    };
+
+      # Mail Stuff
+    } // mailSecretPosteo // mailSecretGmx // mailSecretUni // mailSecretWork1;
   };
 
+  systemd.user.services.thunderbird.Unit.After = [ "sops-nix.service" ];
 }

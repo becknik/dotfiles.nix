@@ -1,7 +1,11 @@
 { pkgs, ... }:
 
 {
-  imports = [ ./programs/librewolf.nix ];
+  imports = [
+    #./media/mail.nix # TODO home-manager account integration won't work with thunderbird...
+
+    ./programs/librewolf.nix
+  ];
 
   # Multimedia
   services.easyeffects.enable = true;
@@ -55,7 +59,14 @@
     # Mail
     thunderbird = {
       enable = true;
-      profiles = {}; # this was necessary...
+      profiles."default" = {
+        isDefault = true;
+        withExternalGnupg = true;
+      };
+
+      settings = {
+        "privacy.donottrackheader.enabled" = true;
+      };
     };
   };
 

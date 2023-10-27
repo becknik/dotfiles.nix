@@ -90,8 +90,9 @@ Things I have to do after the installation...
 
 ### Logins
 
+- [ ] Thunderbird Mail Accounts :(
+- [ ] Firefox
 - [ ] Nextcloud, Dropbox
-- [ ] Firefox, Thunderbird
 - [ ] JetBrains (IDEA, CLion, ...)
 - [ ] Whatsapp, Telegram, Signal
 - [ ] Discord, Element
