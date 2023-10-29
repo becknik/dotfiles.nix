@@ -10,6 +10,7 @@
             priority = 1;
             name = "esp";
             size = "512M";
+            type = "EF00"; # Might set the gpt EFI, BOOT flags?
             content = {
               type = "filesystem";
               format = "vfat";

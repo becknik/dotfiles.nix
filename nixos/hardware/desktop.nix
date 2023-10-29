@@ -10,15 +10,33 @@
   networking.hostName = "dnix";
 
   # File Systems & Devices
-  fileSystems."/" = {
-      device = "/dev/disk/by-uuid/7cf25cd9-8d47-4fac-8371-4e9901d5b202";
-      fsType = "ext4";
-   };
   fileSystems."/boot" = {
-      device = "/dev/disk/by-uuid/E35B-9B7F";
-      fsType = "vfat";
+    device = "/dev/disk/by-uuid/B6C7-8A7B";
+    fsType = "vfat";
   };
-  swapDevices = [ { device = "/dev/disk/by-uuid/0d61e6c7-90fa-48f5-8f75-a572010d7cb4"; } ];
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/d1724ada-6dfe-45b7-8a0d-e65aa0127205";
+    fsType = "ext4";
+    options = [
+      "lazytime"
+      "commit=60"
+    ];
+  };
+  fileSystems."/nix" = {
+    device = "/dev/disk/by-uuid/113a8b60-b786-4252-a9ca-e5c3b55cae0a";
+    fsType = "ext4";
+    options = [
+      "noatime"
+    ];
+  };
+  swapDevices = [
+    {
+      device = "/.swapfile";
+      size = 32*1024;
+      randomEncryption.enable = true;
+    }
+  ];
+
 
   # Kernel Stuff
   boot = {

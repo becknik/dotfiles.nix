@@ -66,8 +66,8 @@
         # auto-complete with Ctrl + Space
         + "bindkey '^ ' autosuggest-accept\n"
         #https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git-escape-magic
-        + "autoload -Uz git-escape-magic"
-        #+ "cbonsai --multiplier 5 -m 'It takes strength to resist the dark side. Only the weak embrace it.' -p"
+        + "autoload -Uz git-escape-magic\n"
+        + "cbonsai --multiplier 5 -m 'It takes strength to resist the dark side. Only the weak embrace it.' -p"
       ;
 
       oh-my-zsh = {

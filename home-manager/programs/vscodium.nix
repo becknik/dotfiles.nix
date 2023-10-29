@@ -74,13 +74,17 @@
         name = "vscode-monokai-night";
         publisher = "fabiospampinato";
         version = "latest";
+        #curl https://marketplace.visualstudio.com/_apis/public/gallery/publishers/fabiospampinato/vsextensions/vscode-monokai-night/latest/vspackage | sha256sum # TODO this wont work atm...
+				# https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-monokai-night
         sha256 = "ed59bf678ea3d861b67365d990096627d64267da20fafded6e80f64dfdb78060";
       }
       { # German cSpell dictionary
         name = "code-spell-checker-german";
         publisher = "streetsidesoftware";
         version = "latest";
-        sha256 = "174ca44df140652a967e7b5829658482d5322e29814f44347e2136d7dfd8a86b";
+        # https://marketplace.visualstudio.com/_apis/public/gallery/publishers/streetsidesoftware/vsextensions/code-spell-checker-german/latest/vspackage
+				# https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker-german&ssr=false#version-history
+        sha256 = "8d6d9b7f5363a759faee4853d7e2f6a7114107e1766d3680ba87f3d80a833cee";
       }
       # Monokai Pro
       # Vue volar

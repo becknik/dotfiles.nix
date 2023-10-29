@@ -82,6 +82,7 @@
     };
     please.enable = true; # Tool that enables executing a command as another user
   };
+  services.pcscd.enable = true; # Must be running for age-plugin-yubikey
   #services.clamav.daemon.enable = false; # Not considered necessary, because we're on NixOS :D
 
   # Shell Setup
