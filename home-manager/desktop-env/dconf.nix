@@ -215,7 +215,7 @@ in {
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
       screensaver = [ "<Shift><Super>q" ];
-      search = [ "<Super>slash" ];
+      search = [ "<Super>slash" "<Super>space" ];
       terminal = [ "<Super>t" ];
     };
 
@@ -223,6 +223,10 @@ in {
       ambient-enabled = false; # TODO Whats this?!
       idle-dim = false; # "
       power-saver-profile-on-low-battery = true;
+    };
+
+    "org/gnome/shell" = {
+      favorite-apps = ["org.gnome.Terminal.desktop" "org.kde.dolphin.desktop" "librewolf.desktop" "obsidian.desktop" "thunderbird.desktop" "teams-for-linux.desktop" "org.gnome.Pomodoro.desktop" "anki.desktop" "vscodium.desktop" "idea-ultimate.desktop" "clion.desktop" "org.keepassxc.KeePassXC.desktop"];
     };
 
     "org/gnome/shell/extensions/Logo-menu" = { # TODO

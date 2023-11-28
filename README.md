@@ -113,11 +113,11 @@ Things I have to do after the installation...
 
 - [ ] Enable the installed GNOME-extensions
 - [ ] `ssh-add -v ~/.ssh/<ssh-key-name>`
-- [ ] Configure the CPU-scheduler in `cpupower-gui`
+- [ ] Configure the CPU-scheduler and profile in `cpupower-gui`
 
 ### Logins
 
-- [ ] Thunderbird Mail Accounts :(
+- [ ] Thunderbird with Mail Accounts :(
 - [ ] Firefox
 - [ ] Nextcloud, Dropbox
 - [ ] JetBrains (IDEA, CLion, ...)

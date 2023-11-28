@@ -112,7 +112,14 @@
   # Boot Process
   boot = {
     kernelPackages = pkgs.linux_xanmod_latest_custom; # use my impure linux-overlay
-    tmp.useTmpfs = true; # for /tmp
+    tmp = {
+      useTmpfs = true; # for /tmp
+      cleanOnBoot = true;
+      # Source: https://github.com/NixOS/nixpkgs/issues/54707
+      # The following only makes sense when building huge packages like the Linux kernel is failing with something like
+      # `fatal error: error writing to /build/ccGD5Lsd.s: No space left on device`
+      tmpfsSize = "90%"; # at least: max{linux-2023-11-25: 20G}
+    };
     plymouth = {
       enable = true;
       theme = "breeze";
