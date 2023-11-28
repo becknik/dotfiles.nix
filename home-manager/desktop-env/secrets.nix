@@ -2,12 +2,12 @@
 
 let
   createMailSecret = providerName: {
-    "mail/${providerName}/address" = {
+    "${providerName}/address" = {
       sopsFile = ./secrets/mail.yaml;
       key = "${providerName}/address";
     };
 
-    "mail/${providerName}/password" = {
+    "${providerName}/password" = {
       sopsFile = ./secrets/mail.yaml;
       key = "${providerName}/password";
     };
@@ -16,7 +16,7 @@ let
   mailSecretPosteo = createMailSecret "posteo";
   mailSecretGmx = createMailSecret "gmx";
   mailSecretUni = createMailSecret "uni";
-  mailSecretWork1 = createMailSecret "work1";
+  #mailSecretWork1 = createMailSecret "work1";
 in {
   # Sources:
   # https://github.com/Mic92/sops-nix
@@ -27,7 +27,7 @@ in {
 
     # Intentionally set to the default path for the sops (not sops-nix) executables private-keys search:
     age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
-    # `cd home-manager && sops /desktop-env/secrets/<some-secret>` and sops-nix now use the same private key file
+    # `cd home-manager && sops ./desktop-env/secrets/<some-secret>` and sops-nix now use the same private key file
     # The path of a secret must match the golang regex pattern in the `.sops` file
 
     #defaultSopsFile = ./secrets/git.yaml; # Useful if only one secret file is used
@@ -55,7 +55,7 @@ in {
       };
 
       # Creation of secrets from binaries: `sops -e ./desktop-env/secrets/keepass.key > ./desktop-env/secrets/keepassxc.yaml`
-      # The path must match the golang regex-pattern from the `.sops` file
+      # The path must - likewise to the other secret files - match the golang regex-pattern from the `.sops` file
 
       "keepassxc.key" = {
         format = "binary";
@@ -63,7 +63,7 @@ in {
       };
 
       # Mail Stuff
-    } // mailSecretPosteo // mailSecretGmx // mailSecretUni // mailSecretWork1;
+    } // mailSecretPosteo // mailSecretGmx // mailSecretUni;
   };
 
   systemd.user.services.thunderbird.Unit.After = [ "sops-nix.service" ];

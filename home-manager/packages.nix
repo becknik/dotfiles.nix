@@ -46,7 +46,9 @@
     ### Secrets Management
     sops
     age
-    age-plugin-yubikey # TODO Buy one :)
+    #age-plugin-yubikey # This isn't working with sops-nix atm due to sops... https://github.com/Mic92/sops-nix/issues/377
+    yubikey-manager-qt
+    yubikey-personalization-gui
 
     ## Penetration Testing
     nmap
