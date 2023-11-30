@@ -84,7 +84,7 @@
         version = "latest";
         # https://marketplace.visualstudio.com/_apis/public/gallery/publishers/streetsidesoftware/vsextensions/code-spell-checker-german/latest/vspackage
 				# https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker-german&ssr=false#version-history
-        sha256 = "8d6d9b7f5363a759faee4853d7e2f6a7114107e1766d3680ba87f3d80a833cee";
+        sha256 = "ac09b7a5c2e7e87a169e159ea0aff40fdaf9a18f53210db710c877e6bbab8038";
       }
       # Monokai Pro
       # Vue volar

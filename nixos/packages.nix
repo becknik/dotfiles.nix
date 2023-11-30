@@ -74,7 +74,7 @@
 
   # Fonts
   nixpkgs.config.joypixels.acceptLicense = true;
-  fonts.fonts = with pkgs; [ # TODO fonts japan?
+  fonts.packages = with pkgs; [ # TODO fonts japan?
     monoid
     joypixels
     (nerdfonts.override { fonts = [ "FiraCode" "Hack" "SourceCodePro" ]; })

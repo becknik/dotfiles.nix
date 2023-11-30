@@ -171,7 +171,7 @@
   services.samba.openFirewall = true;
 
   # System Versioning
-  system.stateVersion = "23.05";
+  system.stateVersion = "23.11";
 
   # Home-Manager (NixOS-Module)
   # For standalone home-manager usage with this repo:

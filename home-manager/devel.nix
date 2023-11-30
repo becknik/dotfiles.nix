@@ -86,7 +86,7 @@
     ## Testing
     httpie
     newman
-    postman
+    #postman # TODO failed to build on update to 23.11
 
     ### SQL
     dbeaver

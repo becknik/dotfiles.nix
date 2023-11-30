@@ -14,9 +14,9 @@
       packages = [ pkgs.gnome.seahorse ];
     };
 
-    keyd = { # TODO keyd setup for laptop keyboard
+    keyd = { # TODO keyd setup for laptop keyboard & update to new 23.11 API
       enable = false;
-      settings = {
+      /*settings = {
         main = {
           capslock = "timeout(esc, 180, capslock)";
           #shift = oneshot(shift)
@@ -26,7 +26,7 @@
           #rightalt = oneshot(altgr)
           #capslock = overload(control, esc)
         };
-      };
+      };*/
     };
 
     psd.enable = true;

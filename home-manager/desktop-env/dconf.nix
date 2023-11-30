@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 
 let
   default_sidebar_width = 156;
@@ -56,6 +56,13 @@ in {
       video-framerate = 60;
     };
 
+   "org/gnome/calculator" = {
+      button-mode = "programming";
+      show-thousands = true;
+      base = 10;
+      word-size = 64;
+    };
+
     "org/gnome/SoundRecorder" = {
       audio-channel = "mono";
       audio-profile = "flac";
@@ -74,7 +81,7 @@ in {
       color-scheme = "prefer-dark";
       clock-show-weekday = true;
       enable-animations = false;
-      enable-hot-corners = false;
+      enable-hot-corners = true; # Can be useful when no keyboard is available
       icon-theme = "Tela-dark";
       show-battery-percentage = true;
       text-scaling-factor = 0.97;
@@ -166,6 +173,9 @@ in {
       toggle-fullscreen = [ "<Super>m" ];
       toggle-maximized = [ "<Super>k" ];
       unmaximize = [ "<Super>j" ];
+
+      toggle-overview = [ "<Super>s" ];
+      toggle-quick-settings = [ "<Shift><Super>s" ];
     };
 
     "org/gnome/desktop/wm/preferences" = {
@@ -203,7 +213,7 @@ in {
       dynamic-workspaces = false;
       edge-tiling = true;
       experimental-features = [ "scale-monitor-framebuffer" "rt-scheduler" "autoclose-xwayland" ];
-      workspaces-only-on-primary = true; # TODO This might be bad?
+      workspaces-only-on-primary = false; # TODO This should be enabled when using a laptop for presentations on external monitors
     };
 
     "org/gnome/mutter/keybindings" = {
@@ -245,12 +255,12 @@ in {
 
     "org/gnome/shell/extensions/auto-move-windows".application-list = [
       "teams-for-linux.desktop:3"
-      "org.mozilla.Thunderbird.desktop:3"
+      "thunderbird.desktop:3"
       "io.github.alainm23.planify.desktop:3"
-      "io.element.Element.desktop:4"
+      "element-desktop.desktop:4"
       "org.telegram.desktop.desktop:4"
       "com.github.eneshecan.WhatsAppForLinux.desktop:4"
-      "threema-desktop.desktop:4"
+      #"threema-desktop.desktop:4"
       "discord.desktop:4"
       "signal-desktop.desktop:4"
       #"signal-tray.desktop:4" # TODO
@@ -360,10 +370,10 @@ in {
       global-presets = false;
       moveresize-enabled = false;
 
-      preset-resize-1 = [ "1" ];
-      preset-resize-2 = [ "2" ];
-      preset-resize-3 = [ "3" ];
-      preset-resize-4 = [ "4" ];
+      preset-resize-1 = [ "w" ];
+      preset-resize-2 = [ "s" ];
+      preset-resize-3 = [ "q" ];
+      preset-resize-4 = [ "a" ];
 
       resize1 = "5x5 2:2 4:4, 1:1 3:3, 3:1 5:3, 3:3 5:5, 1:3 3:5";
       resize2 = "5x5 1:1 4:4, 2:1 5:4, 2:2 5:5, 1:2 4:5";
@@ -378,7 +388,7 @@ in {
 
     "org/gnome/shell/extensions/just-perfection" = {
       accessibility-menu = false;
-      activities-button = false;
+      activities-button = true; # since GNOME 45 this thing is amazing
       activities-button-icon-monochrome = false;
       activities-button-label = false;
       aggregate-menu = true;
@@ -574,5 +584,12 @@ in {
 
     "org/virt-manager/virt-manager/details".show-toolbar = true;
     "org/virt-manager/virt-manager/paths".image-default = "${config.home.homeDirectory}/vm";
+
+    # Set the EurKey keyboard layout as default (source: https://discourse.nixos.org/t/keyboard-layout-with-gnome/21996/9)
+    "org/gnome/desktop/input-sources" = {
+      show-all-sources = true;
+      sources = [ (lib.gvariant.mkTuple [ "xkb" "eu" ]) (lib.gvariant.mkTuple [ "xkb" "us+altgr-intl" ]) ];
+      xkb-options = [ "terminate:ctrl_alt_bksp" ];
+    };
   };
 }
