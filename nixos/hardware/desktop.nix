@@ -11,11 +11,11 @@
 
   # File Systems & Devices
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/B6C7-8A7B";
+    device = "/dev/disk/by-uuid/993E-935D";
     fsType = "vfat";
   };
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/d1724ada-6dfe-45b7-8a0d-e65aa0127205";
+    device = "/dev/disk/by-uuid/d3d26548-2e4e-49e6-a7a0-3d2c66b358b9";
     fsType = "ext4";
     options = [
       "lazytime"
@@ -23,7 +23,7 @@
     ];
   };
   fileSystems."/nix" = {
-    device = "/dev/disk/by-uuid/113a8b60-b786-4252-a9ca-e5c3b55cae0a";
+    device = "/dev/disk/by-uuid/382b34eb-f14b-438c-b7e8-abdcbe1b23e8";
     fsType = "ext4";
     options = [
       "noatime"

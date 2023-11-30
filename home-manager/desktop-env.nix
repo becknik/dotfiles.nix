@@ -44,6 +44,7 @@
   };
   #home.packages = with pkgs; [ handlr-regex ]; # Doesn't work on NixOS :(
 
+  xdg.configFile."gtk-3.0/settings.ini".force = true; # Only necessary for first deployment (?)
   gtk = {
     enable = true;
     gtk3 = {

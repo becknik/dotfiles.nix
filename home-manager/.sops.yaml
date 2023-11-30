@@ -1,13 +1,8 @@
 keys:
-  #- &secrets_jnnk age1xtmhyy5p0praad7k8wf8jejhapcj5dnm9hsq43amzwh76vhj9pxqd6mcju
-  - &key2023-11-28 age1c88pgm8tg0vldq6dqf4gu7xsphcvl7v77yrjsym0nvmd3xdkaats3a9usj
+  - &key2023-11-30 age1dgqn7cqhs4f47at4ls30tsvu5hat6zjn9knuftxxps05jdkrl4nq3tu9p9
 creation_rules:
-  # - path_regex: desktop-env/secrets/[^/]+\.(yaml|key)$
-  #   key_groups:
-  #   - age:
-  #     - *secrets_jnnk
-  #   #- pgp:
   - path_regex: desktop-env/secrets/[^/]+\.(yaml|key)$
+    #- pgp:
     key_groups:
     - age:
-      - *key2023-11-28
+      - *key2023-11-30

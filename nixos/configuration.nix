@@ -111,7 +111,8 @@
 
   # Boot Process
   boot = {
-    kernelPackages = pkgs.linux_xanmod_latest_custom; # use my impure linux-overlay
+    kernelPackages = pkgs.linuxPackages_xanmod_latest;
+    #kernelPackages = pkgs.linux_xanmod_latest_custom; # use my impure linux-overlay
     tmp = {
       useTmpfs = true; # for /tmp
       cleanOnBoot = true;

@@ -82,20 +82,30 @@ sudo nix-channel --update
 
 3. Disk Partitioning with Disko
 
-```bash
+```shell
 sudo nix run github:nix-community/disko \
-    --extra-experimental-feature nix-command --extra-experimental-feature flakes -- \\
-    --mode disko ./disko/ext4-unencrypted.nix --arg disks '[ "/dev/sdb" ]'
+    --extra-experimental-features nix-command --extra-experimental-features flakes -- \
+    --mode disko ./disko/ext4-unencrypted.nix --arg disks '[ "/dev/sdX" ]'
 # If the command succeeds, the partitions are mounted automatically under /mnt
 ```
 
-4. `sudo nixos-generate-config --root /mnt`
-5. Replace the UUIDs (etc?) from this repos `./nixos/harware/desktop.nix` with the settings from `/mnt/etc/nixos/hardware-configuration.nix`
-6. Comment out the home-manager user-config `import` in this repos `configuration.nix` (the home-manager part is to be done after successfully booting into the system)
-7. `mv -f` the `./nixos/*` to `/mnt/etc/nixos`. You may delete the hardware-configuration.nix if you're sure you have all the important settings in this repo `./nixos/hardware/*.nix`-file
-8. `cd /mnt && sudo nixos-install` (you might avoid the impure compilation of the kernel in `./nixos/packages/linux-xanmod.nix`)
-9. Then reboot into the system & comment in the `import` from step 6
-10. `git clone https://github.com/caiogondim/bullet-train.zsh $HOME/devel/foreign/bullet-train.zsh` to make the symlink specified in
+4. `sudo nixos-generate-config --root /mnt` and include the generated config in your nix configuration
+	- This can either be archieved by 1) replacing the `configuration.nix`s `import ./hardware/desktop.nix` with your `hardware-configuration.nix`, or...
+	- By 2) altering this repos `/nixos/hardware/desktop.nix` to your liking (by substituting the UUIDs, cpu-modules, etc.) and then `sudo rm /mnt/etc/nixos/hardware-configuration.nix`ing
+5. Comment out in `configuration.nix` the `users.jnnk = import /home/jnnk/.config/home-manager/home.nix;` line
+	- The home-manager part of the setup is to be done after successfully booting into the system
+6. `sudo cp -fr ./nixos/* /mnt/etc/nixos`
+7. Comment out in `configuration.nix` the `kernelPackages = pkgs.linux_xanmod_latest_custom;` line and use a kernel package from the nix repo database to avoid compilation of the kernel
+8. `cd /mnt && sudo nixos-install`
+9. `sudo cp dotfiles.nix /mnt/home/jnnk`
+10. Reboot into the system, then...
+	- Add the channels from step 2 (again)
+	- `mkdir $HOME/.config/home-manager && cp -r $HOME/dotfiles.nix/home-manager/* $HOME/.config/home-manager`
+11. Comment in the `import` from step 7 and run `sudo nixos-install` which is supposed to fail
+	- It will however create the `$HOME/devel/foreign` directory which is necessary for the next step
+	- I'm justbeing layz right here
+12. `git clone https://github.com/caiogondim/bullet-train.zsh $HOME/devel/foreign/bullet-train.zsh` to make the symlink specified in
+13. Toggle off the GNOME "Automatic Suspend" and `sudo nixos-rebuild boot`
 
 ### General
 
@@ -114,6 +124,8 @@ Things I have to do after the installation...
 - [ ] Enable the installed GNOME-extensions
 - [ ] `ssh-add -v ~/.ssh/<ssh-key-name>`
 - [ ] Configure the CPU-scheduler and profile in `cpupower-gui`
+- [ ] Delete the former capitalized xdg-user-dirs: `rm -fr Templates Videos Public Desktop Documents Downloads Pictures Music tmp` (TODO why is there a `tmp/cache-\$USER/oh-my-zsh` dir?!)
+- [ ] Create new nix-sops secrets due to accidental removal of the old primary key...
 
 ### Logins
 
@@ -124,3 +136,7 @@ Things I have to do after the installation...
 - [ ] Whatsapp, Telegram, Signal
 - [ ] Discord, Element
 - [ ] Teams?
+
+### Further
+
+- [ ] Enable autostart manually for keepassxc, telegram-desktop, whatsapp-for-linux, teams-for-linux & planify

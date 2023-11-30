@@ -112,6 +112,7 @@ in {
 
   ## Leftover KDE Support
   qt = {
+    enable = true;
     platformTheme = "gnome"; # leverages qgnomeplatform package; redundant due to gnome.core-os-services
     style = "adwaita-dark";
   };
