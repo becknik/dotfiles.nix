@@ -17,8 +17,9 @@
     typescript
 
     # C++
-    #unstable.gcc
-    unstable.clang
+    #nixpkgs-unstable.gcc
+    #nixpkgs-unstable.clang # TODO
+    clang
     cmake
     lld
     lldb

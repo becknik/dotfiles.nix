@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, pkgs, ... }:
+{ lib, pkgs, home-manager, ... }:
 
 {
   imports = [
@@ -15,7 +15,7 @@
 
       ./virtualisation.nix
 
-      <home-manager/nixos>
+      #<home-manager/nixos>
 
       #<disko/modules/disko.nix>
       #./disko/ext4-unencrypted.nix
@@ -176,18 +176,4 @@
   # System Versioning
   system.stateVersion = "23.11";
 
-  # Home-Manager (NixOS-Module)
-  # For standalone home-manager usage with this repo:
-  # 1) Link to local users `~.config/home-manager/home.nix`
-  # 2) Install home-manager standalone via `nix-shell '<home-manager>' -A install`
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-
-    sharedModules = [
-      <sops-nix/modules/home-manager/sops.nix>
-    ];
-
-    users.jnnk = import /home/jnnk/.config/home-manager/home.nix;
-  };
 }

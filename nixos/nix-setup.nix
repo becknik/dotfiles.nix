@@ -3,14 +3,8 @@
 {
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
-  # Adding `pkg.unstable` to access/ install unstable packages
   nixpkgs.config = {
     allowUnfree = true;
-    packageOverrides = pkgs: {
-      unstable = import <nixos-unstable> {
-        config = config.nixpkgs.config;
-      };
-    };
   };
 
   nix.settings = {

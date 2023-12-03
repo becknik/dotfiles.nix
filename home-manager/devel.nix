@@ -6,7 +6,7 @@
 
     ./devel/ides.nix # Tiny installation of ides without need for configuration
 
-    ./programs/neovim.nix # Nixvim neovim configuration
+    #./programs/neovim.nix # Nixvim neovim configuration
     ./programs/vscodium.nix
   ];
 

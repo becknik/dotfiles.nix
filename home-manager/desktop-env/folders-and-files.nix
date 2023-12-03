@@ -59,12 +59,12 @@
     # Files
 
     ## oh-my-zsh
-    "oh-my-zsh-custom-config-dir" = {
+/*     "oh-my-zsh-custom-config-dir" = { # TODO
       enable = true;
       target = "${config.programs.zsh.oh-my-zsh.custom}/themes/bullet-train.zsh-theme";
       #text = ''''; # TODO
       source = "${config.home.homeDirectory}/devel/foreign/bullet-train.zsh/bullet-train.zsh-theme";
-    };
+    }; */
 
     ## The application-internal way of generating an `electron.desktop` file is wrong and incompatible with NixOS due to dangling symlinks...
     "element-desktop-autostart" = {

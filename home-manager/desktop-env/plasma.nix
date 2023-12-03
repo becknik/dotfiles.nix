@@ -3,7 +3,6 @@
 {
   imports = [
     # sudo nix-channel --add https://github.com/pjones/plasma-manager/archive/trunk.tar.gz plasma-manager
-    <plasma-manager/modules>
   ];
 
   # TODO Grap the ones from my desktop
