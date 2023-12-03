@@ -55,17 +55,43 @@
   security.rtkit.enable = true; # TODO What's that?
 
   # Input
-  #i18n.inputMethod.enabled = "fcitx5"; # TODO fcitx5 setup
-  #i18n.inputMethod.addons = [ fcitx5-rime ];
-
-  # Old settings from Arch
-  #QT_QPA_PLATFORMTHEME='DEFAULT=qt5ct'
-  #GLFW_IM_MODULE = DEFAULT=fcitx
-  #GTK_IM_MODULE = DEFAULT=fcitx
-  #INPUT_METHOD = DEFAULT=fcitx
-  #XMODIFIERS  = DEFAULT=@im=fcitx
-  #IMSETTINGS_MODULE = DEFAULT=fcitx
-  #QT_IM_MODULE = DEFAULT=fcitx
+  i18n.inputMethod = {
+      enabled = "fcitx5";
+      fcitx5 = {
+        addons = with pkgs; [
+          fcitx5-mozc
+          fcitx5-gtk
+          #fcitx5-material-color
+        ];
+       ignoreUserConfig = true;
+        settings = { # How to determine these? Set `ignoreUserConfig` to false, then configure the setup you'd like &
+          # then cat the values of `$HOME/.config/fxcit5/*`
+          globalOptions = { # /etc/xdg/fcitx5/config
+            "Hotkey/TriggerKeys" = {
+              "0" = "Control+Super+space"; # modified this one
+            };
+          };
+          inputMethod = { # /etc/xdg/fcitx5/profile
+            "Groups/0" = {
+              Name = "Default";
+              "Default Layout" = "eu"; # For EurKEY
+              DefaultIM = "mozc";
+            };
+            "Groups/0/Items/0" = {
+              Name = "keyboard-eu"; # "
+              Layout = "";
+            };
+            "Groups/0/Items/1" = {
+              Name = "mozc";
+              Layout = "";
+            };
+            "GroupOrder" = {
+              "0" = "Default";
+            };
+          };
+        };
+      };
+  };
 
   # Wayland
   environment.sessionVariables = {
@@ -74,6 +100,13 @@
     OBSIDIAN_USE_WAYLAND = "1"; # "
     QT_QPA_PLATFORM = "wayland;xcb";
     LIBVA_DRIVER_NAME = "intel"; # Should be redundant
+    # Fcitx5
+    #GTK_IM_MODULE = "fcitx"; # redundant
+    #QT_IM_MODULE = "fcitx"; # "
+    #XMODIFIERS = "@im=fcitx"; # "
+
+    #SDL_IM_MODULE=fcitx
+    #GLFW_IM_MODULE=ibus # for kitty
   };
 
   programs = {
