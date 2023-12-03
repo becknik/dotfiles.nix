@@ -63,9 +63,32 @@
     gnuplot
     pandoc
     qtikz
-    texlive.combined.scheme-small # Need xelatex which is included right here
-    unstable.anki
-    unstable.marp-cli
+    anki
+    marp-cli
+
+    ## TeX Live
+
+    # Source for new 23.11 interface: https://github.com/NixOS/nixpkgs/issues/250243
+    (texlive.withPackages (ps: with ps; [
+      scheme-medium # Need xelatex which is included right here
+      # I'm really annoyed by manually listing every packages I need below and this solves it
+
+      ### General Purpose
+      biblatex biber
+      mmap enumitem pgfplots
+
+      ### Formatting
+
+      changepage #### Page Layout
+
+      csquotes #### Text
+
+      lipsum ### Nice-to-Haves
+
+     fifo-stack varwidth tabto-ltx totcount tikzmark ### Dependency of algpseudocodex
+
+      pdfcolmk ### ???
+    ] ))
 
     ## Trash
     neofetch
