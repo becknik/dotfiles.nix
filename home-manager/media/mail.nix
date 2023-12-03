@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ ... }:
 
 let
   getSecretPasswordCommand = provider: "cat $XDG_RUNTIME_DIR/secrets/mail/${provider}/password";
@@ -34,7 +34,6 @@ let
       enable = true;
       create = "maildir";
     };*/
-    thunderbird.enable = true;
     aerc.enable = false;
     neomutt.enable = false;
     notmuch.enable = false;

@@ -75,6 +75,8 @@ in {
       screen-magnifier-enabled = false;
     };
 
+    "org/gnome/desktop/search-providers".disable-external = true;
+
     #"org/gnome/desktop/input-sources".sources = ""; # TODO
 
     "org/gnome/desktop/interface" = {
@@ -176,6 +178,7 @@ in {
 
       toggle-overview = [ "<Super>s" ];
       toggle-quick-settings = [ "<Shift><Super>s" ];
+      switch-input-source = [ "" ]; # fixed collision with search & fcitx5
     };
 
     "org/gnome/desktop/wm/preferences" = {

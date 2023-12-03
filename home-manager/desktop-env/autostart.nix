@@ -5,13 +5,13 @@ let
   autostartPrograms = with pkgs; [
     thunderbird
     #keepassxc
-    element-desktop
+    #element-desktop # works, but launches the application without the `--hidden` flag...
     #telegram-desktop
     signal-desktop
     #whatsapp-for-linux
     discord
     #teams-for-linux
-    #pkgs.unstable.planify
+    #planify
   ];
 in
 {

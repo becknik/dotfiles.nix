@@ -5,6 +5,7 @@
     #./media/mail.nix # TODO home-manager account integration won't work with thunderbird...
 
     ./programs/librewolf.nix
+    ./programs/thunderbird.nix
   ];
 
   # Multimedia
@@ -16,8 +17,8 @@
     nextcloud-client = {
       # TODO implement sync-exclude.lst management
       enable = true;
-      startInBackground = true;
-      package = pkgs.nextcloud-client;
+      #startInBackground = true; # Keeps `Process 3436 (.nextcloud-wrap) of user 1000 dumped core.`-ing... - even after disabling, wtf?
+      # However, after setting up nextcloud, the autostart .desktop-files is created automatically
     };
     #dropbox.enable = true; # TODO dropbox
     # Privacy
@@ -56,18 +57,6 @@
           #--disable-features=UseChromeOSDirectVideoDecoder
       ];
     };
-    # Mail
-    thunderbird = {
-      enable = true;
-      profiles."default" = {
-        isDefault = true;
-        withExternalGnupg = true;
-      };
-
-      settings = {
-        "privacy.donottrackheader.enabled" = true;
-      };
-    };
   };
 
 
@@ -79,14 +68,14 @@
 
     ## Daily Software
     libreoffice-still
-    unstable.obsidian
+    obsidian
     birdtray # TODO does this work?
-    unstable.planify
+    planify
     nextcloud-client # TODO basically redundant, but necessary for .desktop file in NIX_PATH...
 
     ## Privacy
     keepassxc
-    unstable.tor-browser # same version under tor-browser-bundle-bin in 23.05
+    tor-browser
     gpa
 
     ## Chat Clients

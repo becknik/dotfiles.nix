@@ -25,7 +25,7 @@
   # XDG
   xdg = {
     enable = true; # activates XDG user directory management
-    cacheHome = "/tmp/cache-$USER/";
+    #cacheHome = "/tmp/cache-$USER/"; # no great idea due to some important cached data e.g. keypassxc
 
     ## User Dirs
     userDirs = {

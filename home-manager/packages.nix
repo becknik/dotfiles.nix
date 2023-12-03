@@ -32,7 +32,7 @@
     ### desktop-env
     wl-clipboard
 
-    ### hardware
+    ### Hardware
     cpufetch
     gparted
     ventoy

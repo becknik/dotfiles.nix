@@ -74,11 +74,22 @@
 
   # Fonts
   nixpkgs.config.joypixels.acceptLicense = true;
-  fonts.packages = with pkgs; [ # TODO fonts japan?
-    monoid
-    joypixels
-    (nerdfonts.override { fonts = [ "FiraCode" "Hack" "SourceCodePro" ]; })
-  ];
+  fonts = {
+    packages = with pkgs; [
+      ipaexfont
+      monoid
+      joypixels
+      (nerdfonts.override { fonts = [ "FiraCode" "Hack" "SourceCodePro" ]; })
+    ];
+    /*enableDefaultFonts = true;
+    fontconfig = {
+      defaultFonts = {
+        serif = [ "Vazirmatn" "Ubuntu" ];
+        sansSerif = [ "Vazirmatn" "Ubuntu" ];
+        monospace = [ "Ubuntu" ];
+      };
+    };*/
+  };
 
   # Print all via configuration.nix installed packages into /etc/current-system-packages.txt
   environment.etc."current-system-packages.txt".text =

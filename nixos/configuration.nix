@@ -24,8 +24,11 @@
   system.autoUpgrade.enable = true;
 
   # Bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader = {
+    timeout = 2;
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+  };
 
   # Time
   time.timeZone = "Europe/Berlin";
@@ -155,11 +158,11 @@
   # source: https://man7.org/linux/man-pages/man5/logind.conf.5.html
 
   ## Automatic User Login
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "jnnk";
+  services.xserver.displayManager.autoLogin.enable = false;
+  #services.xserver.displayManager.autoLogin.user = "jnnk";
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
-  systemd.services."getty@tty1".enable = false;
-  systemd.services."autovt@tty1".enable = false;
+  #systemd.services."getty@tty1".enable = false;
+  #systemd.services."autovt@tty1".enable = false;
 
   # Firewall
   networking.nftables.enable = true; # TODO might (according to wiki) cause trouble with docker and libvirt

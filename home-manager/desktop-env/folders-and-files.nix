@@ -66,6 +66,36 @@
       source = "${config.home.homeDirectory}/devel/foreign/bullet-train.zsh/bullet-train.zsh-theme";
     };
 
+    ## The application-internal way of generating an `electron.desktop` file is wrong and incompatible with NixOS due to dangling symlinks...
+    "element-desktop-autostart" = {
+      enable = true;
+      target = ".config/autostart/element.desktop";
+      text =
+''[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Element
+Comment=Forcing element-desktop to start properly
+Exec=element-desktop --hidden
+StartupNotify=false
+Terminal=false'';
+    };
+
+    "whatsapp-for-linux-autostart" = {
+      enable = true;
+      target = ".config/autostart/whatsapp-for-linux.desktop";
+      text =
+''[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Whatsapp
+Comment=Fixing the autostart toggle of whatsapp-for-linux doing nothing at all
+Exec=whatsapp-for-linux
+StartupNotify=false
+Terminal=false'';
+    };
+
+
     ## cargo (target code optimization) config
     "cargo-config" = {
       enable = true;

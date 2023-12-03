@@ -2,9 +2,41 @@
 
 ## Project Structure
 
-```bash
-$ tree
-.
+```shell
+$ tree # main branch
+/home/jnnk/devel/own/dotfiles.nix
+├── disko
+│   ├── ext4-encrypted.nix
+│   └── ext4-unencrypted.nix
+├── home-manager
+│   ├── desktop-env
+│   │   ├── autostart.nix
+│   │   ├── dconf.nix
+│   │   ├── folders-and-files.nix
+│   │   ├── plasma.nix
+│   │   ├── secrets
+│   │   │   ├── git.yaml
+│   │   │   ├── gpg.yaml
+│   │   │   ├── keepassxc.yaml
+│   │   │   └── mail.yaml
+│   │   ├── secrets.nix
+│   │   ├── xdg-mime.nix
+│   │   └── zsh.nix
+│   ├── desktop-env.nix
+│   ├── devel
+│   │   ├── ides.nix
+│   │   └── proglangs.nix
+│   ├── devel.nix
+│   ├── home.nix
+│   ├── media
+│   │   └── mail.nix
+│   ├── media.nix
+│   ├── packages.nix
+│   ├── programs
+│   │   ├── librewolf.nix
+│   │   ├── neovim.nix
+│   │   └── vscodium.nix
+│   └── virtualisation.nix
 ├── nixos
 │   ├── configuration.nix
 │   ├── desktop-env.nix
@@ -13,40 +45,11 @@ $ tree
 │   │   ├── desktop.nix
 │   │   └── laptop.nix
 │   ├── nix-setup.nix
-│   ├── packages.nix
 │   ├── packages
 │   │   └── linux-xanmod.nix
-│   └── virtualisation.nix
-├── home-manager
-│   ├── desktop-env.nix
-│   ├── desktop-env
-│   │   ├── autostart.nix
-│   │   ├── dconf.nix
-│   │   ├── folders-and-files.nix
-│   │   ├── plasma.nix
-│   │   ├── secrets.nix
-│   │   ├── secrets
-│   │   │   ├── git.yaml
-│   │   │   ├── gpg.yaml
-│   │   │   └── keepassxc.yaml
-│   │   ├── xdg-mime.nix
-│   │   └── zsh.nix
-│   ├── devel.nix
-│   ├── devel
-│   │   ├── ides.nix
-│   │   └── proglangs.nix
-│   ├── home.nix
-│   ├── media.nix
 │   ├── packages.nix
-│   ├── programs
-│   │   ├── librewolf.nix
-│   │   ├── neovim.nix
-│   │   └── vscodium.nix
 │   └── virtualisation.nix
-├── README.md
-└── disko
-    ├── ext4-encrypted.nix
-    └── ext4-unencrypted.nix
+└── README.md
 ```
 
 ## Setup
@@ -90,20 +93,20 @@ sudo nix run github:nix-community/disko \
 ```
 
 4. `sudo nixos-generate-config --root /mnt` and include the generated config in your nix configuration
-	- This can either be archieved by 1) replacing the `configuration.nix`s `import ./hardware/desktop.nix` with your `hardware-configuration.nix`, or...
-	- By 2) altering this repos `/nixos/hardware/desktop.nix` to your liking (by substituting the UUIDs, cpu-modules, etc.) and then `sudo rm /mnt/etc/nixos/hardware-configuration.nix`ing
+   - This can either be archieved by 1) replacing the `configuration.nix`s `import ./hardware/desktop.nix` with your `hardware-configuration.nix`, or...
+   - By 2) altering this repos `/nixos/hardware/desktop.nix` to your liking (by substituting the UUIDs, cpu-modules, etc.) and then `sudo rm /mnt/etc/nixos/hardware-configuration.nix`ing
 5. Comment out in `configuration.nix` the `users.jnnk = import /home/jnnk/.config/home-manager/home.nix;` line
-	- The home-manager part of the setup is to be done after successfully booting into the system
+   - The home-manager part of the setup is to be done after successfully booting into the system
 6. `sudo cp -fr ./nixos/* /mnt/etc/nixos`
 7. Comment out in `configuration.nix` the `kernelPackages = pkgs.linux_xanmod_latest_custom;` line and use a kernel package from the nix repo database to avoid compilation of the kernel
 8. `cd /mnt && sudo nixos-install`
 9. `sudo cp dotfiles.nix /mnt/home/jnnk`
 10. Reboot into the system, then...
-	- Add the channels from step 2 (again)
-	- `mkdir $HOME/.config/home-manager && cp -r $HOME/dotfiles.nix/home-manager/* $HOME/.config/home-manager`
+    - Add the channels from step 2 (again)
+    - `mkdir $HOME/.config/home-manager && cp -r $HOME/dotfiles.nix/home-manager/* $HOME/.config/home-manager`
 11. Comment in the `import` from step 7 and run `sudo nixos-install` which is supposed to fail
-	- It will however create the `$HOME/devel/foreign` directory which is necessary for the next step
-	- I'm justbeing layz right here
+    - It will however create the `$HOME/devel/foreign` directory which is necessary for the next step
+    - I'm justbeing layz right here
 12. `git clone https://github.com/caiogondim/bullet-train.zsh $HOME/devel/foreign/bullet-train.zsh` to make the symlink specified in
 13. Toggle off the GNOME "Automatic Suspend" and `sudo nixos-rebuild boot`
 
@@ -135,8 +138,16 @@ Things I have to do after the installation...
 - [ ] JetBrains (IDEA, CLion, ...)
 - [ ] Whatsapp, Telegram, Signal
 - [ ] Discord, Element
+- [ ] Obsidian
+- [ ] Anki
 - [ ] Teams?
 
 ### Further
 
-- [ ] Enable autostart manually for keepassxc, telegram-desktop, whatsapp-for-linux, teams-for-linux & planify
+- [ ] Enable autostart manually for:
+  - [ ] keepassxc
+  - [ ] telegram-desktop
+  - [ ] planify
+  - [x] element-desktop (manually created in `folders-and-files.nix`)
+  - [x] whatsapp-for-linux (")
+  - [ ] teams-for-linux

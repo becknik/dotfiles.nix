@@ -25,7 +25,7 @@
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    options = "--delete-older-than 5d";
+    options = "--delete-older-than 14d";
   };
 
   # TODO Self-compilation of the whole system with optimizations

@@ -11,7 +11,7 @@ in {
       enable = true;
 
       ## X11
-      layout = "us";
+      layout = "eu";
       xkbVariant = "";
 
       ## GDM
@@ -67,6 +67,7 @@ in {
 
   ## Manual Installations
   ++ ( with pkgs; [
+    gedit
     colord-kde
     adwaita-qt
     adwaita-qt6
@@ -87,7 +88,7 @@ in {
   ++ (with pkgs.gnomeExtensions; [
     alphabetical-app-grid
     appindicator
-    auto-move-windows # redundant
+    #auto-move-windows # redundant & causes collisions warnings on gnome 45
     blur-my-shell
     dash-to-dock
     #removable-drive-menu
@@ -96,8 +97,8 @@ in {
     gsconnect
     gtile
     just-perfection
-    kimpanel # Necessary ??
-    launch-new-instance # redundant
+    kimpanel # Used for a nice gtk-ish fcitx5 theming
+    #launch-new-instance # redundant & causes collision warnings on gnome 45
     logo-menu
     #pixel-saver
     quick-settings-tweaker
