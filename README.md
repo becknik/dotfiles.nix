@@ -44,12 +44,8 @@ $ tree # main branch
 │   ├── flake.lock
 │   ├── flake.nix
 │   ├── gnome.nix
-│   ├── hardware
-│   │   ├── desktop.nix
-│   │   └── laptop.nix
+│   ├── hardware-configuration.nix
 │   ├── nix-setup.nix
-│   ├── packages
-│   │   └── linux-xanmod.nix
 │   ├── packages.nix
 │   └── virtualisation.nix
 └── README.md
@@ -84,10 +80,10 @@ sudo nix run github:nix-community/disko \
    - This can either be archieved by 1) replacing the `configuration.nix`s `import ./hardware/desktop.nix` with your `hardware-configuration.nix`, or...
    - By 2) altering this repos `/nixos/hardware/desktop.nix` to your liking (by substituting the UUIDs, cpu-modules, etc.) and then `sudo rm /mnt/etc/nixos/hardware-configuration.nix`ing
 4. Comment out in `configuration.nix` the `kernelPackages = pkgs.linux_xanmod_latest_custom;` line and use a kernel package from the nix repo database instead to save some installation time
-5. `cd /mnt && sudo nixos-install --flake <repo-root>/nixos`
+5. `cd /mnt && sudo nixos-install --flake <repo-root>/nixos#dnix`
 6. `sudo cp dotfiles.nix /mnt/home/jnnk` to spare re-cloning this repo
-7. `sudo nixos-rebuild --flake ~/dotfiles.nix/nixos switch`
-8. Comment in the Linux kernel overlay from step again, turn off GNOME's "Automatic Suspend" and `sudo nixos-rebuild --flake ~/dotfiles.nix/nixos boot`
+7. `sudo nixos-rebuild --flake ~/dotfiles.nix/nixos#dnix switch`
+8. Comment in the Linux kernel overlay from step again, turn off GNOME's "Automatic Suspend" and `sudo nixos-rebuild --flake ~/dotfiles.nix/nixos#dnix boot`
 
 ## TODO-List
 

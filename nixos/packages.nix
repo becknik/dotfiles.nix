@@ -1,20 +1,18 @@
 { config, lib, pkgs, ...}:
 {
-  imports = [ ./packages/linux-xanmod.nix ];
-
-  # System-level packages
   programs = {
     git.enable = true;
 
-    ## TODO System Neovim Setup
-    /*neovim = {
+    # System Neovim Setup
+    # Gets overwritten by the home-manager one
+    neovim = {
       enable = true;
       defaultEditor = true;
       viAlias = true;
       vimAlias = true;
-    };*/
+    };
 
-    ## Chromium (in the hope that the home-managed version reads this)
+    # Chromium (in the hope that the home-managed version reads this)
     chromium = {
       extraOpts = {
         "SavingBrowserHistoryDisabled" = true;
@@ -32,41 +30,14 @@
     };
   };
 
-  ## TODO PGAdmin?
-  /*deployment.keys."pgadmin-local" = {
-    text = "admin";
-    user = config.users.users.pgadmin.name;
-    group = config.users.users.pgadmin.group;
-    persmissions = "0400";
-  };*/
-
-  /*services= {
-    pgadmin = {
-      enable = true;
-      initialEmail = "jannikb@posteo.de";
-      initialPasswordFile = /run/keys/pgadmin-local; # TODO
-      settings = {
-        SERVER_MODE = lib.mkDefault false;
-      };
-      openFirewall = false; # just to make sure
-    };
-    postgresql = {
-      enable = true;
-      package = pkgs.postgresql;
-      authentication = lib.mkOverride 10 ''
-        #type database  DBuser  auth-method
-        local all       all     trust
-      '';
-    };
-  };*/
-
-  ## Manual installation
+  # Manual Installation
   environment.systemPackages = with pkgs; [
     linux-firmware
 
-    ### Utils
+    ## Utils
     efibootmgr
     usbutils
+    cryptsetup
   ];
 
   # "Bloat" Removal
@@ -81,17 +52,9 @@
       joypixels
       (nerdfonts.override { fonts = [ "FiraCode" "Hack" "SourceCodePro" ]; })
     ];
-    /*enableDefaultFonts = true;
-    fontconfig = {
-      defaultFonts = {
-        serif = [ "Vazirmatn" "Ubuntu" ];
-        sansSerif = [ "Vazirmatn" "Ubuntu" ];
-        monospace = [ "Ubuntu" ];
-      };
-    };*/
   };
 
-  # Print all via configuration.nix installed packages into /etc/current-system-packages.txt
+  # Prints all system packages (installed by configuration.nix) into /etc/current-system-packages.txt
   environment.etc."current-system-packages.txt".text =
     let
       packages = builtins.map (p: "${ p.name }") config.environment.systemPackages;

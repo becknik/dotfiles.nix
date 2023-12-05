@@ -3,7 +3,7 @@
 {
   xdg.portal = {
     #enable = true; # redundant due to gnome.core-os-services
-    extraPortals = with pkgs; [ xdg-desktop-portal-kde ]; # TODO is this even necessary?
+    extraPortals = with pkgs; [ xdg-desktop-portal-kde ]; # No specific reason to enable this
     # ++ [ xdg-desktop-portal-gtk ] conflicts with xdg-desktop-portal-gtk of same version already being present on the system
   };
 
@@ -14,27 +14,12 @@
       packages = [ pkgs.gnome.seahorse ];
     };
 
-    keyd = { # TODO keyd setup for laptop keyboard & update to new 23.11 API
-      enable = false;
-      /*settings = {
-        main = {
-          capslock = "timeout(esc, 180, capslock)";
-          #shift = oneshot(shift)
-          #meta = oneshot(meta)
-          #control = oneshot(control)
-          #leftalt = oneshot(alt)
-          #rightalt = oneshot(altgr)
-          #capslock = overload(control, esc)
-        };
-      };*/
-    };
-
     psd.enable = true;
 
     ## CUPS & Printing
     printing = {
       enable = true;
-      drivers = with pkgs; [ brgenml1lpr ]; # TODO
+      drivers = with pkgs; [ brgenml1lpr ]; # This works out of the box ftw
     };
     avahi = {
       enable = true;
@@ -52,9 +37,12 @@
   ## PipeWire (2/2)
   sound.enable = true;
   hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true; # TODO What's that?
+  security.rtkit.enable = true; # Pipewire and Pulse seem to acquire realtime scheduling with this one
+  # Declared in pulseaudio.nix and optionally in pipewire.nix
 
   # Input
+
+  ## Fcitx5
   i18n.inputMethod = {
       enabled = "fcitx5";
       fcitx5 = {
@@ -64,8 +52,7 @@
           #fcitx5-material-color
         ];
        ignoreUserConfig = true;
-        settings = { # How to determine these? Set `ignoreUserConfig` to false, then configure the setup you'd like &
-          # then cat the values of `$HOME/.config/fxcit5/*`
+        settings = { # How to determine these? Set `ignoreUserConfig` to false, then configure the setup you'd like & then cat the values of `$HOME/.config/fxcit5/*`
           globalOptions = { # /etc/xdg/fcitx5/config
             "Hotkey/TriggerKeys" = {
               "0" = "Control+Super+space"; # modified this one
@@ -93,22 +80,27 @@
       };
   };
 
-  # Wayland
+  # Environment variables
   environment.sessionVariables = {
+
+    ## Wayland
     NIXOS_OZONE_WL = "1";
     MOZ_ENABLE_WAYLAND = "1"; # Just to make sure
     OBSIDIAN_USE_WAYLAND = "1"; # "
     QT_QPA_PLATFORM = "wayland;xcb";
+
+    ## Graphics
     LIBVA_DRIVER_NAME = "intel"; # Should be redundant
-    # Fcitx5
+
+    ## Fcitx5
     #GTK_IM_MODULE = "fcitx"; # redundant
     #QT_IM_MODULE = "fcitx"; # "
-    #XMODIFIERS = "@im=fcitx"; # "
-
+    #XMODIFIERS = "@im=fcitx"; # " & causes error
     #SDL_IM_MODULE=fcitx
     #GLFW_IM_MODULE=ibus # for kitty
   };
 
+  # Etc
   programs = {
     firefox.nativeMessagingHosts.gsconnect = true; # Might be redundant, I think
     nm-applet.enable = true;

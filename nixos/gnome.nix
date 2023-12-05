@@ -5,7 +5,7 @@ let
   mkForce = value: lib.mkOverride 50 value;
 in {
 
-  # Basic GNOME Desktop Environment setup
+  # Basic GNOME Desktop Environment Setup
   services = {
     xserver = {
       enable = true;
@@ -21,6 +21,7 @@ in {
       };
       desktopManager.gnome.enable = true;
     };
+
 
     ## GNOME Services
     # Source: https://github.com/NixOS/nixpkgs/blob/nixos-23.05/nixos/modules/services/x11/desktop-managers/gnome.nix
@@ -43,9 +44,10 @@ in {
     };
   };
 
+
   # Additional GNOME Programs
   programs.gnome-terminal.enable = lib.mkDefault true;
-  programs.gpaste.enable = true; # TODO Do I really need this?
+  #programs.gpaste.enable = true;
 
   ## Manual Installation of additional Tools
   environment.systemPackages = with pkgs.gnome; [
@@ -63,6 +65,7 @@ in {
     networkmanagerapplet # redundant (see desktop-env), but necessary for home-manager to find the .desktop file
   ])
 
+
   # KDE/ Qt Support
 
   ## Manual Installations
@@ -73,42 +76,41 @@ in {
     adwaita-qt6
   ])
 
+
   ## Replacements for GNOME Tools
    ++ (with pkgs.libsForQt5; [
     dolphin
     dolphin-plugins
     gwenview
-    kate # TODO this pulls in Konsole and I don't know if I can stop it from doing so...
+    kate # This pulls in Konsole and I don't know if I can stop it from doing so, but its fine I guess
     #(kate.override { propagatedUserEnvPkgs = []; })
     ktouch
     okular
   ])
 
+
   # Adding some GNOME Extensions
   ++ (with pkgs.gnomeExtensions; [
     alphabetical-app-grid
     appindicator
-    #auto-move-windows # redundant & causes collisions warnings on gnome 45
     blur-my-shell
     dash-to-dock
-    #removable-drive-menu
     espresso
-    #extensions-sync
     gsconnect
     gtile
     just-perfection
-    kimpanel # Used for a nice gtk-ish fcitx5 theming
-    #launch-new-instance # redundant & causes collision warnings on gnome 45
+    kimpanel # GTK-ish fcitx5 theming
     logo-menu
     #pixel-saver
     quick-settings-tweaker
     rounded-window-corners
-    #user-themes
     vitals
-    #workspace-indicator-2 # gnome-45 might bring a good default one making this unnecesary
 
-    # Missing:
-    # windowsNavigarot nasa-pod window-list places-menu gtk4-ding apps-menu (what's this?!)
+    #auto-move-windows # redundant & causes collisions warnings on gnome 45
+    #launch-new-instance # redundant & causes collision warnings on gnome 45
+    #workspace-indicator-2 # gnome-45 might bring a good default one making this unnecessary
+
+    # Missing: windowsNavigator nasa-pod window-list places-menu gtk4-ding apps-menu (what's this?!)
   ]);
 
   ## Leftover KDE Support
@@ -117,6 +119,7 @@ in {
     platformTheme = "gnome"; # leverages qgnomeplatform package; redundant due to gnome.core-os-services
     style = "adwaita-dark";
   };
+
 
   # Remove Bloat & Tools to be replaced
   environment.gnome.excludePackages = (with pkgs.gnome; [
@@ -129,6 +132,7 @@ in {
     nautilus
     sushi
     totem
+    yelp
   ]) ++ (with pkgs; [
     gnome-console
     gnome-connections

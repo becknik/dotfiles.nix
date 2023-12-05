@@ -8,8 +8,8 @@
     };
   };
 
-  home.packages = with pkgs; [
+/*   home.packages = with pkgs; [ # TODO remove virt-manager from home-manager
     virt-manager
     virt-viewer # TODO what's this exacltly?
-  ];
+  ]; */
 }

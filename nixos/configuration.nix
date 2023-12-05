@@ -6,22 +6,23 @@
 
 {
   imports = [
-      ./hardware/desktop.nix # Formerly hardware-config.nix
+      ./hardware-configuration.nix
 
-      ./nix-setup.nix
+      ./nix-setup.nix # Setup of nix & nixpkgs
       ./packages.nix # Installation of a few system packages
       ./gnome.nix # Addition of some kde tools, removal of bloat, etc.
-      ./desktop-env.nix
+      ./desktop-env.nix # Setup of services for desktop-experience like sound, input, printing, ...
 
-      ./virtualisation.nix
-
-      #<home-manager/nixos>
-
-      #<disko/modules/disko.nix>
-      #./disko/ext4-unencrypted.nix
+      ./virtualisation.nix # virtualbox, libvirtd, podman containerization
   ];
 
-  system.autoUpgrade.enable = true;
+
+  # System Settings
+  system = {
+    stateVersion = "23.11";
+    autoUpgrade.enable = true;
+  };
+
 
   # Bootloader
   boot.loader = {
@@ -30,25 +31,30 @@
     efi.canTouchEfiVariables = true;
   };
 
+
   # Time
   time.timeZone = "Europe/Berlin";
   services.timesyncd.enable = true; # should be activated by default unless container
 
+
   # Locale Setup
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "de_DE.UTF-8";
-    LC_IDENTIFICATION = "de_DE.UTF-8";
-    LC_MEASUREMENT = "de_DE.UTF-8";
-    LC_MONETARY = "de_DE.UTF-8";
-    LC_NAME = "de_DE.UTF-8";
-    LC_NUMERIC = "de_DE.UTF-8";
-    LC_PAPER = "de_DE.UTF-8";
-    LC_TELEPHONE = "de_DE.UTF-8";
-    LC_TIME = "en_US.UTF-8";
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    extraLocaleSettings = {
+      LC_ADDRESS = "de_DE.UTF-8";
+      LC_IDENTIFICATION = "de_DE.UTF-8";
+      LC_MEASUREMENT = "de_DE.UTF-8";
+      LC_MONETARY = "de_DE.UTF-8";
+      LC_NAME = "de_DE.UTF-8";
+      LC_NUMERIC = "de_DE.UTF-8";
+      LC_PAPER = "de_DE.UTF-8";
+      LC_TELEPHONE = "de_DE.UTF-8";
+      LC_TIME = "en_US.UTF-8";
+    };
   };
 
-  # Hardware
+
+  # Software for Hardware
   services = {
     #hardware.bolt.enable = true; # implied by gnome.core-os-services
     fstrim = {
@@ -58,8 +64,10 @@
     cpupower-gui.enable = true;
   };
 
+
   ## Networking
   networking = {
+    hostName = "dnix"; # This has to be set, else the configuration will default to the hostname "nixos" in the flake.nix and won't build this system any more, unless #dnix is specified after the flake.nix URL...
     useDHCP = lib.mkDefault true;
     networkmanager = {
       enable = true; # actually redundant due to gnome.core-os-services, but you never know...
@@ -68,11 +76,21 @@
       # networking.tempAddresses is properly set up by default
     };
   };
+
   services.resolved.enable = true; # systemd-resolved
 
+
+  # Firewall
+  networking.nftables.enable = true; # TODO NFTables might (according to wiki) cause trouble with docker and libvirt, test this out
+  networking.firewall.enable = true;
+  ## Firewall Ports to open
+  networking.firewall.allowedTCPPorts = [ ];
+  networking.firewall.allowedUDPPorts = [ ];
+  services.avahi.openFirewall = true;
+  services.samba.openFirewall = true;
+
+
   # Security & Secrets
-  security.pam.services.gdm.enableGnomeKeyring = true;
-  programs.firejail.enable = false; # TODO
   security = {
     sudo = {
       enable = true; # redundant
@@ -85,21 +103,12 @@
     };
     please.enable = true; # Tool that enables executing a command as another user
   };
+
   services.pcscd.enable = true; # Must be running for age-plugin-yubikey
+  programs.firejail.enable = false; # I'm not actively using this tool
+  security.pam.services.gdm.enableGnomeKeyring = true;
   #services.clamav.daemon.enable = false; # Not considered necessary, because we're on NixOS :D
 
-  # Shell Setup
-  programs.zsh = {
-    enable = true;
-    syntaxHighlighting.enable = true; # TODO Should be enabled through home-manager, which somehow isn't available atm so...
-    /*autosuggestions.enable = true; # home-manager
-    ohMyZsh = {
-      enable = true;
-      plugins = [ "man" ];
-      theme = "agnoster";
-    };*/
-  };
-  users.defaultUserShell = pkgs.zsh;
 
   # User Setup
   users.mutableUsers = false;
@@ -112,10 +121,12 @@
     useDefaultShell = true;
   };
 
+
   # Boot Process
   boot = {
     kernelPackages = pkgs.linuxPackages_xanmod_latest;
     #kernelPackages = pkgs.linux_xanmod_latest_custom; # use my impure linux-overlay
+
     tmp = {
       useTmpfs = true; # for /tmp
       cleanOnBoot = true;
@@ -124,15 +135,17 @@
       # `fatal error: error writing to /build/ccGD5Lsd.s: No space left on device`
       tmpfsSize = "90%"; # at least: max{linux-2023-11-25: 20G}
     };
+
     plymouth = {
       enable = true;
       theme = "breeze";
     };
   };
 
-  ## sysctl
+
+  # Sysctl
   boot.kernel.sysctl = {
-    # TODO https://documentation.suse.com/sles/15-SP3/html/SLES-all/cha-tuning-memory.html https://docs.kernel.org/admin-guide/sysctl/vm.html
+    # TODO Recherche on interesting sysctl options https://documentation.suse.com/sles/15-SP3/html/SLES-all/cha-tuning-memory.html https://docs.kernel.org/admin-guide/sysctl/vm.html
     #"vm.dirty_writeback_centisecs" = 1500;
     # Source: https://wiki.archlinux.org/title/Sysctl#Enable_TCP_Fast_Open
     "net.ipv4.tcp_fastopen" = 3;
@@ -144,9 +157,10 @@
     "net.ipv4.icmp_ignore_bogus_error_responses" = 1;
   };
 
-  ## systemd
 
-  ### journald
+  # Systemd
+
+  ## Journald
   # source: https://man7.org/linux/man-pages/man5/journald.conf.5.html
   services.journald.extraConfig =
     # Initialized with 10% of the respective file system
@@ -154,26 +168,16 @@
     # Initalized with 4G
     + "RuntimeMaxFileSize=128M";
 
-  ### logind # TODO
-  # source: https://man7.org/linux/man-pages/man5/logind.conf.5.html
+  ## Logind
+  # TODO Logind config might be interesting for laptops https://man7.org/linux/man-pages/man5/logind.conf.5.html
 
-  ## Automatic User Login
-  services.xserver.displayManager.autoLogin.enable = false;
-  #services.xserver.displayManager.autoLogin.user = "jnnk";
-  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
-  #systemd.services."getty@tty1".enable = false;
-  #systemd.services."autovt@tty1".enable = false;
 
-  # Firewall
-  networking.nftables.enable = true; # TODO might (according to wiki) cause trouble with docker and libvirt
-  networking.firewall.enable = true;
-  ## Firewall Ports to open
-  networking.firewall.allowedTCPPorts = [ ];
-  networking.firewall.allowedUDPPorts = [ ];
-  services.avahi.openFirewall = true;
-  services.samba.openFirewall = true;
-
-  # System Versioning
-  system.stateVersion = "23.11";
+  # Shell Setup
+  programs.zsh = {
+    enable = true;
+    syntaxHighlighting.enable = true; # TODO Should be enabled through home-manager, which somehow isn't available atm so...
+    #autosuggestions.enable = true; # Configured in home-manager
+  };
+  users.defaultUserShell = pkgs.zsh;
 
 }

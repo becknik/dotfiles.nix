@@ -12,7 +12,8 @@
 
     sops-nix = {
       url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable"; # TODO ???
+      inputs.nixpkgs-stable.follows = "nixpkgs";
     };
 
     plasma-manager = {
@@ -24,27 +25,49 @@
     nixvim = {
       url = "github:nix-community/nixvim/nixos-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
+      #inputs.pre-commit-hooks.inputs.nixpkgs-stable.follows = "nixpkgs"; # TODO Doesn't follows the nixvim inputs - bug report?
     };
   };
 
   outputs = input-attrs@{ self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, plasma-manager, nixvim, ... }:
   let
-    overlay-unstable = final: prev: {
-      unstable = nixpkgs-unstable.legacyPackages.${prev.system};
-      # unstable = import nixpkgs-unstable { # TODO Couldn't get this working
-      #   inherit system;
-      #   config.allowUnfree = true;
-      # };
+    current-system = "x86_64-linux";
+
+    overlay-unstable = self: super: {
+      unstable = import input-attrs.nixpkgs-unstable {
+        system = current-system;
+        config.allowUnfree = true;
+      };
     };
   in {
     nixosConfigurations = {
       dnix = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+        system = current-system;
         #specialArgs = { inherit nixpkgs-unstable; };
 
         modules = [
           # Enables pkgs.unstable
-          ({ ... }: { nixpkgs.overlays = [ overlay-unstable ]; })
+          ({ config, pkgs, lib, ... }: { nixpkgs.overlays = [
+            overlay-unstable
+
+            (final: prev: { # TODO Move overlays into separate file?
+              linux_xanmod_latest_custom = pkgs.linuxPackagesFor (pkgs.linux_xanmod_latest.override (old: {
+                # Optimizations
+                # TODO https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=linux-clear
+                # Maybe interesting: https://discourse.nixos.org/t/overriding-nativebuildinputs-on-buildlinux/24934
+                stdenv = prev.impureUseNativeOptimizations prev.stdenv;
+                # Disable the Proton and Wine stuff
+                structuredExtraConfig = with lib.kernel; {
+                  FUTEX = no;
+                  FUTEX_PI = no;
+                  WINESYNC = no;
+                };
+                # Disable programming language errors in the compilation-log
+                ignoreConfigErrors = true;
+              }));
+            })
+            ];
+          })
 
           # NixOS configuration
           ./configuration.nix

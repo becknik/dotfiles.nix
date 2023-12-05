@@ -5,37 +5,34 @@
     allowUnfree = true;
   };
 
-  nix.settings = {
-    cores = 20; # leave 4 of my 24 logical CPUs free, useful for compilations
-    auto-optimise-store = true;
+  nix = {
+    optimise.automatic = true;
+    settings = {
+      cores = 20; # leave 4 of my 24 logical CPUs free, useful for compilations
+      auto-optimise-store = true;
 
-    experimental-features = [
-      "nix-command" # Enables some useful tools like the `nix edit '<nixpkgs>' <some-package-name>`
-      "flakes" # TODO Figure out what this is and why I should waste even more time with this OS config...
-    ];
+      experimental-features = [
+        "nix-command" # Enables some useful tools like the `nix edit '<nixpkgs>' <some-package-name>`
+        "flakes"
+      ];
+    };
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 14d";
+    };
   };
-
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 14d";
-  };
-
-  # TODO Self-compilation of the whole system with optimizations
-  /*nix.settings.system-features = [ "benchmark" "big-parallel" "kvm" "nixos-test" "gccarch-raptorlake" "gccarch-x86-64-v3"];
-  nixpkgs.localSystem = {
-    gcc.arch = "raptorlake";
-    gcc.tune = "raptorlake";
-    #gcc.arch = "x86-64-v3";
-    #gcc.tune = "x86-64-v3";
-    system = "x86_64-linux";
-  };*/
-
-  #programs.ccache.enable = false; # TODO Don't think that this is necessary for my purposes
-  #sloppiness = locale,time_macros
-  #cache_dir = /home/jnnk/.cache/ccache
-  #max_size = 1.0G
 }
+
+# Stuff to get self-compilation of the whole system with cpu-optimizations to work. I find this idea ridiculous now...
+/*nix.settings.system-features = [ "benchmark" "big-parallel" "kvm" "nixos-test" "gccarch-raptorlake" "gccarch-x86-64-v3"];
+nixpkgs.localSystem = {
+  gcc.arch = "raptorlake";
+  gcc.tune = "raptorlake";
+  #gcc.arch = "x86-64-v3";
+  #gcc.tune = "x86-64-v3";
+  system = "x86_64-linux";
+};*/
 
 # Arch Linux compilation flags setup
 #CFLAGS="-march=native -O3 -pipe -fno-plt -fexceptions \
