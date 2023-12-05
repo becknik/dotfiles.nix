@@ -1,14 +1,6 @@
 { ... }:
 
-let
-  nixvim = import (builtins.fetchGit {
-    url = "https://github.com/nix-community/nixvim";
-    ref = "nixos-23.05";
-  });
-  nixvim_source = nixvim.homeManagerModules.nixvim;
-in {
-  imports = [ nixvim_source ];
-
+{
   # Neovim TODO https://mipmip.github.io/home-manager-option-search/?query=neovim
   programs = {
 		/*neovim = { # Conflicts with nixvim below. Default editor set in desktop.env file

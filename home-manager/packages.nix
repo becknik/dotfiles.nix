@@ -40,10 +40,8 @@
 
     ## NixOS
     nixos-option
-    # nixpkgs-unstable.nixd # TODO figure out how to set this up to work properly - should be superior to nil
-    # nixpkgs-unstable.nil
-    nixd
-    nil
+    unstable.nixd # TODO figure out how to set this up to work properly - should be superior to nil
+    unstable.nil
 
     ### Secrets Management
     sops

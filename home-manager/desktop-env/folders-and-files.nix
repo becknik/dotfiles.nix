@@ -58,13 +58,17 @@
 
     # Files
 
-    ## oh-my-zsh
-/*     "oh-my-zsh-custom-config-dir" = { # TODO
+    ## oh-my-zsh theme
+      "oh-my-zsh-custom-config-dir" = {
       enable = true;
-      target = "${config.programs.zsh.oh-my-zsh.custom}/themes/bullet-train.zsh-theme";
-      #text = ''''; # TODO
-      source = "${config.home.homeDirectory}/devel/foreign/bullet-train.zsh/bullet-train.zsh-theme";
-    }; */
+      target = "${config.programs.zsh.oh-my-zsh.custom}/themes";
+      source = builtins.fetchGit {
+        name = "caiogondim-bullet-train.zsh";
+        url = "https://github.com/caiogondim/bullet-train.zsh";
+        ref = "master";
+        rev = "d60f62c34b3d9253292eb8be81fb46fa65d8f048";
+      }; # Former setup by symlinking: "${config.home.homeDirectory}/devel/foreign/bullet-train.zsh/bullet-train.zsh-theme";
+    };
 
     ## The application-internal way of generating an `electron.desktop` file is wrong and incompatible with NixOS due to dangling symlinks...
     "element-desktop-autostart" = {

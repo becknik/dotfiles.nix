@@ -9,7 +9,7 @@
 
     ./desktop-env/dconf.nix
     ./desktop-env/xdg-mime.nix # Default apps - I think this might grow rapidly
-    #./desktop-env/plasma.nix # Setup of KDE apps with plasma-manager, partly by using the plasma-manager auto exporter on Arch
+    ./desktop-env/plasma.nix # Setup of KDE apps with plasma-manager, partly by using the plasma-manager auto exporter on Arch
 
     ./desktop-env/autostart.nix # Sad try on xdg-autostarting some apps
   ];

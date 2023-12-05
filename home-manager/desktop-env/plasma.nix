@@ -1,11 +1,7 @@
 { ... }:
 
 {
-  imports = [
-    # sudo nix-channel --add https://github.com/pjones/plasma-manager/archive/trunk.tar.gz plasma-manager
-  ];
-
-  # TODO Grap the ones from my desktop
+  # TODO Grab the ones from my desktop
   programs.plasma.configFile = {
     kdeglobals = {
       "Colors:View".BackgroundNormal = "#2E2E2E";

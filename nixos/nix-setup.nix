@@ -1,8 +1,6 @@
-{ config, lib, ... }:
+{ ... }:
 
 {
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-
   nixpkgs.config = {
     allowUnfree = true;
   };
@@ -10,6 +8,7 @@
   nix.settings = {
     cores = 20; # leave 4 of my 24 logical CPUs free, useful for compilations
     auto-optimise-store = true;
+
     experimental-features = [
       "nix-command" # Enables some useful tools like the `nix edit '<nixpkgs>' <some-package-name>`
       "flakes" # TODO Figure out what this is and why I should waste even more time with this OS config...
