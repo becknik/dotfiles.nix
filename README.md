@@ -5,7 +5,7 @@
 ```shell
 $ tree # main branch
 /home/jnnk/devel/own/dotfiles.nix
-├── disko
+── disko
 │   ├── ext4-encrypted.nix
 │   └── ext4-unencrypted.nix
 ├── home-manager
@@ -35,11 +35,14 @@ $ tree # main branch
 │   ├── programs
 │   │   ├── librewolf.nix
 │   │   ├── neovim.nix
+│   │   ├── thunderbird.nix
 │   │   └── vscodium.nix
 │   └── virtualisation.nix
 ├── nixos
 │   ├── configuration.nix
 │   ├── desktop-env.nix
+│   ├── flake.lock
+│   ├── flake.nix
 │   ├── gnome.nix
 │   ├── hardware
 │   │   ├── desktop.nix
@@ -54,12 +57,8 @@ $ tree # main branch
 
 ## Setup
 
-- Highly customized GNOME with some KDE tooling
-- Neovim & VSCode
-- ...
-
-## Utilized Modules
-
+- Flake-based NixOS 23.11 setup
+- Highly customized GNOME DE with some KDE tools
 - [home-manager](https://github.com/nix-community/home-manager)
 - [sops-nix](https://github.com/Mic92/sops-nix) & [age](https://github.com/FiloSottile/age)
 - [nixvim](https://github.com/nix-community/nixvim)
@@ -67,23 +66,12 @@ $ tree # main branch
 
 ## Getting Started
 
+> After my switch to the flake-setup, I altered this instruction significantly.
+> It's not tested on my machine so far, so it might (and probably will) lack some edge case steps.
+> My guess is, that something with my ssh git setup goes bananas...
+
 1. Clone this repo & `cd` into it
-2. Add the channels needed. Whether sudo or not should be clear if you want to use standalone home-manager (not tested so far) or NixOS
-
-```bash
-# Add Module-Channels for NixOS (can also be used for home-manager standalone, but need different channel urls)
-sudo nix-channel --add https://nixos.org/channels/nixos-23.05 nixos
-sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
-sudo nix-channel --add https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz home-manager
-sudo nix-channel --add https://github.com/Mic92/sops-nix/archive/master.tar.gz sops-nix
-## Add Module-Channels for home-manager
-sudo nix-channel --add https://github.com/pjones/plasma-manager/archive/trunk.tar.gz plasma-manager
-sudo nix-channel --update
-```
-
-### From NixOS Installer
-
-3. Disk Partitioning with Disko
+2. Disk Partitioning with [disko](https://github.com/nix-community/disko):
 
 ```shell
 sudo nix run github:nix-community/disko \
@@ -92,39 +80,21 @@ sudo nix run github:nix-community/disko \
 # If the command succeeds, the partitions are mounted automatically under /mnt
 ```
 
-4. `sudo nixos-generate-config --root /mnt` and include the generated config in your nix configuration
+3. `sudo nixos-generate-config --root /mnt` and include the generated config in your nix configuration
    - This can either be archieved by 1) replacing the `configuration.nix`s `import ./hardware/desktop.nix` with your `hardware-configuration.nix`, or...
    - By 2) altering this repos `/nixos/hardware/desktop.nix` to your liking (by substituting the UUIDs, cpu-modules, etc.) and then `sudo rm /mnt/etc/nixos/hardware-configuration.nix`ing
-5. Comment out in `configuration.nix` the `users.jnnk = import /home/jnnk/.config/home-manager/home.nix;` line
-   - The home-manager part of the setup is to be done after successfully booting into the system
-6. `sudo cp -fr ./nixos/* /mnt/etc/nixos`
-7. Comment out in `configuration.nix` the `kernelPackages = pkgs.linux_xanmod_latest_custom;` line and use a kernel package from the nix repo database to avoid compilation of the kernel
-8. `cd /mnt && sudo nixos-install`
-9. `sudo cp dotfiles.nix /mnt/home/jnnk`
-10. Reboot into the system, then...
-    - Add the channels from step 2 (again)
-    - `mkdir $HOME/.config/home-manager && cp -r $HOME/dotfiles.nix/home-manager/* $HOME/.config/home-manager`
-11. Comment in the `import` from step 7 and run `sudo nixos-install` which is supposed to fail
-    - It will however create the `$HOME/devel/foreign` directory which is necessary for the next step
-    - I'm justbeing layz right here
-12. `git clone https://github.com/caiogondim/bullet-train.zsh $HOME/devel/foreign/bullet-train.zsh` to make the symlink specified in
-13. Toggle off the GNOME "Automatic Suspend" and `sudo nixos-rebuild boot`
-
-### General
-
-- Linking the repo contents into the right places to have the whole configuration editable from this repos directory
-
-```bash
-sudo ln -sr ./nixos /etc/nixos # You might want to delete the contents from /etc/nixos first: `sudo rm -rf /etc/nixos`
-ln -sr ./home-manager ~/.config # You might have to create this folders first
-sudo nixos-rebuild switch
-```
+4. Comment out in `configuration.nix` the `kernelPackages = pkgs.linux_xanmod_latest_custom;` line and use a kernel package from the nix repo database instead to save some installation time
+5. `cd /mnt && sudo nixos-install --flake <repo-root>/nixos`
+6. `sudo cp dotfiles.nix /mnt/home/jnnk` to spare re-cloning this repo
+7. `sudo nixos-rebuild --flake ~/dotfiles.nix/nixos switch`
+8. Comment in the Linux kernel overlay from step again, turn off GNOME's "Automatic Suspend" and `sudo nixos-rebuild --flake ~/dotfiles.nix/nixos boot`
 
 ## TODO-List
 
 Things I have to do after the installation...
 
 - [ ] Enable the installed GNOME-extensions
+    - [ ] Setup `gsconnect`
 - [ ] `ssh-add -v ~/.ssh/<ssh-key-name>`
 - [ ] Configure the CPU-scheduler and profile in `cpupower-gui`
 - [ ] Delete the former capitalized xdg-user-dirs: `rm -fr Templates Videos Public Desktop Documents Downloads Pictures Music tmp` (TODO why is there a `tmp/cache-\$USER/oh-my-zsh` dir?!)
