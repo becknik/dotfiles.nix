@@ -7,7 +7,7 @@
 
     enableExtensionUpdateCheck = false;
     enableUpdateCheck = false;
-    mutableExtensionsDir = true;
+    mutableExtensionsDir = false; # Setting this to true disabled the java extensions to properly install
 
 		# Plugins
     extensions = with pkgs.vscode-extensions; [
@@ -16,6 +16,7 @@
       alefragnani.project-manager
       alefragnani.bookmarks
       gruntfuggly.todo-tree
+      mkhl.direnv
 
       ## Editor Config, Autocompletion, etc.
       vscodevim.vim
@@ -23,6 +24,7 @@
       formulahendry.code-runner
       streetsidesoftware.code-spell-checker
       christian-kohler.path-intellisense
+      eamodio.gitlens
 
       ## Eye Candy
       adpyke.codesnap
@@ -40,6 +42,8 @@
 
       ### Scripting
       ms-python.python
+			ms-python.vscode-pylance
+			ms-pyright.pyright
 
       #### JS/TS
       esbenp.prettier-vscode
@@ -56,6 +60,12 @@
       ### JVM
       scalameta.metals
 			redhat.java
+      vscjava.vscode-java-debug
+      vscjava.vscode-java-test
+      vscjava.vscode-maven
+      vscjava.vscode-java-dependency
+      vscjava.vscode-gradle
+      vscjava.vscode-spring-initializr
 
       ### Rust
       rust-lang.rust-analyzer
@@ -67,7 +77,9 @@
       #twxs.cmake #?
       ms-vscode.cmake-tools
 
+    # Further Plugins
     ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+
       { # Monokai Night Theme
         name = "vscode-monokai-night";
         publisher = "fabiospampinato";
@@ -75,6 +87,7 @@
         #sha256 = lib.fakeSha256;
         sha256 = "sha256-7Vm/Z46j2GG2c2XZkAlmJ9ZCZ9og+v3tboD2Tf23gGA=";
       }
+
       { # German cSpell dictionary
         name = "code-spell-checker-german";
         publisher = "streetsidesoftware";
@@ -83,6 +96,38 @@
         sha256 = "sha256-rAm3pcLn6HoWnhWeoK/0D9r5oY9TIQ23EMh35rurgDg=";
       }
 
+      /*{ # Auto Completion IntelliCode
+        name = "vscodeintellicode";
+        publisher = "VisualStudioExptTeam";
+        version = "latest";
+        #sha256 = lib.fakeSha256;
+        sha256 = "7f61a7f96d101cdf230f96821be3fddd8f890ebfefb3695d18beee43004ae251";
+      }*/
+
+			{ # Java Checkstyle
+        name = "vscode-checkstyle";
+        publisher = "shengchen";
+        version = "latest";
+        #sha256 = lib.fakeSha256;
+        sha256 = "21c860417f42510e77a6e2eed2597cccd97a1334a7543063eed4d4a393736630";
+      }
+
+      /*{ # Spring Boot Tools
+        name = "vscode-spring-boot";
+        publisher = "vmware";
+        version = "latest";
+        #sha256 = lib.fakeSha256;
+        sha256 = "89a07234f8c53ea09e80d815129da2c2cef9a10cb6987564e7e8af4aa3d8106f";
+      }
+
+      { # Spring Boot Dashboard
+        name = "vscode-spring-boot-dashboard";
+        publisher = "vscjava";
+        version = "latest";
+        #sha256 = lib.fakeSha256;
+        sha256 = "f3395bc26e1e79db9f2c406068987b362a746faf4093acfb1a3d274110a437bd";
+      }*/
+
       # Missing: Monokai Pro, Vue Volar
     ];
 
@@ -90,11 +135,14 @@
 
     keybindings = [];
 
-		# VSCode Settings:
 
     userSettings = {
 
-			# Main Settings:
+			#########################################################################
+		# VSCode Settings
+			#########################################################################
+
+			# Main Settings
       window = {
 				zoomLevel = 1;
 			  restoreWindows = "none";
@@ -103,14 +151,14 @@
 			telemetry.telemetryLevel = "error";
 			#settingsSync.ignoredSettings = ["-window.zoomLevel"];
 
-			# Security/ Project Trust:
+			# Security/ Project Trust
 			security.workspace.trust = {
 				untrustedFiles = "open";
 				enabled = false;
 				startupPrompt = "never";
 			};
 
-			# Workbench Settings:
+			# Workbench Settings
 			workbench = {
 				startupEditor = "none";
 				reduceMotion = "on";
@@ -133,7 +181,7 @@
 				};
 			};
 
-			# Explorer settings:
+			# Explorer settings
 			explorer = {
 				confirmDelete = false;
 				confirmDragAndDrop = false;
@@ -141,7 +189,7 @@
 				#openEditors.sortOrder = "alphabetical"; # defaults to editorOrder
 			};
 
-			# Editor Settings:
+			# Editor Settings
 			zenMode = {
 				hideActivityBar = false;
 				hideLineNumbers = false;
@@ -171,7 +219,7 @@
 				accessibilitySupport = "off";
 				unfoldOnClickAfterEndOfLine = true;
 				fastScrollSensitivity = 3;
-				glyphMargin = false;
+				glyphMargin = true;
 				hover.delay = 350;
 				inlayHints.padding = true;
 				matchBrackets = "always";
@@ -206,7 +254,7 @@
 				suggest.filterGraceful = true;
 			};
 
-			# Search:
+			# Search
 			search = {
 				showLineNumbers = true;
 				smartCase = true;
@@ -233,26 +281,40 @@
 				openRepositoryInParentFolders = "always";
 			};
 
-			# Plugin Settings
 
-			## Etc:
+			#########################################################################
+			# General Plugin Settings
+			#########################################################################
+
+			## Code Runner
 			code-runner = {
 				clearPreviousOutput = true;
-				enableAppInsights = false;
+				enableAppInsights = false; # Whether to enable AppInsights to track user telemetry data.
 			};
 
+			## Project Manager
 			projectManager = {
-				git.baseFolders = [ "~/devel/own" "~/devel/foreign" "~/devel/ide" ];
+				groupList = true;
+				ignoreProjectsWithinProjects = true;
+				openInNewWindowWhenClickingInStatusBar = true;
+				showParentFolderInfoOnDuplicates = true;
+				sortList = "Recent";
+				git.baseFolders = [ "~/devel/own" "~/devel/foreign" "~/devel/ide" "~/devel/work" ];
 				confirmSwitchOnActiveWindow = "onlyUsingSideBar";
 			};
 
+			## Direnv
+			direnv.restart.automatic = true;
+			direnv.status.showChangesCount = true;
+
+			## Path Intellisense
 			path-intellisense = {
 				autoTriggerNextSuggestion = true;
 				extensionOnImport = true;
 				showHiddenFiles = true;
 			};
 
-			## cSpell:
+			## cSpell
 			cSpell = {
 				enabled = true;
 				caseSensitive = true;
@@ -278,34 +340,42 @@
 				];
 			};
 
-			## Prettier
-			prettier = {
-				trailingComma = "es5";
-				singleQuote = true;
-				useTabs = true;
-				tabWidth = 4;
-				#useTabs = false
-				#tabWidth = 2
-				printWidth = 120;
+			## Git Lense
+			gitlense = {
+				plusFeatures.enabled = false;
+				gitlens.showWelcomeOnInstall = false;
+				gitlens.currentLine.enabled = false;
 			};
-			#editor.defaultFormatter = "esbenp.prettier-vscode";
 
 			## Neovim
 			# Source: https://github.com/vscode-neovim/vscode-neovim
-			extensions.experimental.affinity = { asvetliakov.vscode-neovim = 1; };
+			/*extensions.experimental.affinity = { asvetliakov.vscode-neovim = 1; };
 			vscode-neovim = {
 				logLevel = "warn";
 				mouseSelectionStartVisualMode = false;
 				neovimClean = true;
-			};
+			};*/
 
-			## Project Manager
-			projectManager = {
-				groupList = true;
-				ignoreProjectsWithinProjects = true;
-				openInNewWindowWhenClickingInStatusBar = true;
-				showParentFolderInfoOnDuplicates = true;
-				sortList = "Recent";
+			## VIM
+			vim = {
+				camelCaseMotion.enable = true;
+				easymotionDimBackground = false;
+				foldfix = true;
+				highlightedyank.enable = true;
+				report = 1;
+				matchpairs = "(:),{:},[:],<:>";
+				replaceWithRegister = false; # This sound like good stuff https://github.com/vim-scripts/ReplaceWithRegister
+				smartRelativeLine = false;
+				textwidth = 120; # word-wrap width with `gp`
+
+				vim.handleKeys = {
+					# Defaults
+					"<C-d>" = true; # true = Handled by VIM
+					"<C-s>" = false;
+					"<C-z>" = false;
+					"<C-p>" = false;
+					"<C-t>" = false;
+				};
 			};
 
 			## Todo Tree
@@ -334,26 +404,35 @@
 				regex.enableMultiLine = true;
 			};
 
-			# Code Snap
-			codesnap = {
-				realLineNumbers = true;
-				showWindowTitle = true;
-				transparentBackground = true;
-				shutterAction = "copy";
+			## Run on Save
+			runOnSave.commands = [
+				/*{
+					match = "\\.java$";
+					command = ''google-java-format --replace ''${file}'';
+				}*/
+			];
+
+
+			##########################################################################
+			# Language Plugin Settings
+			##########################################################################
+
+			## Linting
+
+			### Prettier
+			prettier = {
+				trailingComma = "es5";
+				singleQuote = true;
+				useTabs = true;
+				tabWidth = 4;
+				#useTabs = false
+				#tabWidth = 2
+				printWidth = 120;
 			};
+			#editor.defaultFormatter = "esbenp.prettier-vscode";
 
-			# Marp
-			markdown.marp = {
-				enableHtml = true;
-				pdf.noteAnnotations = true;
-				pdf.outlines = "headings";
-			};
-
-			## Languages
-
-			### Markdown
+			## Markdown
 			"[markdown]" = {
-				editor.unicodeHighlight.invisibleCharacters = false;
 				editor.defaultFormatter = "DavidAnson.vscode-markdownlint";
 				editor.quickSuggestions = {
 					comments = "off";
@@ -367,31 +446,14 @@
 			};
 			markdownlint.run = "onSave";
 
-			### Bash:
-			bashIde.highlightParsingErrors = true;
-			shellcheck.disableVersionCheck = true;
-
-			### Java
-			redhat.telemetry.enabled = false;
-			java = {
-				autobuild.enabled = false;
-				codeGeneration = {
-					generateComments = true;
-					hashCodeEquals.useInstanceof = true;
-					useBlocks = true;
-				};
-				project = {
-					encoding = "setDefault";
-					importOnFirstTimeStartup = "automatic";
-				};
-				jdt.ls.androidSupport.enabled = "off";
-				sharedIndexes.enabled = "off";
-			};
-			"[java]" = {
-				editor.defaultFormatter = "redhat.java";
+			### Marp
+			markdown.marp = {
+				enableHtml = true;
+				pdf.noteAnnotations = true;
+				pdf.outlines = "headings";
 			};
 
-			### LaTeX:
+			## LaTeX
 			"[latex]" = {
 				editor.wordBasedSuggestions = false;
 				editor.defaultFormatter = "James-Yu.latex-workshop";
@@ -408,11 +470,7 @@
         latex.recipe.default = "lastUsed";
 			};
 
-			### Rust
-			rust-analyzer.restartServerOnConfigChange = true;
-			"[rust]".editor.defaultFormatter = "rust-lang.rust-analyzer";
-
-			### Nix
+			## Nix
 			# Source: https://github.com/nix-community/vscode-nix-ide
       nix = {
         enableLanguageServer = true;
@@ -429,6 +487,40 @@
 				}; */
       };
 
+			## Bash
+			bashIde.highlightParsingErrors = true;
+			shellcheck.disableVersionCheck = true;
+
+			## Java
+			redhat.telemetry.enabled = false;
+			java = {
+				autobuild.enabled = false;
+				codeGeneration = {
+					generateComments = true;
+					hashCodeEquals.useInstanceof = true;
+					useBlocks = true;
+				};
+				project = {
+					encoding = "setDefault";
+					importOnFirstTimeStartup = "automatic";
+				};
+				jdt.ls.androidSupport.enabled = "off";
+				sharedIndexes.enabled = "off";
+				configuration.runtimes = [
+					{
+						name = "JavaSE-17";
+						path = "$JAVA_HOME";
+						default = true;
+					}
+				];
+			};
+			"[java]" = {
+				editor.defaultFormatter = "redhat.java";
+			};
+
+			## Rust
+			rust-analyzer.restartServerOnConfigChange = true;
+			"[rust]".editor.defaultFormatter = "rust-lang.rust-analyzer";
 			# Messy Settings Part
 
 			lldb.suppressUpdateNotifications = true;
@@ -440,7 +532,7 @@
 				"**/.ammonite" = true;
 			};
 
-			### Clangd
+			## Clangd
 			clangd.arguments = [
 				"--enable-config"
 				''--compile-commands-dir=''${workspaceFolder}''
@@ -456,14 +548,7 @@
 			];
 			clangd.onConfigChanged = "restart";
 
-			# VIM Plugin:
-			vim.camelCaseMotion.enable = true;
-			vim.easymotionDimBackground = false;
-			vim.foldfix = true;
-			vim.highlightedyank.enable = true;
-			vim.report = 1;
-
-			# Code Together:
+			# Code Together
 			#codetogether.userName = "becknik";
 			#codetogether.virtualCursorJoin = "ownVirtualCursor";
 

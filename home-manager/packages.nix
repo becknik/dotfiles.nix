@@ -40,11 +40,6 @@
 
     ## NixOS
     nixos-option
-    # https://github.com/nix-community/nixd
-    unstable.nixd # TODO Figure out how to set up nixd - Seems like this isn't possible at all so far... https://github.com/nix-community/vscode-nix-ide/issues/363
-    unstable.nil
-    nixpkgs-fmt
-    nixpkgs-lint
 
     ### Secrets Management
     sops
