@@ -7,6 +7,7 @@
 			enable = true;
 			defaultEditor = true; # redundant
 		};*/
+
 		nixvim = {
 			enable = true;
 			#colorschemes.moneokai.enable = true; # TODO

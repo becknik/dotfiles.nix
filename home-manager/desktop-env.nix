@@ -65,22 +65,5 @@
   font-size: 0.8em;
 }'';
     };
-    /*gtk4 = {
-      extraConfig = {};
-      extraCss = {};
-    };*/
   };
 }
-
-# TODO Cache-persist script?
-#[Unit]
-#Description=Copy persisting cache files back to ~/.cache
-#
-#[Service]
-#Type=oneshot
-#ExecStart=/home/jnnk/scripts/cache-persist.sh start
-#ExecStop=/home/jnnk/scripts/persist-cache.sh stop
-#RemainAfterExit=yes
-#
-#[Install]
-#WantedBy=default.target

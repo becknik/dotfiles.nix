@@ -1,40 +1,47 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 {
   programs = {
-    hstr.enable = true;
+    hstr.enable = true; # Whether to enable Bash And Zsh shell history suggest box
+
+    fzf = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
     zsh = {
       enable = true;
 
-      enableAutosuggestions = true;
-      enableVteIntegration = true;
-
-      autocd = true; # Autoamatically cds into a path enterd; setopt autocd
-      #completionInit = "autoload -Uz compinit promptinit && compinit && promptinit"; #zmodload zsh/complist
-      #zstyle :compinstall filename '/home/jnnk/.zshrc'
-      #defaultKeymap = "viins"; # viins vicmd # TODO What's that?!
-
-      dirHashes = {
-        dl = "${config.home.homeDirectory}/dl";
-        docs = "${config.home.homeDirectory}/docs";
-        devel = "${config.home.homeDirectory}/devel";
-      };
       dotDir = ".config/zsh"; # Where zsh config files are placed
       envExtra =
         "export KEYTIMEOUT=5" # Esc key in vi mode is 0.4s by default, this sets it to 0.05s
       ;
 
+      enableAutosuggestions = true;
+      enableVteIntegration = true;
+
+      syntaxHighlighting.enable = true;
+      /*zsh-abbr = { # TODO zsh-abbr isn't working...
+        enable = true;
+        abbreviations = { # Alias which expansion after entering, like the ones in fish
+          nrbs = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#dnix\" switch";
+          nrbt = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#dnix\" test";
+        };
+      };*/
+
+      historySubstringSearch.enable = true;
+      autocd = true; # Automatically cds into a path entered = setopt autocd
+
       history = {
-        extended = false; # Write the history file in the ":start:elapsed;command" format
-        #ignoreAllDups = true; # Delete old recorded entry if new entry is a duplicate # TODO not yet available
+        extended = true; # Write the history file in the ":start:elapsed;command" format
+        ignoreAllDups = true; # Delete old recorded entry if new entry is a duplicate
         ignoreDups = true; # Don't record an entry that was just recorded again
-        ignorePatterns = [ "git" "gcl" "alias" "cd" "gcsm" "ls" "la" ];
-        ignoreSpace = true; # Share history between all sessions.
         path = "${config.programs.zsh.dotDir}/.zhistroy";
         save = 10000; # Amount of lines to save
         share = true; # Share history between all sessions.
+        ignorePatterns = [ "alias" "cd" "gcsm" "ls" "la" ];
+        ignoreSpace = true; # Share history between all sessions.
       };
-      historySubstringSearch.enable = true;
 
       localVariables = { # variable definitions on top of .zshrc
         # Further oh-my-zsh Settings
@@ -46,8 +53,10 @@
       #initExtraFirst = ""; # Placed on top of .zshrc
       #initExtraBeforeCompInit = '''';
       initExtra =
+        # further history setup
         "setopt HIST_EXPIRE_DUPS_FIRST\n" # Expire duplicate entries first when trimming history.
         + "setopt HIST_FIND_NO_DUPS\n" # Do not display a line previously found.
+
         + "bindkey -v\n" # vim keybindings
         + "bindkey '^H' backward-kill-word\n" # Enables Ctrl + Del to delete a full word
         # vi-style navigation in menu completion
@@ -65,40 +74,18 @@
         + "bindkey '^q' push-line\n"
         # auto-complete with Ctrl + Space
         + "bindkey '^ ' autosuggest-accept\n"
-        #https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git-escape-magic
+
+        # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git-escape-magic
         + "autoload -Uz git-escape-magic\n"
+        + "git-escape-magic\n"
+        # bonsai
         + "cbonsai --multiplier 5 -m 'It takes strength to resist the dark side. Only the weak embrace it.' -p"
       ;
 
       oh-my-zsh = {
         enable = true;
-        theme = "bullet-train"; # TODO This repo (is) should be synced via program.git.repositories in the devel.nix file
-        custom = "${config.home.homeDirectory}/.config/oh-my-zsh/custom";
-        extraConfig =  # oh-my-zsh extra settings for plugins
-# $1=exit_status, $2=command, $3=elapsed_time
-''function bgnotify_formatted {
-  [ $1 -eq 0 ] && title="Holy Smokes, Batman!" || title="Holy Graf Zeppelin!"
-  bgnotify "$title -- after $3 s" "$2";
-}
-bgnotify_threshold=10;
-TIMER_PRECISION=2;
-TIMER_FORMAT="[%d]";
-TIMER_THRESHOLD=.5;
-'' +
-# oh-my-zsh extra settings for themes:
-# Not set: perl nvm hg
-''BULLETTRAIN_PROMPT_ORDER=("time" "status" "context" "custom" "dir" "ruby" "virtualenv" "aws" "go" "elixir" "git" "cmd_exec_time");
-BULLETTRAIN_PROMPT_SEPARATE_LINE=true;
-BULLETTRAIN_PROMPT_ADD_NEWLINE=false;
-BULLETTRAIN_STATUS_EXIT_SHOW=true;
-BULLETTRAIN_IS_SSH_CLIENT=true;
-BULLETTRAIN_PROMPT_SEPARATE_LINE=false
-#BULLETTRAIN_GIT_COLORIZE_DIRTY=true
-''
-        ;
+        theme = "bullet-train";
         plugins = [
-          #"archlinux"
-          #"sudo"
           "systemd"
           #"timer"
           "common-aliases"
@@ -109,34 +96,33 @@ BULLETTRAIN_PROMPT_SEPARATE_LINE=false
           "alias-finder"
           #"catimg"
           #"chucknorris"
-          "aws"
+          #"aws"
           "docker"
-          #"fzf"
-          #"fzf-tab"
+          "fzf"
           "git"
           "git-auto-fetch"
           "git-escape-magic"
           "gitignore"
-          "rust"
-          "mvn"
+          #"rust"
+          #"mvn"
           #"pyenv"
-          "python"
-          "gradle"
+          #"python"
+          #"gradle"
           #"hitchhiker"
-          "httpie"
-          "jsontools"
-          "kubectl"
-          "nmap"
-          "npm"
-          "microk8s"
+          #"httpie"
+          #"jsontools"
+          #"kubectl"
+          #"nmap"
+          #"npm"
+          #"microk8s"
           #"man"
-          "encode64"
+          #"encode64"
           #"extract"
           "fancy-ctrl-z"
           #"rand-quote"
           "ripgrep"
-          "ruby"
-          "rsync"
+          #"ruby"
+          #"rsync"
           #"scala"
           "singlechar"
           #"ssh-agent"
@@ -150,63 +136,44 @@ BULLETTRAIN_PROMPT_SEPARATE_LINE=false
           "zsh-interactive-cd"
           "direnv"
         ];
+        custom = "${config.home.homeDirectory}/.config/oh-my-zsh/custom";
+        extraConfig =  # oh-my-zsh extra settings for plugins
+# $1=exit_status, $2=command, $3=elapsed_time
+''bgnotify_bell=false;
+bgnotify_threshold=10;
+
+function bgnotify_formatted {
+  [ $1 -eq 0 ] && title="Holy Smokes, Batman!" || title="Holy Graf Zeppelin!"
+  bgnotify "$title -- after $3 s" "$2";
+}
+
+TIMER_PRECISION=2;
+TIMER_FORMAT="[%d]";
+TIMER_THRESHOLD=.5;
+'' +
+# oh-my-zsh extra settings for themes:
+# Not set: perl nvm hg
+''BULLETTRAIN_PROMPT_ORDER=("time" "status" "context" "custom" "dir" "ruby" "virtualenv" "aws" "go" "elixir" "git" "cmd_exec_time");
+BULLETTRAIN_PROMPT_SEPARATE_LINE=true;
+BULLETTRAIN_PROMPT_ADD_NEWLINE=false;
+BULLETTRAIN_STATUS_EXIT_SHOW=true;
+BULLETTRAIN_IS_SSH_CLIENT=true;
+BULLETTRAIN_PROMPT_SEPARATE_LINE=true;
+#BULLETTRAIN_GIT_COLORIZE_DIRTY=true;
+''
+        ;
       };
       shellAliases = {
         fu = "sudo";
         sduo = "sudo";
-        #code = "vscodium"; # TODO Doesn't work
+        nrbs = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#dnix\" switch";
+        nrbt = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#dnix\" test";
       };
 
-      #syntaxHighlighting.enable = true; # TODO Not available & the current one is crappy af :|
-      /*zsh-abbr = { # TODO Not available
-        enable = true;
-        abbreviations = {}; # Alias which expansion after entering, like the ones in fish
-      };*/
+      #completionInit # "Oh-My-Zsh/Prezto calls compinit during initialization, calling it twice causes slight start up slowdown"
+      #defaultKeymap = "viins"; # viins vicmd # ??
     };
   };
+
+  home.packages = [ pkgs.libnotify ]; # For bg-notify zsh plugin
 }
-
-#setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
-#setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
-# Starts separate vim editor when pressing Esc instead of edit command with vim-bindings in shell
-#autoload -U edit-command-line
-#zle -N edit-command-line
-#bindkey -M vicmd v edit-command-line
-#autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
-#zle -N up-line-or-beginning-search
-#zle -N down-line-or-beginning-search
-#[[ -n "${key[Up]}"   ]] && bindkey -- "${key[Up]}"   up-line-or-beginning-search
-#[[ -n "${key[Down]}" ]] && bindkey -- "${key[Down]}" down-line-or-beginning-search
-#ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=white,bold,underline"
-# ssh key evaluation for GNOME keychain - now done via oh-my-zsh plugin
-#eval $(keychain --eval --quiet git-personal)
-#zstyle ':completion:*' menu select
-#zstyle ':completion::complete:*' gain-privileges 1
-## source: https://github.com/MrElendig/dotfiles-alice/blob/master/.zshrc
-#zstyle ':completion:*:*:pacman:*' menu yes select
-
-## Alias stuff
-#alias ls="ls --color -F"
-#alias ll="ls --color -lh"
-#alias cp='cp -iv --reflink=auto'
-#alias rcp='rsync -v --progress'
-#alias rmv='rsync -v --progress --remove-source-files'
-#alias mv='mv -iv'
-#alias rm='rm -iv'
-#alias rmdir='rmdir -v'
-#alias ln='ln -v'
-#alias chmod="chmod -c"
-#alias chown="chown -c"
-#alias mkdir="mkdir -v"
-#alias grep='grep --colour=auto'
-#alias egrep='egrep --colour=auto'
-#alias ls='ls --color=auto --human-readable --group-directories-first --classify'
-#alias ll='ls --color=auto --human-readable --group-directories-first --classify -l'
-#alias lla='ls --color=auto --human-readable --group-directories-first --classify -la'
-# Own:
-#alias fu='sudo'
-#alias sduo='sudo'
-#alias cat='bat'
-#alias catt="cat"
-#alias paru="paru --bottomup --removemake"
-#alias upd="paru -Syu --bottomup --removemake --upgrademenu --devel --cleanafter --combinedupgrade --sudoloop"

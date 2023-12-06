@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   programs.vscode = {
@@ -7,7 +7,7 @@
 
     enableExtensionUpdateCheck = false;
     enableUpdateCheck = false;
-    mutableExtensionsDir = false; # TODO Check if the settings.json is properly linted now
+    mutableExtensionsDir = true;
 
 		# Plugins
     extensions = with pkgs.vscode-extensions; [
@@ -17,9 +17,9 @@
       alefragnani.bookmarks
       gruntfuggly.todo-tree
 
-      ## Meta-code level
-      #vscodevim.vim
-      asvetliakov.vscode-neovim
+      ## Editor Config, Autocompletion, etc.
+      vscodevim.vim
+      #asvetliakov.vscode-neovim
       formulahendry.code-runner
       streetsidesoftware.code-spell-checker
       christian-kohler.path-intellisense
@@ -27,10 +27,8 @@
       ## Eye Candy
       adpyke.codesnap
       johnpapa.vscode-peacock
-      #dracula-theme.theme-dracula
 
       ## Languages
-      #github.copilot
 
       ### Markup
       yzhang.markdown-all-in-one
@@ -74,32 +72,28 @@
         name = "vscode-monokai-night";
         publisher = "fabiospampinato";
         version = "latest";
-        #curl https://marketplace.visualstudio.com/_apis/public/gallery/publishers/fabiospampinato/vsextensions/vscode-monokai-night/latest/vspackage | sha256sum # TODO this wont work atm...
-				# https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-monokai-night
-        sha256 = "ed59bf678ea3d861b67365d990096627d64267da20fafded6e80f64dfdb78060";
+        #sha256 = lib.fakeSha256;
+        sha256 = "sha256-7Vm/Z46j2GG2c2XZkAlmJ9ZCZ9og+v3tboD2Tf23gGA=";
       }
       { # German cSpell dictionary
         name = "code-spell-checker-german";
         publisher = "streetsidesoftware";
         version = "latest";
-        # https://marketplace.visualstudio.com/_apis/public/gallery/publishers/streetsidesoftware/vsextensions/code-spell-checker-german/latest/vspackage
-				# https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker-german&ssr=false#version-history
-        sha256 = "ac09b7a5c2e7e87a169e159ea0aff40fdaf9a18f53210db710c877e6bbab8038";
+        #sha256 = lib.fakeSha256;
+        sha256 = "sha256-rAm3pcLn6HoWnhWeoK/0D9r5oY9TIQ23EMh35rurgDg=";
       }
-      # Monokai Pro
-      # Vue volar
-      # settings-sync (now obsolete :) )
+
+      # Missing: Monokai Pro, Vue Volar
     ];
 
     languageSnippets = {};
 
     keybindings = [];
 
-    userTasks = {}; # TODO what is this?
-
 		# VSCode Settings:
 
     userSettings = {
+
 			# Main Settings:
       window = {
 				zoomLevel = 1;
@@ -284,11 +278,15 @@
 				];
 			};
 
-			## Prettier # TODO
+			## Prettier
 			prettier = {
-				printWidth = 120;
-				tabWidth = 4;
+				trailingComma = "es5";
+				singleQuote = true;
 				useTabs = true;
+				tabWidth = 4;
+				#useTabs = false
+				#tabWidth = 2
+				printWidth = 120;
 			};
 			#editor.defaultFormatter = "esbenp.prettier-vscode";
 
@@ -297,9 +295,8 @@
 			extensions.experimental.affinity = { asvetliakov.vscode-neovim = 1; };
 			vscode-neovim = {
 				logLevel = "warn";
-				mouseSelectionStartVisualMode = false; # TODO changed this
+				mouseSelectionStartVisualMode = false;
 				neovimClean = true;
-				#neovimExecutablePaths.darwin = "";
 			};
 
 			## Project Manager
@@ -366,7 +363,7 @@
 				editor.wordBasedSuggestions = false;
 				cSpell.fixSpellingWithRenameProvider = true;
 				cSpell.advanced.feature.useReferenceProviderWithRename = true;
-				cSpell.advanced.feature.useReferenceProviderRemove = "/^#+\\s/"; # TODO ; weg?
+				cSpell.advanced.feature.useReferenceProviderRemove = "/^#+\\s/"; # TODO Whats this for??
 			};
 			markdownlint.run = "onSave";
 
@@ -444,10 +441,9 @@
 			};
 
 			### Clangd
-			/*clangd.path = "/usr/bin/clangd";
 			clangd.arguments = [
 				"--enable-config"
-				''--compile-commands-dir=''${workspaceFolder}'' # TODO does this escape the interpolation
+				''--compile-commands-dir=''${workspaceFolder}''
 				"--log=error"
 				"--print-options"
 				"--header-insertion=never"
@@ -458,14 +454,14 @@
 				"--background-index"
 				"--clang-tidy"
 			];
-			clangd.onConfigChanged = "restart"; */
+			clangd.onConfigChanged = "restart";
 
 			# VIM Plugin:
-			#vim.camelCaseMotion.enable = true;
-			#vim.easymotionDimBackground = false;
-			#vim.foldfix = true;
-			#vim.highlightedyank.enable = true;
-			#vim.report = 1;
+			vim.camelCaseMotion.enable = true;
+			vim.easymotionDimBackground = false;
+			vim.foldfix = true;
+			vim.highlightedyank.enable = true;
+			vim.report = 1;
 
 			# Code Together:
 			#codetogether.userName = "becknik";

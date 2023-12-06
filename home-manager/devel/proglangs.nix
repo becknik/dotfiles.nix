@@ -19,16 +19,10 @@
     # C++
     #unstable.gcc # TODO
     unstable.clang
-    clang
     cmake
     lld
     lldb
     mold
-
-    ## Libraries
-    #boost
-    #gtest
-    #spdlog
   ];
 
   # JDK Setup TODO Add priority

@@ -15,7 +15,7 @@ let
     default-size-columns = 132;
     default-size-rows = 42;
     delete-binding = "auto";
-    font = "FiraCode Nerd Font 10"; # TODO
+    font = "FiraCode Nerd Font 10";
     title-mode = "ignore";
     use-system-font = false;
     use-theme-background = false;
@@ -50,7 +50,6 @@ in {
     };
 
     "io/github/seadve/Kooha" = {
-      capture-mode = "monitor-window"; # TODO
       record-delay = 5;
       video-format = "mp4";
       video-framerate = 60;
@@ -77,8 +76,6 @@ in {
 
     "org/gnome/desktop/search-providers".disable-external = true;
 
-    #"org/gnome/desktop/input-sources".sources = ""; # TODO
-
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
       clock-show-weekday = true;
@@ -89,11 +86,11 @@ in {
       text-scaling-factor = 0.97;
     };
 
-    "org.gnome.desktop.peripherals.keyboard" = { # TODO this is not appied correctly...
-      delay = 200;
-      remember-numlock-state = false;
-      repeat-interval = 25;
+    "org/gnome/desktop/peripherals/keyboard" = {
+      delay = lib.hm.gvariant.mkUint32 200;
+      repeat-interval = lib.hm.gvariant.mkUint32 25;
     };
+
     "org/gnome/desktop/peripherals/mouse"= {
       accel-profile = "default";
       speed = 0.1;
@@ -153,7 +150,7 @@ in {
 
       show-desktop = [ "<Super>0" ];
 
-      #switch-applications = [ "<Alt>Escape" ]; # TODO What is this option?
+      #switch-applications = [ "<Alt>Escape" ];
       #switch-applications-backward=['<Shift><Alt>Escape']
       #switch-group=['<Super>grave']
       #switch-group-backward=['<Shift><Super>grave']
@@ -233,7 +230,7 @@ in {
     };
 
     "org/gnome/settings-daemon/plugins/power" = {
-      ambient-enabled = false; # TODO Whats this?!
+      ambient-enabled = false; # Ambient light sensor
       idle-dim = false; # "
       power-saver-profile-on-low-battery = true;
     };
@@ -242,13 +239,13 @@ in {
       favorite-apps = ["org.gnome.Terminal.desktop" "org.kde.dolphin.desktop" "librewolf.desktop" "obsidian.desktop" "thunderbird.desktop" "teams-for-linux.desktop" "org.gnome.Pomodoro.desktop" "anki.desktop" "vscodium.desktop" "idea-ultimate.desktop" "clion.desktop" "org.keepassxc.KeePassXC.desktop"];
     };
 
-    "org/gnome/shell/extensions/Logo-menu" = { # TODO
-      hide-forcequit=true;
-      menu-button-icon-click-type=3;
-      menu-button-icon-image=23; # 6 = arch linux
-      menu-button-icon-size=24;
-      show-lockscreen=true;
-      show-power-options=true;
+    "org/gnome/shell/extensions/Logo-menu" = {
+      hide-forcequit = true;
+      menu-button-icon-click-type = 3;
+      menu-button-icon-image = 23; # 6 = arch linux
+      menu-button-icon-size = 24;
+      show-lockscreen = true;
+      show-power-options = false;
     };
 
     "org/gnome/shell/extensions/appindicator" = {
@@ -263,10 +260,8 @@ in {
       "element-desktop.desktop:4"
       "org.telegram.desktop.desktop:4"
       "com.github.eneshecan.WhatsAppForLinux.desktop:4"
-      #"threema-desktop.desktop:4"
       "discord.desktop:4"
       "signal-desktop.desktop:4"
-      #"signal-tray.desktop:4" # TODO
     ];
 
     "org/gnome/shell/extensions/blur-my-shell".color-and-noise = false;
@@ -322,7 +317,7 @@ in {
       extend-height = false;
       height-fraction = 0.9;
       hide-delay = 0.5;
-      hot-keys = false; # TODO ?
+      hot-keys = false; # ?
       hotkeys-overlay = false;
       hotkeys-show-dock = false;
       icon-size-fixed = false;
@@ -342,11 +337,11 @@ in {
       scroll-to-focused-application = true;
       shift-click-action = "launch";
       shift-middle-click-action = "launch";
-      shortcut = ["<Super>q"]; # TODO ?
+      shortcut = ["<Super>q"]; # ?
       shortcut-text = "<Super>q"; # "
       shortcut-timeout = 0.5;
       show-apps-at-top = false;
-      show-delay = 1.3877787807814457e-17; # TODO ??
+      show-delay = 1.3877787807814457e-17; # ??
       show-dock-urgent-notify = true;
       show-favorites = true;
       show-mounts = false;
@@ -463,7 +458,7 @@ in {
 
     "org/gnome/shell/extensions/rounded-window-corners" = {
       black-list = [ "gnome-terminal-server" ];
-      border-color= [ 0.5 0.5 0.5 1.0 ]; # TODO this was a ( ... ) before
+      border-color= "(0.5 0.5 0.5 1.0)";
       border-width = 0;
       enable-preferences-entry = true;
       focused-shadow = "{'vertical_offset': 4, 'horizontal_offset': 0, 'blur_offset': 28, 'spread_radius': 0, 'opacity': 80}";
@@ -502,10 +497,9 @@ in {
 
     "org/gnome/shell/weather".automatic-location = true;
 
-    "org/gnome/simple-scan" = { # TODO makes this sense?
+    "org/gnome/simple-scan" = {
       document-type = "text";
       jpeg-quality = 100;
-      page-side = "front";
       photo-dpi = 600;
       postproc-enabled = false;
       save-directory = "file:///home/jnnk/dl/";

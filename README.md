@@ -4,8 +4,10 @@
 
 ```shell
 $ tree # main branch
-/home/jnnk/devel/own/dotfiles.nix
-── disko
+.
+├── disko
+├── flake.lock
+├── flake.nix
 │   ├── ext4-encrypted.nix
 │   └── ext4-unencrypted.nix
 ├── home-manager
@@ -14,35 +16,31 @@ $ tree # main branch
 │   │   ├── dconf.nix
 │   │   ├── folders-and-files.nix
 │   │   ├── plasma.nix
+│   │   ├── secrets.nix
 │   │   ├── secrets
 │   │   │   ├── git.yaml
 │   │   │   ├── gpg.yaml
 │   │   │   ├── keepassxc.yaml
 │   │   │   └── mail.yaml
-│   │   ├── secrets.nix
 │   │   ├── xdg-mime.nix
 │   │   └── zsh.nix
 │   ├── desktop-env.nix
-│   ├── devel
-│   │   ├── ides.nix
-│   │   └── proglangs.nix
 │   ├── devel.nix
+│   ├── devel
+│   │   └── proglangs.nix
 │   ├── home.nix
 │   ├── media
 │   │   └── mail.nix
 │   ├── media.nix
 │   ├── packages.nix
-│   ├── programs
-│   │   ├── librewolf.nix
-│   │   ├── neovim.nix
-│   │   ├── thunderbird.nix
-│   │   └── vscodium.nix
-│   └── virtualisation.nix
+│   └── programs
+│       ├── librewolf.nix
+│       ├── neovim.nix
+│       ├── thunderbird.nix
+│       └── vscodium.nix
 ├── nixos
 │   ├── configuration.nix
 │   ├── desktop-env.nix
-│   ├── flake.lock
-│   ├── flake.nix
 │   ├── gnome.nix
 │   ├── hardware-configuration.nix
 │   ├── nix-setup.nix

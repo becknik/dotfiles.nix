@@ -9,7 +9,7 @@
   ];
 
   # Multimedia
-  services.easyeffects.enable = true;
+  #services.easyeffects.enable = true;
   programs.mpv.enable = true;
 
   services = {
@@ -19,10 +19,10 @@
       #startInBackground = true; # Keeps `Process 3436 (.nextcloud-wrap) of user 1000 dumped core.`-ing... - even after disabling, wtf?
       # However, after setting up nextcloud, the autostart .desktop-files is created automatically
     };
-    dropbox = {
-      enable = true; # TODO Is dropbox working?
+    /*dropbox = { # TODO Dropbox module not working & corresponding home-manager issue is on stall: https://github.com/nix-community/home-manager/issues/4226
+      enable = true;
       path = "${config.home.homeDirectory}/dropbox";
-    };
+    };*/
 
     # Privacy
     #keychain # TODO keychain management methods
@@ -47,17 +47,6 @@
         # https://aur.archlinux.org/packages/ungoogled-chromium 2022-05-06 pinned message
         "--disable-features=UseChromeOSDirectVideoDecoder"
         "--enable-hardware-overlays"
-
-          #--process-per-site
-          #-single-process
-          #-force-device-scale-factor=1
-          #--disable-reading-from-canvas
-          # GUP - ArchWiki
-          #--ignore-gpu-blocklist
-          #--enable-gpu-rasterization
-          #--disable-gpu-driver-bug-workarounds
-          #--enable-features=VaapiVideoDecoder
-          #--disable-features=UseChromeOSDirectVideoDecoder
       ];
     };
   };
@@ -68,6 +57,7 @@
     ## Natural language
     hunspell
     hunspellDicts.de_DE
+    hunspellDicts.en-us-large
 
     ## Daily Software
     libreoffice-still
@@ -90,7 +80,7 @@
       withOpenASAR = true;
       withVencord = true;
     })
-    teams-for-linux
+    #teams-for-linux
 
     ## Media
     kooha

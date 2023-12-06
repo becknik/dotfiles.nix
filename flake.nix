@@ -70,7 +70,7 @@
           })
 
           # NixOS configuration
-          ./configuration.nix
+          ./nixos/configuration.nix
 
           # home-manager basic setup & configuration import
           home-manager.nixosModules.home-manager {
@@ -85,7 +85,7 @@
               nixvim.homeManagerModules.nixvim
             ];
 
-            home-manager.users.jnnk = import ../home-manager/home.nix; # flakes are git-repo-root & symlink-aware
+            home-manager.users.jnnk = import ./home-manager/home.nix; # flakes are git-repo-root & symlink-aware
           }
         ];
       };

@@ -4,8 +4,6 @@
   imports = [
     ./devel/proglangs.nix # Installation of some programming languages
 
-    ./devel/ides.nix # Tiny installation of ides without need for configuration
-
     ./programs/neovim.nix # Nixvim neovim configuration
     ./programs/vscodium.nix
   ];
@@ -18,7 +16,6 @@
 
       ## Diff syntax highlighting tools
       diff-so-fancy.enable = true; # Like this better than delta
-      #delta.enable = true;
       #difftastic.enable = true; # Side-by-side diff view in terminal, looks odd to me
 
       ## (User) Config
@@ -56,11 +53,9 @@
       hashKnownHosts = true;
       #extraOptionOverrides = {};
     };
-
-    # TODO fzf & whats the difference between the `fuzzyCompletion` and `keybindings` attributes NixOS offers?
   };
 
-  ## GPG-agent
+  # GPG-Agent
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
@@ -74,6 +69,10 @@
     neovim
     git-crypt
     meld
+
+    # JetBrains IDEs
+    jetbrains.clion
+    jetbrains.idea-ultimate
 
     ## Build Tools
     gradle

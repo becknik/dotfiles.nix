@@ -175,8 +175,8 @@
   # Shell Setup
   programs.zsh = {
     enable = true;
-    syntaxHighlighting.enable = true; # TODO Should be enabled through home-manager, which somehow isn't available atm so...
-    #autosuggestions.enable = true; # Configured in home-manager
+    #syntaxHighlighting.enable = true; # Configured in home-manager
+    #autosuggestions.enable = true; # "
   };
   users.defaultUserShell = pkgs.zsh;
 

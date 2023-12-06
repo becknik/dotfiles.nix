@@ -41,7 +41,7 @@ in {
       "github_personal.pub" = {
         sopsFile = ./secrets/git.yaml;
         format = "yaml";
-        key = "github/personal/pub.ed25519"; # "No tested [yaml]-data structures [apart from strings] are supported right now" - even directories aren't?! # TODO
+        key = "github/personal/pub.ed25519"; # "No tested [yaml]-data structures [apart from strings] are supported right now" - including directories?!
         mode = "0400";
         /*symlink-*/ path = "${config.home.homeDirectory}/.ssh/github_personal.pub";
       };
