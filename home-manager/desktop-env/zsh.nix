@@ -23,6 +23,7 @@
       envExtra =
         "export KEYTIMEOUT=5" # Esc key in vi mode is 0.4s by default, this sets it to 0.05s
       ;
+      profileExtra = ''eval "$(/usr/local/bin/brew shellenv)"'';
 
       history = {
         extended = false; # Write the history file in the ":start:elapsed;command" format

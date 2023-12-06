@@ -5,13 +5,8 @@
     ./desktop-env/zsh.nix # zsh and oh-my-zsh config
 
     ./desktop-env/folders-and-files.nix # Creates my basic folder structure
-    ./desktop-env/secrets.nix # Secrets management with sops-nix
 
     ./desktop-env/dconf.nix
-    ./desktop-env/xdg-mime.nix # Default apps - I think this might grow rapidly
-    ./desktop-env/plasma.nix # Setup of KDE apps with plasma-manager, partly by using the plasma-manager auto exporter on Arch
-
-    ./desktop-env/autostart.nix # Sad try on xdg-autostarting some apps
   ];
 
   # Env
@@ -26,21 +21,6 @@
   xdg = {
     enable = true; # activates XDG user directory management
     cacheHome = "/tmp/cache-$USER/";
-
-    ## User Dirs
-    userDirs = {
-      enable = true;
-      createDirectories = true;
-
-      desktop = "${config.home.homeDirectory}/dtop"; # to enable quick jump to devel in VSCode Ctrl + K, O
-      documents = "${config.home.homeDirectory}/docs";
-      download = "${config.home.homeDirectory}/dl";
-      music = "${config.home.homeDirectory}/music";
-      pictures = "${config.home.homeDirectory}/pics";
-      publicShare = "${config.home.homeDirectory}/pub-share";
-      templates = "${config.home.homeDirectory}/templates";
-      videos = "${config.home.homeDirectory}/vids";
-    };
   };
   #home.packages = with pkgs; [ handlr-regex ]; # Doesn't work on NixOS :(
 
@@ -68,6 +48,20 @@
       extraConfig = {};
       extraCss = {};
     };*/
+  };
+
+  programs.kitty = {
+    enable = true;
+    darwinLaunchOptions = [
+      "--single-instance"
+    ];
+    #keybindings
+    settings = {
+      scrollback_lines = 25000;
+      enable_audio_bell = true;
+      update_check_interval = 0;
+    };
+    theme = "Desert";
   };
 }
 

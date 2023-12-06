@@ -28,15 +28,13 @@
     tldr
     tree
     bat
+    coreutils # for sha256sum
 
     ### desktop-env
     wl-clipboard
 
     ### hardware
     cpufetch
-    gparted
-    ventoy
-    powertop
 
     ## NixOS
     nixos-option
@@ -54,16 +52,6 @@
     ## Benchmarking
     speedtest-cli
     stress-ng
-    sysstat
-    valgrind
-
-    ## Uni & TeX
-    gnuplot
-    pandoc
-    qtikz
-    texlive.combined.scheme-small # Need xelatex which is included right here
-    unstable.anki
-    unstable.marp-cli
 
     ## Trash
     neofetch
@@ -71,8 +59,8 @@
     fortune
     sl
     cbonsai
-    oneko
-    uwuify
+    #oneko
+    #uwuify
     #uwufetch # TODO broken?
   ];
 

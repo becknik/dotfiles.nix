@@ -19,7 +19,7 @@
       #diff-so-fancy.enable = true; # TODO etra syntax highlighter for diffs
       #difftastic.enable = true; # TODO side-by-side diff view in terminal <3
       userName = "Jannik Becker";
-      userEmail = "jannikb@posteo.de";
+      userEmail = "j.becker@sprinteins.com";
       extraConfig = {
         init.defaultBranch = "main"; # TODO ist this even necessary?
         core = {
@@ -29,7 +29,7 @@
         push.dafault = "current";
         merge.tool = "vscodium";
         mergetool."vscodium".cmd = "vscodium --wait $MERGED";
-        url."git@github.com:".insteadOf = "https://github.com/";
+        #url."git@github.com:becknik".insteadOf = "https://github.com/becknik";
 
         repositories = {
           /*bullet_train = { # TODO this won't work, sadly
@@ -64,15 +64,6 @@
     # TODO fzf & whats the difference between the `fuzzyCompletion` and `keybindings` attributes NixOS offers?
   };
 
-  ## GPG-agent
-  services.gpg-agent = {
-    enable = true;
-    enableSshSupport = true;
-    extraConfig = "";
-    pinentryFlavor = "gnome3";
-    #sshKeys = {}; # Expose GPG-keys as SSH-keys
-  };
-
   # Manual Installations
   home.packages = with pkgs; [
     neovim
@@ -86,24 +77,10 @@
     ## Testing
     httpie
     newman
-    postman
-
-    ### SQL
-    dbeaver
+    #postman # TODO wont download...
 
     ## CI / CD
-    awscli2
     kubectl
     act
   ];
-
-  /*programs.awscli = { TODO this doesn't work so far...
-    enable = true;
-    settings = {
-      "default" = {
-        region = "eu-central-1";
-      };
-    };
-    credentials = {}; # TODO
-  };*/
 }

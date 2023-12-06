@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
 {
+  home.packages = [ pkgs.google-java-format ];
+
   programs.vscode = {
     enable = true;
     package = pkgs.vscodium;
@@ -16,13 +18,14 @@
       alefragnani.project-manager
       alefragnani.bookmarks
       gruntfuggly.todo-tree
+			mkhl.direnv
 
       ## Meta-code level
-      #vscodevim.vim
-      asvetliakov.vscode-neovim
-      formulahendry.code-runner
+      vscodevim.vim
+      #asvetliakov.vscode-neovim
       streetsidesoftware.code-spell-checker
       christian-kohler.path-intellisense
+      eamodio.gitlens
 
       ## Eye Candy
       adpyke.codesnap
@@ -42,9 +45,8 @@
 
       ### Scripting
       ms-python.python
-
-      #### JS/TS
-      esbenp.prettier-vscode
+      ms-python.vscode-pylance
+			ms-pyright.pyright
 
       #### Shell
       mads-hartmann.bash-ide-vscode
@@ -52,22 +54,15 @@
       ### Nix
       jnoortheen.nix-ide
 
-      ### LaTeX
-      james-yu.latex-workshop
-
       ### JVM
-      scalameta.metals
-			redhat.java
+      redhat.java
+      vscjava.vscode-java-debug
+      vscjava.vscode-java-test
+      vscjava.vscode-maven
+      vscjava.vscode-java-dependency
+      vscjava.vscode-gradle
+      vscjava.vscode-spring-initializr
 
-      ### Rust
-      rust-lang.rust-analyzer
-
-      ### Cpp
-      llvm-vs-code-extensions.vscode-clangd
-      vadimcn.vscode-lldb
-      #ms-vscode.cpptools
-      #twxs.cmake #?
-      ms-vscode.cmake-tools
 
     ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
       { # Monokai Night Theme
@@ -84,7 +79,42 @@
         version = "latest";
         # https://marketplace.visualstudio.com/_apis/public/gallery/publishers/streetsidesoftware/vsextensions/code-spell-checker-german/latest/vspackage
 				# https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker-german&ssr=false#version-history
-        sha256 = "8d6d9b7f5363a759faee4853d7e2f6a7114107e1766d3680ba87f3d80a833cee";
+        sha256 = "ac09b7a5c2e7e87a169e159ea0aff40fdaf9a18f53210db710c877e6bbab8038";
+      }
+      { # intellicode
+        name = "vscodeintellicode";
+        publisher = "VisualStudioExptTeam";
+        version = "latest";
+				# https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode
+        sha256 = "7f61a7f96d101cdf230f96821be3fddd8f890ebfefb3695d18beee43004ae251";
+      }
+      { # java checkstyle
+        name = "vscode-checkstyle";
+        publisher = "shengchen";
+        version = "latest";
+				# https://marketplace.visualstudio.com/items?itemName=shengchen.vscode-checkstyle&ssr=false#version-history
+        sha256 = "21c860417f42510e77a6e2eed2597cccd97a1334a7543063eed4d4a393736630";
+      }
+      /*{ # Run on Save
+        name = "run-on-save";
+        publisher = "pucelle";
+        version = "latest";
+				# https://marketplace.visualstudio.com/items?itemName=pucelle.run-on-save&ssr=false#version-history
+        sha256 = "7c25b2f5d7dbac538ffe4cc8b4edec18075efa0772a34ec0ec0e704fdc2c5c80";
+      }*/
+      { # Spring Boot Tools
+        name = "vscode-spring-boot";
+        publisher = "vmware";
+        version = "latest";
+				# https://marketplace.visualstudio.com/items?itemName=vmware.vscode-spring-boot
+        sha256 = "89a07234f8c53ea09e80d815129da2c2cef9a10cb6987564e7e8af4aa3d8106f";
+      }
+      { # Spring Boot Dashboard
+        name = "vscode-spring-boot-dashboard";
+        publisher = "vscjava";
+        version = "latest";
+				# https://marketplace.visualstudio.com/items?itemName=vmware.vscode-spring-boot
+        sha256 = "f3395bc26e1e79db9f2c406068987b362a746faf4093acfb1a3d274110a437bd";
       }
       # Monokai Pro
       # Vue volar
@@ -177,7 +207,7 @@
 				accessibilitySupport = "off";
 				unfoldOnClickAfterEndOfLine = true;
 				fastScrollSensitivity = 3;
-				glyphMargin = false;
+				glyphMargin = true;
 				hover.delay = 350;
 				inlayHints.padding = true;
 				matchBrackets = "always";
@@ -369,7 +399,6 @@
 				cSpell.advanced.feature.useReferenceProviderRemove = "/^#+\\s/"; # TODO ; weg?
 			};
 			markdownlint.run = "onSave";
-
 			### Bash:
 			bashIde.highlightParsingErrors = true;
 			shellcheck.disableVersionCheck = true;
@@ -389,10 +418,24 @@
 				};
 				jdt.ls.androidSupport.enabled = "off";
 				sharedIndexes.enabled = "off";
+				java.configuration.runtimes = [
+					{
+						name = "JavaSE-17";
+						path = "$JAVA_HOME";
+						default = true;
+					}
+				];
 			};
 			"[java]" = {
 				editor.defaultFormatter = "redhat.java";
+				files.autoSave = "onFocusChange"; # TODO wont work... to disable the run-on-save extension to constantly apply google-java
 			};
+			runOnSave.commands = [
+				{
+					match = "\\.java$";
+					command = ''google-java-format --replace ''${file}'';
+				}
+			];
 
 			### LaTeX:
 			"[latex]" = {
