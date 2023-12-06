@@ -43,7 +43,7 @@
     nixosConfigurations = {
       dnix = nixpkgs.lib.nixosSystem {
         system = current-system;
-        #specialArgs = { inherit nixpkgs-unstable; };
+        specialArgs = { inherit current-system; };
 
         modules = [
           # Enables pkgs.unstable
@@ -74,6 +74,8 @@
 
           # home-manager basic setup & configuration import
           home-manager.nixosModules.home-manager {
+            home-manager.extraSpecialArgs = { inherit current-system; };
+
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
 

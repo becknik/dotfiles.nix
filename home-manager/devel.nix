@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, current-system, ... }:
 
 {
   imports = [
@@ -15,13 +15,17 @@
     git = {
       enable = true;
       lfs.enable = true;
-      delta.enable = true; # delta synatx highlighter
-      #diff-so-fancy.enable = true; # TODO etra syntax highlighter for diffs
-      #difftastic.enable = true; # TODO side-by-side diff view in terminal <3
+
+      ## Diff syntax highlighting tools
+      diff-so-fancy.enable = true; # Like this better than delta
+      #delta.enable = true;
+      #difftastic.enable = true; # Side-by-side diff view in terminal, looks odd to me
+
+      ## (User) Config
       userName = "Jannik Becker";
       userEmail = "jannikb@posteo.de";
       extraConfig = {
-        init.defaultBranch = "main"; # TODO ist this even necessary?
+        init.defaultBranch = "main";
         core = {
           filemode = false; # ignores file permission changes
           autocrlf = "input"; # CRLF -> LF; use true for LF -> CRLF -> LF (intersting for Windows)
@@ -30,14 +34,6 @@
         merge.tool = "vscodium";
         mergetool."vscodium".cmd = "vscodium --wait $MERGED";
         url."git@github.com:".insteadOf = "https://github.com/";
-
-        repositories = {
-          /*bullet_train = { # TODO this won't work, sadly
-            url = "https://github.com/caiogondim/bullet-train.zsh.git";
-            path = "${config.programs.zsh.oh-my-zsh.custom}/plugins/";
-            interval = 1;
-          };*/
-        };
       };
     };
 
@@ -86,7 +82,19 @@
     ## Testing
     httpie
     newman
-    #postman # TODO failed to build on update to 23.11
+
+    # Latest postman build fails to download - last checked 2023.12.06
+    #> curl: (22) The requested URL returned error: 404
+    #> error: cannot download postman-10.18.6.tar.gz from any mirror
+    (import (builtins.fetchGit {
+      name = "nixpkgs-unstable-postman-10.15.0";
+      url = "https://github.com/NixOS/nixpkgs/";
+      ref = "refs/heads/nixpkgs-unstable";
+      rev = "976fa3369d722e76f37c77493d99829540d43845";
+    }) {
+      system = current-system;
+      config.allowUnfree = true;
+    }).postman
 
     ### SQL
     dbeaver
@@ -96,14 +104,4 @@
     kubectl
     act
   ];
-
-  /*programs.awscli = { TODO this doesn't work so far...
-    enable = true;
-    settings = {
-      "default" = {
-        region = "eu-central-1";
-      };
-    };
-    credentials = {}; # TODO
-  };*/
 }

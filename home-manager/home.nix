@@ -14,8 +14,6 @@
     ./packages.nix # Installation of User Packages
     ./desktop-env.nix # XDG, GTK-X, Systemd & everything in the desktop-env folder
 
-    ./virtualisation.nix # Tiny user setup of libvirt
-
     ./devel.nix
     ./media.nix
   ];

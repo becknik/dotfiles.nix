@@ -588,6 +588,11 @@ in {
     "org/virt-manager/virt-manager/details".show-toolbar = true;
     "org/virt-manager/virt-manager/paths".image-default = "${config.home.homeDirectory}/vm";
 
+    "org/virt-manager/virt-manager/connections" = { # Source: https://nixos.wiki/wiki/Virt-manager
+      autoconnect = [ "qemu:///system" ];
+      uris = [ "qemu:///system" ];
+    };
+
     # Set the EurKey keyboard layout as default (source: https://discourse.nixos.org/t/keyboard-layout-with-gnome/21996/9)
     "org/gnome/desktop/input-sources" = {
       show-all-sources = true;

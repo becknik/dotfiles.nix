@@ -416,9 +416,20 @@
 			"[rust]".editor.defaultFormatter = "rust-lang.rust-analyzer";
 
 			### Nix
+			# Source: https://github.com/nix-community/vscode-nix-ide
       nix = {
         enableLanguageServer = true;
         serverPath = "nil";
+				serverSettings.nil = {
+					formatting.command = [ "nixpkgs-fmt" ];
+				};
+/*         serverPath = "nixd";
+				serverSettings.nixd = {
+					formatting.command = "nixpkgs-fmt";
+					options = {
+						enable = true;
+					};
+				}; */
       };
 
 			# Messy Settings Part

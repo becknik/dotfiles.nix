@@ -40,8 +40,11 @@
 
     ## NixOS
     nixos-option
-    unstable.nixd # TODO figure out how to set this up to work properly - should be superior to nil
+    # https://github.com/nix-community/nixd
+    unstable.nixd # TODO Figure out how to set up nixd - Seems like this isn't possible at all so far... https://github.com/nix-community/vscode-nix-ide/issues/363
     unstable.nil
+    nixpkgs-fmt
+    nixpkgs-lint
 
     ### Secrets Management
     sops
@@ -98,12 +101,18 @@
     cbonsai
     oneko
     uwuify
-    #uwufetch # TODO broken?
+    #uwufetch # TODO uwufetch seems to be broken
   ];
+
+  # Missing packages in nixpkgs:
+  # - qtqr (replaced)
+  # - gogh-git (workaround with dconf)
+  # - zsh-lovers
+  # - laptop-mode-tools
+  # - modprobed-db
+  # - plymouth-themes
+  # - deezer: TODO https://github.com/Shawn8901/nix-configuration/blob/main/packages/deezer/default.nix
 
   # Packages I found unnecessary with nix shell:
   # [ mypy perf plantuml postgresql prettier(d)? ]
-
-  # TODO Missing packages:
-  # [ qtqr, zsh-lovers, deezer, gogh-git, jetbrains-toolbox, laptop-mode-tools, modprobed-db, plymouth-themes ]
 }

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [
@@ -15,12 +15,15 @@
   services = {
     # Sync
     nextcloud-client = {
-      # TODO implement sync-exclude.lst management
       enable = true;
       #startInBackground = true; # Keeps `Process 3436 (.nextcloud-wrap) of user 1000 dumped core.`-ing... - even after disabling, wtf?
       # However, after setting up nextcloud, the autostart .desktop-files is created automatically
     };
-    #dropbox.enable = true; # TODO dropbox
+    dropbox = {
+      enable = true; # TODO Is dropbox working?
+      path = "${config.home.homeDirectory}/dropbox";
+    };
+
     # Privacy
     #keychain # TODO keychain management methods
     gpg-agent = {
@@ -69,9 +72,9 @@
     ## Daily Software
     libreoffice-still
     obsidian
-    birdtray # TODO does this work?
+    #birdtray # Actually not needing this
     planify
-    nextcloud-client # TODO basically redundant, but necessary for .desktop file in NIX_PATH...
+    nextcloud-client # Basically redundant, but still necessary for .desktop file in NIX_PATH...
 
     ## Privacy
     keepassxc
