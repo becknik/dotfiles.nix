@@ -2,25 +2,30 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
-      ./hardware-configuration.nix
+    ./hardware-configuration.nix
 
-      ./nix-setup.nix # Setup of nix & nixpkgs
-      ./packages.nix # Installation of a few system packages
-      ./gnome.nix # Addition of some kde tools, removal of bloat, etc.
-      ./desktop-env.nix # Setup of services for desktop-experience like sound, input, printing, ...
+    ./nix-setup.nix # Setup of nix & nixpkgs
+    ./packages.nix # Installation of a few system packages
+    ./gnome.nix # Addition of some kde tools, removal of bloat, etc.
+    ./desktop-env.nix # Setup of services for desktop-experience like sound, input, printing, ...
 
-      ./virtualisation.nix # virtualbox, libvirtd, podman containerization
+    ./virtualisation.nix # virtualbox, libvirtd, podman containerization
   ];
 
 
   # System Settings
   system = {
     stateVersion = "23.11";
-    autoUpgrade.enable = true;
+    autoUpgrade = {
+      enable = true;
+      operation = "boot";
+      flake = "${config.users.users.jnnk.home}/devel/own/dotfiles.nix";
+      flags = [ "--update-input" "nixpkgs" "--update-input" "nixpkgs-unstable" ]; # "--commit-lock-file"
+    };
   };
 
 
@@ -85,7 +90,19 @@
   networking.firewall.enable = true;
   ## Firewall Ports to open
   networking.firewall.allowedTCPPorts = [ ];
+  networking.firewall.allowedTCPPortRanges = [
+    {
+      from = 1714;
+      to = 1764;
+    }
+  ];
   networking.firewall.allowedUDPPorts = [ ];
+  networking.firewall.allowedUDPPortRanges = [
+    {
+      from = 1714;
+      to = 1764;
+    }
+  ];
   services.avahi.openFirewall = true;
   services.samba.openFirewall = true;
 

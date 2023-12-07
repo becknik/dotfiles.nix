@@ -72,8 +72,11 @@
       # I'm really annoyed by manually listing every packages I need below and this solves it
 
       ### General Purpose
-      biblatex biber
-      mmap enumitem pgfplots
+      biblatex
+      biber
+      mmap
+      enumitem
+      pgfplots
 
       ### Formatting
 
@@ -83,10 +86,14 @@
 
       lipsum ### Nice-to-Haves
 
-     fifo-stack varwidth tabto-ltx totcount tikzmark ### Dependency of algpseudocodex
+      fifo-stack
+      varwidth
+      tabto-ltx
+      totcount
+      tikzmark ### Dependency of algpseudocodex
 
       pdfcolmk ### ???
-    ] ))
+    ]))
 
     ## Trash
     neofetch

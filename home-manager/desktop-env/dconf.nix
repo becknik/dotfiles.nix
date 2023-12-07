@@ -35,7 +35,8 @@ let
     sort-order = "ascending";
     startup-mode = "cwd";
   };
-in {
+in
+{
   dconf.settings = {
     "apps/seahorse/listing".keyrings-selected = [ "openssh:///home/jnnk/.ssh" ];
 
@@ -55,7 +56,7 @@ in {
       video-framerate = 60;
     };
 
-   "org/gnome/calculator" = {
+    "org/gnome/calculator" = {
       button-mode = "programming";
       show-thousands = true;
       base = 10;
@@ -91,7 +92,7 @@ in {
       repeat-interval = lib.hm.gvariant.mkUint32 25;
     };
 
-    "org/gnome/desktop/peripherals/mouse"= {
+    "org/gnome/desktop/peripherals/mouse" = {
       accel-profile = "default";
       speed = 0.1;
     };
@@ -142,7 +143,7 @@ in {
       move-to-workspace-4 = [ "<Shift><Super>4" ];
       #move-to-workspace-5 = [ "<Shift><Super>5" ];
 
-      move-to-workspace-down =[ "<Shift><Super>j" ];
+      move-to-workspace-down = [ "<Shift><Super>j" ];
       move-to-workspace-last = [ "<Shift><Super>g" ];
       move-to-workspace-left = [ "<Shift><Super>h" ];
       move-to-workspace-right = [ "<Shift><Super>l" ];
@@ -236,7 +237,7 @@ in {
     };
 
     "org/gnome/shell" = {
-      favorite-apps = ["org.gnome.Terminal.desktop" "org.kde.dolphin.desktop" "librewolf.desktop" "obsidian.desktop" "thunderbird.desktop" "teams-for-linux.desktop" "org.gnome.Pomodoro.desktop" "anki.desktop" "vscodium.desktop" "idea-ultimate.desktop" "clion.desktop" "org.keepassxc.KeePassXC.desktop"];
+      favorite-apps = [ "org.gnome.Terminal.desktop" "org.kde.dolphin.desktop" "librewolf.desktop" "obsidian.desktop" "thunderbird.desktop" "teams-for-linux.desktop" "org.gnome.Pomodoro.desktop" "anki.desktop" "vscodium.desktop" "idea-ultimate.desktop" "clion.desktop" "org.keepassxc.KeePassXC.desktop" ];
     };
 
     "org/gnome/shell/extensions/Logo-menu" = {
@@ -337,7 +338,7 @@ in {
       scroll-to-focused-application = true;
       shift-click-action = "launch";
       shift-middle-click-action = "launch";
-      shortcut = ["<Super>q"]; # ?
+      shortcut = [ "<Super>q" ]; # ?
       shortcut-text = "<Super>q"; # "
       shortcut-timeout = 0.5;
       show-apps-at-top = false;
@@ -442,23 +443,23 @@ in {
       workspaces-in-app-grid = false;
     };
 
-# org/gnome/shell/extensions/quick-settings-tweaks # I'm abadining this one due to the errors caused by it
-#datemenu-fix-weather-widget=false
-#datemenu-remove-notifications=true
-#input-always-show=true
-#input-show-selected=true
-#list-buttons='[{"name":"SystemItem","label":null,"visible":true},{"name":"Notifications","label":null,"visible":false},{"name":"OutputStreamSlider","label":null,"visible":false},{"name":"InputStreamSlider","label":null,"visible":false},{"name":"St_BoxLayout","label":null,"visible":true},{"name":"BrightnessItem","label":null,"visible":true},{"name":"NMWiredToggle","label":null,"visible":true},{"name":"NMWirelessToggle","label":null,"visible":true},{"name":"NMModemToggle","label":null,"visible":true},{"name":"NMBluetoothToggle","label":null,"visible":true},{"name":"NMVpnToggle","label":null,"visible":true},{"name":"BluetoothToggle","label":"Bluetooth","visible":false},{"name":"PowerProfilesToggle","label":"Power Mode","visible":false},{"name":"NightLightToggle","label":"Night Light","visible":true},{"name":"DarkModeToggle","label":"Dark Style","visible":true},{"name":"RfkillToggle","label":"Airplane Mode","visible":false},{"name":"RotationToggle","label":"Auto Rotate","visible":false},{"name":"ServiceToggle","label":"GSConnect","visible":true},{"name":"DndQuickToggle","label":"Do Not Disturb","visible":true},{"name":"BackgroundAppsToggle","label":null,"visible":false},{"name":"MediaSection","label":null,"visible":false}]'
-#notifications-enabled=true
-#notifications-hide-when-no-notifications=true
-#notifications-integrated=true
-#notifications-position='top'
-#output-show-selected=true
-#volume-mixer-check-description=false
-#volume-mixer-position='top'
+    # org/gnome/shell/extensions/quick-settings-tweaks # I'm abadining this one due to the errors caused by it
+    #datemenu-fix-weather-widget=false
+    #datemenu-remove-notifications=true
+    #input-always-show=true
+    #input-show-selected=true
+    #list-buttons='[{"name":"SystemItem","label":null,"visible":true},{"name":"Notifications","label":null,"visible":false},{"name":"OutputStreamSlider","label":null,"visible":false},{"name":"InputStreamSlider","label":null,"visible":false},{"name":"St_BoxLayout","label":null,"visible":true},{"name":"BrightnessItem","label":null,"visible":true},{"name":"NMWiredToggle","label":null,"visible":true},{"name":"NMWirelessToggle","label":null,"visible":true},{"name":"NMModemToggle","label":null,"visible":true},{"name":"NMBluetoothToggle","label":null,"visible":true},{"name":"NMVpnToggle","label":null,"visible":true},{"name":"BluetoothToggle","label":"Bluetooth","visible":false},{"name":"PowerProfilesToggle","label":"Power Mode","visible":false},{"name":"NightLightToggle","label":"Night Light","visible":true},{"name":"DarkModeToggle","label":"Dark Style","visible":true},{"name":"RfkillToggle","label":"Airplane Mode","visible":false},{"name":"RotationToggle","label":"Auto Rotate","visible":false},{"name":"ServiceToggle","label":"GSConnect","visible":true},{"name":"DndQuickToggle","label":"Do Not Disturb","visible":true},{"name":"BackgroundAppsToggle","label":null,"visible":false},{"name":"MediaSection","label":null,"visible":false}]'
+    #notifications-enabled=true
+    #notifications-hide-when-no-notifications=true
+    #notifications-integrated=true
+    #notifications-position='top'
+    #output-show-selected=true
+    #volume-mixer-check-description=false
+    #volume-mixer-position='top'
 
     "org/gnome/shell/extensions/rounded-window-corners" = {
       black-list = [ "gnome-terminal-server" ];
-      border-color= "(0.5 0.5 0.5 1.0)";
+      border-color = "(0.5 0.5 0.5 1.0)";
       border-width = 0;
       enable-preferences-entry = true;
       focused-shadow = "{'vertical_offset': 4, 'horizontal_offset': 0, 'blur_offset': 28, 'spread_radius': 0, 'opacity': 80}";
@@ -518,7 +519,8 @@ in {
       list = [ "4a3fbad7-a54d-4910-b51a-808fea7e70e2" "dd180816-99e9-4947-bd75-2af5159e839b" ];
     };
 
-    "org/gnome/terminal/legacy/profiles:/:4a3fbad7-a54d-4910-b51a-808fea7e70e2" = ( # Gogh's 'Desert' theme
+    "org/gnome/terminal/legacy/profiles:/:4a3fbad7-a54d-4910-b51a-808fea7e70e2" = (
+      # Gogh's 'Desert' theme
       org_gnome_terminal_legacy_default_profile // {
         background-color = "#333333333333";
         bold-color = "#FFFFFFFFFFFF";
@@ -547,7 +549,8 @@ in {
       }
     );
 
-    "org/gnome/terminal/legacy/profiles:/:dd180816-99e9-4947-bd75-2af5159e839b" = ( # Gogh's 'Panda' theme
+    "org/gnome/terminal/legacy/profiles:/:dd180816-99e9-4947-bd75-2af5159e839b" = (
+      # Gogh's 'Panda' theme
       org_gnome_terminal_legacy_default_profile // {
         background-color = "#1D1D1E1E2020";
         bold-color = "#F0F0F0F0F0F0";
@@ -582,7 +585,8 @@ in {
     "org/virt-manager/virt-manager/details".show-toolbar = true;
     "org/virt-manager/virt-manager/paths".image-default = "${config.home.homeDirectory}/vm";
 
-    "org/virt-manager/virt-manager/connections" = { # Source: https://nixos.wiki/wiki/Virt-manager
+    "org/virt-manager/virt-manager/connections" = {
+      # Source: https://nixos.wiki/wiki/Virt-manager
       autoconnect = [ "qemu:///system" ];
       uris = [ "qemu:///system" ];
     };

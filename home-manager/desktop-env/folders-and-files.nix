@@ -59,7 +59,7 @@
     # Files
 
     ## oh-my-zsh theme
-      "oh-my-zsh-custom-config-dir" = {
+    "oh-my-zsh-custom-config-dir" = {
       enable = true;
       target = "${config.programs.zsh.oh-my-zsh.custom}/themes";
       source = builtins.fetchGit {
@@ -75,7 +75,7 @@
       enable = true;
       target = ".config/autostart/element.desktop";
       text =
-''[Desktop Entry]
+        ''[Desktop Entry]
 Type=Application
 Version=1.0
 Name=Element
@@ -89,7 +89,7 @@ Terminal=false'';
       enable = true;
       target = ".config/autostart/whatsapp-for-linux.desktop";
       text =
-''[Desktop Entry]
+        ''[Desktop Entry]
 Type=Application
 Version=1.0
 Name=Whatsapp
@@ -105,7 +105,7 @@ Terminal=false'';
       enable = true;
       target = ".cargo/config";
       text =
-''[target.x86_64-unknown-linux-gnu]
+        ''[target.x86_64-unknown-linux-gnu]
 rustflags = ["-C", "target-cpu=native"]
 '';
     };
@@ -115,7 +115,7 @@ rustflags = ["-C", "target-cpu=native"]
       enable = true;
       target = ".config/keepassxc/keepassxc.ini";
       text =
-''General]
+        ''General]
 ConfigVersion=2
 
 [Browser]
@@ -159,7 +159,7 @@ LockDatabaseIdle=true
       executable = true;
       target = "vm/run.sh";
       text =
-''#!/bin/bash
+        ''#!/bin/bash
 
 KVM="-enable-kvm -machine q35 -device intel-iommu"	# virtio-serial-pc
 HW="-m 4096 -smp 4 -cpu host"

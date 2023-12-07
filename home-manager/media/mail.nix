@@ -4,41 +4,44 @@ let
   getSecretPasswordCommand = provider: "cat $XDG_RUNTIME_DIR/secrets/mail/${provider}/password";
 
   # `provider` should be a lower case string
-  getDefaultMailAccountSettings = {
-      provider,
-      mailAddress,
-      serverUsername ? provider
-   }: let
-    # Provides a `Provider` variable with the first letter uppercased
-    /*
-    firstProviderLetter = lib.substring 0 1 provider;
-    restOfProvider = lib.substring 1 (lib.stringLength provider) provider;
-    Provider = lib.concatStrings [(lib.toUpper firstProviderLetter) restOfProvider];
-    */
-   in {
-    #name = Provider;
-    /*
-    error: The option `home-manager.users.jnnk.accounts.email.accounts.posteo.name' is read-only, but it's set multiple times. Definition values:
+  getDefaultMailAccountSettings =
+    { provider
+    , mailAddress
+    , serverUsername ? provider
+    }:
+    let
+      # Provides a `Provider` variable with the first letter uppercased
+      /*
+        firstProviderLetter = lib.substring 0 1 provider;
+        restOfProvider = lib.substring 1 (lib.stringLength provider) provider;
+        Provider = lib.concatStrings [(lib.toUpper firstProviderLetter) restOfProvider];
+      */
+    in
+    {
+      #name = Provider;
+      /*
+        error: The option `home-manager.users.jnnk.accounts.email.accounts.posteo.name' is read-only, but it's set multiple times. Definition values:
        - In `/nix/var/nix/profiles/per-user/root/channels/home-manager/modules/accounts/email.nix': "posteo"
        - In `/home/jnnk/.config/home-manager/media/mail.nix': "Posteo"
-    */
+      */
 
-    address = mailAddress; # Differing names necessary to avoid infinit recursion
-    realName = "Jannik Becker";
-    passwordCommand = getSecretPasswordCommand provider;
+      address = mailAddress; # Differing names necessary to avoid infinit recursion
+      realName = "Jannik Becker";
+      passwordCommand = getSecretPasswordCommand provider;
 
-    userName = serverUsername;
+      userName = serverUsername;
 
 
-    /*mbsync = {
+      /*mbsync = {
       enable = true;
       create = "maildir";
-    };*/
-    aerc.enable = false;
-    neomutt.enable = false;
-    notmuch.enable = false;
-  };
-in {
+      };*/
+      aerc.enable = false;
+      neomutt.enable = false;
+      notmuch.enable = false;
+    };
+in
+{
   accounts.email.accounts = {
 
     "posteo" = (getDefaultMailAccountSettings {

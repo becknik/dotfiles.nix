@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 {
   programs = {
     git.enable = true;
@@ -61,5 +61,5 @@
       sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
       formatted = builtins.concatStringsSep "\n" sortedUnique;
     in
-      formatted;
+    formatted;
 }

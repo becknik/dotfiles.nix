@@ -20,9 +20,10 @@
 
   # Backups
   programs = {
-    borgmatic = { # TODO Setup automatic backups for the home-directory
+    borgmatic = {
+      # TODO Setup automatic backups for the home-directory
       enable = false;
-      backups = {};
+      backups = { };
     };
   };
 }

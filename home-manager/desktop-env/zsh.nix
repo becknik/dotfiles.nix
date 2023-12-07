@@ -43,7 +43,8 @@
         ignoreSpace = true; # Share history between all sessions.
       };
 
-      localVariables = { # variable definitions on top of .zshrc
+      localVariables = {
+        # variable definitions on top of .zshrc
         # Further oh-my-zsh Settings
         DISABLE_AUTO_TITLE = true; # automatic setting of terminal title
         ENABLE_CORRECTION = false; # command auto corrections
@@ -137,9 +138,9 @@
           "direnv"
         ];
         custom = "${config.home.homeDirectory}/.config/oh-my-zsh/custom";
-        extraConfig =  # oh-my-zsh extra settings for plugins
-# $1=exit_status, $2=command, $3=elapsed_time
-''bgnotify_bell=false;
+        extraConfig = # oh-my-zsh extra settings for plugins
+          # $1=exit_status, $2=command, $3=elapsed_time
+          ''bgnotify_bell=false;
 bgnotify_threshold=10;
 
 function bgnotify_formatted {
@@ -151,9 +152,9 @@ TIMER_PRECISION=2;
 TIMER_FORMAT="[%d]";
 TIMER_THRESHOLD=.5;
 '' +
-# oh-my-zsh extra settings for themes:
-# Not set: perl nvm hg
-''BULLETTRAIN_PROMPT_ORDER=("time" "status" "context" "custom" "dir" "ruby" "virtualenv" "aws" "go" "elixir" "git" "cmd_exec_time");
+          # oh-my-zsh extra settings for themes:
+          # Not set: perl nvm hg
+          ''BULLETTRAIN_PROMPT_ORDER=("time" "status" "context" "custom" "dir" "ruby" "virtualenv" "aws" "go" "elixir" "git" "cmd_exec_time");
 BULLETTRAIN_PROMPT_SEPARATE_LINE=true;
 BULLETTRAIN_PROMPT_ADD_NEWLINE=false;
 BULLETTRAIN_STATUS_EXIT_SHOW=true;

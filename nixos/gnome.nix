@@ -3,7 +3,8 @@
 let
   # Used to overwrite the lib.mkDefault which uses the lower priority of 1000
   mkForce = value: lib.mkOverride 50 value;
-in {
+in
+{
 
   # Basic GNOME Desktop Environment Setup
   services = {
@@ -69,7 +70,7 @@ in {
   # KDE/ Qt Support
 
   ## Manual Installations
-  ++ ( with pkgs; [
+  ++ (with pkgs; [
     gedit
     colord-kde
     adwaita-qt
@@ -78,7 +79,7 @@ in {
 
 
   ## Replacements for GNOME Tools
-   ++ (with pkgs.libsForQt5; [
+  ++ (with pkgs.libsForQt5; [
     dolphin
     dolphin-plugins
     gwenview

@@ -85,15 +85,17 @@
     # Latest postman build fails to download - last checked 2023.12.06
     #> curl: (22) The requested URL returned error: 404
     #> error: cannot download postman-10.18.6.tar.gz from any mirror
-    (import (builtins.fetchGit {
-      name = "nixpkgs-unstable-postman-10.15.0";
-      url = "https://github.com/NixOS/nixpkgs/";
-      ref = "refs/heads/nixpkgs-unstable";
-      rev = "976fa3369d722e76f37c77493d99829540d43845";
-    }) {
-      system = current-system;
-      config.allowUnfree = true;
-    }).postman
+    (import
+      (builtins.fetchGit {
+        name = "nixpkgs-unstable-postman-10.15.0";
+        url = "https://github.com/NixOS/nixpkgs/";
+        ref = "refs/heads/nixpkgs-unstable";
+        rev = "976fa3369d722e76f37c77493d99829540d43845";
+      })
+      {
+        system = current-system;
+        config.allowUnfree = true;
+      }).postman
 
     ### SQL
     dbeaver

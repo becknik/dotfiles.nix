@@ -30,7 +30,7 @@
 
     # C++
     unstable.gcc
-    (unstable.clang.overrideAttrs ( oldAttrs: {
+    (unstable.clang.overrideAttrs (oldAttrs: {
       meta.priority = -10;
     }))
     cmake
@@ -39,7 +39,7 @@
   # JDK Setup
   programs.java = {
     enable = true;
-    package = pkgs.openjdk17-bootstrap.overrideAttrs ( oldAttrs: {
+    package = pkgs.openjdk17-bootstrap.overrideAttrs (oldAttrs: {
       meta.priorty = -10;
     });
   };

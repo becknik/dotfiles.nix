@@ -44,40 +44,43 @@
 
   ## Fcitx5
   i18n.inputMethod = {
-      enabled = "fcitx5";
-      fcitx5 = {
-        addons = with pkgs; [
-          fcitx5-mozc
-          fcitx5-gtk
-          #fcitx5-material-color
-        ];
-       ignoreUserConfig = true;
-        settings = { # How to determine these? Set `ignoreUserConfig` to false, then configure the setup you'd like & then cat the values of `$HOME/.config/fxcit5/*`
-          globalOptions = { # /etc/xdg/fcitx5/config
-            "Hotkey/TriggerKeys" = {
-              "0" = "Control+Super+space"; # modified this one
-            };
+    enabled = "fcitx5";
+    fcitx5 = {
+      addons = with pkgs; [
+        fcitx5-mozc
+        fcitx5-gtk
+        #fcitx5-material-color
+      ];
+      ignoreUserConfig = true;
+      settings = {
+        # How to determine these? Set `ignoreUserConfig` to false, then configure the setup you'd like & then cat the values of `$HOME/.config/fxcit5/*`
+        globalOptions = {
+          # /etc/xdg/fcitx5/config
+          "Hotkey/TriggerKeys" = {
+            "0" = "Control+Super+space"; # modified this one
           };
-          inputMethod = { # /etc/xdg/fcitx5/profile
-            "Groups/0" = {
-              Name = "Default";
-              "Default Layout" = "eu"; # For EurKEY
-              DefaultIM = "mozc";
-            };
-            "Groups/0/Items/0" = {
-              Name = "keyboard-eu"; # "
-              Layout = "";
-            };
-            "Groups/0/Items/1" = {
-              Name = "mozc";
-              Layout = "";
-            };
-            "GroupOrder" = {
-              "0" = "Default";
-            };
+        };
+        inputMethod = {
+          # /etc/xdg/fcitx5/profile
+          "Groups/0" = {
+            Name = "Default";
+            "Default Layout" = "eu"; # For EurKEY
+            DefaultIM = "mozc";
+          };
+          "Groups/0/Items/0" = {
+            Name = "keyboard-eu"; # "
+            Layout = "";
+          };
+          "Groups/0/Items/1" = {
+            Name = "mozc";
+            Layout = "";
+          };
+          "GroupOrder" = {
+            "0" = "Default";
           };
         };
       };
+    };
   };
 
   # Environment variables

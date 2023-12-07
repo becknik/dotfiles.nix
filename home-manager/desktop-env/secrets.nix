@@ -17,7 +17,8 @@ let
   mailSecretGmx = createMailSecret "gmx";
   mailSecretUni = createMailSecret "uni";
   #mailSecretWork1 = createMailSecret "work1";
-in {
+in
+{
   # Sources:
   # https://github.com/Mic92/sops-nix
   # https://github.com/FiloSottile/age

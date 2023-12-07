@@ -26,7 +26,7 @@
 
 # Stuff to get self-compilation of the whole system with cpu-optimizations to work. I find this idea ridiculous now...
 /*nix.settings.system-features = [ "benchmark" "big-parallel" "kvm" "nixos-test" "gccarch-raptorlake" "gccarch-x86-64-v3"];
-nixpkgs.localSystem = {
+  nixpkgs.localSystem = {
   gcc.arch = "raptorlake";
   gcc.tune = "raptorlake";
   #gcc.arch = "x86-64-v3";

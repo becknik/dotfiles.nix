@@ -30,65 +30,69 @@
   };
 
   outputs = input-attrs@{ self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, plasma-manager, nixvim, ... }:
-  let
-    current-system = "x86_64-linux";
+    let
+      current-system = "x86_64-linux";
 
-    overlay-unstable = self: super: {
-      unstable = import input-attrs.nixpkgs-unstable {
-        system = current-system;
-        config.allowUnfree = true;
+      overlay-unstable = self: super: {
+        unstable = import input-attrs.nixpkgs-unstable {
+          system = current-system;
+          config.allowUnfree = true;
+        };
       };
-    };
-  in {
-    nixosConfigurations = {
-      dnix = nixpkgs.lib.nixosSystem {
-        system = current-system;
-        specialArgs = { inherit current-system; };
+    in
+    {
+      nixosConfigurations = {
+        dnix = nixpkgs.lib.nixosSystem {
+          system = current-system;
+          specialArgs = { inherit current-system; };
 
-        modules = [
-          # Enables pkgs.unstable
-          ({ config, pkgs, lib, ... }: { nixpkgs.overlays = [
-            overlay-unstable
+          modules = [
+            # Enables pkgs.unstable
+            ({ config, pkgs, lib, ... }: {
+              nixpkgs.overlays = [
+                overlay-unstable
 
-            (final: prev: { # TODO Move overlays into separate file?
-              linux_xanmod_latest_custom = pkgs.linuxPackagesFor (pkgs.linux_xanmod_latest.override (old: {
-                # Optimizations
-                # TODO https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=linux-clear
-                # Maybe interesting: https://discourse.nixos.org/t/overriding-nativebuildinputs-on-buildlinux/24934
-                stdenv = prev.impureUseNativeOptimizations prev.stdenv;
-                # Disable the Proton and Wine stuff
-                structuredExtraConfig = with lib.kernel; {
-                  FUTEX = no;
-                  FUTEX_PI = no;
-                  WINESYNC = no;
-                };
-                # Disable programming language errors in the compilation-log
-                ignoreConfigErrors = true;
-              }));
+                (final: prev: {
+                  # TODO Move overlays into separate file?
+                  linux_xanmod_latest_custom = pkgs.linuxPackagesFor (pkgs.linux_xanmod_latest.override (old: {
+                    # Optimizations
+                    # TODO https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=linux-clear
+                    # Maybe interesting: https://discourse.nixos.org/t/overriding-nativebuildinputs-on-buildlinux/24934
+                    stdenv = prev.impureUseNativeOptimizations prev.stdenv;
+                    # Disable the Proton and Wine stuff
+                    structuredExtraConfig = with lib.kernel; {
+                      FUTEX = no;
+                      FUTEX_PI = no;
+                      WINESYNC = no;
+                    };
+                    # Disable programming language errors in the compilation-log
+                    ignoreConfigErrors = true;
+                  }));
+                })
+              ];
             })
-            ];
-          })
 
-          # NixOS configuration
-          ./nixos/configuration.nix
+            # NixOS configuration
+            ./nixos/configuration.nix
 
-          # home-manager basic setup & configuration import
-          home-manager.nixosModules.home-manager {
-            home-manager.extraSpecialArgs = { inherit current-system; };
+            # home-manager basic setup & configuration import
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.extraSpecialArgs = { inherit current-system; };
 
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
 
-            home-manager.sharedModules = [
-              sops-nix.homeManagerModules.sops
-              plasma-manager.homeManagerModules.plasma-manager
-              nixvim.homeManagerModules.nixvim
-            ];
+              home-manager.sharedModules = [
+                sops-nix.homeManagerModules.sops
+                plasma-manager.homeManagerModules.plasma-manager
+                nixvim.homeManagerModules.nixvim
+              ];
 
-            home-manager.users.jnnk = import ./home-manager/home.nix; # flakes are git-repo-root & symlink-aware
-          }
-        ];
+              home-manager.users.jnnk = import ./home-manager/home.nix; # flakes are git-repo-root & symlink-aware
+            }
+          ];
+        };
       };
     };
-  };
 }

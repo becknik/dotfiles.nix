@@ -3,150 +3,150 @@
 {
   # Neovim TODO https://mipmip.github.io/home-manager-option-search/?query=neovim
   programs = {
-		/*neovim = { # Conflicts with nixvim below. Default editor set in desktop.env file
-			enable = true;
-			defaultEditor = true; # redundant
-		};*/
+    /*neovim = { # Conflicts with nixvim below. Default editor set in desktop.env file
+      enable = true;
+      defaultEditor = true; # redundant
+    };*/
 
-		nixvim = {
-			enable = true;
-			#colorschemes.moneokai.enable = true; # TODO
-			# Sources:
-			# https://gist.github.com/Nazerbayev/641ad1367cdc3044a0f3b3866e52e1b6
-			# https://medium.com/geekculture/neovim-configuration-for-beginners-b2116dbbde84
+    nixvim = {
+      enable = true;
+      #colorschemes.moneokai.enable = true; # TODO
+      # Sources:
+      # https://gist.github.com/Nazerbayev/641ad1367cdc3044a0f3b3866e52e1b6
+      # https://medium.com/geekculture/neovim-configuration-for-beginners-b2116dbbde84
 
-			options = {
-				encoding = "utf-8";
-				spell = true;
-				spelllang = [ "en" "de" ]; # Requires german language dictionary
+      options = {
+        encoding = "utf-8";
+        spell = true;
+        spelllang = [ "en" "de" ]; # Requires german language dictionary
 
-				## Colors
-				termguicolors = true; # Proper terminal coloring support
-				#colorscheme moneokai
+        ## Colors
+        termguicolors = true; # Proper terminal coloring support
+        #colorscheme moneokai
 
-				## UI
-				number = true;
-				relativenumber = true;
-				colorcolumn = [ 80 120 ];
-				rulerformat = ""; # TODO
-				# Make Neovim look weird:
-				#breakindent = true;
-				#cursorline = true;
-				#cursorcolumn = true;
+        ## UI
+        number = true;
+        relativenumber = true;
+        colorcolumn = [ 80 120 ];
+        rulerformat = ""; # TODO
+        # Make Neovim look weird:
+        #breakindent = true;
+        #cursorline = true;
+        #cursorcolumn = true;
 
-				## Indentation
-				tabstop = 2;
-				softtabstop = 2;
-				shiftround = true;
-				shiftwidth = 2;	# Rounds the amount of shifts according to shiftwidth
-				#set autoindent smarttab - default is on " Use expandtab option to ident with spaces
+        ## Indentation
+        tabstop = 2;
+        softtabstop = 2;
+        shiftround = true;
+        shiftwidth = 2; # Rounds the amount of shifts according to shiftwidth
+        #set autoindent smarttab - default is on " Use expandtab option to ident with spaces
 
 
-				## Line & Blank Formatting
-				list = true;
-				listchars = "tab:»\ ,extends:›,precedes:‹,trail:·,nbsp:·";
+        ## Line & Blank Formatting
+        list = true;
+        listchars = "tab:»\ ,extends:›,precedes:‹,trail:·,nbsp:·";
 
-				## Search
-				ignorecase = true;
-				smartcase = true; #	Ignore case when no upper cased letters are contained in search string
-				#"set gdefault " Sets the g option to substitute by default & when set manually apply on one or all selections
-				#"set incsearch " Incremental search
-				#"set wildmode=longest,list,full wildmenu
+        ## Search
+        ignorecase = true;
+        smartcase = true; #	Ignore case when no upper cased letters are contained in search string
+        #"set gdefault " Sets the g option to substitute by default & when set manually apply on one or all selections
+        #"set incsearch " Incremental search
+        #"set wildmode=longest,list,full wildmenu
 
-				## Completion
-				completeopt = [ "menu" "menuone" "longest" ];
+        ## Completion
+        completeopt = [ "menu" "menuone" "longest" ];
 
-				splitright = true;
-				splitbelow = true;
-				matchpairs = "<:>,=:;"; # Maybe change this to HTML, XML & Generics
-			};
-		};
+        splitright = true;
+        splitbelow = true;
+        matchpairs = "<:>,=:;"; # Maybe change this to HTML, XML & Generics
+      };
+    };
   };
   #set history=1000
-	#" default: backup current file, deleted afterwards
-	#set backup	" delete old backup, backup current file
-	#set backupdir=~/.cache/nvim/backup//	"seems to not work properly...
-	#set noswapfile
-	#set shada='100,<1000,s100
-	#set shadafile=~/.cache/nvim/session.shada
+  #" default: backup current file, deleted afterwards
+  #set backup	" delete old backup, backup current file
+  #set backupdir=~/.cache/nvim/backup//	"seems to not work properly...
+  #set noswapfile
+  #set shada='100,<1000,s100
+  #set shadafile=~/.cache/nvim/session.shada
 
-	#" Keybinding setup
-	#" _nnoremap maps keys in normal mode
-	#" :inoremap maps keys in insertion mode
-	#" :vnoremap maps keys in visual mode
-	#" <C> represents control key
-	#" <A> represents control key
+  #" Keybinding setup
+  #" _nnoremap maps keys in normal mode
+  #" :inoremap maps keys in insertion mode
+  #" :vnoremap maps keys in visual mode
+  #" <C> represents control key
+  #" <A> represents control key
 
-	#" move line or visually selected block - alt+j/k
-	#inoremap <A-j> <Esc>:move .+1<CR>==gi
-	#inoremap <A-k> <Esc>:move .-2<CR>==gi
-	#vnoremap <A-j> :move '>+1<CR>gv=gv
-	#vnoremap <A-k> :move '<-2<CR>gv=gv
+  #" move line or visually selected block - alt+j/k
+  #inoremap <A-j> <Esc>:move .+1<CR>==gi
+  #inoremap <A-k> <Esc>:move .-2<CR>==gi
+  #vnoremap <A-j> :move '>+1<CR>gv=gv
+  #vnoremap <A-k> :move '<-2<CR>gv=gv
 
-	#" move split panes to left/bottom/top/right
-	#nnoremap <A-h> <C-W>H
-	#nnoremap <A-j> <C-W>J
-	#nnoremap <A-k> <C-W>K
-	#nnoremap <A-l> <C-W>L
+  #" move split panes to left/bottom/top/right
+  #nnoremap <A-h> <C-W>H
+  #nnoremap <A-j> <C-W>J
+  #nnoremap <A-k> <C-W>K
+  #nnoremap <A-l> <C-W>L
 
-	#" move between panes to left/bottom/top/right
-	#nnoremap <C-h> <C-w>h
-	#nnoremap <C-j> <C-w>j
-	#nnoremap <C-k> <C-w>k
-	#nnoremap <C-l> <C-w>l
+  #" move between panes to left/bottom/top/right
+  #nnoremap <C-h> <C-w>h
+  #nnoremap <C-j> <C-w>j
+  #nnoremap <C-k> <C-w>k
+  #nnoremap <C-l> <C-w>l
 
-	#" modify windows sizes with <C->> & <C-<>
-	#nnoremap <C-w>+ :res +10<CR>
-	#nnoremap <C-w>- :res -10<CR>
-	#" I give it up...
-	#"nnoremap <C-w>> :resize vertical +10<CR>
-	#"nnoremap <C-w>< :resize vertical -10<CR>
+  #" modify windows sizes with <C->> & <C-<>
+  #nnoremap <C-w>+ :res +10<CR>
+  #nnoremap <C-w>- :res -10<CR>
+  #" I give it up...
+  #"nnoremap <C-w>> :resize vertical +10<CR>
+  #"nnoremap <C-w>< :resize vertical -10<CR>
 
-	#" Press i to enter insert mode, and ii etc. to exit insert mode.
-	#:inoremap ii <Esc>
-	#:inoremap hh <Esc>
-	#:inoremap jj <Esc>
-	#:inoremap kk <Esc>
-	#":inoremap jk <Esc>
-	#" Maybe not so good idea?
+  #" Press i to enter insert mode, and ii etc. to exit insert mode.
+  #:inoremap ii <Esc>
+  #:inoremap hh <Esc>
+  #:inoremap jj <Esc>
+  #:inoremap kk <Esc>
+  #":inoremap jk <Esc>
+  #" Maybe not so good idea?
 
-	#nnoremap <C-n>oh :noh<CR>
+  #nnoremap <C-n>oh :noh<CR>
 
-	#" Prevents clipboard hijacking of <C-R+>
-	#:inoremap <C-R>+ <C-R><C-R>+
+  #" Prevents clipboard hijacking of <C-R+>
+  #:inoremap <C-R>+ <C-R><C-R>+
 
-	#""" VIM gutter - jump between 'hunks'
+  #""" VIM gutter - jump between 'hunks'
 
-	#nmap ]h <Plug>(GitGutterNextHunk)
-	#nmap [h <Plug>(GitGutterPrevHunk)
+  #nmap ]h <Plug>(GitGutterNextHunk)
+  #nmap [h <Plug>(GitGutterPrevHunk)
 
-	#""" NERDCommenter config
+  #""" NERDCommenter config
 
-	#let g:NERDCreateDefaultMappings = 1
-	#let g:NERDSpaceDelims = 1
-	#let g:NERDCompactSexyComs = 1
-	#let g:NERDTrimTrailingWhitespace = 1
+  #let g:NERDCreateDefaultMappings = 1
+  #let g:NERDSpaceDelims = 1
+  #let g:NERDCompactSexyComs = 1
+  #let g:NERDTrimTrailingWhitespace = 1
 
-	#nnoremap <C-n> :NvimTreeFocus<CR>
-	#nnoremap <C-t> :NvimTreeToggle<CR>
-	#nnoremap <C-n>f :NERDTreeFind<CR>
+  #nnoremap <C-n> :NvimTreeFocus<CR>
+  #nnoremap <C-t> :NvimTreeToggle<CR>
+  #nnoremap <C-n>f :NERDTreeFind<CR>
 
-	#" Start NERDTree and put the cursor back in the other window.
-	#"autocmd VimEnter * NERDTree | wincmd p
-	#" Close the tab if NERDTree is the only window remaining in it.
-	#"autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-	#" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
-	#"autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
-	#"	\ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+  #" Start NERDTree and put the cursor back in the other window.
+  #"autocmd VimEnter * NERDTree | wincmd p
+  #" Close the tab if NERDTree is the only window remaining in it.
+  #"autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+  #" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+  #"autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+  #"	\ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 
-	#"set statusline+=%#warningmsg#
-	#"set statusline+=%{SyntasticStatuslineFlag()}
-	#"set statusline+=%*
+  #"set statusline+=%#warningmsg#
+  #"set statusline+=%{SyntasticStatuslineFlag()}
+  #"set statusline+=%*
 
-	#"let g:syntastic_always_populate_loc_list = 1
-	#"let g:syntastic_auto_loc_list = 1
-	#"let g:syntastic_check_on_open = 1
-	#"let g:syntastic_check_on_wq = 0
+  #"let g:syntastic_always_populate_loc_list = 1
+  #"let g:syntastic_auto_loc_list = 1
+  #"let g:syntastic_check_on_open = 1
+  #"let g:syntastic_check_on_wq = 0
 }
 
 # Plugins
