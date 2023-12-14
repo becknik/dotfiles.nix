@@ -75,6 +75,12 @@ in
     colord-kde
     adwaita-qt
     adwaita-qt6
+    # Should be redundant due to the qt.platformTheme setting below...
+    qgnomeplatform
+    qgnomeplatform-qt6
+
+    #libsForQt5.qtstyleplugin-kvantum
+    #qt6Packages.qtstyleplugin-kvantum
   ])
 
 

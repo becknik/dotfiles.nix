@@ -39,10 +39,14 @@
       enable = true;
       package = pkgs.ungoogled-chromium;
       commandLineArgs = [
-        "--features=UseOzonePlatform"
-        "--ozone-platform-hint=wayland"
+        "--enable-features=UseOzonePlatform"
+        "--ozone-platform=wayland"
         "--password-store=gnome"
         "--enable-zero-copy"
+
+        # Source: https://github.com/fcitx/fcitx5/issues/263asdfasd (for fcitx support)
+        "--gtk-version=4"
+        "--enable-features=WebRTCPipeWireCapturer"
 
         # https://aur.archlinux.org/packages/ungoogled-chromium 2022-05-06 pinned message
         "--disable-features=UseChromeOSDirectVideoDecoder"
@@ -94,5 +98,6 @@
     yt-dlp
     media-downloader # for yt-dlp
     krita
+    imagemagick
   ];
 }

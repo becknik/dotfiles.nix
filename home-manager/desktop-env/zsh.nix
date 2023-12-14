@@ -126,7 +126,7 @@
           #"rsync"
           #"scala"
           "singlechar"
-          #"ssh-agent"
+          "ssh-agent"
           #"thefuck" # should conflict with the Esc^2 from sudo plugin
           #"transfer" # file sharing, but idk if usefull fo rme...
           #"urltools"
@@ -169,6 +169,7 @@ BULLETTRAIN_PROMPT_SEPARATE_LINE=true;
         sduo = "sudo";
         nrbs = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#dnix\" switch";
         nrbt = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#dnix\" test";
+        ngcd = "sudo nix-collect-garbage -d && nix-collect-garbage -d";
       };
 
       #completionInit # "Oh-My-Zsh/Prezto calls compinit during initialization, calling it twice causes slight start up slowdown"

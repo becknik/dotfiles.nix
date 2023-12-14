@@ -200,6 +200,9 @@ in
       update-interval = 2000;
     };
 
+    #"org/gnome/gedit/preferences/editor/scheme" = "oblivion"; # dconf editor claims "No schema available", but it definitive is
+    # TODO this option "is not a type `GVariant value`", probably because of the dconf scheme not being recognized...
+
     "org/gnome/meld" = {
       enable-space-drawer = false;
       highlight-current-line = true;

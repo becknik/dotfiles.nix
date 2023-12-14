@@ -1,4 +1,4 @@
-{ pkgs, current-system, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -71,8 +71,8 @@
     meld
 
     # JetBrains IDEs
-    jetbrains.clion
-    jetbrains.idea-ultimate
+    unstable.jetbrains.clion
+    unstable.jetbrains.idea-ultimate
 
     ## Build Tools
     gradle
@@ -93,7 +93,7 @@
         rev = "976fa3369d722e76f37c77493d99829540d43845";
       })
       {
-        system = current-system;
+        inherit system;
         config.allowUnfree = true;
       }).postman
 

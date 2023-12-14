@@ -3,12 +3,14 @@
 {
   nixpkgs.config = {
     allowUnfree = true;
+    permittedInsecurePackages = [ "electron-25.9.0" ];
   };
 
   nix = {
     optimise.automatic = true;
     settings = {
-      cores = 20; # leave 4 of my 24 logical CPUs free, useful for compilations
+      max-jobs = 3;
+      cores = 7; # uses 21 logical CPUs
       auto-optimise-store = true;
 
       experimental-features = [

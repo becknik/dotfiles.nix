@@ -31,11 +31,16 @@
 
   outputs = input-attrs@{ self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, plasma-manager, nixvim, ... }:
     let
-      current-system = "x86_64-linux";
+      system = "x86_64-linux";
+
+/*       pkgs = import nixpkgs {
+        inherit system;
+        config = { allowUnfree = true; };
+      }; */
 
       overlay-unstable = self: super: {
         unstable = import input-attrs.nixpkgs-unstable {
-          system = current-system;
+          inherit system;
           config.allowUnfree = true;
         };
       };
@@ -43,9 +48,7 @@
     {
       nixosConfigurations = {
         dnix = nixpkgs.lib.nixosSystem {
-          system = current-system;
-          specialArgs = { inherit current-system; };
-
+          inherit system;
           modules = [
             # Enables pkgs.unstable
             ({ config, pkgs, lib, ... }: {
@@ -78,8 +81,6 @@
             # home-manager basic setup & configuration import
             home-manager.nixosModules.home-manager
             {
-              home-manager.extraSpecialArgs = { inherit current-system; };
-
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
 

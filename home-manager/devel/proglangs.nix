@@ -13,6 +13,14 @@
     unstable.nil
 
     # JVM
+    # TODO Install multiple JDK version system wide
+    /*(pkgs.temurin-bin-17.overrideAttrs (oldAttrs: {
+      meta.priorty = 10;
+    }))*/
+    /*(temurin-bin-11.overrideAttrs (oldAttrs: {
+      meta.priorty = 10;
+    }))*/
+
     kotlin
     dotty # = scala 3
 
@@ -39,7 +47,8 @@
   # JDK Setup
   programs.java = {
     enable = true;
-    package = pkgs.openjdk17-bootstrap.overrideAttrs (oldAttrs: {
+    # Source: https://whichjdk.com/
+    package = pkgs.temurin-bin-21.overrideAttrs (oldAttrs: {
       meta.priorty = -10;
     });
   };

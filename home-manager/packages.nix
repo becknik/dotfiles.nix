@@ -80,17 +80,21 @@
 
       ### Formatting
 
-      changepage #### Page Layout
+      #### Page Layout
+      changepage
 
-      csquotes #### Text
+      #### Text
+      csquotes
 
-      lipsum ### Nice-to-Haves
+      ### Nice-to-Haves
+      lipsum
 
+      ### Dependency of algpseudocodex
       fifo-stack
       varwidth
       tabto-ltx
       totcount
-      tikzmark ### Dependency of algpseudocodex
+      tikzmark
 
       pdfcolmk ### ???
     ]))

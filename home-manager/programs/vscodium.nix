@@ -368,7 +368,7 @@
         report = 1;
         matchpairs = "(:),{:},[:],<:>";
         replaceWithRegister = false; # This sound like good stuff https://github.com/vim-scripts/ReplaceWithRegister
-        smartRelativeLine = false;
+        smartRelativeLine = true;
         textwidth = 120; # word-wrap width with `gp`
 
         handleKeys = {
@@ -379,6 +379,8 @@
 
           "<C-p>" = false;
           "<C-t>" = false;
+          "<C-w>" = false;
+          "<C-k>" = false; # <C-k><C-o>
         };
       };
 
