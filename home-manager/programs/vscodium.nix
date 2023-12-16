@@ -438,18 +438,6 @@
       #editor.defaultFormatter = "esbenp.prettier-vscode";
 
       ## Markdown
-      "[markdown]" = {
-        editor.defaultFormatter = "DavidAnson.vscode-markdownlint";
-        editor.quickSuggestions = {
-          comments = "off";
-          strings = "off";
-          other = "off";
-        };
-        editor.wordBasedSuggestions = false;
-        cSpell.fixSpellingWithRenameProvider = true;
-        cSpell.advanced.feature.useReferenceProviderWithRename = true;
-        cSpell.advanced.feature.useReferenceProviderRemove = "/^#+\\s/"; # TODO Whats this for??
-      };
       markdownlint.run = "onSave";
 
       ### Marp
@@ -460,10 +448,6 @@
       };
 
       ## LaTeX
-      "[latex]" = {
-        editor.wordBasedSuggestions = false;
-        editor.defaultFormatter = "James-Yu.latex-workshop";
-      };
       latex-workshop = {
         intellisense.unimathsymbols.enabled = true;
         latex.autoClean.run = "onFailed";
@@ -514,21 +498,17 @@
         sharedIndexes.enabled = "off";
         configuration.runtimes = [
           {
-            name = "JavaSE-17";
+            name = "JavaSE-21";
             path = "$JAVA_HOME";
             default = true;
           }
         ];
       };
-      "[java]" = {
-        editor.defaultFormatter = "redhat.java";
-      };
 
       ## Rust
       rust-analyzer.restartServerOnConfigChange = true;
-      "[rust]".editor.defaultFormatter = "rust-lang.rust-analyzer";
-      # Messy Settings Part
 
+      # Messy Settings Part
       lldb.suppressUpdateNotifications = true;
       terminal.integrated.scrollback = 5000;
       outline.collapseItems = "alwaysCollapse";
@@ -556,9 +536,10 @@
       clangd.onConfigChanged = "restart";
 
       # Code Together
-      #codetogether.userName = "becknik";
-      #codetogether.virtualCursorJoin = "ownVirtualCursor";
-
+      codetogether = {
+        userName = "becknik";
+        virtualCursorJoin = "ownVirtualCursor";
+      };
 
       # MS C++ Plugin
       /*C_Cpp.intelliSenseEngine = "disabled";
@@ -600,6 +581,27 @@
       #sync.gist = "461947d6481e2c78445a11486a0b11a7";
       #sync.autoDownload = true;
       #sync.autoUpload = true;
+
+      # Language-specific Formatting section
+
+      # VSCodium seems to make this change from version 1.85 autoamtically when opening projects
+      "[markdown]" = {
+        editor.defaultFormatter = "DavidAnson.vscode-markdownlint";
+        editor.quickSuggestions = {
+          comments = "off";
+          strings = "off";
+          other = "off";
+        };
+        cSpell.fixSpellingWithRenameProvider = true;
+        cSpell.advanced.feature.useReferenceProviderWithRename = true;
+        cSpell.advanced.feature.useReferenceProviderRemove = "/^#+\\s/"; # TODO Whats this for??
+      };
+      "[latex]" = {
+        editor.defaultFormatter = "James-Yu.latex-workshop";
+      };
+      "[latex][markdown]".editor.wordBasedSuggestions = "off";
+      "[java]".editor.defaultFormatter = "redhat.java";
+      "[rust]".editor.defaultFormatter = "rust-lang.rust-analyzer";
     };
   };
 }

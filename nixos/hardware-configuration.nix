@@ -28,9 +28,11 @@
   };
   swapDevices = [
     {
-      device = "/.swapfile";
+      device = "/swapfile";
       size = 32 * 1024;
-      randomEncryption.enable = true;
+      #randomEncryption.enable = true; # "Don’t try to hibernate when you have at least one swap partition with this option enabled!"
+      discardPolicy = "both"; # randomEncryption.allowDiscards defaults to false
+      #priority = -1; # always is -2, probably because it's a file (Linux man page claims range -1 to 32767 allowed...)
     }
   ];
 

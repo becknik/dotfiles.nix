@@ -12,7 +12,7 @@
     zsh = {
       enable = true;
 
-      dotDir = ".config/zsh"; # Where zsh config files are placed
+      dotDir = "$HOME/.config/zsh"; # Where zsh config files are placed
       envExtra =
         "export KEYTIMEOUT=5" # Esc key in vi mode is 0.4s by default, this sets it to 0.05s
       ;
@@ -169,7 +169,8 @@ BULLETTRAIN_PROMPT_SEPARATE_LINE=true;
         sduo = "sudo";
         nrbs = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#dnix\" switch";
         nrbt = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#dnix\" test";
-        ngcd = "sudo nix-collect-garbage -d && nix-collect-garbage -d";
+        ngc = "sudo nix-collect-garbage -d";
+        ngcu = "nix-collect-garbage -d";
       };
 
       #completionInit # "Oh-My-Zsh/Prezto calls compinit during initialization, calling it twice causes slight start up slowdown"
