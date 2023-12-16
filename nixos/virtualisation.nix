@@ -13,10 +13,10 @@
     };
 
     # VBox
-    virtualbox.host = {
+    /*virtualbox.host = {
       enable = true;
       enableExtensionPack = true; # this causes recompilations - when?
-    };
+    };*/
 
     # Podman
     podman = {

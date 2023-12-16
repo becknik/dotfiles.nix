@@ -37,7 +37,7 @@
     # Browsers
     chromium = {
       enable = true;
-      package = pkgs.ungoogled-chromium;
+      package = pkgs.clean.ungoogled-chromium;
       commandLineArgs = [
         "--enable-features=UseOzonePlatform"
         "--ozone-platform=wayland"
@@ -64,15 +64,25 @@
     hunspellDicts.en-us-large
 
     ## Daily Software
-    libreoffice-still
-    obsidian
+    clean.libreoffice-still
+    (import
+      (builtins.fetchGit {
+        name = "nixpkgs-unstable-obsidian-1.4.13";
+        url = "https://github.com/NixOS/nixpkgs/";
+        ref = "refs/heads/nixpkgs-unstable";
+        rev = "4ab8a3de296914f3b631121e9ce3884f1d34e1e5";
+      })
+      {
+        inherit system;
+        config.allowUnfree = true;
+      }).obsidian
     #birdtray # Actually not needing this
     planify
     nextcloud-client # Basically redundant, but still necessary for .desktop file in NIX_PATH...
 
     ## Privacy
     keepassxc
-    tor-browser
+    clean.tor-browser
     gpa
 
     ## Chat Clients
@@ -97,7 +107,7 @@
     trash-cli
     yt-dlp
     media-downloader # for yt-dlp
-    krita
+    clean.krita
     imagemagick
   ];
 }

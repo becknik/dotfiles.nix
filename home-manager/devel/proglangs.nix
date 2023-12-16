@@ -37,8 +37,8 @@
     lldb
 
     # C++
-    unstable.gcc
-    (unstable.clang.overrideAttrs (oldAttrs: {
+    gcc_latest
+    (clang.overrideAttrs (oldAttrs: {
       meta.priority = -10;
     }))
     cmake

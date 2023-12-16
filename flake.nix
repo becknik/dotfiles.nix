@@ -1,5 +1,5 @@
 {
-  description = "Flake configuration of NixOS for dnix (desktop)";
+  description = "NixOS configuration";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
@@ -29,51 +29,81 @@
     };
   };
 
-  outputs = input-attrs@{ self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, plasma-manager, nixvim, ... }:
-    let
-      system = "x86_64-linux";
-
-/*       pkgs = import nixpkgs {
-        inherit system;
-        config = { allowUnfree = true; };
-      }; */
-
-      overlay-unstable = self: super: {
-        unstable = import input-attrs.nixpkgs-unstable {
-          inherit system;
-          config.allowUnfree = true;
-        };
-      };
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, plasma-manager, nixvim, ... }@input-attrs:
+    let system = "x86_64-linux";
     in
     {
       nixosConfigurations = {
         dnix = nixpkgs.lib.nixosSystem {
           inherit system;
-          modules = [
-            # Enables pkgs.unstable
-            ({ config, pkgs, lib, ... }: {
-              nixpkgs.overlays = [
-                overlay-unstable
 
-                (final: prev: {
-                  # TODO Move overlays into separate file?
-                  linux_xanmod_latest_custom = pkgs.linuxPackagesFor (pkgs.linux_xanmod_latest.override (old: {
-                    # Optimizations
-                    # TODO https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=linux-clear
-                    # Maybe interesting: https://discourse.nixos.org/t/overriding-nativebuildinputs-on-buildlinux/24934
-                    stdenv = prev.impureUseNativeOptimizations prev.stdenv;
-                    # Disable the Proton and Wine stuff
-                    structuredExtraConfig = with lib.kernel; {
-                      FUTEX = no;
-                      FUTEX_PI = no;
-                      WINESYNC = no;
+          modules = [
+            ({ config, pkgs, lib, ... }@module-attrs:
+              let
+                # Build Flags Setup (https://nixos.wiki/wiki/Build_flags#Building_the_whole_system_on_NixOS)
+
+                arch = "alderlake"; # "raptorlake"
+                tune = arch;
+
+                platform = {
+                  inherit system;
+                  gcc = { inherit arch tune; };
+                  #rustc = { inherit arch tune; }; # TODO Research build flag attributes for rustc
+                  # https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/compilers/rust/rustc.nix
+                };
+
+                # Overlay Setup
+
+                ## Overlay to disable native compilation of packages with build flags
+                clean-platform = final: prev: {
+                  clean = import nixpkgs {
+                    inherit system;
+                    hostPlatform = {
+                      gcc = { };
+                      rustc = { };
                     };
-                    # Disable programming language errors in the compilation-log
-                    ignoreConfigErrors = true;
-                  }));
-                })
-              ];
-            })
+                  };
+                };
+
+                build-fixes = import ./overlays/build-fixes.nix;
+
+                packages = import ./overlays/packages.nix module-attrs;
+
+                unstable = final: prev: {
+                  unstable = import nixpkgs-unstable {
+                    inherit system;
+                    config.allowUnfree = true;
+                  };
+                };
+
+              in
+              {
+                nixpkgs.config = {
+                  allowUnfree = true;
+                  permittedInsecurePackages =
+                    lib.optional (pkgs.obsidian.version == "1.4.16") "electron-25.9.0";
+                };
+
+                nixpkgs = {
+                  # https://nix.dev/tutorials/cross-compilation.html
+                  #buildPlatform = platform; # platform where the executables are built
+                  hostPlatform = platform; # platform where the executables will run
+                };
+
+                nixpkgs.overlays = [
+                  unstable
+                  clean-platform
+
+                  build-fixes.don't-build-huge-packages
+
+                  build-fixes.deactivate-tests-failing-python
+                  build-fixes.deactivate-tests-redis
+                  build-fixes.deactivate-tests-haskell
+
+                  packages.patched-linux
+                  #packages.obsidian
+                ];
+              })
 
             # NixOS configuration
             ./nixos/configuration.nix

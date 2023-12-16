@@ -98,7 +98,7 @@
       }).postman
 
     ### SQL
-    dbeaver
+    clean.dbeaver
 
     ## CI / CD
     awscli2

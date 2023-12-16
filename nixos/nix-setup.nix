@@ -1,22 +1,22 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
-  nixpkgs.config = {
-    allowUnfree = true;
-    permittedInsecurePackages = [ "electron-25.9.0" ];
-  };
-
   nix = {
     optimise.automatic = true;
     settings = {
       max-jobs = 3;
-      cores = 7; # uses 21 logical CPUs
+      cores = 7;
       auto-optimise-store = true;
 
       experimental-features = [
         "nix-command" # Enables some useful tools like the `nix edit '<nixpkgs>' <some-package-name>`
         "flakes"
       ];
+
+      system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ]
+        # Source: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/config/nix.nix
+          ++ [ "gccarch-alderlake" ];
+        # TODO alderlake flag is available in GCC 13.1, but not sure how to change the system env compiler from gcc (12.3.1) to gcc13...
     };
     gc = {
       automatic = true;
@@ -24,17 +24,11 @@
       options = "--delete-older-than 14d";
     };
   };
-}
 
-# Stuff to get self-compilation of the whole system with cpu-optimizations to work. I find this idea ridiculous now...
-/*nix.settings.system-features = [ "benchmark" "big-parallel" "kvm" "nixos-test" "gccarch-raptorlake" "gccarch-x86-64-v3"];
-  nixpkgs.localSystem = {
-  gcc.arch = "raptorlake";
-  gcc.tune = "raptorlake";
-  #gcc.arch = "x86-64-v3";
-  #gcc.tune = "x86-64-v3";
-  system = "x86_64-linux";
-};*/
+  environment.systemPackages = with pkgs; [
+    nix-tree
+  ];
+}
 
 # Arch Linux compilation flags setup
 #CFLAGS="-march=native -O3 -pipe -fno-plt -fexceptions \
