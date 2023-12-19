@@ -156,6 +156,7 @@
     # replaced docker with podman, docker wouldn't work rootless
     useDefaultShell = true;
   };
+  users.users.root.hashedPassword = "!";
 
 
   # Boot Process
