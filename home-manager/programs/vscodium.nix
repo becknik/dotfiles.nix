@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, system, ... }:
 
 {
   programs.vscode = {
@@ -17,6 +17,8 @@
       alefragnani.bookmarks
       gruntfuggly.todo-tree
       mkhl.direnv
+      #(lib.optional (system  == "x86_64-linux") ms-vsliveshare.vsliveshare) # TODO
+      ms-vsliveshare.vsliveshare
 
       ## Editor Config, Autocompletion, etc.
       vscodevim.vim
@@ -24,7 +26,11 @@
       formulahendry.code-runner
       streetsidesoftware.code-spell-checker
       christian-kohler.path-intellisense
+      usernamehw.errorlens
+
+      ### Git
       eamodio.gitlens
+      mhutchie.git-graph
 
       ## Eye Candy
       adpyke.codesnap
@@ -80,14 +86,14 @@
       # Further Plugins
     ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
 
-      {
-        # Monokai Night Theme
-        name = "vscode-monokai-night";
-        publisher = "fabiospampinato";
+
+      /* (lib.optional (system != "x86_64-linux") { # TODO
+        # VSCode Live Share (for MacOS etc due to incompatible package)
+        name = "vsliveshare";
+        publisher = "MS-vsliveshare";
         version = "latest";
         #sha256 = lib.fakeSha256;
-        sha256 = "sha256-7Vm/Z46j2GG2c2XZkAlmJ9ZCZ9og+v3tboD2Tf23gGA=";
-      }
+      }) */
 
       {
         # German cSpell dictionary
@@ -98,6 +104,15 @@
         sha256 = "sha256-rAm3pcLn6HoWnhWeoK/0D9r5oY9TIQ23EMh35rurgDg=";
       }
 
+      {
+        # Monokai Night Theme
+        name = "vscode-monokai-night";
+        publisher = "fabiospampinato";
+        version = "latest";
+        #sha256 = lib.fakeSha256;
+        sha256 = "sha256-7Vm/Z46j2GG2c2XZkAlmJ9ZCZ9og+v3tboD2Tf23gGA=";
+      }
+
       /*{ # Auto Completion IntelliCode
         name = "vscodeintellicode";
         publisher = "VisualStudioExptTeam";
@@ -106,14 +121,14 @@
         sha256 = "7f61a7f96d101cdf230f96821be3fddd8f890ebfefb3695d18beee43004ae251";
       }*/
 
-      {
+      /*{
         # Java Checkstyle
         name = "vscode-checkstyle";
         publisher = "shengchen";
         version = "latest";
         #sha256 = lib.fakeSha256;
         sha256 = "21c860417f42510e77a6e2eed2597cccd97a1334a7543063eed4d4a393736630";
-      }
+      }*/
 
       /*{ # Spring Boot Tools
         name = "vscode-spring-boot";
@@ -284,6 +299,12 @@
         openRepositoryInParentFolders = "always";
       };
 
+      # Terminal
+      terminal = {
+        integrated.scrollback = 5000;
+        enablePersistentSessions = false;
+      };
+
 
       #########################################################################
       # General Plugin Settings
@@ -340,6 +361,14 @@
           ".config/*"
           "*.conf"
           "settings.json"
+        ];
+      };
+
+      errorLens = {
+        delay = 500;
+        delayMode = "debounce";
+        excludeBySource = [
+          "cSpell"
         ];
       };
 
@@ -510,7 +539,6 @@
 
       # Messy Settings Part
       lldb.suppressUpdateNotifications = true;
-      terminal.integrated.scrollback = 5000;
       outline.collapseItems = "alwaysCollapse";
       files.watcherExclude = {
         # Scala Metals

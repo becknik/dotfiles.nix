@@ -111,6 +111,7 @@
             # home-manager basic setup & configuration import
             home-manager.nixosModules.home-manager
             {
+              home-manager.extraSpecialArgs = {inherit system;}; # For if-else with "x86_64-linux"/darwin
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
 
