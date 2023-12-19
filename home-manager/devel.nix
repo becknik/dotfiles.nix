@@ -41,8 +41,11 @@
     };
 
     # DirEnv Setup
-    direnv.enable = true; # nix-direnv gets enabled automatically in NixOs - but not in home-manager...
-    direnv.nix-direnv.enable = true;
+    direnv = {
+      enable = true; # nix-direnv gets enabled automatically in NixOS - but not in home-manager...
+      nix-direnv.enable = true;
+      enableZshIntegration = true;
+    };
 
     # SSH
     # Source: https://github.com/nix-community/home-manager/blob/master/modules/programs/ssh.nix
@@ -52,21 +55,29 @@
       forwardAgent = true;
       hashKnownHosts = true;
       #extraOptionOverrides = {};
+      matchBlocks = {
+        github_personal = {
+          host = "github.com";
+          user = "git";
+          identityFile = "~/.ssh/github_personal";
+        };
+      };
     };
   };
 
   # GPG-Agent
-  services.gpg-agent = {
+  services.gpg-agent = { # TODo use keychain instead?
     enable = true;
     enableSshSupport = true;
+    enableZshIntegration = true;
     extraConfig = "";
     pinentryFlavor = "gnome3";
     #sshKeys = {}; # Expose GPG-keys as SSH-keys
   };
+  programs.gpg.enable = true;
 
   # Manual Installations
   home.packages = with pkgs; [
-    neovim
     git-crypt
     meld
 

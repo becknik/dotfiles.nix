@@ -3,15 +3,6 @@
   programs = {
     git.enable = true;
 
-    # System Neovim Setup
-    # Gets overwritten by the home-manager one
-    neovim = {
-      enable = true;
-      defaultEditor = true;
-      viAlias = true;
-      vimAlias = true;
-    };
-
     # Chromium (in the hope that the home-managed version reads this)
     chromium = {
       extraOpts = {

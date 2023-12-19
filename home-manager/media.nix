@@ -23,15 +23,7 @@
       enable = true;
       path = "${config.home.homeDirectory}/dropbox";
     };*/
-
-    # Privacy
-    #keychain # TODO keychain management methods
-    gpg-agent = {
-      enable = true;
-      enableSshSupport = true;
-    };
   };
-  programs.gpg.enable = true;
 
   programs = {
     # Browsers

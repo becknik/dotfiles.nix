@@ -24,8 +24,27 @@
       enable = true;
       operation = "boot";
       flake = "${config.users.users.jnnk.home}/devel/own/dotfiles.nix";
-      flags = [ "--update-input" "nixpkgs" "--update-input" "nixpkgs-unstable" ]; # "--commit-lock-file"
+      flags = [
+        "--commit-lock-file"
+        "--update-input"
+        "nixpkgs"
+        "--update-input"
+        "nixpkgs-unstable"
+        "--update-input"
+        "home-manager"
+        "--update-input"
+        "plasma-manager"
+        "--update-input"
+        "sops-nix"
+      ];
+      dates = "weekly";
+      randomizedDelaySec = "2h";
     };
+  };
+
+  programs.git.config.user = { # Necessary for the `--commit-lock-file` option on config.system.autoUpgrade.flags
+    email = "jannikb@posteo.de";
+    name = "becknik";
   };
 
 

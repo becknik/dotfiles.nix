@@ -10,6 +10,9 @@
 
     nixvim = {
       enable = true;
+      defaultEditor = true;
+      viAlias = true;
+      vimAlias = true;
       #colorschemes.moneokai.enable = true; # TODO
       # Sources:
       # https://gist.github.com/Nazerbayev/641ad1367cdc3044a0f3b3866e52e1b6

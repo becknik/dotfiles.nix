@@ -12,7 +12,7 @@
     zsh = {
       enable = true;
 
-      dotDir = "$HOME/.config/zsh"; # Where zsh config files are placed
+      #dotDir = "~/.config/zsh"; # Where zsh config files are placed; randomly creates new folders in $HOME or elsewhere
       envExtra =
         "export KEYTIMEOUT=5" # Esc key in vi mode is 0.4s by default, this sets it to 0.05s
       ;
@@ -36,7 +36,7 @@
         extended = true; # Write the history file in the ":start:elapsed;command" format
         ignoreAllDups = true; # Delete old recorded entry if new entry is a duplicate
         ignoreDups = true; # Don't record an entry that was just recorded again
-        path = "${config.programs.zsh.dotDir}/.zhistroy";
+        #path = "${config.programs.zsh.dotDir}/.zhistroy";
         save = 10000; # Amount of lines to save
         share = true; # Share history between all sessions.
         ignorePatterns = [ "alias" "cd" "gcsm" "ls" "la" ];
@@ -126,7 +126,7 @@
           #"rsync"
           #"scala"
           "singlechar"
-          "ssh-agent"
+          #"ssh-agent"
           #"thefuck" # should conflict with the Esc^2 from sudo plugin
           #"transfer" # file sharing, but idk if usefull fo rme...
           #"urltools"

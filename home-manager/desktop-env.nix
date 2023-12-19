@@ -14,14 +14,6 @@
     ./desktop-env/autostart.nix # Sad try on xdg-autostarting some apps
   ];
 
-  # Env
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    # Use gpg-agent instead of ssh-agent, which seems to be set before sourcing .zenv? Why? TODO
-    # Former seems to be started automatically on every boot, so this value makes sure gpg-agent is used...
-    SSH_AUTH_SOCK = ''"''${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh"'';
-  };
-
   # XDG
   xdg = {
     enable = true; # activates XDG user directory management
