@@ -2,7 +2,7 @@
 
 # Source: https://github.com/nix-community/home-manager/issues/3447 (TODO seems like this isn't a real solution...)
 let
-  autostartPrograms = with pkgs; [
+  autostart-programs = with pkgs; [
     thunderbird
     #keepassxc
     #element-desktop # works, but launches the application without the `--hidden` flag...
@@ -31,5 +31,5 @@ in
             source = (pkg + "/share/applications/${pkg.pname}.desktop");
           };
       })
-    autostartPrograms);
+    autostart-programs);
 }

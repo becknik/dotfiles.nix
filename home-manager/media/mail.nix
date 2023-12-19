@@ -4,11 +4,7 @@ let
   getSecretPasswordCommand = provider: "cat $XDG_RUNTIME_DIR/secrets/mail/${provider}/password";
 
   # `provider` should be a lower case string
-  getDefaultMailAccountSettings =
-    { provider
-    , mailAddress
-    , serverUsername ? provider
-    }:
+  getDefaultMailAccountSettings = { provider, mail-address, server-username ? provider }:
     let
       # Provides a `Provider` variable with the first letter uppercased
       /*
@@ -25,11 +21,11 @@ let
        - In `/home/jnnk/.config/home-manager/media/mail.nix': "Posteo"
       */
 
-      address = mailAddress; # Differing names necessary to avoid infinit recursion
+      address = mail-address; # Differing names necessary to avoid infinit recursion
       realName = "Jannik Becker";
       passwordCommand = getSecretPasswordCommand provider;
 
-      userName = serverUsername;
+      userName = server-username;
 
 
       /*mbsync = {

@@ -1,8 +1,9 @@
 { config, lib, ... }:
 
 let
-  default_sidebar_width = 156;
-  org_gnome_terminal_legacy_default_profile = {
+  default-sidebar-width = 156;
+
+  org-gnome-terminal-legacy-default-profile = {
     allow-bold = true;
     audible-bell = false;
     background-transparency-percent = 15;
@@ -23,13 +24,14 @@ let
     use-theme-transparency = false;
     use-transparent-background = true;
   };
-  file_cooser_settings = {
+
+  file-cooser-settings = {
     expand-folders = true;
     location-mode = "path-bar";
     show-hidden = true;
     show-size-column = false;
     show-type-column = false;
-    sidebar-width = default_sidebar_width;
+    sidebar-width = default-sidebar-width;
     sort-column = "name";
     sort-directories-first = true;
     sort-order = "ascending";
@@ -524,7 +526,7 @@ in
 
     "org/gnome/terminal/legacy/profiles:/:4a3fbad7-a54d-4910-b51a-808fea7e70e2" = (
       # Gogh's 'Desert' theme
-      org_gnome_terminal_legacy_default_profile // {
+      org-gnome-terminal-legacy-default-profile // {
         background-color = "#333333333333";
         bold-color = "#FFFFFFFFFFFF";
         cursor-background-color = "#FFFFFFFFFFFF";
@@ -554,7 +556,7 @@ in
 
     "org/gnome/terminal/legacy/profiles:/:dd180816-99e9-4947-bd75-2af5159e839b" = (
       # Gogh's 'Panda' theme
-      org_gnome_terminal_legacy_default_profile // {
+      org-gnome-terminal-legacy-default-profile // {
         background-color = "#1D1D1E1E2020";
         bold-color = "#F0F0F0F0F0F0";
         cursor-background-color = "#F0F0F0F0F0F0";
@@ -582,8 +584,8 @@ in
       }
     );
 
-    "org/gtk/settings/file-chooser" = file_cooser_settings;
-    "org/gtk/gtk4/settings/file-chooser" = file_cooser_settings;
+    "org/gtk/settings/file-chooser" = file-cooser-settings;
+    "org/gtk/gtk4/settings/file-chooser" = file-cooser-settings;
 
     "org/virt-manager/virt-manager/details".show-toolbar = true;
     "org/virt-manager/virt-manager/paths".image-default = "${config.home.homeDirectory}/vm";

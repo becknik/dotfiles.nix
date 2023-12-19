@@ -58,8 +58,8 @@
   environment.etc."current-system-packages.txt".text =
     let
       packages = builtins.map (p: "${ p.name }") config.environment.systemPackages;
-      sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
-      formatted = builtins.concatStringsSep "\n" sortedUnique;
+      sorted-unique = builtins.sort builtins.lessThan (lib.unique packages);
+      formatted = builtins.concatStringsSep "\n" sorted-unique;
     in
     formatted;
 }

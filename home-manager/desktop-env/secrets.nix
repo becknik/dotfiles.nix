@@ -1,21 +1,21 @@
 { config, ... }:
 
 let
-  createMailSecret = providerName: {
-    "${providerName}/address" = {
+  createMailSecret = provider-name: {
+    "${provider-name}/address" = {
       sopsFile = ./secrets/mail.yaml;
-      key = "${providerName}/address";
+      key = "${provider-name}/address";
     };
 
-    "${providerName}/password" = {
+    "${provider-name}/password" = {
       sopsFile = ./secrets/mail.yaml;
-      key = "${providerName}/password";
+      key = "${provider-name}/password";
     };
   };
 
-  mailSecretPosteo = createMailSecret "posteo";
-  mailSecretGmx = createMailSecret "gmx";
-  mailSecretUni = createMailSecret "uni";
+  mail-secret-posteo = createMailSecret "posteo";
+  mail-secret-gmx = createMailSecret "gmx";
+  mail-secret-uni = createMailSecret "uni";
   #mailSecretWork1 = createMailSecret "work1";
 in
 {
@@ -64,7 +64,7 @@ in
       };
 
       # Mail Stuff
-    } // mailSecretPosteo // mailSecretGmx // mailSecretUni;
+    } // mail-secret-posteo // mail-secret-gmx // mail-secret-uni;
   };
 
   systemd.user.services.thunderbird.Unit.After = [ "sops-nix.service" ];
