@@ -59,7 +59,7 @@
         github_personal = {
           host = "github.com";
           user = "git";
-          identityFile = "~/.ssh/github_personal";
+          identityFile = "~/.ssh/github-personal";
         };
       };
     };
