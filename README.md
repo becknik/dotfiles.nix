@@ -18,12 +18,6 @@ $ tree # main branch
 │   │   ├── dconf.nix
 │   │   ├── folders-and-files.nix
 │   │   ├── plasma.nix
-│   │   ├── secrets.nix
-│   │   ├── secrets
-│   │   │   ├── git.yaml
-│   │   │   ├── gpg.yaml
-│   │   │   ├── keepassxc.yaml
-│   │   │   └── mail.yaml
 │   │   ├── xdg-mime.nix
 │   │   └── zsh.nix
 │   ├── devel.nix
@@ -34,11 +28,17 @@ $ tree # main branch
 │   ├── media
 │   │   └── mail.nix
 │   ├── packages.nix
-│   └── programs
-│       ├── librewolf.nix
-│       ├── neovim.nix
-│       ├── thunderbird.nix
-│       └── vscodium.nix
+│   ├── programs
+│   │   ├── librewolf.nix
+│   │   ├── neovim.nix
+│   │   ├── thunderbird.nix
+│   │   └── vscodium.nix
+│   ├── secrets.nix
+│   └── secrets
+│       ├── git.yaml
+│       ├── gpg-personal.asc
+│       ├── keepassxc.key
+│       └── mail.yaml
 ├── nixos
 │   ├── configuration.nix
 │   ├── desktop-env.nix

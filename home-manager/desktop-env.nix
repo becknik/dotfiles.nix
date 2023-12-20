@@ -5,7 +5,6 @@
     ./desktop-env/zsh.nix # zsh and oh-my-zsh config
 
     ./desktop-env/folders-and-files.nix # Creates my basic folder structure
-    ./desktop-env/secrets.nix # Secrets management with sops-nix
 
     ./desktop-env/dconf.nix
     ./desktop-env/xdg-mime.nix # Default apps - I think this might grow rapidly

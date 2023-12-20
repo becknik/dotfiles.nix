@@ -1,7 +1,7 @@
 keys:
   - &key2023-11-30 age1dgqn7cqhs4f47at4ls30tsvu5hat6zjn9knuftxxps05jdkrl4nq3tu9p9
 creation_rules:
-  - path_regex: desktop-env/secrets/[^/]+\.(yaml|key|asc)$
+  - path_regex: secrets/[^/]+\.(yaml|key|asc)$
     #- pgp:
     key_groups:
     - age:
