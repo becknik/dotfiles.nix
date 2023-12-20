@@ -42,9 +42,12 @@
     };
   };
 
-  programs.git.config.user = { # Necessary for the `--commit-lock-file` option on config.system.autoUpgrade.flags
-    email = "jannikb@posteo.de";
-    name = "becknik";
+  programs.git = {
+    enable = true;
+    config.user = { # Necessary for the `--commit-lock-file` option on config.system.autoUpgrade.flags
+      email = "jannikb@posteo.de";
+      name = "becknik";
+    };
   };
 
 

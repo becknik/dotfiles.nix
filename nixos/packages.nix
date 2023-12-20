@@ -1,7 +1,11 @@
 { config, lib, pkgs, ... }:
 {
   programs = {
-    git.enable = true;
+    neovim = { # Enable neovim for root account, besides of nixvim for home-manager user
+      enable = true;
+      viAlias = true;
+      vimAlias = true;
+    };
 
     # Chromium (in the hope that the home-managed version reads this)
     chromium = {
@@ -29,6 +33,18 @@
     efibootmgr
     usbutils
     cryptsetup
+
+    ## Build Cache
+    # `nix-collect-garbage -d` seems to clean some build deps
+    # TODO verify if build cache works
+    # TODO figure out how to move build cache into flake.nix
+    gcc
+    binutils
+    perl
+    meson
+    yarn
+    python3
+    bash
   ];
 
   # "Bloat" Removal
