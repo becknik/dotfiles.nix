@@ -5,12 +5,14 @@
 ```shell
 $ tree # main branch
 .
-├── disko
-├── flake.lock
 ├── flake.nix
+├── flake.lock
+├── disko
 │   ├── ext4-encrypted.nix
 │   └── ext4-unencrypted.nix
 ├── home-manager
+│   ├── .sops.yaml
+│   ├── desktop-env.nix
 │   ├── desktop-env
 │   │   ├── autostart.nix
 │   │   ├── dconf.nix
@@ -24,14 +26,13 @@ $ tree # main branch
 │   │   │   └── mail.yaml
 │   │   ├── xdg-mime.nix
 │   │   └── zsh.nix
-│   ├── desktop-env.nix
 │   ├── devel.nix
 │   ├── devel
 │   │   └── proglangs.nix
 │   ├── home.nix
+│   ├── media.nix
 │   ├── media
 │   │   └── mail.nix
-│   ├── media.nix
 │   ├── packages.nix
 │   └── programs
 │       ├── librewolf.nix
@@ -46,13 +47,17 @@ $ tree # main branch
 │   ├── nix-setup.nix
 │   ├── packages.nix
 │   └── virtualisation.nix
+├── overlays
+│   ├── build-fixes.nix
+│   └── packages.nix
 └── README.md
 ```
 
 ## Setup
 
 - Flake-based NixOS 23.11 setup
-- Highly customized GNOME DE with some KDE tools
+- Highly customized GNOME Wayland DE with some KDE tools
+- Target platform build optimization to Alderlake CPU architecture
 - [home-manager](https://github.com/nix-community/home-manager)
 - [sops-nix](https://github.com/Mic92/sops-nix) & [age](https://github.com/FiloSottile/age)
 - [nixvim](https://github.com/nix-community/nixvim)
@@ -88,7 +93,7 @@ sudo nix run github:nix-community/disko \
 Things I have to do after the installation...
 
 - [ ] Enable the installed GNOME-extensions
-    - [ ] Setup `gsconnect`
+  - [ ] Setup `gsconnect`
 - [ ] `ssh-add -v ~/.ssh/<ssh-key-name>`
 - [ ] Configure the CPU-scheduler and profile in `cpupower-gui`
 - [ ] Delete the former capitalized xdg-user-dirs: `rm -fr Templates Videos Public Desktop Documents Downloads Pictures Music tmp` (TODO why is there a `tmp/cache-\$USER/oh-my-zsh` dir?!)
@@ -108,7 +113,7 @@ Things I have to do after the installation...
 
 ### Further
 
-- [ ] Enable autostart manually for:
+- [ ] Manually enable autostart for:
   - [ ] keepassxc
   - [ ] telegram-desktop
   - [ ] planify
