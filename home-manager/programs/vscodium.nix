@@ -63,6 +63,10 @@
       ### LaTeX
       james-yu.latex-workshop
 
+      ### Haskell
+      justusadam.language-haskell # Syntax highlighting
+      haskell.haskell # Linting etc.
+
       ### JVM
       scalameta.metals
       redhat.java
@@ -478,15 +482,22 @@
 
       ## LaTeX
       latex-workshop = {
-        intellisense.unimathsymbols.enabled = true;
-        latex.autoClean.run = "onFailed";
-        latex.autoBuild.run = "never";
-        message.badbox.show = false;
-        message.information.show = true;
-        message.log.show = true;
-        latex.build.clearLog.everyRecipeStep.enabled = false;
-        latex.option.maxPrintLine.enabled = false;
-        latex.recipe.default = "lastUsed";
+        intellisense = {
+          unimathsymbols.enabled = true;
+          citation.backend = "biber";
+        };
+        latex = {
+          autoClean.run = "onFailed";
+          autoBuild.run = "never";
+          build.clearLog.everyRecipeStep.enabled = false;
+          option.maxPrintLine.enabled = false;
+          recipe.default = "latexmk (xelatex)"; # "lastUsed";
+        };
+        message = {
+          badbox.show = false;
+          information.show = true;
+          log.show = true;
+        };
       };
 
       ## Nix
@@ -509,6 +520,8 @@
       ## Bash
       bashIde.highlightParsingErrors = true;
       shellcheck.disableVersionCheck = true;
+
+      ## Haskell
 
       ## Java
       redhat.telemetry.enabled = false;

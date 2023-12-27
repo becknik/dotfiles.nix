@@ -27,21 +27,19 @@ in
     ## GNOME Services
     # Source: https://github.com/NixOS/nixpkgs/blob/nixos-23.05/nixos/modules/services/x11/desktop-managers/gnome.nix
     gnome = {
-
       ### Redundant stuff
-      core-os-services.enable = lib.mkDefault true;
       gnome-keyring.enable = lib.mkDefault true;
-      gnome-browser-connector.enable = true;
 
-      ### Override the implicationns of gnome.core-os-services; using mkDefault to make sure...
+      ### Override the implications of gnome.core-os-services
       gnome-online-accounts.enable = mkForce false;
-      tracker.enable = mkForce false;
-      tracker-miners.enable = mkForce false;
-      gnome-remote-desktop.enable = mkForce false;
-      gnome-initial-setup.enable = mkForce false;
-
       evolution-data-server.enable = lib.mkDefault false;
       gnome-online-miners.enable = lib.mkDefault false;
+      tracker-miners.enable = mkForce false;
+      tracker.enable = mkForce false;
+
+      ### " gnome.core-shell
+      gnome-remote-desktop.enable = mkForce false;
+      gnome-initial-setup.enable = mkForce false;
     };
   };
 
@@ -88,6 +86,8 @@ in
   ++ (with pkgs.libsForQt5; [
     dolphin
     dolphin-plugins
+    kio-extras # Might solve dolphin log spam "serviceType "ThumbCreator" not found"
+    # https://forums.opensuse.org/t/dolphin-cant-create-photo-thumbnails-servicetype-thumbcreator-not-found/170259/6
     gwenview
     kate # This pulls in Konsole and I don't know if I can stop it from doing so, but its fine I guess
     #(kate.override { propagatedUserEnvPkgs = []; })
@@ -134,6 +134,7 @@ in
     evince
     eog
     geary
+    gnome-calendar # Might be causing gnome crashs on login/screen unlock
     gnome-contacts
     gnome-music
     nautilus

@@ -2,14 +2,16 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, stateVersion, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
 
-    ./nix-setup.nix # Setup of nix & nixpkgs
-    ./packages.nix # Installation of a few system packages
+    ./systemd.nix # Auto Upgrade Nix & systemd services
+    ./nix-setup.nix # Setup of nix
+
+    ./packages.nix # Installation of a few system packages & browsers
     ./gnome.nix # Addition of some kde tools, removal of bloat, etc.
     ./desktop-env.nix # Setup of services for desktop-experience like sound, input, printing, ...
 
@@ -18,38 +20,7 @@
 
 
   # System Settings
-  system = {
-    stateVersion = "23.11";
-    autoUpgrade = {
-      enable = true;
-      operation = "boot";
-      flake = "${config.users.users.jnnk.home}/devel/own/dotfiles.nix";
-      flags = [
-        "--commit-lock-file"
-        "--update-input"
-        "nixpkgs"
-        "--update-input"
-        "nixpkgs-unstable"
-        "--update-input"
-        "home-manager"
-        "--update-input"
-        "plasma-manager"
-        "--update-input"
-        "sops-nix"
-      ];
-      dates = "weekly";
-      randomizedDelaySec = "2h";
-    };
-  };
-
-  programs.git = {
-    enable = true;
-    config.user = { # Necessary for the `--commit-lock-file` option on config.system.autoUpgrade.flags
-      email = "jannikb@posteo.de";
-      name = "becknik";
-    };
-  };
-
+  system = {inherit stateVersion; };
 
   # Bootloader
   boot.loader = {
@@ -131,16 +102,23 @@
 
   # Security & Secrets
   security = {
-    sudo = {
+/*     sudo = {
       enable = true; # redundant
       execWheelOnly = true;
       extraConfig =
-        "Defaults timestamp_type=global\n" # share sudo between terminals
-        + "Defaults timestamp_timeout=15\n" # sudo timeout from 10 to 15 minutes
-        + "Defaults pwfeedback\n" # display star when typing character
-        + "Defaults insults";
+        "Defaults timestamp_type=global\n" # share sudo session between terminal sessions
+        + "Defaults timestamp_timeout=20\n" # set sudo timeout from 10 to 20 minutes
+        + "Defaults pwfeedback\n" # display stars when typing characters
+        + "Defaults insults\n"
+        #+ "Defaults editor=${pkgs.neovim}/bin/nvim";
+        + "Defaults:root,%wheel env_keep+=EDITOR"; # Enables sudo-prepended programs like `systemctl edit ...` to use the specified default editor https://github.com/NixOS/nixpkgs/issues/276778
+    }; */
+    #please.enable = true; # Tool that enables executing a command as another user
+    sudo-rs = {
+      enable = true;
+      execWheelOnly = true;
+       extraConfig = "Defaults env_keep+=EDITOR";
     };
-    please.enable = true; # Tool that enables executing a command as another user
   };
 
   services.pcscd.enable = true; # Must be running for age-plugin-yubikey

@@ -3,6 +3,7 @@
 {
   programs.librewolf = {
     enable = true;
+    enableGnomeExtensions = true;
     package = (pkgs.clean.librewolf.override {
       nativeMessagingHosts = [ pkgs.gnome-browser-connector ]; # TODO nativeMessagingHost wont' work :'(
     });

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, gpt4all, ... }:
 
 {
   imports = [
@@ -80,6 +80,10 @@
   home.packages = with pkgs; [
     git-crypt
     meld
+
+    # LLM (ChatGPT)
+    (gpt4all.packages.x86_64-linux.gpt4all-chat.override { withAvx2 = true; }) # The default option anyways
+    shell_gpt
 
     # JetBrains IDEs
     unstable.jetbrains.clion

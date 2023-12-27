@@ -19,7 +19,7 @@
           };
           nix = {
             name = "nix";
-            size = "96G";
+            size = "192G"; # yes, source archives are huge...
             content = {
               type = "filesystem";
               format = "ext4";

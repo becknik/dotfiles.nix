@@ -1,7 +1,9 @@
+system:
+
 {
   # Using the clean nixpkgs environment for huge packages
 
-  don't-build-huge-packages = final: prev: {
+  huge-dependency-compilation-skip = final: prev: {
     #thunderbird = prev.clean.thunderbird;
     webkitgtk = prev.clean.webkitgtk;
 
@@ -11,15 +13,13 @@
 
     ## Chromium
     electron = prev.clean.electron;
-    electron_27 = prev.clean.electron_27;
+    #electron_27 = prev.clean.electron_27;
 
     ## KDE
-    spidermonkey = prev.clean.spidermondkey;
+    #spidermonkey = prev.clean.spidermondkey;
 
     ### Qt
-    /*libsForQt5.qt5.override = {
-                    qtwebview = prev.clean.libsForQt5.qt5.qtwebview;
-                  };*/
+    /*libsForQt5.qt5.override = { qtwebview = prev.clean.libsForQt5.qt5.qtwebview; };*/
     #qt6.qtwebview = prev.clean.qt6.qtwebview;
   };
 
@@ -27,15 +27,18 @@
 
   ## Reddis
   # test 66 failing: https://github.com/redis/redis/issues/12792
-  deactivate-tests-redis = final: prev: {
+  deactivate-failing-tests-normal-packages = final: prev: {
     redis = prev.redis.overrideAttrs (oldAttrs: {
+      doCheck = false;
+    });
+    libsecret = prev.libsecret.overrideAttrs (oldAttrs: { # https://github.com/NixOS/nixpkgs/issues/276036
       doCheck = false;
     });
   };
 
   ## Python
   # Source: https://discourse.nixos.org/t/overwrite-the-disabledtests-of-a-failing-python-dependencies-in-nixos/36886
-  deactivate-tests-failing-python = final: prev: {
+  deactivate-failing-tests-python = final: prev: {
     pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
       (
         python-final: python-prev: {
@@ -72,7 +75,7 @@
 
   ## Haskell
   # Source: https://unix.stackexchange.com/questions/497798/how-can-i-override-a-broken-haskell-package-in-nix
-  deactivate-tests-haskell = final: prev: {
+  deactivate-failing-tests-haskell = final: prev: {
     haskellPackages = prev.haskellPackages.override {
       overrides = haskell-final: haskell-prev: {
         crypton = prev.haskell.lib.compose.dontCheck haskell-prev.crypton;
@@ -80,10 +83,32 @@
         tls_1_9_0 = prev.haskell.lib.compose.dontCheck haskell-prev.tls_1_9_0;
         tls = prev.haskell.lib.compose.dontCheck haskell-prev.tls;
 
-        #crypton = prev.haskell.lib.overrideCabal haskell-prev.crypton { doCheck = false; };
-        #crypton = prev.haskell.lib.compose.overrideCabal (oldAttrs: {doCheck = false;}) prev.haskellPackages.crypton;
+        # Getting GHCup and running for haskell.haskell vscode extension...
+/*         haskus-utils-variant = (import
+          (builtins.fetchGit {
+            name = "nixpkgs-unstable-haskus-utils-variant-3.2.1";
+            url = "https://github.com/NixOS/nixpkgs/";
+            ref = "refs/heads/nixpkgs-unstable";
+            rev = "6e3a86f2f73a466656a401302d3ece26fba401d9";
+          })
+          { inherit system; }).haskellPackages.haskus-utils-variant;
+        yaml-streamly = (import # libyaml-streamly is broken
+          (builtins.fetchGit {
+            name = "nixpkgs-unstable-libyaml-streamly-0.2.1";
+            url = "https://github.com/NixOS/nixpkgs/";
+            ref = "refs/heads/nixpkgs-unstable";
+            rev = "50a7139fbd1acd4a3d4cfa695e694c529dd26f3a";
+          })
+          { inherit system; }).haskellPackages.yaml-streamly;
+        cabal-plan = (import
+          (builtins.fetchGit {
+            name = "nixpkgs-unstable-cabal-plan-0.7.2.3";
+            url = "https://github.com/NixOS/nixpkgs/";
+            ref = "refs/heads/nixpkgs-unstable";
+            rev = "50a7139fbd1acd4a3d4cfa695e694c529dd26f3a";
+          })
+          { inherit system; }).haskellPackages.cabal-plan; */
       };
     };
   };
-
 }

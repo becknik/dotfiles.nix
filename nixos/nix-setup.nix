@@ -5,7 +5,7 @@
     optimise.automatic = true;
     settings = {
       max-jobs = 3;
-      cores = 7;
+      cores = 6; # with 7 the DE sometimes gets really unresponsive with CPU-usage up of 2400%
       auto-optimise-store = true;
 
       experimental-features = [

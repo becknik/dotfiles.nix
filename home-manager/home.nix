@@ -1,11 +1,13 @@
-{ ... }:
+{ stateVersion, ... }:
 
 {
-  home.stateVersion = "23.11";
+  home = {
+    inherit stateVersion;
 
-  # Home Manager needs a bit of information about you and the paths it should manage.
-  home.username = "jnnk";
-  home.homeDirectory = "/home/jnnk";
+    # Home Manager needs a bit of information about you and the paths it should manage.
+    username = "jnnk";
+    homeDirectory = "/home/jnnk";
+  };
 
   # Lets Home Manager install and manage itself.
   programs.home-manager.enable = true;

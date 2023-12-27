@@ -2,11 +2,13 @@
 
 {
   programs = {
+    # zsh & bash integration are enabled by default
     hstr.enable = true; # Whether to enable Bash And Zsh shell history suggest box
+    fzf.enable = true;
 
-    fzf = {
+    bash = {
       enable = true;
-      enableZshIntegration = true;
+      #enableVteIntegration = true; # implied by gnome
     };
 
     zsh = {
@@ -18,7 +20,7 @@
       ;
 
       enableAutosuggestions = true;
-      enableVteIntegration = true;
+      #enableVteIntegration = true; # implied by gnome
 
       syntaxHighlighting.enable = true;
       /*zsh-abbr = { # TODO zsh-abbr isn't working...
@@ -169,8 +171,10 @@ BULLETTRAIN_PROMPT_SEPARATE_LINE=true;
         sduo = "sudo";
         nrbs = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#dnix\" switch";
         nrbt = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#dnix\" test";
-        ngc = "sudo nix-collect-garbage -d";
-        ngcu = "nix-collect-garbage -d";
+        ngc = "sudo nix-collect-garbage";
+        ngckeep = "sudo nix-collect-garbage --delete-older-than";
+        ngcd = "sudo nix-collect-garbage -d";
+        ngcdu = "nix-collect-garbage -d";
       };
 
       #completionInit # "Oh-My-Zsh/Prezto calls compinit during initialization, calling it twice causes slight start up slowdown"

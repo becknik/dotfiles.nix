@@ -4,7 +4,7 @@
   imports = [
     #./media/mail.nix # TODO home-manager account integration won't work with thunderbird...
 
-    ./programs/librewolf.nix
+    #./programs/librewolf.nix
     ./programs/thunderbird.nix
   ];
 
@@ -59,15 +59,21 @@
     clean.libreoffice-still
     (import
       (builtins.fetchGit {
-        name = "nixpkgs-unstable-obsidian-1.4.13";
+        name = "nixpkgs-unstable-obsidian-1.4.14";
         url = "https://github.com/NixOS/nixpkgs/";
         ref = "refs/heads/nixpkgs-unstable";
-        rev = "4ab8a3de296914f3b631121e9ce3884f1d34e1e5";
+        rev = "9957cd48326fe8dbd52fdc50dd2502307f188b0d";
       })
-      {
-        inherit system;
-        config.allowUnfree = true;
-      }).obsidian
+      { inherit system; config.allowUnfree = true; }).obsidian
+    # Options from laptop to get fcitx5 input working:
+    # --enable-features=WaylandWindowsDecorations,UseOzonePlatform --oxone-platform-hint=wayland
+    /* (obsidian.override {
+      # App quits when opening vault but error messages disappeared
+      electron = electron_25.overrideAttrs (_: {
+        preFixup = "patchelf --add-needed ${libglvnd}/lib/libEGL.so.1 $out/bin/electron"; # NixOS/nixpkgs#272912
+        meta.knownVulnerabilities = [ ]; # NixOS/nixpkgs#273611
+      });
+    }) */
     #birdtray # Actually not needing this
     planify
     nextcloud-client # Basically redundant, but still necessary for .desktop file in NIX_PATH...

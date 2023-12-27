@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   xdg.portal = {
@@ -58,6 +58,10 @@
           # /etc/xdg/fcitx5/config
           "Hotkey/TriggerKeys" = {
             "0" = "Control+Super+space"; # modified this one
+          };
+          Behavior = {
+            DefaultPageSize = 7;
+            OverrideXkbOption = true;
           };
         };
         inputMethod = {

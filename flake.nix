@@ -27,15 +27,24 @@
       inputs.nixpkgs.follows = "nixpkgs";
       #inputs.pre-commit-hooks.inputs.nixpkgs-stable.follows = "nixpkgs"; # TODO Doesn't follows the nixvim inputs - bug report?
     };
+
+    gpt4all = {
+      # TODO don't provides .desktop file & installing ChatGPT doesn't work
+      url = "github:polygon/gpt4all-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, plasma-manager, nixvim, ... }@input-attrs:
-    let system = "x86_64-linux";
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, plasma-manager, nixvim, gpt4all, ... }@input-attrs:
+    let
+      system = "x86_64-linux";
+      stateVersion = "23.11";
     in
     {
       nixosConfigurations = {
         dnix = nixpkgs.lib.nixosSystem {
           inherit system;
+                specialArgs = { inherit stateVersion; };
 
           modules = [
             ({ config, pkgs, lib, ... }@module-attrs:
@@ -55,7 +64,7 @@
                 # Overlay Setup
 
                 ## Overlay to disable native compilation of packages with build flags
-                clean-platform = final: prev: {
+                clean = final: prev: {
                   clean = import nixpkgs {
                     inherit system;
                     hostPlatform = {
@@ -65,7 +74,7 @@
                   };
                 };
 
-                build-fixes = import ./overlays/build-fixes.nix;
+                build-fixes = import ./overlays/build-fixes.nix system;
 
                 packages = import ./overlays/packages.nix module-attrs;
 
@@ -78,31 +87,35 @@
 
               in
               {
-                nixpkgs.config = {
-                  allowUnfree = true;
-                  permittedInsecurePackages =
-                    lib.optional (pkgs.obsidian.version == "1.4.16") "electron-25.9.0";
-                };
-
                 nixpkgs = {
                   # https://nix.dev/tutorials/cross-compilation.html
                   #buildPlatform = platform; # platform where the executables are built
                   hostPlatform = platform; # platform where the executables will run
+
+                  config = {
+                    allowUnfree = true;
+                    joypixels.acceptLicense = true;
+                    permittedInsecurePackages =
+                      lib.optional (pkgs.obsidian.version == "1.4.16") "electron-25.9.0";
+                  };
+
+                  overlays = [
+                    unstable
+                    clean
+
+                    packages.default-to-faster-stdenv
+
+                    build-fixes.huge-dependency-compilation-skip
+
+                    build-fixes.deactivate-failing-tests-python
+                    build-fixes.deactivate-failing-tests-haskell
+                    build-fixes.deactivate-failing-tests-normal-packages
+
+                    packages.patched-linux
+                    packages.patched-librewolf-unwrapped
+                    #packages.obsidian
+                  ];
                 };
-
-                nixpkgs.overlays = [
-                  unstable
-                  clean-platform
-
-                  build-fixes.don't-build-huge-packages
-
-                  build-fixes.deactivate-tests-failing-python
-                  build-fixes.deactivate-tests-redis
-                  build-fixes.deactivate-tests-haskell
-
-                  packages.patched-linux
-                  #packages.obsidian
-                ];
               })
 
             # NixOS configuration
@@ -111,7 +124,7 @@
             # home-manager basic setup & configuration import
             home-manager.nixosModules.home-manager
             {
-              home-manager.extraSpecialArgs = {inherit system;}; # For if-else with "x86_64-linux"/"x86_64-darwin"
+              home-manager.extraSpecialArgs = { inherit system stateVersion gpt4all; }; # `system` For if-else with "x86_64-linux"/"x86_64-darwin" (yet to come)
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
 
@@ -121,7 +134,7 @@
                 nixvim.homeManagerModules.nixvim
               ];
 
-              home-manager.users.jnnk = import ./home-manager/home.nix; # flakes are git-repo-root & symlink-aware
+              home-manager.users.jnnk = import ./home-manager/home.nix;
             }
           ];
         };

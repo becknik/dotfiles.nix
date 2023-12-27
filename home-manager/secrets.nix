@@ -73,7 +73,7 @@ in
     } // mail-secret-posteo // mail-secret-gmx // mail-secret-uni;
   };
 
-  systemd.user.services.gpg-agent.Unit.After = [ "sops-nix.service" ];
-  systemd.user.services."app-org.keepassxc.KeePassXC@autostart.service".Unit.After = [ "sops-nix.service" ]; # disabled
+  #systemd.user.services.gpg-agent.Unit.After = [ "sops-nix.service" ]; # Already set
+  #systemd.user.services."app-org.keepassxc.KeePassXC@autostart.service".Unit.After = [ "sops-nix.service" ]; # disabled
   systemd.user.services.thunderbird.Unit.After = [ "sops-nix.service" ];
 }

@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./desktop-env/zsh.nix # zsh and oh-my-zsh config
+    ./desktop-env/shell.nix # zsh, oh-my-zsh and bash config
 
     ./desktop-env/folders-and-files.nix # Creates my basic folder structure
 

@@ -38,7 +38,8 @@ let
     startup-mode = "cwd";
   };
 in
-{
+with lib.gvariant; {
+
   dconf.settings = {
     "apps/seahorse/listing".keyrings-selected = [ "openssh:///home/jnnk/.ssh" ];
 
@@ -90,8 +91,8 @@ in
     };
 
     "org/gnome/desktop/peripherals/keyboard" = {
-      delay = lib.hm.gvariant.mkUint32 200;
-      repeat-interval = lib.hm.gvariant.mkUint32 25;
+      delay = mkUint32 200;
+      repeat-interval = mkUint32 25;
     };
 
     "org/gnome/desktop/peripherals/mouse" = {
@@ -242,8 +243,14 @@ in
     };
 
     "org/gnome/shell" = {
-      favorite-apps = [ "org.gnome.Terminal.desktop" "org.kde.dolphin.desktop" "librewolf.desktop" "codium.desktop" "obsidian.desktop" "thunderbird.desktop" "teams-for-linux.desktop" "org.gnome.Pomodoro.desktop" "anki.desktop" "idea-ultimate.desktop" "clion.desktop" "org.keepassxc.KeePassXC.desktop" ];
+      favorite-apps = [ "org.gnome.Terminal.desktop" "org.kde.dolphin.desktop" "librewolf.desktop" "chromium-browser.desktop" "codium.desktop" "obsidian.desktop" "thunderbird.desktop" "teams-for-linux.desktop" "org.gnome.Pomodoro.desktop" "anki.desktop" "idea-ultimate.desktop" "clion.desktop" "org.keepassxc.KeePassXC.desktop" ];
     };
+
+    "org/gnome/shell/window-switcher" = {
+      current-workspace-only = true;
+      app-icon-mode = "app-icon-only";
+    };
+    "org/gnome/shell/window-switcher/app-switcher".current-workspace-only = true;
 
     "org/gnome/shell/extensions/Logo-menu" = {
       hide-forcequit = true;
@@ -448,6 +455,8 @@ in
       workspaces-in-app-grid = false;
     };
 
+    "org/gnome/shell/extensions/kimpanel".font = mkString "IPAexGothic 14";
+
     # org/gnome/shell/extensions/quick-settings-tweaks # I'm abadining this one due to the errors caused by it
     #datemenu-fix-weather-widget=false
     #datemenu-remove-notifications=true
@@ -599,7 +608,7 @@ in
     # Set the EurKey keyboard layout as default (source: https://discourse.nixos.org/t/keyboard-layout-with-gnome/21996/9)
     "org/gnome/desktop/input-sources" = {
       show-all-sources = true;
-      sources = [ (lib.gvariant.mkTuple [ "xkb" "eu" ]) (lib.gvariant.mkTuple [ "xkb" "us+altgr-intl" ]) ];
+      sources = [ (mkTuple [ "xkb" "eu" ]) (mkTuple [ "xkb" "us+altgr-intl" ]) ];
       xkb-options = [ "terminate:ctrl_alt_bksp" ];
     };
   };
