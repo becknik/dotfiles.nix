@@ -18,8 +18,8 @@ $ tree # main branch
 │   │   ├── dconf.nix
 │   │   ├── folders-and-files.nix
 │   │   ├── plasma.nix
-│   │   ├── xdg-mime.nix
-│   │   └── zsh.nix
+│   │   ├── shell.nix
+│   │   └── xdg-mime.nix
 │   ├── devel.nix
 │   ├── devel
 │   │   └── proglangs.nix
@@ -35,10 +35,10 @@ $ tree # main branch
 │   │   └── vscodium.nix
 │   ├── secrets.nix
 │   └── secrets
-│       ├── git.yaml
-│       ├── gpg-personal.asc
-│       ├── keepassxc.key
-│       └── mail.yaml
+│       ├── git.yaml
+│       ├── gpg-personal.asc
+│       ├── keepassxc.key
+│       └── mail.yaml
 ├── nixos
 │   ├── configuration.nix
 │   ├── desktop-env.nix
@@ -46,6 +46,9 @@ $ tree # main branch
 │   ├── hardware-configuration.nix
 │   ├── nix-setup.nix
 │   ├── packages.nix
+│   ├── packages
+│   │   └── browsers.nix
+│   ├── systemd.nix
 │   └── virtualisation.nix
 ├── overlays
 │   ├── build-fixes.nix
@@ -58,10 +61,21 @@ $ tree # main branch
 - Flake-based NixOS 23.11 setup
 - Highly customized GNOME Wayland DE with some KDE tools
 - Target platform build optimization to Alderlake CPU architecture
-- [home-manager](https://github.com/nix-community/home-manager)
-- [sops-nix](https://github.com/Mic92/sops-nix) & [age](https://github.com/FiloSottile/age)
+  - Some Overlays to make this a bit more convenient
+- [home-manager](https://github.com/nix-community/home-manager) for managing everything apart from systemd config, browsers & DE
+- home-managed [sops-nix](https://github.com/Mic92/sops-nix) with [age](https://github.com/FiloSottile/age) encryption
 - [nixvim](https://github.com/nix-community/nixvim)
 - [plasma-manager](https://github.com/pjones/plasma-manager)
+
+### Features
+
+- Systemd Services:
+  - `nixos-upgrade-notify-send-{failure|success}.service` - Sends desktop notification when automatic nixos-upgrade finished
+  - `nixos-upgrade-automatic-shutdown.service` - Shuts down the desktop when nixos-upgrade service finished
+  > Disabled by default; Must be started manually
+- Shell alias (see [shell.nix](./home-manager/desktop-env/shell.nix) for specifics)
+  - `nrbt` & `nrbs` - `nixos-rebuild test/switch` with this flake & the `dnix` host
+  - `ngc*` - Some common options on `nix-collect-garbage`
 
 ## Getting Started
 
@@ -88,9 +102,7 @@ sudo nix run github:nix-community/disko \
 7. `sudo nixos-rebuild --flake ~/dotfiles.nix/nixos#dnix switch`
 8. Comment in the Linux kernel overlay from step again, turn off GNOME's "Automatic Suspend" and `sudo nixos-rebuild --flake ~/dotfiles.nix/nixos#dnix boot`
 
-## TODO-List
-
-Things I have to do after the installation...
+## After Installation TODO-List
 
 - [ ] Enable the installed GNOME-extensions
   - [ ] Setup `gsconnect`
