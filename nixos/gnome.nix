@@ -31,8 +31,8 @@ in
       gnome-keyring.enable = lib.mkDefault true;
 
       ### Override the implications of gnome.core-os-services
+      #evolution-data-server.enable = lib.mkDefault false; # might be the cause for gnome shell crashes
       gnome-online-accounts.enable = mkForce false;
-      evolution-data-server.enable = lib.mkDefault false;
       gnome-online-miners.enable = lib.mkDefault false;
       tracker-miners.enable = mkForce false;
       tracker.enable = mkForce false;
@@ -134,7 +134,7 @@ in
     evince
     eog
     geary
-    gnome-calendar # Might be causing gnome crashs on login/screen unlock
+    gnome-calendar
     gnome-contacts
     gnome-music
     nautilus

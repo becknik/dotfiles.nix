@@ -37,6 +37,7 @@
 
     binutils
     gnumake
+    bison
     perl
     meson
     yarn

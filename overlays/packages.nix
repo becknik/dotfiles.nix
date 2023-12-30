@@ -42,25 +42,25 @@
     );
   };
 
-  # Something here makes the browsing experience really bad...
   patched-librewolf-unwrapped = final: prev: {
-    librewolf-wayland = prev.clean.librewolf-wayland;
+    #librewolf-wayland = prev.clean.librewolf-wayland;
     librewolf-unwrapped = prev.librewolf-unwrapped.overrideAttrs (oldAttrs:
       let
         # Source: https://firefox-source-docs.mozilla.org/setup/configuring_build_options.html
-        configureFlags' = with lib.lists; remove "--enable-optimize" (remove "--enable-debug-symbols" oldAttrs.configureFlags);
-        # --enable-default-toolkit=cairo-gtk3-wayland --enable-lto=cross
-        configureFlags'' = configureFlags' ++ [ "--disable-debug-symbols" "--enable-optimize=-march=native" "--enable-optimize=-O3" "--enable-rust-simd" ]; # When specified multiple times the last option is applied by mozbuild
-        # "--enable-profile-use=cross"
-        # ''--enable-optimize="-march=native -O2"'' doesn't work due to '\' not being removed by nix...
+        configureFlags' = with lib.lists; remove "--enable-debug-symbols" oldAttrs.configureFlags;
+        # --enable-optimize --enable-default-toolkit=cairo-gtk3-wayland --enable-lto=cross
+        configureFlags'' = configureFlags' ++ [ "--disable-debug-symbols" "--enable-rust-simd" ];
+        # When option is specified multiple times the last option is applied by mozbuild
+        # ''--enable-optimize="-march=native,-O3"'' doesn't work due to '\' not being removed from nix-string...
+        # -> https://discourse.nixos.org/t/character-escaping-remove-from-escaped-string/37444
         # "--enable-default-toolkit=cairo-gtk3-wayland-only": crashes in profiling phase
         # "--enable-lto=cross,full": to much RAM usage...
       in
       {
-        makeFlags = oldAttrs.makeFlags ++ [ "-j 18" ];
-        configureFlags = configureFlags'';
         #depsBuildBuild = [ pkgs.egl-wayland ];
-        preConfigure = oldAttrs.preConfigure + "RUSTFLAGS=\"-C debuginfo=0 -C target-cpu=native -C opt-level=3\"\n";
+        #makeFlags = oldAttrs.makeFlags ++ [ "-j 20" ];
+        configureFlags = configureFlags'';
+        preConfigure = oldAttrs.preConfigure + "export RUSTFLAGS=\"-C debuginfo=0 -C target-cpu=native -C opt-level=3\"\n";
       });
   };
 
