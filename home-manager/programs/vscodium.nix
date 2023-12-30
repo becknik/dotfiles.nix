@@ -86,6 +86,9 @@
       #ms-vscode.cpptools
       #twxs.cmake #?
       ms-vscode.cmake-tools
+    ] ++ [
+      ### Nix leftover
+      pkgs.unstable.vscode-extensions.arrterian.nix-env-selector # 1.0.10 is 17 months newer than 1.0.9 & not in stable nixpkgs
 
       # Further Plugins
     ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
