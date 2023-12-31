@@ -85,6 +85,7 @@
 
       #### Text
       csquotes
+      hyphenat # for automatic hyphenation in monospace text \usepackage[htt]{hyphenat}
 
       ### Nice-to-Haves
       lipsum
