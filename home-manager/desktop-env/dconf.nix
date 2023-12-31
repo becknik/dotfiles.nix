@@ -243,7 +243,7 @@ with lib.gvariant; {
     };
 
     "org/gnome/shell" = {
-      favorite-apps = [ "org.gnome.Terminal.desktop" "org.kde.dolphin.desktop" "librewolf.desktop" "chromium-browser.desktop" "codium.desktop" "obsidian.desktop" "thunderbird.desktop" "teams-for-linux.desktop" "org.gnome.Pomodoro.desktop" "anki.desktop" "idea-ultimate.desktop" "clion.desktop" "org.keepassxc.KeePassXC.desktop" ];
+      favorite-apps = [ "org.gnome.Terminal.desktop" "org.kde.dolphin.desktop" "librewolf.desktop" "codium.desktop" "obsidian.desktop" "chromium-browser.desktop" "thunderbird.desktop" "teams-for-linux.desktop" "org.gnome.Pomodoro.desktop" "anki.desktop" "idea-ultimate.desktop" "clion.desktop" "org.keepassxc.KeePassXC.desktop" ];
     };
 
     "org/gnome/shell/window-switcher" = {
