@@ -1,10 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [
-    ./packages/browsers.nix
-  ];
-
   programs.neovim = {
     # Enable neovim for root account, besides of nixvim for home-manager user
     enable = true;
@@ -22,27 +18,6 @@
     efibootmgr
     usbutils
     cryptsetup
-  ]
-
-  ## Build Cache
-  ++ [
-    # `nix-collect-garbage -d` seems to clean some build deps
-    # TODO verify if build cache works
-    # TODO figure out how to move build cache into flake.nix
-    gcc
-    gmp
-    clang
-    vala
-    bash
-
-    binutils
-    gnumake
-    bison
-    perl
-    meson
-    yarn
-
-    ncurses
   ];
 
   # "Bloat" Removal

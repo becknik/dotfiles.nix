@@ -45,7 +45,7 @@ in
 
 
   # Additional GNOME Programs
-  programs.gnome-terminal.enable = lib.mkDefault true;
+  programs.gnome-terminal.enable = lib.mkDefault true; # TODO add fedora transparency patches
   #programs.gpaste.enable = true;
 
   ## Manual Installation of additional Tools
@@ -86,8 +86,10 @@ in
   ++ (with pkgs.libsForQt5; [
     dolphin
     dolphin-plugins
-    kio-extras # Might solve dolphin log spam "serviceType "ThumbCreator" not found"
-    # https://forums.opensuse.org/t/dolphin-cant-create-photo-thumbnails-servicetype-thumbcreator-not-found/170259/6
+    kio-extras # Solves spam of "serviceType "ThumbCreator" not found"
+    # TODO find a way to enable dav connections and further network protocols in dolphin
+    #org.kde.dolphin.desktop[294371]: kf.service.services: KApplicationTrader: mimeType "x-scheme-handler/dav" not found
+    #kf.kio.core: couldn't create worker: "Unknown protocol 'dav'
     gwenview
     kate # This pulls in Konsole and I don't know if I can stop it from doing so, but its fine I guess
     #(kate.override { propagatedUserEnvPkgs = []; })

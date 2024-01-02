@@ -3,15 +3,16 @@
 ## Project Structure
 
 ```shell
-$ tree # main branch
+$ tree -a -I '\.git|\.vscode' .
 .
 ├── flake.nix
 ├── flake.lock
 ├── disko
+│   ├── common-definitions.nix
 │   ├── ext4-encrypted.nix
 │   └── ext4-unencrypted.nix
 ├── home-manager
-│   ├── .sops.yaml
+│   ├── default.nix
 │   ├── desktop-env.nix
 │   ├── desktop-env
 │   │   ├── autostart.nix
@@ -23,7 +24,6 @@ $ tree # main branch
 │   ├── devel.nix
 │   ├── devel
 │   │   └── proglangs.nix
-│   ├── home.nix
 │   ├── media.nix
 │   ├── media
 │   │   └── mail.nix
@@ -34,20 +34,24 @@ $ tree # main branch
 │   │   ├── thunderbird.nix
 │   │   └── vscodium.nix
 │   ├── secrets.nix
-│   └── secrets
-│       ├── git.yaml
-│       ├── gpg-personal.asc
-│       ├── keepassxc.key
-│       └── mail.yaml
+│   ├── secrets
+│   │   ├── git.yaml
+│   │   ├── gpg-personal.asc
+│   │   ├── keepassxc.key
+│   │   └── mail.yaml
+│   └── .sops.yaml
 ├── nixos
-│   ├── configuration.nix
+│   ├── browsers.nix
+│   ├── default.nix
 │   ├── desktop-env.nix
+│   ├── dnix
+│   │   ├── default.nix
+│   │   └── hardware-configuration.nix
 │   ├── gnome.nix
-│   ├── hardware-configuration.nix
-│   ├── nix-setup.nix
+│   ├── lnix
+│   │   ├── default.nix
+│   │   └── hardware-configuration.nix
 │   ├── packages.nix
-│   ├── packages
-│   │   └── browsers.nix
 │   ├── systemd.nix
 │   └── virtualisation.nix
 ├── overlays
@@ -59,10 +63,12 @@ $ tree # main branch
 ## Setup
 
 - Flake-based NixOS 23.11 setup
+  - Configuration for laptop (`lnix`) & desktop (`dnix`)
+  - [`nix-hardware`](https://github.com/NixOS/nixos-hardware) setup for each
+- Target platform build optimization to Alderlake CPU architecture (on desktop only)
+  - Overlays to make this a bit more convenient
 - Highly customized GNOME Wayland DE with some KDE tools
-- Target platform build optimization to Alderlake CPU architecture
-  - Some Overlays to make this a bit more convenient
-- [home-manager](https://github.com/nix-community/home-manager) for managing everything apart from systemd config, browsers & DE
+- [home-manager](https://github.com/nix-community/home-manager) for managing everything apart from system stuff, DE & browsers
 - home-managed [sops-nix](https://github.com/Mic92/sops-nix) with [age](https://github.com/FiloSottile/age) encryption
 - [nixvim](https://github.com/nix-community/nixvim)
 - [plasma-manager](https://github.com/pjones/plasma-manager)
@@ -70,11 +76,11 @@ $ tree # main branch
 ### Features
 
 - Systemd Services:
-  - `nixos-upgrade-notify-send-{failure|success}.service` - Sends desktop notification when automatic nixos-upgrade finished
+  - `nixos-upgrade-notify-send-{failure|success}.service` - Sends desktop notification when nixos-upgrade unit finished
   - `nixos-upgrade-automatic-shutdown.service` - Shuts down the desktop when nixos-upgrade service finished
   > Disabled by default; Must be started manually
 - Shell alias (see [shell.nix](./home-manager/desktop-env/shell.nix) for specifics)
-  - `nrbt` & `nrbs` - `nixos-rebuild test/switch` with this flake & the `dnix` host
+  - `nrbt` & `nrbs` - `nixos-rebuild test/switch` for currently activated flake profile
   - `ngc*` - Some common options on `nix-collect-garbage`
 
 ## Getting Started
@@ -88,7 +94,7 @@ $ tree # main branch
 
 ```shell
 sudo nix run github:nix-community/disko \
-    --extra-experimental-features nix-command --extra-experimental-features flakes -- \
+    --extra-experimental-features "nix-command flakes" -- \
     --mode disko ./disko/ext4-unencrypted.nix --arg disks '[ "/dev/sdX" ]'
 # If the command succeeds, the partitions are mounted automatically under /mnt
 ```

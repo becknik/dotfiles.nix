@@ -3,24 +3,33 @@ system:
 {
   # Using the clean nixpkgs environment for huge packages
 
-  huge-dependency-compilation-skip = final: prev: {
-    #thunderbird = prev.clean.thunderbird;
+  dependency-build-skip = final: prev: {
     webkitgtk = prev.clean.webkitgtk;
-
-    ## GNOME
     webkitgtk_6_0 = prev.clean.webkitgtk_6_0;
     webkitgtk_4_1 = prev.clean.webkitgtk_4_1;
 
     ## Chromium
     electron = prev.clean.electron;
-    #electron_27 = prev.clean.electron_27;
+    electron_27 = prev.clean.electron_27;
+    #qtwebengine =
 
-    ## KDE
+    ## Compiler
+    gfortran = prev.clean.gfortran; # why is this even a dependency?!
+    #clang = prev.clean.clang;
+    #llvm = prev.clean.llvm;
+
     #spidermonkey = prev.clean.spidermondkey;
-
-    ### Qt
-    /*libsForQt5.qt5.override = { qtwebview = prev.clean.libsForQt5.qt5.qtwebview; };*/
+    #thunderbird = prev.clean.thunderbird;
+    # Not working:
+    #libsForQt5.qt5.override = { qtwebview = prev.clean.libsForQt5.qt5.qtwebview; };
+    /* qt6Packages = prev.qt6Packages.override {
+      overrides = (qt-final: qt-prev: {
+        qt6.qtwebview = qt-prev.clean.qt6.qtwebview;
+        qt6.qtwebengine = qt-prev.clean.qt6.qtwebengine;
+      });
+    }); */
     #qt6.qtwebview = prev.clean.qt6.qtwebview;
+    #qt6.qtwebengine = prev.clean.qt6.qtwebengine;
   };
 
   # Fixing Build Failures
@@ -31,7 +40,8 @@ system:
     redis = prev.redis.overrideAttrs (oldAttrs: {
       doCheck = false;
     });
-    libsecret = prev.libsecret.overrideAttrs (oldAttrs: { # https://github.com/NixOS/nixpkgs/issues/276036
+    libsecret = prev.libsecret.overrideAttrs (oldAttrs: {
+      # https://github.com/NixOS/nixpkgs/issues/276036
       doCheck = false;
     });
   };
@@ -68,6 +78,11 @@ system:
               "test_rolling_var_numerical_issues"
             ] ++ oldAttrs.disabledTests;
           });
+          afdko = python-prev.afdko.overridePythonAttrs (oldAttrs: {
+            disabledTests = [
+              "test_alt_missing_glyph"
+            ] ++ oldAttrs.disabledTests;
+          });
         }
       )
     ];
@@ -84,7 +99,7 @@ system:
         tls = prev.haskell.lib.compose.dontCheck haskell-prev.tls;
 
         # Getting GHCup and running for haskell.haskell vscode extension...
-/*         haskus-utils-variant = (import
+        /*         haskus-utils-variant = (import
           (builtins.fetchGit {
             name = "nixpkgs-unstable-haskus-utils-variant-3.2.1";
             url = "https://github.com/NixOS/nixpkgs/";

@@ -169,8 +169,10 @@ BULLETTRAIN_PROMPT_SEPARATE_LINE=true;
       shellAliases = {
         fu = "sudo";
         sduo = "sudo";
-        nrbs = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#dnix\" switch";
-        nrbt = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#dnix\" test";
+        # Flake NixOS configuration equals hostname of machine
+        nrbt = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#$NIXOS_CONFIGURATION_NAME\" test";
+        nrbs = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#$NIXOS_CONFIGURATION_NAME\" switch";
+        nrbb = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#$NIXOS_CONFIGURATION_NAME\" boot";
         ngc = "sudo nix-collect-garbage";
         ngckeep = "sudo nix-collect-garbage --delete-older-than";
         ngcd = "sudo nix-collect-garbage -d";

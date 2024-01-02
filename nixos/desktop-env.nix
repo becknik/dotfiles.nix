@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   xdg.portal = {
@@ -96,9 +96,6 @@
     OBSIDIAN_USE_WAYLAND = "1"; # "
     QT_QPA_PLATFORM = "wayland;xcb";
 
-    ## Graphics
-    LIBVA_DRIVER_NAME = "intel"; # Should be redundant
-
     ## Fcitx5
     #GTK_IM_MODULE = "fcitx"; # redundant
     #QT_IM_MODULE = "fcitx"; # "
@@ -108,8 +105,5 @@
   };
 
   # Etc
-  programs = {
-    firefox.nativeMessagingHosts.gsconnect = true; # Might be redundant, I think
-    nm-applet.enable = true;
-  };
+  programs.nm-applet.enable = true;
 }

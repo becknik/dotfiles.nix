@@ -35,7 +35,7 @@
     ### Hardware
     cpufetch
     gparted
-    ventoy
+    ventoy-full
     powertop
 
     ## NixOS

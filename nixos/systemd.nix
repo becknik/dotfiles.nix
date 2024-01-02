@@ -1,37 +1,7 @@
-{ config, pkgs, ... }:
+{pkgs, ... }:
 
 {
   # Auto Upgrade Systemd Service
-  system.autoUpgrade = {
-    enable = true;
-    operation = "boot";
-    flake = "${config.users.users.jnnk.home}/devel/own/dotfiles.nix";
-    flags = [
-      "--commit-lock-file"
-      "--update-input"
-      "nixpkgs"
-      "--update-input"
-      "nixpkgs-unstable"
-      "--update-input"
-      "home-manager"
-      "--update-input"
-      "plasma-manager"
-      "--update-input"
-      "sops-nix"
-      "-L" # print build logs
-    ];
-    dates = "weekly";
-    randomizedDelaySec = "2h";
-  };
-
-  programs.git = {
-    enable = true;
-    config.user = {
-      # Necessary for the `--commit-lock-file` option on config.system.autoUpgrade.flags
-      email = "jannikb@posteo.de";
-      name = "becknik";
-    };
-  };
 
   ## Post Auto Upgrade Systemd Services
   systemd.services =
