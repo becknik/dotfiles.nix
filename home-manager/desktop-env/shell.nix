@@ -41,7 +41,7 @@
         #path = "${config.programs.zsh.dotDir}/.zhistroy";
         save = 10000; # Amount of lines to save
         share = true; # Share history between all sessions.
-        ignorePatterns = [ "alias" "cd" "gcsm" "ls" "la" ];
+        ignorePatterns = [ "alias" "cd" "gcsm" "gcmsg" "ls" "la" ]; # TODO this doesn't work...
         ignoreSpace = true; # Share history between all sessions.
       };
 
@@ -140,30 +140,32 @@
           "direnv"
         ];
         custom = "${config.home.homeDirectory}/.config/oh-my-zsh/custom";
-        extraConfig = # oh-my-zsh extra settings for plugins
-          # $1=exit_status, $2=command, $3=elapsed_time
-          ''bgnotify_bell=false;
-bgnotify_threshold=10;
+        # oh-my-zsh extra settings for plugins
+        # $1=exit_status, $2=command, $3=elapsed_time
+        extraConfig = ''
+          bgnotify_bell=false;
+          bgnotify_threshold=10;
 
-function bgnotify_formatted {
-  [ $1 -eq 0 ] && title="Holy Smokes, Batman!" || title="Holy Graf Zeppelin!"
-  bgnotify "$title -- after $3 s" "$2";
-}
+          function bgnotify_formatted {
+            [ $1 -eq 0 ] && title="Holy Smokes, Batman!" || title="Holy Graf Zeppelin!"
+            bgnotify "$title -- after $3 s" "$2";
+          }
 
-TIMER_PRECISION=2;
-TIMER_FORMAT="[%d]";
-TIMER_THRESHOLD=.5;
-'' +
-          # oh-my-zsh extra settings for themes:
-          # Not set: perl nvm hg
-          ''BULLETTRAIN_PROMPT_ORDER=("time" "status" "context" "custom" "dir" "ruby" "virtualenv" "aws" "go" "elixir" "git" "cmd_exec_time");
-BULLETTRAIN_PROMPT_SEPARATE_LINE=true;
-BULLETTRAIN_PROMPT_ADD_NEWLINE=false;
-BULLETTRAIN_STATUS_EXIT_SHOW=true;
-BULLETTRAIN_IS_SSH_CLIENT=true;
-BULLETTRAIN_PROMPT_SEPARATE_LINE=true;
-#BULLETTRAIN_GIT_COLORIZE_DIRTY=true;
-''
+          TIMER_PRECISION=2;
+          TIMER_FORMAT="[%d]";
+          TIMER_THRESHOLD=.5;
+        '' +
+        # oh-my-zsh extra settings for themes:
+        # Not set: perl nvm hg
+        ''
+          BULLETTRAIN_PROMPT_ORDER=("time" "status" "context" "custom" "dir" "ruby" "virtualenv" "aws" "go" "elixir" "git" "cmd_exec_time");
+          BULLETTRAIN_PROMPT_SEPARATE_LINE=true;
+          BULLETTRAIN_PROMPT_ADD_NEWLINE=false;
+          BULLETTRAIN_STATUS_EXIT_SHOW=true;
+          BULLETTRAIN_IS_SSH_CLIENT=true;
+          BULLETTRAIN_PROMPT_SEPARATE_LINE=true;
+          #BULLETTRAIN_GIT_COLORIZE_DIRTY=true;
+        ''
         ;
       };
       shellAliases = {

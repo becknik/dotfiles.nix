@@ -1,5 +1,7 @@
 # dotfiles.nix
 
+My way of declaratively syncing the state of my Linux-desktop setups between all my devices.
+
 ## Project Structure
 
 ```shell
@@ -62,11 +64,11 @@ $ tree -a -I '\.git|\.vscode' .
 
 ## Setup
 
-- Flake-based NixOS 23.11 setup
+- Flake-based NixOS setup
   - Configuration for laptop (`lnix`) & desktop (`dnix`)
   - [`nix-hardware`](https://github.com/NixOS/nixos-hardware) setup for each
 - Target platform build optimization to Alderlake CPU architecture (on desktop only)
-  - Overlays to make this a bit more convenient
+  - Overlays & systemd services to make this a bit more convenient
 - Highly customized GNOME Wayland DE with some KDE tools
 - [home-manager](https://github.com/nix-community/home-manager) for managing everything apart from system stuff, DE & browsers
 - home-managed [sops-nix](https://github.com/Mic92/sops-nix) with [age](https://github.com/FiloSottile/age) encryption
@@ -79,55 +81,51 @@ $ tree -a -I '\.git|\.vscode' .
   - `nixos-upgrade-notify-send-{failure|success}.service` - Sends desktop notification when nixos-upgrade unit finished
   - `nixos-upgrade-automatic-shutdown.service` - Shuts down the desktop when nixos-upgrade service finished
   > Disabled by default; Must be started manually
+- `nixos-fetch-and-switch-on-change` - Pulls and executes `nixos-rebuild switch` when this repos local differs from remote
 - Shell alias (see [shell.nix](./home-manager/desktop-env/shell.nix) for specifics)
-  - `nrbt` & `nrbs` - `nixos-rebuild test/switch` for currently activated flake profile
+  - `nrbt`, `nrbb` & `nrbs` - `nixos-rebuild test/boot/switch` for currently activated flake profile
   - `ngc*` - Some common options on `nix-collect-garbage`
 
 ## Getting Started
 
-> After my switch to the flake-setup, I altered this instruction significantly.
-> It's not tested on my machine so far, so it might (and probably will) lack some edge case steps.
-> My guess is, that something with my ssh git setup goes bananas...
-
-1. Clone this repo & `cd` into it
-2. Disk Partitioning with [disko](https://github.com/nix-community/disko):
+1. Disk Partitioning with [disko](https://github.com/nix-community/disko):
 
 ```shell
 sudo nix run github:nix-community/disko \
     --extra-experimental-features "nix-command flakes" -- \
-    --mode disko ./disko/ext4-unencrypted.nix --arg disks '[ "/dev/sdX" ]'
-# If the command succeeds, the partitions are mounted automatically under /mnt
+    --mode disko ./disko/ext4-(un)encrypted.nix (--arg disks '[ "/dev/sdX" ]')
+# If the command succeeds, the partitions are automatically mounted under /mnt
 ```
 
-3. `sudo nixos-generate-config --root /mnt` and include the generated config in your nix configuration
-   - This can either be archieved by 1) replacing the `configuration.nix`s `import ./hardware/desktop.nix` with your `hardware-configuration.nix`, or...
-   - By 2) altering this repos `/nixos/hardware/desktop.nix` to your liking (by substituting the UUIDs, cpu-modules, etc.) and then `sudo rm /mnt/etc/nixos/hardware-configuration.nix`ing
-4. Comment out in `configuration.nix` the `kernelPackages = pkgs.linux_xanmod_latest_custom;` line and use a kernel package from the nix repo database instead to save some installation time
-5. `cd /mnt && sudo nixos-install --flake <repo-root>/nixos#dnix`
-6. `sudo cp dotfiles.nix /mnt/home/jnnk` to spare re-cloning this repo
-7. `sudo nixos-rebuild --flake ~/dotfiles.nix/nixos#dnix switch`
-8. Comment in the Linux kernel overlay from step again, turn off GNOME's "Automatic Suspend" and `sudo nixos-rebuild --flake ~/dotfiles.nix/nixos#dnix boot`
+2. `sudo nixos-generate-config --root /mnt`, then merge/ configure the resulting files:
+   - `cat /mnt/etc/nixos/hardware-configuration.nix >> ./nixos/<profile>/hardware-configuration.nix`
+3. Comment out in `configuration.nix` the `kernelPackages = pkgs.linux_xanmod_latest_custom;` line
+4. `cd /mnt && sudo nixos-install --flake <repo-root>/nixos#dnix`
+
+> `/home/nixos/dotfiles.nix#<profile>` in the installer
+
+6. `sudo cp /home/nixos/dotfiles.nix /mnt/home/jnnk/devel/own`
 
 ## After Installation TODO-List
 
 - [ ] Enable the installed GNOME-extensions
   - [ ] Setup `gsconnect`
 - [ ] `ssh-add -v ~/.ssh/<ssh-key-name>`
-- [ ] Configure the CPU-scheduler and profile in `cpupower-gui`
+- [ ] (Configure the CPU-scheduler and profile in `cpupower-gui`)
 - [ ] Delete the former capitalized xdg-user-dirs: `rm -fr Templates Videos Public Desktop Documents Downloads Pictures Music tmp` (TODO why is there a `tmp/cache-\$USER/oh-my-zsh` dir?!)
-- [ ] Create new nix-sops secrets due to accidental removal of the old primary key...
+- [ ] (Create new nix-sops secrets due to accidental removal of the old primary key...)
 
 ### Logins
 
-- [ ] Thunderbird with Mail Accounts :(
+- [ ] Thunderbird with Mail Accounts (because home-managed ones won't work :( )
 - [ ] Firefox
-- [ ] Nextcloud, Dropbox
+- [ ] Nextcloud, (Dropbox <- broken?)
 - [ ] JetBrains (IDEA, CLion, ...)
 - [ ] Whatsapp, Telegram, Signal
 - [ ] Discord, Element
 - [ ] Obsidian
 - [ ] Anki
-- [ ] Teams?
+- [ ] (Teams)
 
 ### Further
 
@@ -135,6 +133,6 @@ sudo nix run github:nix-community/disko \
   - [ ] keepassxc
   - [ ] telegram-desktop
   - [ ] planify
-  - [x] element-desktop (manually created in `folders-and-files.nix`)
-  - [x] whatsapp-for-linux (")
-  - [ ] teams-for-linux
+  - [x] element-desktop (manually created in `autostart.nix`)
+  - [x] whatsapp-for-linux ( " )
+  - [ ] (teams-for-linux)

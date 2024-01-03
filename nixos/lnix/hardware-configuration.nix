@@ -3,6 +3,8 @@
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
+  console.keyMap = "de"; # Using the german keyboard layout only for the luks password prompt
+
   swapDevices = [
     {
       device = "/swapfile";
@@ -14,7 +16,7 @@
 
   # Kernel Stuff
   boot = {
-    kernelModules = [ "amdgpu" ];
+    kernelModules = [ "kvm-amd" "amdgpu" ];
     extraModulePackages = with config.boot.kernelPackages; [ zenpower ];
     initrd = {
       availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];

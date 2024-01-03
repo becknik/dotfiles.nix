@@ -1,4 +1,4 @@
-{pkgs, ... }:
+{ pkgs, flakeDirectory, ... }:
 
 {
   # Auto Upgrade Systemd Service
@@ -56,6 +56,33 @@
         message = "Upgrade failed";
         critical = true;
       });
+
+      nixos-fetch-and-switch-on-change = {
+        description = "Triggers the nixos-upgrade.service when the remote config git repo is != local";
+        unitConfig = {
+          After = "network.target";
+        };
+
+        serviceConfig = {
+          Type = "oneshot";
+        };
+        path = with pkgs; [ git nixos-rebuild ];
+        environment = {
+          NIXOS_CONFIG_REPO_DIRECTORY = flakeDirectory;
+        };
+        script = ''
+          cd $NIXOS_CONFIG_REPO_DIRECTORY
+
+          git fetch
+          local=$(git rev-parse main)
+          remote=$(git rev-parse main@{upstream})
+          if [ $local != $remote ]; then
+            git pull
+            nixos-rebuild --flake "$NIXOS_CONFIG_REPO_DIRECTORY#$NIXOS_CONFIGURATION_NAME" switch
+          fi
+        '';
+        #
+      };
     };
 
   system.activationScripts = {

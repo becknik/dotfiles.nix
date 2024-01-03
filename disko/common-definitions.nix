@@ -3,7 +3,7 @@
     name = "esp";
     priority = 1;
     size = "512M";
-    type = "EF02"; # EF00
+    type = "EF00"; # EF02 results in a "grub-something" partition flag
     content = {
       type = "filesystem";
       format = "vfat";

@@ -46,6 +46,8 @@
     {
       nixosConfigurations =
         let
+          flakeDirectory = "/home/jnnk/devel/own/dotfiles.nix";
+
           system = "x86_64-linux";
           stateVersion = "23.11";
 
@@ -93,7 +95,7 @@
           };
 
           specialArgs = {
-            inherit stateVersion;
+            inherit stateVersion flakeDirectory;
           };
         in
         {

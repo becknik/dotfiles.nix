@@ -48,13 +48,15 @@
         gtk-recent-files-limit = 0;
         gtk-application-prefer-dark-theme = 0; # Sets "Legacy Applications" to "Adwaita-dark" theme
       };
-      extraCss = # Minimizes the gtk-3 header-bar
-        ''headerbar.default-decoration {
-  padding-top: 5px;
-  padding-bottom: 5px;
-  min-height: 0px;
-  font-size: 0.8em;
-}'';
+      # Minimizes the gtk-3 header-bar
+      extraCss = ''
+        headerbar.default-decoration {
+          padding-top: 5px;
+          padding-bottom: 5px;
+          min-height: 0px;
+          font-size: 0.8em;
+        }
+      '';
     };
   };
 }

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, stateVersion, ... }:
+{ stateVersion, flakeDirectory, config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -21,24 +21,31 @@
       enable = true;
       operation = "boot";
       flake = "${config.users.users.jnnk.home}/devel/own/dotfiles.nix";
-      flags = [
-        "--update-input"
-        "nixpkgs"
-        "--update-input"
-        "nixpkgs-unstable"
-        "--update-input"
-        "home-manager"
-        "--update-input"
-        "plasma-manager"
-        "--update-input"
-        "sops-nix"
+      flags = (builtins.map (flakeInput: "--update-input ${flakeInput}")
+        [
+          "nixpkgs"
+          "nixpkgs-unstable"
+          "nixos-hardware"
+          "disko"
+          "home-manager"
+          "sops-nix"
+          "plasma-manager"
+          "nixvim"
+        ]
+      ) ++ [
         "-L" # print build logs
       ];
       dates = "Sat";
       randomizedDelaySec = "2h";
     };
   };
-  programs.git.enable = true; # for managing the flakes
+  programs.git = {
+    enable = true; # Necessary for managing the flakes
+    config = {
+      # Necessary for systemd service fetching this git repo
+      safe.directory = flakeDirectory;
+    };
+  };
 
   # Bootloader
   boot.loader = {
@@ -145,11 +152,6 @@
       ethernet.macAddress = "stable";
       # networking.tempAddresses is properly set up by default
     };
-    # Necessary due to lnix (=laptop) module enabling `wireless`, to add `userControlled` group to this modules users `extraGroups` list
-    wireless.userControlled = {
-      enable = true;
-      group = "network";
-    };
   };
 
   services.resolved.enable = true; # systemd-resolved
@@ -206,7 +208,7 @@
     isNormalUser = true;
     description = "jannik";
     hashedPassword = "$y$j9T$v2v24yeaoZcmnJRJqKVIb/$9/ERYx13TXXpCXA12dNvvrr1BOKx1/tgpO9M9fRlio4";
-    extraGroups = [ "wheel" "networkmanager" "libvirtd" /* "docker" */ "vboxusers" "video" "network" ];
+    extraGroups = [ "wheel" "networkmanager" "libvirtd" /* "docker" */ "vboxusers" "video" ];
     # replaced docker with podman, docker wouldn't work rootless
     useDefaultShell = true;
   };

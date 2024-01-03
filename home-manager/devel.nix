@@ -92,6 +92,7 @@
     ## Build Tools
     gradle
     maven
+    gnumake
 
     ## Testing
     httpie
