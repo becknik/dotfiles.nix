@@ -1,16 +1,16 @@
-{ lib, pkgs, system, ... }:
+{ config, lib, pkgs, system, ... }:
 
 {
   programs.vscode = {
     enable = true;
     package = pkgs.unstable.vscodium;
 
-    enableExtensionUpdateCheck = false;
+    enableExtensionUpdateCheck = true;
     enableUpdateCheck = false;
     mutableExtensionsDir = false; # Setting this to true disabled the java extensions to properly install
 
     # Plugins
-    extensions = with pkgs.vscode-extensions; [
+    extensions = with pkgs.unstable.vscode-extensions; [
 
       ## Management
       alefragnani.project-manager
@@ -59,6 +59,7 @@
 
       ### Nix
       jnoortheen.nix-ide
+      arrterian.nix-env-selector # 1.0.10 is 17 months newer than 1.0.9 & not in stable nixpkgs
 
       ### LaTeX
       james-yu.latex-workshop
@@ -86,19 +87,13 @@
       #ms-vscode.cpptools
       #twxs.cmake #?
       ms-vscode.cmake-tools
-    ] ++ [
-      ### Nix leftover
-      pkgs.unstable.vscode-extensions.arrterian.nix-env-selector # 1.0.10 is 17 months newer than 1.0.9 & not in stable nixpkgs
-
-      # Further Plugins
     ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-
 
       /* (lib.optional (system != "x86_64-linux") { # TODO
         # VSCode Live Share (for MacOS etc due to incompatible package)
         name = "vsliveshare";
         publisher = "MS-vsliveshare";
-        version = "latest";
+        version = "1.0.5900";
         #sha256 = lib.fakeSha256;
       }) */
 
@@ -106,16 +101,16 @@
         # German cSpell dictionary
         name = "code-spell-checker-german";
         publisher = "streetsidesoftware";
-        version = "latest";
+        version = "2.3.1";
         #sha256 = lib.fakeSha256;
-        sha256 = "sha256-rAm3pcLn6HoWnhWeoK/0D9r5oY9TIQ23EMh35rurgDg=";
+        sha256 = "sha256-LxgftSpGk7+SIUdZcNpL7UZoAx8IMIcwPYIGqSfVuDc=";
       }
 
       {
         # Monokai Night Theme
         name = "vscode-monokai-night";
         publisher = "fabiospampinato";
-        version = "latest";
+        version = "1.7.0";
         #sha256 = lib.fakeSha256;
         sha256 = "sha256-7Vm/Z46j2GG2c2XZkAlmJ9ZCZ9og+v3tboD2Tf23gGA=";
       }
@@ -123,16 +118,15 @@
       /*{ # Auto Completion IntelliCode
         name = "vscodeintellicode";
         publisher = "VisualStudioExptTeam";
-        version = "latest";
-        #sha256 = lib.fakeSha256;
-        sha256 = "7f61a7f96d101cdf230f96821be3fddd8f890ebfefb3695d18beee43004ae251";
+        version = "1.2.30";
+        sha256 = lib.fakeSha256;
       }*/
 
       /*{
         # Java Checkstyle
         name = "vscode-checkstyle";
         publisher = "shengchen";
-        version = "latest";
+        version = "1.4.2";
         #sha256 = lib.fakeSha256;
         sha256 = "21c860417f42510e77a6e2eed2597cccd97a1334a7543063eed4d4a393736630";
       }*/
@@ -140,17 +134,21 @@
       /*{ # Spring Boot Tools
         name = "vscode-spring-boot";
         publisher = "vmware";
-        version = "latest";
-        #sha256 = lib.fakeSha256;
-        sha256 = "89a07234f8c53ea09e80d815129da2c2cef9a10cb6987564e7e8af4aa3d8106f";
+        version = "1.52.2024010405";
+        sha256 = lib.fakeSha256;
       }
-
       { # Spring Boot Dashboard
         name = "vscode-spring-boot-dashboard";
         publisher = "vscjava";
-        version = "latest";
+        version = "0.13.2023072200";
         #sha256 = lib.fakeSha256;
         sha256 = "f3395bc26e1e79db9f2c406068987b362a746faf4093acfb1a3d274110a437bd";
+      }
+      { # Spring Boot Initializer
+        name = "vscode-spring-initializr";
+        publisher = "vscjava";
+        version = "0.11.2023070103";
+        #sha256 = lib.fakeSha256;
       }*/
 
       # Missing: Monokai Pro, Vue Volar
@@ -541,13 +539,30 @@
         };
         jdt.ls.androidSupport.enabled = "off";
         sharedIndexes.enabled = "off";
-        configuration.runtimes = [
-          {
-            name = "JavaSE-21";
-            path = "$JAVA_HOME";
-            default = true;
-          }
-        ];
+        # Automatically add all home-manager installed jdks as runtimes and selects the highest version as `default`
+        configuration.runtimes =
+          let
+            # helpers
+            addMajVersion = jdk: {
+              path = jdk;
+              majVersion = builtins.head (builtins.splitVersion jdk.version);
+            };
+            majVersionComp = jdk1: jdk2: builtins.lessThan jdk1.majVersion jdk2.majVersion;
+
+            # perhaps all packages with a `jre`-attribute are jdks
+            jdks = (builtins.filter (pkg: builtins.hasAttr "jre" pkg) (config.home.packages));
+            # TODO `++ config.environment.systemPackages` not working in home-manager module
+            jdksTransformed = builtins.map addMajVersion jdks;
+            jdksSorted = builtins.sort majVersionComp jdksTransformed;
+          in
+          builtins.map
+            (jdk: {
+              inherit (jdk) path;
+              version = "JavaSE-${jdk.majVersion}";
+              default = if (jdk == builtins.head jdksSorted) then true else false;
+            }
+            )
+            jdksSorted;
       };
 
       ## Rust

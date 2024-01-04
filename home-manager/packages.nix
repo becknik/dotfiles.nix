@@ -67,37 +67,8 @@
     ## TeX Live
 
     # Source for new 23.11 interface: https://github.com/NixOS/nixpkgs/issues/250243
-    (texlive.withPackages (ps: with ps; [
-      scheme-medium # Need xelatex which is included right here
-      # I'm really annoyed by manually listing every packages I need below and this solves it
-
-      ### General Purpose
-      biblatex
-      biber
-      mmap
-      enumitem
-      pgfplots
-
-      ### Formatting
-
-      #### Page Layout
-      changepage
-
-      #### Text
-      csquotes
-      hyphenat # for automatic hyphenation in monospace text \usepackage[htt]{hyphenat}
-
-      ### Nice-to-Haves
-      lipsum
-
-      ### Dependency of algpseudocodex
-      fifo-stack
-      varwidth
-      tabto-ltx
-      totcount
-      tikzmark
-
-      pdfcolmk ### ???
+    (unstable.texlive.withPackages (ps: with ps; [
+      scheme-full # Need xelatex which is included right here
     ]))
 
     ## Trash
