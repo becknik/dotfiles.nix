@@ -40,10 +40,6 @@ system:
     redis = prev.redis.overrideAttrs (oldAttrs: {
       doCheck = false;
     });
-    libsecret = prev.libsecret.overrideAttrs (oldAttrs: {
-      # https://github.com/NixOS/nixpkgs/issues/276036
-      doCheck = false;
-    });
   };
 
   ## Python

@@ -35,11 +35,6 @@
       #inputs.pre-commit-hooks.inputs.nixpkgs-stable.follows = "nixpkgs"; # TODO Doesn't follows the nixvim inputs - bug report?
     };
 
-    gpt4all = {
-      # TODO don't provides .desktop file & installing ChatGPT doesn't work
-      url = "github:polygon/gpt4all-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nixos-hardware, ... }@input-attrs:
@@ -80,7 +75,7 @@
 
           common-conf-home-manager = {
             home-manager = {
-              extraSpecialArgs = { inherit system stateVersion; inherit (input-attrs) gpt4all; }; # `system` For if-else with "x86_64-linux"/"x86_64-darwin" (yet to come)
+              extraSpecialArgs = { inherit system stateVersion; }; # `system` For if-else with "x86_64-linux"/"x86_64-darwin" (yet to come)
               useGlobalPkgs = true;
               useUserPackages = true;
 

@@ -117,45 +117,6 @@
         "type": "github"
       }
     },
-    "gpt4all": {
-      "inputs": {
-        "gpt4all": "gpt4all_2",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1699308269,
-        "narHash": "sha256-uFHc0GMp+hfPHB/kw46YFDWvpPdGI/c6kFXXGgmif7s=",
-        "owner": "polygon",
-        "repo": "gpt4all-nix",
-        "rev": "6d8d5346895ffde4383c34aa8eb68dc95f05076c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "polygon",
-        "repo": "gpt4all-nix",
-        "type": "github"
-      }
-    },
-    "gpt4all_2": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1699024904,
-        "narHash": "sha256-Y1wizN2prgY2zKYLRpIi9wZLH0RdNe4s9lqDpWAXz7Y=",
-        "ref": "refs/heads/main",
-        "rev": "8fabf0be4a1bc7629762a1456a4adeb6941c71c7",
-        "revCount": 1526,
-        "submodules": true,
-        "type": "git",
-        "url": "https://github.com/nomic-ai/gpt4all"
-      },
-      "original": {
-        "submodules": true,
-        "type": "git",
-        "url": "https://github.com/nomic-ai/gpt4all"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -343,7 +304,6 @@
     "root": {
       "inputs": {
         "disko": "disko",
-        "gpt4all": "gpt4all",
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",

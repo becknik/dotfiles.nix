@@ -238,7 +238,7 @@
     optimise.automatic = true;
     gc = {
       automatic = true;
-      dates = "Sat";
+      dates = "Sun"; # 1 day after automatic system upgrade
       options = "--delete-older-than 14d";
     };
   };

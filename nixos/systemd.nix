@@ -57,6 +57,7 @@
         critical = true;
       });
 
+      # TODO nixos-fetch-and-switch-on-change systemd service seems to no start on boot?
       nixos-fetch-and-switch-on-change = {
         description = "Triggers the nixos-upgrade.service when the remote config git repo is != local";
         unitConfig = {

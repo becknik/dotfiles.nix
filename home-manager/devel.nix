@@ -1,4 +1,4 @@
-{ pkgs, gpt4all, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -82,7 +82,6 @@
     meld
 
     # LLM (ChatGPT)
-    (gpt4all.packages.x86_64-linux.gpt4all-chat.override { withAvx2 = true; }) # The default option anyways
     shell_gpt
 
     # JetBrains IDEs
