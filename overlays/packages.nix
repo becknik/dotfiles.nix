@@ -10,7 +10,7 @@
   };
 
   patched-linux = final: prev: {
-    linux_xanmod_latest_patched = pkgs.linuxPackagesFor (
+    linux_xanmod_latest_patched_dnix = pkgs.linuxPackagesFor (
       pkgs.linux_xanmod_latest.override (old: {
 
         # TODO https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=linux-clear
@@ -40,6 +40,15 @@
         ignoreConfigErrors = true;
       })
     );
+
+    linux_xanmod_latest_patched_lnix = pkgs.linuxPackages_xanmod_latest;
+    /* pkgs.linuxPackagesFor (
+      pkgs.linux_xanmod_latest.override (old: {
+        # TODO https://wiki.archlinux.org/title/ASUS_Zenbook_UM3402YA
+        kernelPatches = [ ];
+        ignoreConfigErrors = true;
+      })
+    ); */
   };
 
   patched-librewolf-unwrapped = final: prev: {

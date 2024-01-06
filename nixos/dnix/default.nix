@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [
@@ -13,7 +13,10 @@
   # Source: https://github.com/NixOS/nixpkgs/issues/54707
   # The following only makes sense when building huge packages like the Linux kernel is failing with something like
   # `fatal error: error writing to /build/ccGD5Lsd.s: No space left on device`
-  boot.tmp.tmpfsSize = "90%"; # at least: max{linux-2023-11-25: 20G}
+  boot = {
+    tmp.tmpfsSize = "90%"; # at least: max{linux-2023-11-25: 20G}
+    kernelPackages = pkgs.linux_xanmod_latest_patched_dnix;
+  };
 
   # Build Cache
   programs.ccache = {

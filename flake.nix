@@ -44,34 +44,33 @@
           defaultUser = "jnnk";
           flakeDirectory = "/home/${defaultUser}/devel/own/dotfiles.nix";
 
-          system = "x86_64-linux";
           stateVersion = "23.11";
+
+          system = "x86_64-linux";
+          permittedInsecurePackages = [ "electron-25.9.0" ];
+            # defaultNixpkgs...
+          config = {
+            inherit permittedInsecurePackages;
+            allowUnfree = true;
+            joypixels.acceptLicense = true;
+          };
 
           global-overlay-unstable = final: prev: {
             unstable = import nixpkgs-unstable {
-              inherit system;
-              config.allowUnfree = true;
+              inherit system config;
             };
           };
           # For devices where no native building is set up
           global-overlay-clean-replacement = final: prev: {
             clean = import nixpkgs {
-              inherit system;
-              config.allowUnfree = true;
+              inherit system config;
             };
           };
 
           # To be applied in the `nixpkgs.lib.nixosSystem { modules }` list
           common-conf-nixpkgs = ({ pkgs, lib, ... }@module-attrs: {
+            inherit system config;
             overlays = [ global-overlay-unstable ];
-
-            config = {
-              allowUnfree = true;
-              joypixels.acceptLicense = true;
-
-              permittedInsecurePackages =
-                lib.optional (pkgs.obsidian.version <= "1.6") "electron-25.9.0";
-            };
           });
 
           specialArgs = {

@@ -101,7 +101,7 @@ sudo nix run github:nix-community/disko \
 2. `sudo nixos-generate-config --root /mnt`, then merge/ configure `hardware-configuration.nix`:
   - `cat /mnt/etc/nixos/hardware-configuration.nix >> ./nixos/<profile>/hardware-configuration.nix`
   - Adjust it to your needs
-3. Comment out in [default.nix](./nixos/default.nix) the `kernelPackages = pkgs.linux_xanmod_latest_custom;` line
+3. Replace in `default.nix` of `<profile>` the `kernelPackages = pkgs.linux_xanmod_latest_patched_<profile>;` line with `pkgs.linux_xanmod_latest` to avoid compilation;
 4. `cd /mnt && sudo nixos-install --flake </home/nixos/>dotfiles.nix#(d|l)nix`
 5. `sudo cp /home/nixos/dotfiles.nix /mnt/home/<username>/devel/own`
 
@@ -109,9 +109,8 @@ sudo nix run github:nix-community/disko \
 
 - [ ] Enable the installed GNOME-extensions
   - [ ] Setup `gsconnect`
-- [ ]
+- [ ] Copy the nix-sops secret to the new system
 - [ ] (Configure the CPU-scheduler and profile in `cpupower-gui`)
-- [ ] (Create new nix-sops secrets due to accidental removal of the old primary key...)
 
 ### Logins
 
