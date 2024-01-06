@@ -10,7 +10,7 @@
         packages = with pkgs; [ gnomeExtensions.gsconnect keepassxc ];
         gsconnect = lib.mkOverride 50 false; # deprecated option
       };
-      preferences = {
+      preferences = { # TODO this seems to not be applied to librewolf
         "media.ffmpeg.vaapi.enabled" = true;
         "widget.use-xdg-desktop-portal.file-picker" = 1;
         "browser.gnome-search-provider.enabled" = true;

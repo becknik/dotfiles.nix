@@ -78,13 +78,13 @@
             inherit stateVersion flakeDirectory defaultUser;
           };
 
-          common-conf-home-manager = {
+          common-conf-home-manager = { laptopMode, ... }: {
             home-manager = {
-              extraSpecialArgs = specialArgs;
+              extraSpecialArgs = specialArgs // { inherit laptopMode; };
               useGlobalPkgs = true;
               useUserPackages = true;
 
-              sharedModules = with  input-attrs; [
+              sharedModules = with input-attrs; [
                 sops-nix.homeManagerModules.sops
                 plasma-manager.homeManagerModules.plasma-manager
                 nixvim.homeManagerModules.nixvim
@@ -104,7 +104,8 @@
               common-pc-ssd
             ] ++ [
               # nixpkgs, native building & overlay setup
-              ({ config, pkgs, lib, ... }@module-attrs:
+              (
+                { config, pkgs, lib, ... }@module-attrs:
                 let
                   # Build Flags Setup (https://nixos.wiki/wiki/Build_flags#Building_the_whole_system_on_NixOS)
 
@@ -158,7 +159,8 @@
                       #packages.obsidian
                     ];
                   };
-                })
+                }
+              )
 
               # NixOS configuration
               input-attrs.disko.nixosModules.disko
@@ -167,7 +169,7 @@
 
               # home-manager basic setup & configuration import
               home-manager.nixosModules.home-manager
-              common-conf-home-manager
+              (common-conf-home-manager { laptopMode = false; })
             ];
           };
 
@@ -195,7 +197,7 @@
               ./nixos
               ./nixos/lnix
               home-manager.nixosModules.home-manager
-              common-conf-home-manager
+              (common-conf-home-manager { laptopMode = true; })
             ];
           };
         };

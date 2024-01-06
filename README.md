@@ -81,6 +81,7 @@ $ tree -a -I '\.git|\.vscode' .
   - `nixos-upgrade-notify-send-(failure|success).service` - Sends desktop notification when nixos-upgrade unit finished
   - `nixos-upgrade-automatic-shutdown.service` - Shuts down the desktop when nixos-upgrade service finished
   > Disabled by default; Must be started manually
+  - `nixos-upgrade.service` writes logs to `/var/log/nixos-upgrade/`
 - `nixos-fetch-and-switch-on-change` - Pulls and executes `nixos-rebuild switch` when this repos local differs from remote
 - Shell alias (see [shell.nix](./home-manager/desktop-env/shell.nix) for specifics)
   - `nrbt`, `nrbb` & `nrbs` - `nixos-rebuild test/boot/switch` for currently activated flake profile
@@ -88,7 +89,7 @@ $ tree -a -I '\.git|\.vscode' .
 
 ## Getting Started
 
-1. Disk Partitioning with [disko](https://github.com/nix-community/disko):
+1. Partition disks with [disko](https://github.com/nix-community/disko):
 
 ```shell
 sudo nix run github:nix-community/disko \
@@ -97,19 +98,18 @@ sudo nix run github:nix-community/disko \
 # If the command succeeds, the partitions are automatically mounted under /mnt
 ```
 
-2. `sudo nixos-generate-config --root /mnt`, then merge/ configure the resulting files:
+2. `sudo nixos-generate-config --root /mnt`, then merge/ configure `hardware-configuration.nix`:
   - `cat /mnt/etc/nixos/hardware-configuration.nix >> ./nixos/<profile>/hardware-configuration.nix`
-  - Then adjust it to your needs
+  - Adjust it to your needs
 3. Comment out in [default.nix](./nixos/default.nix) the `kernelPackages = pkgs.linux_xanmod_latest_custom;` line
 4. `cd /mnt && sudo nixos-install --flake </home/nixos/>dotfiles.nix#(d|l)nix`
-5. `sudo cp /home/nixos/dotfiles.nix /mnt/home/jnnk/devel/own`
-6. Reboot the system and `nixos-rebuild --flake "/home/jnnk/dotfiles.nix#<profile> boot"`
+5. `sudo cp /home/nixos/dotfiles.nix /mnt/home/<username>/devel/own`
 
 ## TODOs After Installation
 
 - [ ] Enable the installed GNOME-extensions
   - [ ] Setup `gsconnect`
-- [ ] `ssh-add -v ~/.ssh/<ssh-key-name>`
+- [ ]
 - [ ] (Configure the CPU-scheduler and profile in `cpupower-gui`)
 - [ ] (Create new nix-sops secrets due to accidental removal of the old primary key...)
 

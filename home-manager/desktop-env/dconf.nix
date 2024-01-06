@@ -1,4 +1,4 @@
-{ defaultUser, config, lib, ... }:
+{ defaultUser, laptopMode, config, lib, ... }:
 
 let
   default-sidebar-width = 156;
@@ -177,8 +177,8 @@ with lib.gvariant; {
       toggle-maximized = [ "<Super>k" ];
       unmaximize = [ "<Super>j" ];
 
-      toggle-overview = [ "<Super>s" ];
-      toggle-quick-settings = [ "<Shift><Super>s" ];
+      toggle-overview = [ "<Super>s" ]; # must be set automatically
+      toggle-quick-settings = [ "<Shift><Super>s" ]; # ""
       switch-input-source = [ "" ]; # fixed collision with search & fcitx5
     };
 
@@ -237,13 +237,28 @@ with lib.gvariant; {
     };
 
     "org/gnome/settings-daemon/plugins/power" = {
-      ambient-enabled = false; # Ambient light sensor
-      idle-dim = false; # "
-      power-saver-profile-on-low-battery = true;
+      # Ambient light sensor
+      ambient-enabled = laptopMode;
+      idle-dim = laptopMode;
+      power-saver-profile-on-low-battery = laptopMode;
     };
 
     "org/gnome/shell" = {
-      favorite-apps = [ "org.gnome.Terminal.desktop" "org.kde.dolphin.desktop" "librewolf.desktop" "codium.desktop" "obsidian.desktop" "chromium-browser.desktop" "thunderbird.desktop" "teams-for-linux.desktop" "org.gnome.Pomodoro.desktop" "anki.desktop" "idea-ultimate.desktop" "clion.desktop" "org.keepassxc.KeePassXC.desktop" ];
+      favorite-apps = [
+        "org.gnome.Terminal.desktop"
+        "org.kde.dolphin.desktop"
+        "librewolf.desktop"
+        "codium.desktop"
+        "obsidian.desktop"
+        "chromium-browser.desktop"
+        "thunderbird.desktop"
+        "teams-for-linux.desktop"
+        "org.gnome.Pomodoro.desktop"
+        "anki.desktop"
+        "idea-ultimate.desktop"
+        "clion.desktop"
+        "org.keepassxc.KeePassXC.desktop"
+      ];
     };
 
     "org/gnome/shell/window-switcher" = {

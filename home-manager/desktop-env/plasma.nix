@@ -3,7 +3,7 @@
 {
   # TODO Grab the ones from my desktop
   programs.plasma.configFile = {
-    kdeglobals = {
+    kdeglobals = { # TODO file not created automatically?
       "Colors:View".BackgroundNormal = "#2E2E2E";
       General.TerminalApplication = "gnome-terminal"; # Destroys nvim open files in dolphin
       KDE.ShowDeleteCommand = false;

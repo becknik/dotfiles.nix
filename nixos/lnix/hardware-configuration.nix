@@ -3,6 +3,8 @@
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
+  # TODO systemd-boot seems to not correctly apply this, standard password containing umlauts fails in systemd-boot only
+  # However, password containing '@' is correctly mapped to german keyboard...
   console.keyMap = "de"; # Using the german keyboard layout only for the luks password prompt
 
   swapDevices = [
@@ -59,9 +61,9 @@
   # Power Management
   powerManagement.powertop.enable = true;
   # https://github.com/AdnanHodzic/auto-cpufreq
-  services.auto-cpufreq.enable = true;
+  services.auto-cpufreq.enable = false; # TODO journalctl spam in auto-cpufreq-1.9.9: `line 105: echo: write error: Device or resource busy`
 
-  hardware.asus.battery.chargeUpto = 85; # @nixos-hardware
+  hardware.asus.battery.chargeUpto = 85; # @nixos-hardware, doesn't work
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
