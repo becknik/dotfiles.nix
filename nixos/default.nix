@@ -1,4 +1,4 @@
-{ stateVersion, flakeDirectory, config, lib, pkgs, ... }:
+{ stateVersion, flakeDirectory, defaultUser, config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -20,7 +20,7 @@
     autoUpgrade = {
       enable = true;
       operation = "boot";
-      flake = "${config.users.users.jnnk.home}/devel/own/dotfiles.nix";
+      flake = "${config.users.users.${defaultUser}.home}/devel/own/dotfiles.nix";
       flags = (builtins.map (flakeInput: "--update-input ${flakeInput}")
         [
           "nixpkgs"
@@ -34,6 +34,7 @@
         ]
       ) ++ [
         "-L" # print build logs
+        "--commit-lock-file"
       ];
       dates = "Sat";
       randomizedDelaySec = "2h";
@@ -204,7 +205,7 @@
 
   # User Setup
   users.mutableUsers = false;
-  users.users.jnnk = {
+  users.users.${defaultUser} = {
     isNormalUser = true;
     description = "jannik";
     hashedPassword = "$y$j9T$v2v24yeaoZcmnJRJqKVIb/$9/ERYx13TXXpCXA12dNvvrr1BOKx1/tgpO9M9fRlio4";

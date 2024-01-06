@@ -1,12 +1,12 @@
-{ stateVersion, ... }:
+{ stateVersion, defaultUser, ... }:
 
 {
   home = {
     inherit stateVersion;
 
     # Home Manager needs a bit of information about you and the paths it should manage.
-    username = "jnnk";
-    homeDirectory = "/home/jnnk";
+    username = defaultUser;
+    homeDirectory = "/home/${defaultUser}";
   };
 
   # Lets Home Manager install and manage itself.

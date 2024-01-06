@@ -1,4 +1,4 @@
-{ pkgs, flakeDirectory, ... }:
+{ flakeDirectory, defaultUser, pkgs, ... }:
 
 {
   # Auto Upgrade Systemd Service
@@ -11,7 +11,7 @@
         description = "NixOS Upgrade Notification";
         serviceConfig = {
           Type = "oneshot";
-          User = "jnnk";
+          User = defaultUser;
           Group = "users";
           ExecStart = "${pkgs.libnotify}/bin/notify-send "
             + "--urgency=${if critical then "critical --wait" else "normal --expire-time=10000"} "

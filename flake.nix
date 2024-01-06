@@ -41,7 +41,8 @@
     {
       nixosConfigurations =
         let
-          flakeDirectory = "/home/jnnk/devel/own/dotfiles.nix";
+          defaultUser = "jnnk";
+          flakeDirectory = "/home/${defaultUser}/devel/own/dotfiles.nix";
 
           system = "x86_64-linux";
           stateVersion = "23.11";
@@ -73,9 +74,13 @@
             };
           });
 
+          specialArgs = {
+            inherit stateVersion flakeDirectory defaultUser;
+          };
+
           common-conf-home-manager = {
             home-manager = {
-              extraSpecialArgs = { inherit system stateVersion; }; # `system` For if-else with "x86_64-linux"/"x86_64-darwin" (yet to come)
+              extraSpecialArgs = specialArgs;
               useGlobalPkgs = true;
               useUserPackages = true;
 
@@ -85,12 +90,8 @@
                 nixvim.homeManagerModules.nixvim
               ];
 
-              users.jnnk = import ./home-manager;
+              users.${defaultUser} = import ./home-manager;
             };
-          };
-
-          specialArgs = {
-            inherit stateVersion flakeDirectory;
           };
         in
         {

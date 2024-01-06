@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ defaultUser, config, lib, ... }:
 
 let
   default-sidebar-width = 156;
@@ -41,7 +41,7 @@ in
 with lib.gvariant; {
 
   dconf.settings = {
-    "apps/seahorse/listing".keyrings-selected = [ "openssh:///home/jnnk/.ssh" ];
+    "apps/seahorse/listing".keyrings-selected = [ "openssh:///home/${defaultUser}/.ssh" ];
 
     "ca/desrt/dconf-editor".show-warning = false;
 
@@ -517,7 +517,7 @@ with lib.gvariant; {
       jpeg-quality = 100;
       photo-dpi = 600;
       postproc-enabled = false;
-      save-directory = "file:///home/jnnk/dl/";
+      save-directory = "file:///home/${defaultUser}/dl/";
       text-dpi = 600;
     };
 

@@ -1,4 +1,4 @@
-{ config, ... }:
+{ defaultUser, config, ... }:
 
 {
   imports = [
@@ -40,9 +40,9 @@
     enable = true;
     gtk3 = {
       bookmarks = [
-        "file:///home/jnnk/nextcloud/Uni/current-courses"
-        "file:///home/jnnk/devel"
-        "file:///home/jnnk/nextcloud"
+        "file:///home/${defaultUser}/nextcloud/Uni/current-courses"
+        "file:///home/${defaultUser}/devel"
+        "file:///home/${defaultUser}/nextcloud"
       ];
       extraConfig = {
         gtk-recent-files-limit = 0;

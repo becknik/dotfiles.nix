@@ -169,8 +169,10 @@
         ;
       };
       shellAliases = {
+        # Generally
         fu = "sudo";
         sduo = "sudo";
+
         # Flake NixOS configuration equals hostname of machine
         nrbt = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#$NIXOS_CONFIGURATION_NAME\" test";
         nrbs = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#$NIXOS_CONFIGURATION_NAME\" switch";
@@ -179,6 +181,10 @@
         ngckeep = "sudo nix-collect-garbage --delete-older-than";
         ngcd = "sudo nix-collect-garbage -d";
         ngcdu = "nix-collect-garbage -d";
+
+        # Git
+        gai = "git add --interactive";
+        grsst = "git restore --staged"; # = grst
       };
 
       #completionInit # "Oh-My-Zsh/Prezto calls compinit during initialization, calling it twice causes slight start up slowdown"
