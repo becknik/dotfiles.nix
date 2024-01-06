@@ -87,8 +87,8 @@
 
   # Boot Process
   boot = {
-    #kernelPackages = pkgs.linuxPackages_xanmod_latest;
-    kernelPackages = pkgs.linux_xanmod_latest_patched;
+    kernelPackages = pkgs.linuxPackages_xanmod_latest;
+    #kernelPackages = pkgs.linux_xanmod_latest_patched;
 
     ## Shared Kernel Config
     extraModulePackages = with config.boot.kernelPackages; [

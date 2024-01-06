@@ -19,7 +19,7 @@
     kernelModules = [ "kvm-amd" "amdgpu" ];
     extraModulePackages = with config.boot.kernelPackages; [ zenpower ];
     initrd = {
-      availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+      availableKernelModules = [ "nvme" "xhci_pci" "usbhid" "usb_storage" "sd_mod" "sdhci_pci" ];
       kernelModules = [ ];
     };
 
@@ -40,7 +40,7 @@
 
 
   # CPU
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault true;
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
 
   # Further Hardware Settings
@@ -62,4 +62,12 @@
   services.auto-cpufreq.enable = true;
 
   hardware.asus.battery.chargeUpto = 85; # @nixos-hardware
+
+  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
+  # (the default) this is the recommended approach. When using systemd-networkd it's
+  # still possible to use this option, but it's recommended to use it in conjunction
+  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  networking.useDHCP = lib.mkDefault true;
+  # networking.interfaces.enp4s0f4u1u4.useDHCP = lib.mkDefault true;
+  # networking.interfaces.wlp1s0.useDHCP = lib.mkDefault true;
 }

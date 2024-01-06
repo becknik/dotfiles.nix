@@ -85,8 +85,8 @@
     shell_gpt
 
     # JetBrains IDEs
-    unstable.jetbrains.clion
-    unstable.jetbrains.idea-ultimate
+    #unstable.jetbrains.clion
+    #unstable.jetbrains.idea-ultimate
 
     ## Build Tools
     gradle

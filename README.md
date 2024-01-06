@@ -78,7 +78,7 @@ $ tree -a -I '\.git|\.vscode' .
 ### Features
 
 - Systemd Services:
-  - `nixos-upgrade-notify-send-{failure|success}.service` - Sends desktop notification when nixos-upgrade unit finished
+  - `nixos-upgrade-notify-send-(failure|success).service` - Sends desktop notification when nixos-upgrade unit finished
   - `nixos-upgrade-automatic-shutdown.service` - Shuts down the desktop when nixos-upgrade service finished
   > Disabled by default; Must be started manually
 - `nixos-fetch-and-switch-on-change` - Pulls and executes `nixos-rebuild switch` when this repos local differs from remote
@@ -98,21 +98,19 @@ sudo nix run github:nix-community/disko \
 ```
 
 2. `sudo nixos-generate-config --root /mnt`, then merge/ configure the resulting files:
-   - `cat /mnt/etc/nixos/hardware-configuration.nix >> ./nixos/<profile>/hardware-configuration.nix`
-3. Comment out in `configuration.nix` the `kernelPackages = pkgs.linux_xanmod_latest_custom;` line
-4. `cd /mnt && sudo nixos-install --flake <repo-root>/nixos#dnix`
+  - `cat /mnt/etc/nixos/hardware-configuration.nix >> ./nixos/<profile>/hardware-configuration.nix`
+  - Then adjust it to your needs
+3. Comment out in [default.nix](./nixos/default.nix) the `kernelPackages = pkgs.linux_xanmod_latest_custom;` line
+4. `cd /mnt && sudo nixos-install --flake </home/nixos/>dotfiles.nix#(d|l)nix`
+5. `sudo cp /home/nixos/dotfiles.nix /mnt/home/jnnk/devel/own`
+6. Reboot the system and `nixos-rebuild --flake "/home/jnnk/dotfiles.nix#<profile> boot"`
 
-> `/home/nixos/dotfiles.nix#<profile>` in the installer
-
-6. `sudo cp /home/nixos/dotfiles.nix /mnt/home/jnnk/devel/own`
-
-## After Installation TODO-List
+## TODOs After Installation
 
 - [ ] Enable the installed GNOME-extensions
   - [ ] Setup `gsconnect`
 - [ ] `ssh-add -v ~/.ssh/<ssh-key-name>`
 - [ ] (Configure the CPU-scheduler and profile in `cpupower-gui`)
-- [ ] Delete the former capitalized xdg-user-dirs: `rm -fr Templates Videos Public Desktop Documents Downloads Pictures Music tmp` (TODO why is there a `tmp/cache-\$USER/oh-my-zsh` dir?!)
 - [ ] (Create new nix-sops secrets due to accidental removal of the old primary key...)
 
 ### Logins
@@ -127,12 +125,11 @@ sudo nix run github:nix-community/disko \
 - [ ] Anki
 - [ ] (Teams)
 
-### Further
+### Manually Enable Autostart
 
-- [ ] Manually enable autostart for:
-  - [ ] keepassxc
-  - [ ] telegram-desktop
-  - [ ] planify
-  - [x] element-desktop (manually created in `autostart.nix`)
-  - [x] whatsapp-for-linux ( " )
-  - [ ] (teams-for-linux)
+- [ ] keepassxc
+- [ ] telegram-desktop
+- [ ] planify
+- [x] element-desktop (manually created in `autostart.nix`)
+- [x] whatsapp-for-linux ( " )
+- [ ] (teams-for-linux)

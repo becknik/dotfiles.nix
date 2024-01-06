@@ -52,7 +52,7 @@
     ## sops .config folder where the keys.txt should live in to decrypt the secrets of sops-nix
     "sops" = {
       enable = true;
-      target = "${config.programs.zsh.oh-my-zsh.custom}/.config/sops/age/.keep";
+      target = ".config/sops/age/.keep";
       text = '''';
     };
 
