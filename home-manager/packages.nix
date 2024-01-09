@@ -64,13 +64,6 @@
     anki
     marp-cli
 
-    ## TeX Live
-
-    # Source for new 23.11 interface: https://github.com/NixOS/nixpkgs/issues/250243
-    (unstable.texlive.withPackages (ps: with ps; [
-      scheme-full # Need xelatex which is included right here
-    ]))
-
     ## Trash
     neofetch
     cmatrix

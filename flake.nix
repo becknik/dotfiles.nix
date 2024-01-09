@@ -48,7 +48,7 @@
 
           system = "x86_64-linux";
           permittedInsecurePackages = [ "electron-25.9.0" ];
-            # defaultNixpkgs...
+          # defaultNixpkgs...
           config = {
             inherit permittedInsecurePackages;
             allowUnfree = true;
@@ -56,22 +56,12 @@
           };
 
           global-overlay-unstable = final: prev: {
-            unstable = import nixpkgs-unstable {
-              inherit system config;
-            };
+            unstable = import nixpkgs-unstable { inherit system config; };
           };
           # For devices where no native building is set up
           global-overlay-clean-replacement = final: prev: {
-            clean = import nixpkgs {
-              inherit system config;
-            };
+            clean = import nixpkgs { inherit system config; };
           };
-
-          # To be applied in the `nixpkgs.lib.nixosSystem { modules }` list
-          common-conf-nixpkgs = ({ pkgs, lib, ... }@module-attrs: {
-            inherit system config;
-            overlays = [ global-overlay-unstable ];
-          });
 
           specialArgs = {
             inherit stateVersion flakeDirectory defaultUser;
@@ -104,7 +94,7 @@
             ] ++ [
               # nixpkgs, native building & overlay setup
               (
-                { config, pkgs, lib, ... }@module-attrs:
+                { pkgs, lib, ... }@module-attrs:
                 let
                   # Build Flags Setup (https://nixos.wiki/wiki/Build_flags#Building_the_whole_system_on_NixOS)
 
@@ -120,15 +110,16 @@
 
                   # Overlay Setup
 
+                  unstable = final: prev: { # TODO might it be that unstable packages are not built optimized? :|
+                    unstable = import nixpkgs-unstable {
+                      inherit system config;
+                      hostPlatform = platform;
+                    };
+                  };
+
                   ## Overlay to disable native compilation of packages with build flags
                   clean = final: prev: {
-                    clean = import nixpkgs {
-                      inherit system;
-                      hostPlatform = {
-                        gcc = { };
-                        rustc = { };
-                      };
-                    };
+                    clean = import nixpkgs { inherit system config; /* hostPlatform = prev.hostPlatform // { gcc = { }; }; */ };
                   };
 
                   build-fixes = import ./overlays/build-fixes.nix system;
@@ -136,14 +127,16 @@
                   packages = import ./overlays/packages.nix module-attrs;
                 in
                 {
-                  nixpkgs = (common-conf-nixpkgs module-attrs) // {
+                  nixpkgs = {
+                    inherit system config;
+
                     # https://nix.dev/tutorials/cross-compilation.html
                     #buildPlatform = platform; # platform where the executables are built
                     hostPlatform = platform; # platform where the executables will run
 
                     overlays = [
-                      global-overlay-unstable
                       clean
+                      unstable
 
                       packages.default-to-faster-stdenv
 
@@ -184,7 +177,8 @@
               asus-battery
             ] ++ [
               ({ lib, pkgs, ... }@module-attrs: {
-                nixpkgs = (common-conf-nixpkgs module-attrs) // {
+                nixpkgs = {
+                  inherit system config;
                   overlays = [
                     global-overlay-unstable
                     global-overlay-clean-replacement
