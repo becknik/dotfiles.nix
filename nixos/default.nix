@@ -244,4 +244,6 @@
   environment.systemPackages = with pkgs; [
     nix-tree
   ];
+
+  services.v4l2-relayd.instances = {}; # TODO proper camera setup
 }

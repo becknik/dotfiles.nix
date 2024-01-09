@@ -53,8 +53,9 @@
         COMPLETION_WAITING_DOTS = true;
       };
 
-      #initExtraFirst = ""; # Placed on top of .zshrc
+      initExtraFirst = "cbonsai --multiplier 5 -m 'It takes strength to resist the dark side. Only the weak embrace it.' -p"; # Placed on top of .zshrc
       #initExtraBeforeCompInit = '''';
+
       initExtra =
         # further history setup
         "setopt HIST_EXPIRE_DUPS_FIRST\n" # Expire duplicate entries first when trimming history.
@@ -81,8 +82,19 @@
         # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git-escape-magic
         + "autoload -Uz git-escape-magic\n"
         + "git-escape-magic\n"
-        # bonsai
-        + "cbonsai --multiplier 5 -m 'It takes strength to resist the dark side. Only the weak embrace it.' -p"
+
+        # oh-my-zsh git plugin extension function
+        + ''
+          function gwipmsg() {
+              git add -A
+              git rm $(git ls-files --deleted) 2> /dev/null
+              local message="--wip-- [skip ci]"
+              if [ -n "$1" ]; then
+                  message="$message "$1""
+              fi
+              git commit --no-verify --no-gpg-sign -m "$message"
+          }
+        ''
       ;
 
       oh-my-zsh = {
@@ -90,12 +102,12 @@
         theme = "bullet-train";
         plugins = [
           "systemd"
-          #"timer"
+          "timer"
           "common-aliases"
           "bgnotify"
           "copyfile"
           "copypath"
-          #"dirhistory"
+          "dirhistory" # move with alt+up/down/etc
           "alias-finder"
           #"catimg"
           #"chucknorris"
@@ -113,7 +125,7 @@
           #"gradle"
           #"hitchhiker"
           #"httpie"
-          #"jsontools"
+          "jsontools"
           #"kubectl"
           #"nmap"
           #"npm"
@@ -135,7 +147,7 @@
           "vscode"
           "wd"
           #"web-search"
-          "zbell"
+          #"zbell" # bgnotify is enough
           "zsh-interactive-cd"
           "direnv"
         ];
@@ -144,7 +156,7 @@
         # $1=exit_status, $2=command, $3=elapsed_time
         extraConfig = ''
           bgnotify_bell=false;
-          bgnotify_threshold=10;
+          bgnotify_threshold=120;
 
           function bgnotify_formatted {
             [ $1 -eq 0 ] && title="Holy Smokes, Batman!" || title="Holy Graf Zeppelin!"

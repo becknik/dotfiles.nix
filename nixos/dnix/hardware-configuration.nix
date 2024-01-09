@@ -35,6 +35,12 @@
     intel-compute-runtime
     intel-media-driver
   ];
-    ## Graphics
+  ## Graphics
   environment.variables.LIBVA_DRIVER_NAME = "intel"; # Might be redundant
+
+  ## Further
+  hardware.bluetooth = {
+    enable = false;
+    powerOnBoot = false;
+  };
 }
