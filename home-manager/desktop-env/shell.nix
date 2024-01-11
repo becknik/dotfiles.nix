@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ ohmyzsh, flakeDirectory, config, lib, pkgs, ... }:
 
 {
   programs = {
@@ -99,6 +99,19 @@
 
       oh-my-zsh = {
         enable = true;
+        package =
+          let
+            lock-json = builtins.fromJSON (builtins.readFile ("${flakeDirectory}/flake.lock"));
+            ohmyzsh-source-last-modified = lock-json.nodes.ohmyzsh.locked.lastModified;
+            # Not working:
+            /* lib.readFile ("${pkgs.runCommand "convertToDate"
+              { env.when = ohmyzsh-source-last-modified; }
+              "date -d ${ohmyzsh-source-last-modified} +%Y-%m-%d > $out"}"); */
+          in
+          pkgs.oh-my-zsh.overrideAttrs (oldAttrs: {
+            version = builtins.toString ohmyzsh-source-last-modified;
+            src = ohmyzsh;
+          });
         theme = "bullet-train";
         plugins = [
           "systemd"
@@ -113,6 +126,7 @@
           #"chucknorris"
           #"aws"
           "docker"
+          "podman"
           "fzf"
           "git"
           "git-auto-fetch"
@@ -180,15 +194,18 @@
         ''
         ;
       };
+
       shellAliases = {
-        # Generally
+        # General
         fu = "sudo";
         sduo = "sudo";
 
         # Flake NixOS configuration equals hostname of machine
-        nrbt = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#$NIXOS_CONFIGURATION_NAME\" test";
-        nrbs = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#$NIXOS_CONFIGURATION_NAME\" switch";
-        nrbb = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#$NIXOS_CONFIGURATION_NAME\" boot";
+        # `--impure` is due to flake.lock being referenced to determine version-tag of flake-input `programs.zsh.oh-my-zsh.package`
+        nrbt = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#$NIXOS_CONFIGURATION_NAME\" test --impure";
+        nrbs = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#$NIXOS_CONFIGURATION_NAME\" switch --impure";
+        nrbb = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#$NIXOS_CONFIGURATION_NAME\" boot --impure";
+
         ngc = "sudo nix-collect-garbage";
         ngckeep = "sudo nix-collect-garbage --delete-older-than";
         ngcd = "sudo nix-collect-garbage -d";

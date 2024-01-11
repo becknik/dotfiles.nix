@@ -226,6 +226,22 @@
         "type": "github"
       }
     },
+    "ohmyzsh": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1704919303,
+        "narHash": "sha256-9W602NxDDCARVDHAO3yAwgTTwV/MnSfXjeydZiQbBmk=",
+        "owner": "ohmyzsh",
+        "repo": "ohmyzsh",
+        "rev": "1c8dee848dad169c9eb1a7b0148842b48a99cad1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ohmyzsh",
+        "repo": "ohmyzsh",
+        "type": "github"
+      }
+    },
     "plasma-manager": {
       "inputs": {
         "home-manager": [
@@ -309,6 +325,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixvim": "nixvim",
+        "ohmyzsh": "ohmyzsh",
         "plasma-manager": "plasma-manager",
         "sops-nix": "sops-nix"
       }
