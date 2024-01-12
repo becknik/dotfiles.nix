@@ -28,13 +28,16 @@
       christian-kohler.path-intellisense
       usernamehw.errorlens
 
+      ## Eye Candy
+      adpyke.codesnap
+      johnpapa.vscode-peacock
+
       ### Git
       eamodio.gitlens
       mhutchie.git-graph
 
-      ## Eye Candy
-      adpyke.codesnap
-      johnpapa.vscode-peacock
+      ## Deployment
+      ms-azuretools.vscode-docker
 
       ## Languages
 
@@ -87,7 +90,7 @@
       #ms-vscode.cpptools
       #twxs.cmake #?
       ms-vscode.cmake-tools
-    ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+    ] ++ pkgs.unstable.vscode-utils.extensionsFromVscodeMarketplace [
 
       /* (lib.optional (system != "x86_64-linux") { # TODO
         # VSCode Live Share (for MacOS etc due to incompatible package)
@@ -452,6 +455,11 @@
         }*/
       ];
 
+      ## Docker
+      docker = {
+        composeCommand = "podman compose";
+        dockerPath = "podman";
+      };
 
       ##########################################################################
       # Language Plugin Settings
@@ -655,6 +663,7 @@
         cSpell.advanced.feature.useReferenceProviderWithRename = true;
         cSpell.advanced.feature.useReferenceProviderRemove = "/^#+\\s/"; # TODO Whats this for??
       };
+      "[dockercompose]".editor.defaultFormatter = "ms-azuretools.vscode-docker";
       "[latex]" = {
         editor.defaultFormatter = "James-Yu.latex-workshop";
       };

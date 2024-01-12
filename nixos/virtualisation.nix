@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   # Libvirtd / QEMU
@@ -23,21 +23,16 @@
       enable = true;
       dockerCompat = true; # docker alias for podman
       dockerSocket.enable = true;
-      autoPrune.enable = true;
+      autoPrune = {
+        enable = true;
+        dates = "monthly";
+      };
       # Required for containers under podman-compose to be able to talk to each other.
       defaultNetwork.settings = {
         dns_enabled = true;
       };
+      #extraPackages = with pkgs; [ podman-compose ];
     };
-
-    # Docker (rootless) (now replaced by podman)
-    /*docker = {
-      autoPrune.enable = true; # performes weekly prune --all by default
-      #storageDriver = "btrfs";
-      rootless = {
-        enable = true;
-        setSocketVariable = true;
-      };
-    };*/
   };
+  environment.systemPackages = with pkgs; [ podman-compose ];
 }
