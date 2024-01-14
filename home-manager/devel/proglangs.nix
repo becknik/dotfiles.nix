@@ -7,7 +7,7 @@
     /*(unstable.texlive.withPackages (ps: with ps; [
       scheme-full # Need xelatex which is included right here
     ]))*/
-    unstable.texliveFull
+    texliveFull
 
     # JS / TypeScript
     nodePackages.eslint_d
@@ -16,8 +16,8 @@
 
     # Nix
     # https://github.com/nix-community/nixd
-    unstable.nixd # TODO Figure out how to set up nixd - Seems like this isn't possible at all so far... https://github.com/nix-community/vscode-nix-ide/issues/363
-    unstable.nil
+    nixd # TODO Figure out how to set up nixd - Seems like this isn't possible at all so far... https://github.com/nix-community/vscode-nix-ide/issues/363
+    nil
 
     ## Linting
     nixpkgs-fmt

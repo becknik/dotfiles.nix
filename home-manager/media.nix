@@ -74,7 +74,7 @@
         meta.knownVulnerabilities = [ ]; # NixOS/nixpkgs#273611
       });
     }) */
-    unstable.logseq
+    logseq
     #birdtray # Actually not needing this
     planify
     nextcloud-client # Basically redundant, but still necessary for .desktop file in NIX_PATH...

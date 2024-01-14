@@ -3,14 +3,14 @@
 {
   programs.vscode = {
     enable = true;
-    package = pkgs.unstable.vscodium;
+    package = pkgs.vscodium;
 
-    enableExtensionUpdateCheck = true;
+    enableExtensionUpdateCheck = false;
     enableUpdateCheck = false;
     mutableExtensionsDir = false; # Setting this to true disabled the java extensions to properly install
 
     # Plugins
-    extensions = with pkgs.unstable.vscode-extensions; [
+    extensions = with pkgs.vscode-extensions; [
 
       ## Management
       alefragnani.project-manager
@@ -90,7 +90,7 @@
       #ms-vscode.cpptools
       #twxs.cmake #?
       ms-vscode.cmake-tools
-    ] ++ pkgs.unstable.vscode-utils.extensionsFromVscodeMarketplace [
+    ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
 
       /* (lib.optional (system != "x86_64-linux") { # TODO
         # VSCode Live Share (for MacOS etc due to incompatible package)
