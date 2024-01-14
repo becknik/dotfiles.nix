@@ -53,7 +53,7 @@
 
   nix.settings = {
     max-jobs = 3;
-    cores = 6; # with 7 the DE sometimes gets really unresponsive with CPU-usage up of 2400%
+    cores = 7;
 
     system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ]
       # Source: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/config/nix.nix

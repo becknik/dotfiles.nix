@@ -33,11 +33,12 @@
           "nixvim"
         ]
       ) ++ [
+        "--impure"
         "-L" # print build logs
         "--commit-lock-file"
       ];
       dates = "Sat";
-      randomizedDelaySec = "2h";
+      randomizedDelaySec = "1h";
     };
   };
   programs.git = {
@@ -230,15 +231,20 @@
         "flakes"
       ];
 
-      auto-optimise-store = true;
+      auto-optimise-store = true; # Automatic deduplication hardlinking in store
     };
-
-    optimise.automatic = true;
+    optimise = {
+      automatic = true;
+      dates = [ "20:00" ]; # Don't want it to run at 3:45
+    };
     gc = {
       automatic = true;
-      dates = "Sun"; # 1 day after automatic system upgrade
-      options = "--delete-older-than 14d";
+      dates = "monthly"; # 1 day after automatic system upgrade
+      options = "--delete-older-than 30d";
     };
+
+    channel.enable = false;
+    daemonCPUSchedPolicy = "idle"; # "other", "batch"
   };
 
   environment.systemPackages = with pkgs; [
