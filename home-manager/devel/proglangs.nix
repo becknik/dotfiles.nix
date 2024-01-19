@@ -1,8 +1,5 @@
-{ pkgs, ... }:
+{ additionalJDKs, pkgs, ... }:
 
-let
-  additionalJDKs = with pkgs; [ temurin-bin-11 temurin-bin-17 ];
-in
 {
   home.packages = with pkgs;
     [

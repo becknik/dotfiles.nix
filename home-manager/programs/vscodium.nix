@@ -1,4 +1,4 @@
-{ config, lib, pkgs, system, ... }:
+{ additionalJDKs, config, lib, pkgs, system, ... }:
 
 {
   programs.vscode = {
@@ -555,10 +555,10 @@
               path = jdk;
               majVersion = builtins.head (builtins.splitVersion jdk.version);
             };
-            majVersionComp = jdk1: jdk2: builtins.lessThan jdk1.majVersion jdk2.majVersion;
+            majVersionComp = jdk1: jdk2: !(builtins.lessThan jdk1.majVersion jdk2.majVersion);
 
             # perhaps all packages with a `jre`-attribute are jdks
-            jdks = (builtins.filter (pkg: builtins.hasAttr "jre" pkg) (config.home.packages));
+            jdks = (builtins.filter (pkg: builtins.hasAttr "jre" pkg) (config.home.packages ++ additionalJDKs));
             # TODO `++ config.environment.systemPackages` not working in home-manager module
             jdksTransformed = builtins.map addMajVersion jdks;
             jdksSorted = builtins.sort majVersionComp jdksTransformed;

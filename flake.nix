@@ -68,21 +68,26 @@
             inherit stateVersion flakeDirectory defaultUser;
           };
 
-          common-conf-home-manager = { laptopMode, ... }: {
-            home-manager = {
-              extraSpecialArgs = specialArgs // { inherit laptopMode; inherit (input-attrs) ohmyzsh; };
-              useGlobalPkgs = true;
-              useUserPackages = true;
+          common-conf-home-manager = { laptopMode, pkgs, ... }:
+            let
+              additionalJDKs = with pkgs; [ temurin-bin-11 temurin-bin-17 ];
+            in
+            {
+              home-manager = {
+                extraSpecialArgs = specialArgs //
+                  { inherit laptopMode; inherit (input-attrs) ohmyzsh; inherit additionalJDKs; };
+                useGlobalPkgs = true;
+                useUserPackages = true;
 
-              sharedModules = with input-attrs; [
-                sops-nix.homeManagerModules.sops
-                plasma-manager.homeManagerModules.plasma-manager
-                nixvim.homeManagerModules.nixvim
-              ];
+                sharedModules = with input-attrs; [
+                  sops-nix.homeManagerModules.sops
+                  plasma-manager.homeManagerModules.plasma-manager
+                  nixvim.homeManagerModules.nixvim
+                ];
 
-              users.${defaultUser} = import ./home-manager;
+                users.${defaultUser} = import ./home-manager;
+              };
             };
-          };
         in
         {
           dnix = nixpkgs.lib.nixosSystem {
@@ -111,7 +116,8 @@
 
                   # Overlay Setup
 
-                  unstable = final: prev: { # TODO might it be that unstable packages are not built optimized? :|
+                  unstable = final: prev: {
+                    # TODO might it be that unstable packages are not built optimized? :|
                     unstable = import nixpkgs-unstable {
                       inherit system config;
                       hostPlatform = platform;
@@ -162,7 +168,13 @@
 
               # home-manager basic setup & configuration import
               home-manager.nixosModules.home-manager
-              (common-conf-home-manager { laptopMode = false; })
+              (
+                { pkgs, ... }@module-attrs:
+                common-conf-home-manager {
+                  inherit pkgs;
+                  laptopMode = false;
+                }
+              )
             ];
           };
 
@@ -191,7 +203,13 @@
               ./nixos
               ./nixos/lnix
               home-manager.nixosModules.home-manager
-              (common-conf-home-manager { laptopMode = true; })
+              (
+                { pkgs, ... }@module-attrs:
+                common-conf-home-manager {
+                  inherit pkgs;
+                  laptopMode = true;
+                }
+              )
             ];
           };
         };
