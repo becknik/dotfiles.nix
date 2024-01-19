@@ -56,7 +56,7 @@
     hunspellDicts.en-us-large
 
     ## Daily Software
-    clean.libreoffice-still
+    clean.libreoffice-fresh
     (import
       (builtins.fetchGit {
         name = "nixpkgs-unstable-obsidian-1.4.14";
