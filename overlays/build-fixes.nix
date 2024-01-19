@@ -3,7 +3,7 @@ system:
 {
   # Using the clean nixpkgs environment for huge packages
 
-  dependency-build-skip = final: prev: {
+  dependencyBuildSkip = final: prev: {
     webkitgtk = prev.clean.webkitgtk;
     webkitgtk_6_0 = prev.clean.webkitgtk_6_0;
     webkitgtk_4_1 = prev.clean.webkitgtk_4_1;
@@ -36,7 +36,7 @@ system:
 
   ## Reddis
   # test 66 failing: https://github.com/redis/redis/issues/12792
-  deactivate-failing-tests-normal-packages = final: prev: {
+  deactivateFailingTests = final: prev: {
     redis = prev.redis.overrideAttrs (oldAttrs: {
       doCheck = false;
     });
@@ -44,7 +44,7 @@ system:
 
   ## Python
   # Source: https://discourse.nixos.org/t/overwrite-the-disabledtests-of-a-failing-python-dependencies-in-nixos/36886
-  deactivate-failing-tests-python = final: prev: {
+  deactivateFailingTestsPython = final: prev: {
     pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
       (
         python-final: python-prev: {
@@ -86,7 +86,7 @@ system:
 
   ## Haskell
   # Source: https://unix.stackexchange.com/questions/497798/how-can-i-override-a-broken-haskell-package-in-nix
-  deactivate-failing-tests-haskell = final: prev: {
+  deactivateFailingTestsHaskell = final: prev: {
     haskellPackages = prev.haskellPackages.override {
       overrides = haskell-final: haskell-prev: {
         crypton = prev.haskell.lib.compose.dontCheck haskell-prev.crypton;

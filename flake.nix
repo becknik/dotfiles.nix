@@ -55,27 +55,31 @@
             allowUnfree = true;
             joypixels.acceptLicense = true;
           };
+          defaultNixPkgsConfig = { inherit system config; };
 
-          global-overlay-unstable = final: prev: {
-            unstable = import nixpkgs-unstable { inherit system config; };
+          globalOverlayUnstable = final: prev: {
+            unstable = import nixpkgs-unstable defaultNixPkgsConfig;
           };
           # For devices where no native building is set up
-          global-overlay-clean-replacement = final: prev: {
-            clean = import nixpkgs { inherit system config; };
+          globalOverlayCleanReplacement = final: prev: {
+            clean = import nixpkgs defaultNixPkgsConfig;
           };
 
           specialArgs = {
             inherit stateVersion flakeDirectory defaultUser;
           };
 
-          common-conf-home-manager = { laptopMode, pkgs, ... }:
+          commonConfHomeManager = { laptopMode, pkgs, ... }:
             let
               additionalJDKs = with pkgs; [ temurin-bin-11 temurin-bin-17 ];
             in
             {
               home-manager = {
                 extraSpecialArgs = specialArgs //
-                  { inherit laptopMode; inherit (input-attrs) ohmyzsh; inherit additionalJDKs; };
+                  {
+                    inherit laptopMode additionalJDKs system;
+                    inherit (input-attrs) ohmyzsh;
+                  };
                 useGlobalPkgs = true;
                 useUserPackages = true;
 
@@ -118,25 +122,22 @@
 
                   unstable = final: prev: {
                     # TODO might it be that unstable packages are not built optimized? :|
-                    unstable = import nixpkgs-unstable {
-                      inherit system config;
+                    unstable = import nixpkgs-unstable defaultNixPkgsConfig // {
                       hostPlatform = platform;
                     };
                   };
 
                   ## Overlay to disable native compilation of packages with build flags
                   clean = final: prev: {
-                    clean = import nixpkgs { inherit system config; /* hostPlatform = prev.hostPlatform // { gcc = { }; }; */ };
+                    clean = import nixpkgs defaultNixPkgsConfig;
                   };
 
-                  build-fixes = import ./overlays/build-fixes.nix system;
+                  overlay-build-fixes = import ./overlays/build-fixes.nix system;
 
-                  packages = import ./overlays/packages.nix module-attrs;
+                  overlay-packages = import ./overlays/packages.nix module-attrs;
                 in
                 {
-                  nixpkgs = {
-                    inherit system config;
-
+                  nixpkgs = defaultNixPkgsConfig // {
                     # https://nix.dev/tutorials/cross-compilation.html
                     #buildPlatform = platform; # platform where the executables are built
                     hostPlatform = platform; # platform where the executables will run
@@ -145,16 +146,16 @@
                       clean
                       unstable
 
-                      packages.default-to-faster-stdenv
+                      overlay-packages.fasterStdenv
 
-                      build-fixes.dependency-build-skip
+                      overlay-build-fixes.dependencyBuildSkip
 
-                      build-fixes.deactivate-failing-tests-python
-                      build-fixes.deactivate-failing-tests-haskell
-                      build-fixes.deactivate-failing-tests-normal-packages
+                      overlay-build-fixes.deactivateFailingTestsPython
+                      overlay-build-fixes.deactivateFailingTestsHaskell
+                      overlay-build-fixes.deactivateFailingTests
 
-                      packages.patched-linux
-                      packages.patched-librewolf-unwrapped
+                      overlay-packages.patched-linux-dnix
+                      overlay-packages.patched-librewolf-unwrapped
                       #packages.obsidian
                     ];
                   };
@@ -170,7 +171,7 @@
               home-manager.nixosModules.home-manager
               (
                 { pkgs, ... }@module-attrs:
-                common-conf-home-manager {
+                commonConfHomeManager {
                   inherit pkgs;
                   laptopMode = false;
                 }
@@ -190,11 +191,10 @@
               asus-battery
             ] ++ [
               ({ lib, pkgs, ... }@module-attrs: {
-                nixpkgs = {
-                  inherit system config;
+                nixpkgs = defaultNixPkgsConfig // {
                   overlays = [
-                    global-overlay-unstable
-                    global-overlay-clean-replacement
+                    globalOverlayUnstable
+                    globalOverlayCleanReplacement
                     (import ./overlays/packages.nix module-attrs).patched-linux
                   ];
                 };
@@ -205,7 +205,7 @@
               home-manager.nixosModules.home-manager
               (
                 { pkgs, ... }@module-attrs:
-                common-conf-home-manager {
+                commonConfHomeManager {
                   inherit pkgs;
                   laptopMode = true;
                 }
