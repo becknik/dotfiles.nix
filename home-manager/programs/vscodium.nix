@@ -1,11 +1,11 @@
-{ additionalJDKs, config, lib, pkgs, system, ... }:
+{ system, additionalJDKs, config, lib, pkgs, ... }:
 
 {
   programs.vscode = {
     enable = true;
     package = pkgs.vscodium;
 
-    enableExtensionUpdateCheck = false;
+    enableExtensionUpdateCheck = true;
     enableUpdateCheck = false;
     mutableExtensionsDir = false; # Setting this to true disabled the java extensions to properly install
 
@@ -17,8 +17,7 @@
       alefragnani.bookmarks
       gruntfuggly.todo-tree
       mkhl.direnv
-      #(lib.optional (system  == "x86_64-linux") ms-vsliveshare.vsliveshare) # TODO
-      ms-vsliveshare.vsliveshare
+      (lib.modules.mkIf (system == "x86_64-linux") ms-vsliveshare.vsliveshare)
 
       ## Editor Config, Autocompletion, etc.
       vscodevim.vim
@@ -56,13 +55,14 @@
 
       #### JS/TS
       esbenp.prettier-vscode
+      dbaeumer.vscode-eslint
 
       #### Shell
       mads-hartmann.bash-ide-vscode
 
       ### Nix
       jnoortheen.nix-ide
-      arrterian.nix-env-selector # 1.0.10 is 17 months newer than 1.0.9 & not in stable nixpkgs
+      arrterian.nix-env-selector
 
       ### LaTeX
       james-yu.latex-workshop
@@ -92,13 +92,14 @@
       ms-vscode.cmake-tools
     ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
 
-      /* (lib.optional (system != "x86_64-linux") { # TODO
-        # VSCode Live Share (for MacOS etc due to incompatible package)
-        name = "vsliveshare";
-        publisher = "MS-vsliveshare";
-        version = "1.0.5900";
-        #sha256 = lib.fakeSha256;
-      }) */
+      (lib.modules.mkIf (system != "x86_64-linux")
+        # VSCode Live Share (for MacOS etc due to incompatible package) TODO maybe already fixed
+        {
+          name = "vsliveshare";
+          publisher = "MS-vsliveshare";
+          version = "1.0.5900";
+          #sha256 = lib.fakeSha256;
+        })
 
       {
         # German cSpell dictionary
@@ -109,21 +110,19 @@
         sha256 = "sha256-LxgftSpGk7+SIUdZcNpL7UZoAx8IMIcwPYIGqSfVuDc=";
       }
 
-      {
-        # Monokai Night Theme
-        name = "vscode-monokai-night";
-        publisher = "fabiospampinato";
-        version = "1.7.0";
-        #sha256 = lib.fakeSha256;
-        sha256 = "sha256-7Vm/Z46j2GG2c2XZkAlmJ9ZCZ9og+v3tboD2Tf23gGA=";
-      }
-
       /*{ # Auto Completion IntelliCode
         name = "vscodeintellicode";
         publisher = "VisualStudioExptTeam";
         version = "1.2.30";
         sha256 = lib.fakeSha256;
       }*/
+
+      { # Vue Volar
+        name = "volar";
+        publisher = "vue";
+        version = "1.8.27";
+        sha256 = "sha256-6FktlAJmOD3dQNn2TV83ROw41NXZ/MgquB0RFQqwwW0=";
+      }
 
       /*{
         # Java Checkstyle
@@ -154,7 +153,22 @@
         #sha256 = lib.fakeSha256;
       }*/
 
-      # Missing: Monokai Pro, Vue Volar
+      {
+        # Monokai Night Theme
+        name = "vscode-monokai-night";
+        publisher = "fabiospampinato";
+        version = "1.7.0";
+        #sha256 = lib.fakeSha256;
+        sha256 = "sha256-7Vm/Z46j2GG2c2XZkAlmJ9ZCZ9og+v3tboD2Tf23gGA=";
+      }
+
+      {
+        # Monokai Pro Theme
+        name = "theme-monokai-pro-vscode";
+        publisher = "monokai";
+        version = "1.2.2";
+        sha256 = "sha256-xeLzzNgj/GmNnSmrwSfJW6i93++HO3MPAj8RwZzwzR4=";
+      }
     ];
 
     languageSnippets = { };
@@ -279,6 +293,7 @@
         suggest.localityBonus = true;
         suggest.filterGraceful = true;
       };
+      outline.collapseItems = "alwaysCollapse";
 
       # Search
       search = {
@@ -297,6 +312,12 @@
         simpleDialog.enable = true;
         hotExit = "off";
         trimTrailingWhitespace = true;
+        watcherExclude = {
+          # Scala Metals
+          "**/.bloop" = true;
+          "**/.metals" = true;
+          "**/.ammonite" = true;
+        };
       };
 
       # Git
@@ -559,7 +580,6 @@
 
             # perhaps all packages with a `jre`-attribute are jdks
             jdks = (builtins.filter (pkg: builtins.hasAttr "jre" pkg) (config.home.packages ++ additionalJDKs));
-            # TODO `++ config.environment.systemPackages` not working in home-manager module
             jdksTransformed = builtins.map addMajVersion jdks;
             jdksSorted = builtins.sort majVersionComp jdksTransformed;
           in
@@ -576,17 +596,8 @@
       ## Rust
       rust-analyzer.restartServerOnConfigChange = true;
 
-      # Messy Settings Part
-      lldb.suppressUpdateNotifications = true;
-      outline.collapseItems = "alwaysCollapse";
-      files.watcherExclude = {
-        # Scala Metals
-        "**/.bloop" = true;
-        "**/.metals" = true;
-        "**/.ammonite" = true;
-      };
-
       ## Clangd
+      lldb.suppressUpdateNotifications = true;
       clangd.arguments = [
         "--enable-config"
         ''--compile-commands-dir=''${workspaceFolder}''
@@ -608,50 +619,10 @@
         virtualCursorJoin = "ownVirtualCursor";
       };
 
-      # MS C++ Plugin
-      /*C_Cpp.intelliSenseEngine = "disabled";
-        "[cpp]" = {
-        #"editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
-        editor.wordBasedSuggestions = true;
-        editor.defaultFormatter = "llvm-vs-code-extensions.vscode-clangd";
-        };
-        C_Cpp.autocompleteAddParentheses = true;
-        C_Cpp.default.cppStandard = "c++20";
-        C_Cpp.default.cStandard = "c17";
-        C_Cpp.default.intelliSenseMode = "linux-clang-x86";
-        C_Cpp.loggingLevel = "Information";
-        C_Cpp.default.compilerPath = "/usr/bin/g++";
-        C_Cpp.default.customConfigurationVariables = {};
-        C_Cpp.codeAnalysis.updateDelay = 500;
-        C_Cpp.inlayHints.referenceOperator.enabled = true;
-        C_Cpp.intelliSenseUpdateDelay = 500;
-        C_Cpp.workspaceParsingPriority = "medium";
-        C_Cpp.dimInactiveRegions = false;
-        C_Cpp.default.compilerArgs = [
-        "-std=c++20"
-        "-march=native"
-        "-fuse-ld=mold"
-        "-O0"
-        "-ggdb"
-        "-pedantic-errors"
-        "-Wall"
-        "-Wextra"
-        "-Weffc++"
-        "-Wsign-conversion"
-        ];
-        C_Cpp.clang_format_path = "/usr/bin/clang-format";
-        C_Cpp.clang_format_sortIncludes = false;
-        C_Cpp.clang_format_style = "Visual Studio";
-      C_Cpp.errorSquiggles = "enabled";*/
-
-      # Sync Plugin
-      #sync.gist = "461947d6481e2c78445a11486a0b11a7";
-      #sync.autoDownload = true;
-      #sync.autoUpload = true;
-
+      #########################################################################
       # Language-specific Formatting section
+      #########################################################################
 
-      # VSCodium seems to make this change from version 1.85 autoamtically when opening projects
       "[markdown]" = {
         editor.defaultFormatter = "DavidAnson.vscode-markdownlint";
         editor.quickSuggestions = {
@@ -664,10 +635,11 @@
         cSpell.advanced.feature.useReferenceProviderRemove = "/^#+\\s/"; # TODO Whats this for??
       };
       "[dockercompose]".editor.defaultFormatter = "ms-azuretools.vscode-docker";
+      # VSCodium applies this change from version 1.85 on autoamtically when opening projects
+      "[latex][markdown]".editor.wordBasedSuggestions = "off";
       "[latex]" = {
         editor.defaultFormatter = "James-Yu.latex-workshop";
       };
-      "[latex][markdown]".editor.wordBasedSuggestions = "off";
       "[java]".editor.defaultFormatter = "redhat.java";
       "[rust]".editor.defaultFormatter = "rust-lang.rust-analyzer";
     };
