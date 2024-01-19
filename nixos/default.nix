@@ -221,6 +221,7 @@
     #autosuggestions.enable = true; # "
   };
   users.defaultUserShell = pkgs.zsh;
+  services.envfs.enable = false; # https://github.com/Mic92/envfs#envfs ( TODO `nil` not in path after this?!)
 
 
   # Nix
