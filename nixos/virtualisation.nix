@@ -13,10 +13,10 @@
     };
 
     # VBox
-    /*virtualbox.host = {
+    /* virtualbox.host = { # TODO virtualbox build is broken
       enable = true;
-      enableExtensionPack = true; # this causes recompilations - when?
-    };*/
+      enableExtensionPack = true;
+    }; */
 
     # Containerization
     # Source: https://carjorvaz.com/posts/rootless-podman-and-docker-compose-on-nixos/

@@ -57,6 +57,7 @@ in
     gnome-themes-extra
     pomodoro
     gnome-power-manager
+    gnome-software
   ] ++ (with pkgs; [
     tela-icon-theme
     gnome-decoder

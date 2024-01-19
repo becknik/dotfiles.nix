@@ -1,4 +1,4 @@
-{ flakeDirectory, defaultUser, pkgs, ... }:
+{ flakeDirectory, defaultUser, lib, pkgs, ... }:
 
 {
   # Auto Upgrade Systemd Service

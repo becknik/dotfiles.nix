@@ -94,6 +94,8 @@
       system76-scheduler
       perf
       turbostat
+      opensnitch-ebpf # TODO this might cause kernel warning?
+      #virtualbox # broken, see `virtualization.nix`
     ];
 
     kernelParams = [
@@ -154,6 +156,7 @@
   };
 
   services.resolved.enable = true; # systemd-resolved
+  services.opensnitch.enable = true;
 
 
   # Firewall
@@ -196,9 +199,41 @@
   };
 
   services.pcscd.enable = true; # Must be running for age-plugin-yubikey
-  programs.firejail.enable = false; # I'm not actively using this tool
   security.pam.services.gdm.enableGnomeKeyring = true;
-  #services.clamav.daemon.enable = false; # Not considered necessary, because we're on NixOS :D
+
+  services.dbus.apparmor = "enabled";
+  security.apparmor.enable = true;
+
+  services.flatpak.enable = true;
+  # Doesn't play with apparmor, therefore useless
+  # $ sudo aa-enforce firejail-default
+  # Can't find firejail-default in the system path list. ...
+  /* programs.firejail = {
+    enable = true;
+    wrappedBinaries =
+      let
+        packagesToWrap = [ "librewolf" ]; # TODO "discord"
+
+        packagesToWrap' = builtins.map
+          (packageName: {
+            ${packageName} = {
+              executable = "${lib.getBin pkgs.${packageName}}/bin/${packageName}";
+              profile = "${pkgs.firejail}/etc/firejail/${packageName}.profile";
+            };
+          })
+          packagesToWrap;
+        packagesToWrap'' = (builtins.foldl' (p1: p2: p1 // p2) { } packagesToWrap');
+      in
+      packagesToWrap'' // {
+        ungoogled-chromium = {
+          #executable = "${lib.getBin pkgs.clean.ungoogled-chromium}/bin/chromium";
+          executable = "/etc/per-user/jnnk/bin/chromium";
+          profile = "${pkgs.firejail}/etc/firejail/chromium.profile";
+          #extraArgs = "";
+          #desktop = ""; .desktop file to modify. Only necessary if it uses the absolute path to the executable.
+        };
+      };
+  }; */
 
 
   # User Setup
@@ -250,7 +285,10 @@
 
   environment.systemPackages = with pkgs; [
     nix-tree
+    opensnitch-ui
+    #firejail # if not included explicitly, `/etc/apparmor.d` wouldn't get symlinked...
+    #apparmor-parser # aa-enable firejail-default isn't working
   ];
 
-  services.v4l2-relayd.instances = {}; # TODO proper camera setup
+  services.v4l2-relayd.instances = { }; # TODO proper camera setup
 }
