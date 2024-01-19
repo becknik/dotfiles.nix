@@ -214,6 +214,7 @@
         # Git
         gai = "git add --interactive";
         grsst = "git restore --staged"; # = grst
+        "gaucn!" = "gau && gcn!";
       };
 
       #completionInit # "Oh-My-Zsh/Prezto calls compinit during initialization, calling it twice causes slight start up slowdown"
