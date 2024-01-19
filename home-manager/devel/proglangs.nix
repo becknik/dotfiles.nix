@@ -1,4 +1,4 @@
-{ additionalJDKs, pkgs, ... }:
+{ additionalJDKs, config, pkgs, ... }:
 
 {
   home.packages = with pkgs;
@@ -65,13 +65,15 @@
   programs.java = {
     enable = true;
     # Source: https://whichjdk.com/
-    package = pkgs.temurin-bin-21.overrideAttrs (oldAttrs: {
-      meta.priorty = -10;
-    });
+    package = pkgs.temurin-bin-21;
   };
 
-  home.sessionPath = [ "$HOME/.jdks" ];
-  home.file.".jdks/${(builtins.elemAt additionalJDKs 0).version}".source = (builtins.elemAt additionalJDKs 0);
-  home.file.".jdks/${(builtins.elemAt additionalJDKs 1).version}".source = (builtins.elemAt additionalJDKs 1);
-} /* // TODO
-( builtins.listToAttrs (builtins.map ( jdk: {name = home.file.".jdk/${jdk.version}".source; value = jdk; }) additionalJDKs)) */
+  home.sessionPath = [ "${config.home.homeDirectory}/.jdks" ];
+  # Kudos to @TLATER https://discourse.nixos.org/t/nix-language-question-linking-a-list-of-packages-to-home-files/38520
+  home.file = (builtins.listToAttrs (builtins.map
+    (jdk: {
+      name = ".jdks/${jdk.version}";
+      value = { source = jdk; };
+    })
+    additionalJDKs));
+}
