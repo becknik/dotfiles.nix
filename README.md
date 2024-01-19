@@ -31,7 +31,6 @@ $ tree -a -I '\.git|\.vscode' .
 │   │   └── mail.nix
 │   ├── packages.nix
 │   ├── programs
-│   │   ├── librewolf.nix
 │   │   ├── neovim.nix
 │   │   ├── thunderbird.nix
 │   │   └── vscodium.nix
