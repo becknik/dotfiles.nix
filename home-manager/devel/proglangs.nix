@@ -1,35 +1,39 @@
 { pkgs, ... }:
 
+let
+  additionalJDKs = with pkgs; [ temurin-bin-11 temurin-bin-17 ];
+in
 {
-  home.packages = with pkgs; [
-    # TeX Live
-    # Source for new 23.11 interface: https://github.com/NixOS/nixpkgs/issues/250243
-    /*(unstable.texlive.withPackages (ps: with ps; [
+  home.packages = with pkgs;
+    [
+      # TeX Live
+      # Source for new 23.11 interface: https://github.com/NixOS/nixpkgs/issues/250243
+      /*(unstable.texlive.withPackages (ps: with ps; [
       scheme-full # Need xelatex which is included right here
-    ]))*/
-    texliveFull
+      ]))*/
+      texliveFull
 
-    # JS / TypeScript
-    nodePackages.eslint_d
-    nodejs_latest
-    typescript
+      # JS / TypeScript
+      nodePackages.eslint_d
+      nodejs_latest
+      typescript
 
-    # Nix
-    # https://github.com/nix-community/nixd
-    nixd # TODO Figure out how to set up nixd - Seems like this isn't possible at all so far... https://github.com/nix-community/vscode-nix-ide/issues/363
-    nil
+      # Nix
+      # https://github.com/nix-community/nixd
+      nixd # TODO Figure out how to set up nixd - Seems like this isn't possible at all so far... https://github.com/nix-community/vscode-nix-ide/issues/363
+      nil
 
-    ## Linting
-    nixpkgs-fmt
-    nixpkgs-lint
+      ## Linting
+      nixpkgs-fmt
+      nixpkgs-lint
 
-    # Python
-    python3
+      # Python
+      python3
 
-    # Haskell
-    ghc
-    #clean.haskellPackages.ghcup
-/*     (haskellPackages.ghcup.override {
+      # Haskell
+      ghc
+      #clean.haskellPackages.ghcup
+      /* (haskellPackages.ghcup.override {
       Cabal = haskellPackages.Cabal_3_6_3_0;
       versions = (import (builtins.fetchGit {
          # Descriptive name to make the store path easier to identify
@@ -37,37 +41,28 @@
          url = "https://github.com/NixOS/nixpkgs/";
          ref = "refs/heads/nixpkgs-unstable";
          rev = "50a7139fbd1acd4a3d4cfa695e694c529dd26f3a";
-     }) {}).haskellPackages.versions;
-    }) */
+       }) {}).haskellPackages.versions;
+      }) */
 
-    # JVM
-    # TODO Install multiple JDK version system wide
-    /*(pkgs.temurin-bin-17.overrideAttrs (oldAttrs: {
-      meta.priorty = 10;
-    }))*/
-    /*(temurin-bin-11.overrideAttrs (oldAttrs: {
-      meta.priorty = 10;
-    }))*/
+      kotlin
+      dotty # = scala 3
 
-    kotlin
-    dotty # = scala 3
+      ## Linting
+      google-java-format
 
-    ## Linting
-    google-java-format
+      # Rust
+      cargo
+      rustc
+      lldb
 
-    # Rust
-    cargo
-    rustc
-    lldb
-
-    # C++
-    gcc_latest
-    (clang_17.overrideAttrs (oldAttrs: {
-      meta.priority = -10;
-    }))
-    clang-tools_17
-    cmake
-  ];
+      # C++
+      gcc_latest
+      (clang_17.overrideAttrs (oldAttrs: {
+        meta.priority = -10;
+      }))
+      clang-tools_17
+      cmake
+    ];
 
   # JDK Setup
   programs.java = {
@@ -77,4 +72,9 @@
       meta.priorty = -10;
     });
   };
-}
+
+  home.sessionPath = [ "$HOME/.jdks" ];
+  home.file.".jdks/${(builtins.elemAt additionalJDKs 0).version}".source = (builtins.elemAt additionalJDKs 0);
+  home.file.".jdks/${(builtins.elemAt additionalJDKs 1).version}".source = (builtins.elemAt additionalJDKs 1);
+} /* // TODO
+( builtins.listToAttrs (builtins.map ( jdk: {name = home.file.".jdk/${jdk.version}".source; value = jdk; }) additionalJDKs)) */
