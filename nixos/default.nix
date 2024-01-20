@@ -46,6 +46,10 @@
     config = {
       # Necessary for systemd service fetching this git repo
       safe.directory = flakeDirectory;
+      user = {
+        name = "Jannik Becker";
+        email = "jannikb@posteo.de";
+      };
     };
   };
 
