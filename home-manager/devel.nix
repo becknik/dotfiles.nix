@@ -88,6 +88,10 @@
     unstable.jetbrains.clion
     unstable.jetbrains.idea-ultimate
 
+    ## OCI Containers
+    dive # https://github.com/wagoodman/dive
+    trivy
+
     ## Build Tools
     gradle
     maven
