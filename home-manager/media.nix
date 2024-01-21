@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -49,7 +49,13 @@
 
 
   # Package Leftover
-  home.packages = with pkgs; [
+  home.packages = with pkgs; let
+    # NixOS/nixpkgs#272912 NixOS/nixpkgs#273611
+    elelctron_25-patched-for-wayland = pkgs.electron_25.overrideAttrs (_: {
+      preFixup = "patchelf --add-needed ${pkgs.libglvnd}/lib/libEGL.so.1 $out/bin/electron";
+    });
+  in
+  [
     ## Natural language
     hunspell
     hunspellDicts.de_DE
@@ -57,24 +63,14 @@
 
     ## Daily Software
     clean.libreoffice-fresh
-    (import
-      (builtins.fetchGit {
-        name = "nixpkgs-unstable-obsidian-1.4.14";
-        url = "https://github.com/NixOS/nixpkgs/";
-        ref = "refs/heads/nixpkgs-unstable";
-        rev = "9957cd48326fe8dbd52fdc50dd2502307f188b0d";
-      })
-      { inherit system; config.allowUnfree = true; }).obsidian
+    (lib.trivial.throwIf (lib.strings.versionOlder "1.6" obsidian.version) "Obsidian no longer requires EOL Electron"
+      (obsidian.override { electron = elelctron_25-patched-for-wayland; })
+    )
     # Options from laptop to get fcitx5 input working:
-    # --enable-features=WaylandWindowsDecorations,UseOzonePlatform --oxone-platform-hint=wayland
-    /* (obsidian.override {
-      # App quits when opening vault but error messages disappeared
-      electron = electron_25.overrideAttrs (_: {
-        preFixup = "patchelf --add-needed ${libglvnd}/lib/libEGL.so.1 $out/bin/electron"; # NixOS/nixpkgs#272912
-        meta.knownVulnerabilities = [ ]; # NixOS/nixpkgs#273611
-      });
-    }) */
-    logseq
+    # --enable-features=WaylandWindowsDecorations,UseOzonePlatform --ozone-platform-hint=wayland
+    (lib.trivial.throwIf (lib.strings.versionOlder "0.9.20" logseq.version) "logseq no longer requires EOL Electron"
+      (logseq.override { electron_25 = elelctron_25-patched-for-wayland; })
+    )
     #birdtray # Actually not needing this
     planify
     nextcloud-client # Basically redundant, but still necessary for .desktop file in NIX_PATH...
