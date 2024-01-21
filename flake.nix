@@ -53,20 +53,20 @@
 
           system = "x86_64-linux";
           permittedInsecurePackages = [ "electron-25.9.0" ];
-          # defaultNixpkgs...
+          # default nixpkgs config
           config = {
             inherit permittedInsecurePackages;
             allowUnfree = true;
             joypixels.acceptLicense = true;
           };
-          defaultNixPkgsConfig = { inherit system config; };
+          defaultNixPkgsSetup = { inherit system config; };
 
           globalOverlayUnstable = final: prev: {
-            unstable = import nixpkgs-unstable defaultNixPkgsConfig;
+            unstable = import nixpkgs-unstable defaultNixPkgsSetup;
           };
           # For devices where no native building is set up
           globalOverlayCleanReplacement = final: prev: {
-            clean = import nixpkgs defaultNixPkgsConfig;
+            clean = import nixpkgs defaultNixPkgsSetup;
           };
 
           specialArgs = {
@@ -127,14 +127,14 @@
 
                   unstable = final: prev: {
                     # TODO might it be that unstable packages are not built optimized? :|
-                    unstable = import nixpkgs-unstable defaultNixPkgsConfig // {
+                    unstable = import nixpkgs-unstable defaultNixPkgsSetup // {
                       hostPlatform = platform;
                     };
                   };
 
                   ## Overlay to disable native compilation of packages with build flags
                   clean = final: prev: {
-                    clean = import nixpkgs defaultNixPkgsConfig;
+                    clean = import nixpkgs defaultNixPkgsSetup;
                   };
 
                   overlay-build-fixes = import ./overlays/build-fixes.nix module-attrs;
@@ -142,7 +142,7 @@
                   overlay-packages = import ./overlays/packages.nix module-attrs;
                 in
                 {
-                  nixpkgs = defaultNixPkgsConfig // {
+                  nixpkgs = defaultNixPkgsSetup // {
                     # https://nix.dev/tutorials/cross-compilation.html
                     #buildPlatform = platform; # platform where the executables are built
                     hostPlatform = platform; # platform where the executables will run
@@ -196,7 +196,7 @@
               asus-battery
             ] ++ [
               ({ lib, pkgs, ... }@module-attrs: {
-                nixpkgs = defaultNixPkgsConfig // {
+                nixpkgs = defaultNixPkgsSetup // {
                   overlays = [
                     globalOverlayUnstable
                     globalOverlayCleanReplacement
