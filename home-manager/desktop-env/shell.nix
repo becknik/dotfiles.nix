@@ -1,4 +1,4 @@
-{ ohmyzsh, flakeDirectory, config, lib, pkgs, ... }:
+{ ohmyzsh, flakeLock, config, pkgs, ... }:
 
 {
   programs = {
@@ -101,15 +101,14 @@
         enable = true;
         package =
           let
-            lock-json = builtins.fromJSON (builtins.readFile ("${flakeDirectory}/flake.lock"));
-            ohmyzsh-source-last-modified = lock-json.nodes.ohmyzsh.locked.lastModified;
+            ohmyzsh-source-locked-rev = flakeLock.nodes.ohmyzsh.locked.rev;
             # Not working:
             /* lib.readFile ("${pkgs.runCommand "convertToDate"
               { env.when = ohmyzsh-source-last-modified; }
               "date -d ${ohmyzsh-source-last-modified} +%Y-%m-%d > $out"}"); */
           in
           pkgs.oh-my-zsh.overrideAttrs (oldAttrs: {
-            version = builtins.toString ohmyzsh-source-last-modified;
+            version = ohmyzsh-source-locked-rev;
             src = ohmyzsh;
           });
         theme = "bullet-train";

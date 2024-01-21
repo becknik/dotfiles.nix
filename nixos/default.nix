@@ -1,4 +1,4 @@
-{ stateVersion, flakeDirectory, defaultUser, config, lib, pkgs, ... }:
+{ stateVersion, flakeDirectory, flakeLock, defaultUser, config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -21,17 +21,9 @@
       enable = true;
       operation = "boot";
       flake = "${config.users.users.${defaultUser}.home}/devel/own/dotfiles.nix";
-      flags = (builtins.map (flakeInput: "--update-input ${flakeInput}")
-        [
-          "nixpkgs"
-          "nixpkgs-unstable"
-          "nixos-hardware"
-          "disko"
-          "home-manager"
-          "sops-nix"
-          "plasma-manager"
-          "nixvim"
-        ]
+      flags = (builtins.map
+        (flakeInput: "--update-input ${flakeInput}")
+        (lib.attrsets.mapAttrsToList (name: _: name) flakeLock.nodes.root.inputs)
       ) ++ [
         "--impure"
         "-L" # print build logs
@@ -47,7 +39,7 @@
       # Necessary for systemd service fetching this git repo
       safe.directory = flakeDirectory;
       user = {
-        name = "Jannik Becker";
+        name = "Nix Auto Upgrade";
         email = "jannikb@posteo.de";
       };
     };

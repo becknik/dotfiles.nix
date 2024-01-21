@@ -31,6 +31,9 @@
       #inputs.pre-commit-hooks.inputs.nixpkgs-stable.follows = "nixpkgs"; # TODO Doesn't follows the nixvim inputs - bug report?
     };
 
+    # Libraries
+    flockenzeit.url = "github:balsoft/Flockenzeit";
+
     # Non-Flake Inputs
     "ohmyzsh" = {
       url = "github:ohmyzsh/ohmyzsh";
@@ -44,6 +47,7 @@
         let
           defaultUser = "jnnk";
           flakeDirectory = "/home/${defaultUser}/devel/own/dotfiles.nix";
+          flakeLock = builtins.fromJSON (builtins.readFile ("${flakeDirectory}/flake.lock"));
 
           stateVersion = "23.11";
 
@@ -66,7 +70,8 @@
           };
 
           specialArgs = {
-            inherit stateVersion flakeDirectory defaultUser;
+            inherit stateVersion flakeDirectory flakeLock defaultUser;
+            inherit (input-attrs) flockenzeit;
           };
 
           commonConfHomeManager = { laptopMode, pkgs, ... }:
@@ -77,8 +82,8 @@
               home-manager = {
                 extraSpecialArgs = specialArgs //
                   {
-                    inherit laptopMode additionalJDKs system;
-                    inherit (input-attrs) ohmyzsh;
+                    inherit laptopMode additionalJDKs flakeLock system;
+                    inherit (input-attrs) ohmyzsh flockenzeit;
                   };
                 useGlobalPkgs = true;
                 useUserPackages = true;
@@ -132,7 +137,7 @@
                     clean = import nixpkgs defaultNixPkgsConfig;
                   };
 
-                  overlay-build-fixes = import ./overlays/build-fixes.nix system;
+                  overlay-build-fixes = import ./overlays/build-fixes.nix module-attrs;
 
                   overlay-packages = import ./overlays/packages.nix module-attrs;
                 in

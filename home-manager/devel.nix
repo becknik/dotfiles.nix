@@ -19,7 +19,7 @@
       #difftastic.enable = true; # Side-by-side diff view in terminal, looks odd to me
 
       ## (User) Config
-      userName = "Jannik Becker";
+      userName = "becknik";
       userEmail = "jannikb@posteo.de";
       extraConfig = {
         init.defaultBranch = "main";

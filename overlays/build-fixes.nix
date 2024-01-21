@@ -1,4 +1,4 @@
-system:
+{ lib, ... }:
 
 {
   # Using the clean nixpkgs environment for huge packages
@@ -9,8 +9,6 @@ system:
     webkitgtk_4_1 = prev.clean.webkitgtk_4_1;
 
     ## Chromium
-    electron = prev.clean.electron;
-    electron_27 = prev.clean.electron_27;
     #qtwebengine =
 
     ## Compiler
@@ -30,7 +28,20 @@ system:
     }); */
     #qt6.qtwebview = prev.clean.qt6.qtwebview;
     #qt6.qtwebengine = prev.clean.qt6.qtwebengine;
-  };
+
+    # Electron
+  } // lib.attrsets.mapAttrs
+    # TODO wtf: error: attribute 'electron_28-bin' missing
+    (name: value: if name == "electron_28" then prev.clean.${name} else prev."${name}-bin")
+    (lib.attrsets.filterAttrs
+      (name: value:
+        (lib.strings.hasPrefix "electron_" name)
+          && !(lib.strings.hasSuffix "bin" name)
+          && (name != "electron_9")
+          || (name == "electron")
+      )
+      prev
+    );
 
   # Fixing Build Failures
 

@@ -95,6 +95,21 @@
         "type": "github"
       }
     },
+    "flockenzeit": {
+      "locked": {
+        "lastModified": 1671185345,
+        "narHash": "sha256-+5IWi+iJAYcRxvLN15hKO2hVwNokfN3U+lvWf/zFtCg=",
+        "owner": "balsoft",
+        "repo": "Flockenzeit",
+        "rev": "90abba65671690d95b5d28ce6dd8de7959aa1339",
+        "type": "github"
+      },
+      "original": {
+        "owner": "balsoft",
+        "repo": "Flockenzeit",
+        "type": "github"
+      }
+    },
     "gitignore": {
       "inputs": {
         "nixpkgs": [
@@ -320,6 +335,7 @@
     "root": {
       "inputs": {
         "disko": "disko",
+        "flockenzeit": "flockenzeit",
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",

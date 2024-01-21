@@ -1,4 +1,4 @@
-{ flakeDirectory, defaultUser, lib, pkgs, ... }:
+{ flockenzeit, flakeDirectory, defaultUser, pkgs, ... }:
 
 {
   # Auto Upgrade Systemd Service
@@ -25,14 +25,15 @@
     in
     {
       nixos-upgrade = {
-        environment = {
-          NIXOS_UPGRADE_START_TIME = "$(date '+%Y-%m-%dT%R:%S%:z-%a')";
-        };
-        # TODO Systemd services' variable file names doesn't work, maybe try something like %i?
-        serviceConfig = let log-file-location = "file:/var/log/nixos-upgrade/$NIXOS_UPGRADE_START_TIME"; in {
-          StandardOutput = log-file-location;
-          StandardError = log-file-location;
-        };
+        serviceConfig =
+          let
+            currentDateTimeFormatted = with flockenzeit.lib.splitSecondsSinceEpoch {} builtins.currentTime; "${F}-${T}";
+            logFilePath = "file:/var/log/nixos-upgrade/${"${currentDateTimeFormatted}.log"}";
+          in
+          {
+            StandardOutput = logFilePath;
+            StandardError = logFilePath;
+          };
         onFailure = [ "nixos-upgrade-notify-send-failure.service" ];
         onSuccess = [ "nixos-upgrade-notify-send-success.service" ];
         #After = [];
@@ -79,7 +80,7 @@
           remote=$(git rev-parse main@{upstream})
           if [ $local != $remote ]; then
             git pull
-            nixos-rebuild --flake "$NIXOS_CONFIG_REPO_DIRECTORY#$NIXOS_CONFIGURATION_NAME" switch
+            nixos-rebuild --flake "$NIXOS_CONFIG_REPO_DIRECTORY#$NIXOS_CONFIGURATION_NAME" boot --impure
           fi
         '';
         #
