@@ -14,6 +14,17 @@
     zsh = {
       enable = true;
 
+      # TODO zsh plugin setup is far from perfect
+      plugins = let
+        zshPathForNixpkg = (zshPluginName: "share/zsh/plugins/${zshPluginName}/${zshPluginName}.plugin.zsh");
+      in with pkgs; [
+        rec {
+          name = "you-should-use";
+          src = zsh-you-should-use;
+          file = zshPathForNixpkg name;
+        }
+      ];
+
       #dotDir = "~/.config/zsh"; # Where zsh config files are placed; randomly creates new folders in $HOME or elsewhere
       envExtra =
         "export KEYTIMEOUT=5" # Esc key in vi mode is 0.4s by default, this sets it to 0.05s
@@ -108,16 +119,14 @@
         package =
           let
             ohmyzsh-source-locked-rev = flakeLock.nodes.ohmyzsh.locked.rev;
-            # Not working:
-            /* lib.readFile ("${pkgs.runCommand "convertToDate"
-              { env.when = ohmyzsh-source-last-modified; }
-              "date -d ${ohmyzsh-source-last-modified} +%Y-%m-%d > $out"}"); */
           in
           pkgs.oh-my-zsh.overrideAttrs (oldAttrs: {
             version = ohmyzsh-source-locked-rev;
             src = ohmyzsh;
           });
         theme = ""; # requirement for pure theme to work
+
+        ## ohmyzsh plugins
         plugins = [
           "systemd"
           #"timer" # handled by pure zsh prompt theme
@@ -170,19 +179,25 @@
           "zsh-interactive-cd"
           "direnv"
         ];
+
         # oh-my-zsh extra settings for plugins
-        # $1=exit_status, $2=command, $3=elapsed_time
         extraConfig = ''
           bgnotify_bell=false;
-          bgnotify_threshold=120;
-
+          bgnotify_threshold=120;''
+        # $1=exit_status, $2=command, $3=elapsed_time
+        # this somehow doesn't work sometimes
+        /* + ''
           function bgnotify_formatted {
             [ $1 -eq 0 ] && title="Holy Smokes, Batman!" || title="Holy Graf Zeppelin!"
             bgnotify "$title -- after $3 s" "$2";
           }
-        '' +
-        # oh-my-zsh extra settings for themes:
+        '' */
+        # zsh you should use
+        + ''
+          YSU_MESSAGE_POSITION="after"
         ''
+        # theme/prompts:
+        + ''
           PURE_GIT_UNTRACKED_DIRTY=0
           zstyle :prompt:pure:git:stash show yes
         ''
@@ -221,6 +236,5 @@
     (pure-prompt.overrideAttrs (oldAttrs: {
       patches = [ ./shell/no-newline.patch ];
     }))
-    zsh-you-should-use # TODO include this
   ];
 }
