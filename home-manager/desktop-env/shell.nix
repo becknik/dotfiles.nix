@@ -108,9 +108,11 @@
         ''
 
         # pure plugin setup and initialization https://github.com/sindresorhus/pure#options
+        # adds the system time
         + ''
           autoload -U promptinit; promptinit
           prompt pure
+          PROMPT='%F{white}%* '$PROMPT
         ''
       ;
 
@@ -234,7 +236,7 @@
   home.packages = with pkgs; [
     libnotify # For bg-notify zsh plugin
     (pure-prompt.overrideAttrs (oldAttrs: {
-      patches = [ ./shell/no-newline.patch ];
+      patches = [ ./shell/zsh-pure-prompt.patch ];
     }))
   ];
 }

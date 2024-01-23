@@ -49,6 +49,7 @@ in
 
       # DON'T FORGET TO RUN `systemctl --user restart sops-nix.service` AFTER CHANGING THE CONFIGURATION OF ONE SECRET!!!
 
+      # TODO secrets are symlinked twice?!
       "github-personal" = {
         sopsFile = ./secrets/git.yaml;
         key = "github/personal/.ed25519";
