@@ -1,0 +1,13 @@
+diff --git a/pure.zsh b/pure.zsh
+index ddb0e30..3dad87d 100644
+--- a/pure.zsh
++++ b/pure.zsh
+@@ -176,7 +176,7 @@ prompt_pure_preprompt_render() {
+
+ 	if [[ $1 == precmd ]]; then
+ 		# Initial newline, for spaciousness.
+-		print
++		# print
+ 	elif [[ $prompt_pure_last_prompt != $expanded_prompt ]]; then
+ 		# Redraw the prompt.
+ 		prompt_pure_reset_prompt

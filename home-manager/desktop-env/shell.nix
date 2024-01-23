@@ -95,6 +95,12 @@
               git commit --no-verify --no-gpg-sign -m "$message"
           }
         ''
+
+        # pure plugin setup and initialization https://github.com/sindresorhus/pure#options
+        + ''
+          autoload -U promptinit; promptinit
+          prompt pure
+        ''
       ;
 
       oh-my-zsh = {
@@ -111,10 +117,10 @@
             version = ohmyzsh-source-locked-rev;
             src = ohmyzsh;
           });
-        theme = "bullet-train";
+        theme = ""; # requirement for pure theme to work
         plugins = [
           "systemd"
-          "timer"
+          #"timer" # handled by pure zsh prompt theme
           "common-aliases"
           "bgnotify"
           "copyfile"
@@ -155,7 +161,7 @@
           "singlechar"
           #"ssh-agent"
           #"thefuck" # should conflict with the Esc^2 from sudo plugin
-          #"transfer" # file sharing, but idk if usefull fo rme...
+          #"transfer" # file sharing, but idk if useful for me...
           #"urltools"
           "vscode"
           "wd"
@@ -164,7 +170,6 @@
           "zsh-interactive-cd"
           "direnv"
         ];
-        custom = "${config.home.homeDirectory}/.config/oh-my-zsh/custom";
         # oh-my-zsh extra settings for plugins
         # $1=exit_status, $2=command, $3=elapsed_time
         extraConfig = ''
@@ -175,21 +180,11 @@
             [ $1 -eq 0 ] && title="Holy Smokes, Batman!" || title="Holy Graf Zeppelin!"
             bgnotify "$title -- after $3 s" "$2";
           }
-
-          TIMER_PRECISION=2;
-          TIMER_FORMAT="[%d]";
-          TIMER_THRESHOLD=.5;
         '' +
         # oh-my-zsh extra settings for themes:
-        # Not set: perl nvm hg
         ''
-          BULLETTRAIN_PROMPT_ORDER=("time" "status" "context" "custom" "dir" "ruby" "virtualenv" "aws" "go" "elixir" "git" "cmd_exec_time");
-          BULLETTRAIN_PROMPT_SEPARATE_LINE=true;
-          BULLETTRAIN_PROMPT_ADD_NEWLINE=false;
-          BULLETTRAIN_STATUS_EXIT_SHOW=true;
-          BULLETTRAIN_IS_SSH_CLIENT=true;
-          BULLETTRAIN_PROMPT_SEPARATE_LINE=true;
-          #BULLETTRAIN_GIT_COLORIZE_DIRTY=true;
+          PURE_GIT_UNTRACKED_DIRTY=0
+          zstyle :prompt:pure:git:stash show yes
         ''
         ;
       };
@@ -221,5 +216,11 @@
     };
   };
 
-  home.packages = [ pkgs.libnotify ]; # For bg-notify zsh plugin
+  home.packages = with pkgs; [
+    libnotify # For bg-notify zsh plugin
+    (pure-prompt.overrideAttrs (oldAttrs: {
+      patches = [ ./shell/no-newline.patch ];
+    }))
+    zsh-you-should-use # TODO include this
+  ];
 }
