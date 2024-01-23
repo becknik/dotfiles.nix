@@ -96,13 +96,19 @@
     pavucontrol
     helvum
     vlc
-    pdfslicer
     system-config-printer # graphical ui for CUPS
     transmission-gtk
     trash-cli
     yt-dlp
     media-downloader # for yt-dlp
+
+    ## Images
     clean.krita
     imagemagick
+
+    ### PDF
+    pdfslicer
+    ocrmypdf
+    qpdf
   ];
 }
