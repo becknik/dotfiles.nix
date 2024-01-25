@@ -59,6 +59,7 @@
       defaultNetwork.settings = {
         dns_enabled = true;
       };
+     
     };
   };
   environment.variables = {
@@ -71,5 +72,6 @@
     docker-compose
     docker-buildx
     buildkit
+    nerdctl
   ];
 }

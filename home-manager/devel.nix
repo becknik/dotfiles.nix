@@ -80,6 +80,7 @@
   home.packages = with pkgs; [
     git-crypt
     meld
+    wiggle
 
     # LLM (ChatGPT)
     shell_gpt
