@@ -7,14 +7,9 @@
 
   homebrew = {
     enable = true;
-    autoUpdate = true; # updates homebrew packages on activation (can make darwin-rebuild much slower)
+    onActivation.autoUpdate = true; # updates homebrew packages on activation (can make darwin-rebuild much slower)
     casks = [
-      "hammerspoon"
-      "amethyst"
-      "alfred"
       "logseq"
-      "discord"
-      "iina"
     ];
   };
 

@@ -226,8 +226,9 @@
 
       darwinConfigurations."wnix" =
         let
-          system = "aarch64-darwin";
-          defaultUser = "findOutTheUserName";
+          system = "x86_64-darwin";
+          defaultUser = "jbecker";
+          specialArgs' = specialArgs // {inherit defaultUser;};
         in
         darwin.lib.darwinSystem {
           inherit system;
@@ -237,7 +238,7 @@
             home-manager.darwinModules.home-manager
             {
               home-manager = {
-                extraSpecialArgs = specialArgs //
+                extraSpecialArgs = specialArgs' //
                   {
                     inherit system;
                     inherit (input-attrs) ohmyzsh;
