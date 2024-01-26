@@ -28,7 +28,7 @@
       enable_audio_bell = true;
       update_check_interval = 0;
     };
-    theme = "Panda";
+    theme = "Desert";
   };
 
   # Packaging Leftovers

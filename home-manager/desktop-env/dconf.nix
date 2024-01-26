@@ -544,7 +544,7 @@ with lib.gvariant; {
     };
 
     "org/gnome/terminal/legacy/profiles:" = {
-      default = "4a3fbad7-a54d-4910-b51a-808fea7e70e2";
+      default = "dd180816-99e9-4947-bd75-2af5159e839b";
       list = [ "4a3fbad7-a54d-4910-b51a-808fea7e70e2" "dd180816-99e9-4947-bd75-2af5159e839b" ];
     };
 

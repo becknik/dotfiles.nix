@@ -234,12 +234,19 @@
           defaultUser = "jbecker";
           specialArgs' = specialArgs // { inherit defaultUser; };
           defaultNixPkgsSetup' = defaultNixPkgsSetup // { inherit system; };
+          overlayUnstable = final: prev: {
+            unstable = import nixpkgs-unstable defaultNixPkgsSetup';
+          };
         in
         darwin.lib.darwinSystem {
           inherit system;
 
           modules = [
-            ({ lib, pkgs, ... }@module-attrs: { nixpkgs = defaultNixPkgsSetup'; })
+            ({ lib, pkgs, ... }@module-attrs: {
+              nixpkgs = defaultNixPkgsSetup' // {
+                overlays = [ overlayUnstable ];
+              };
+            })
 
             ./nix-darwin
             input-attrs.mac-app-util.darwinModules.default
