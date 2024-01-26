@@ -14,6 +14,10 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    mac-app-util = {
+      url = "github:hraban/mac-app-util";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     home-manager = {
       url = "github:nix-community/home-manager/release-23.11";
@@ -79,7 +83,7 @@
 
       commonConfHomeManager = { laptopMode, pkgs, ... }:
         let
-          additionalJDKs = with pkgs; [ temurin-bin-11 temurin-bin-17 ];
+          additionalJDKs = with pkgs; [ temurin-bin-17 ];
         in
         {
           home-manager = {
@@ -228,20 +232,30 @@
         let
           system = "x86_64-darwin";
           defaultUser = "jbecker";
-          specialArgs' = specialArgs // {inherit defaultUser;};
+          specialArgs' = specialArgs // { inherit defaultUser; };
         in
         darwin.lib.darwinSystem {
           inherit system;
 
           modules = [
+            ({ lib, pkgs, ... }@module-attrs: {
+              nixpkgs = defaultNixPkgsSetup // {
+                overlays = [
+                  globalOverlayUnstable
+                  globalOverlayCleanReplacement
+                ];
+              };
+            })
             ./nix-darwin
+            input-attrs.mac-app-util.darwinModules.default
             home-manager.darwinModules.home-manager
-            {
+            ({ pkgs, ... }@module-attrs: {
               home-manager = {
                 extraSpecialArgs = specialArgs' //
                   {
                     inherit system;
                     inherit (input-attrs) ohmyzsh;
+                    additionalJDKs = with pkgs; [ temurin-bin-8 temurin-bin-11 temurin-bin-17 ];
                   };
 
                 useGlobalPkgs = true;
@@ -252,7 +266,7 @@
                 ];
                 users.${defaultUser} = import ./nix-darwin/home-manager.nix;
               };
-            }
+            })
           ];
         };
     };

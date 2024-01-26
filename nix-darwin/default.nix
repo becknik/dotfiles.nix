@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ mac-app-util, pkgs, ... }:
 
 {
   nix.useDaemon = true;
@@ -9,9 +9,15 @@
     enable = true;
     onActivation.autoUpdate = true; # updates homebrew packages on activation (can make darwin-rebuild much slower)
     casks = [
-      "logseq"
+      #"logseq"
     ];
   };
+
+  # For system-wide, nix-darwin packages. This works because the
+  # postActivation script is run after nix-darwin has aggregated all
+  # .app links into a single directory, /Applications/Nix Apps.
+  # TODO
+  #system.activationScripts.postActivation.text = ''${mac-app-util}/bin/mac-app-util sync-trampolines "/Applications/Nix Apps" "/Applications/Nix Trampolines"'';
 
   system.defaults = {
     ## Optical Stuff
