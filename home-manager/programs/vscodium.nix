@@ -18,6 +18,7 @@
       gruntfuggly.todo-tree
       mkhl.direnv
       (lib.modules.mkIf (system == "x86_64-linux") ms-vsliveshare.vsliveshare)
+      github.copilot
 
       ## Editor Config, Autocompletion, etc.
       vscodevim.vim
