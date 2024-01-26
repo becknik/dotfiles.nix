@@ -91,91 +91,99 @@
       #ms-vscode.cpptools
       #twxs.cmake #?
       ms-vscode.cmake-tools
-    ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+    ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (
+      [
+        {
+          # German cSpell dictionary
+          name = "code-spell-checker-german";
+          publisher = "streetsidesoftware";
+          version = "2.3.1";
+          #sha256 = lib.fakeSha256;
+          sha256 = "sha256-LxgftSpGk7+SIUdZcNpL7UZoAx8IMIcwPYIGqSfVuDc=";
+        }
 
-      (lib.modules.mkIf (system != "x86_64-linux")
+        {
+          # Vue Volar
+          name = "volar";
+          publisher = "vue";
+          version = "1.8.27";
+          #sha256 = lib.fakeSha256;
+          sha256 = "sha256-6FktlAJmOD3dQNn2TV83ROw41NXZ/MgquB0RFQqwwW0=";
+        }
+
+        {
+          # Monokai Night Theme
+          name = "vscode-monokai-night";
+          publisher = "fabiospampinato";
+          version = "1.7.0";
+          #sha256 = lib.fakeSha256;
+          sha256 = "sha256-7Vm/Z46j2GG2c2XZkAlmJ9ZCZ9og+v3tboD2Tf23gGA=";
+        }
+
+        {
+          # Monokai Pro Theme
+          name = "theme-monokai-pro-vscode";
+          publisher = "monokai";
+          version = "1.2.2";
+          #sha256 = lib.fakeSha256;
+          sha256 = "sha256-xeLzzNgj/GmNnSmrwSfJW6i93++HO3MPAj8RwZzwzR4=";
+        }
+
+        /*{ # Auto Completion IntelliCode
+        name = "vscodeintellicode";
+        publisher = "VisualStudioExptTeam";
+        version = "1.2.30";
+        sha256 = lib.fakeSha256;
+          }*/
+      ] ++
+      (lib.lists.optional (system != "x86_64-linux")
         # VSCode Live Share (for MacOS etc due to incompatible package) TODO maybe already fixed
         {
           name = "vsliveshare";
           publisher = "MS-vsliveshare";
           version = "1.0.5900";
-          #sha256 = lib.fakeSha256;
-        })
+          sha256 = lib.fakeSha256;
+        }) ++
+      (lib.lists.optionals (system == "x86_64-darwin")
+        # Use these packages on work device only
+        [
+          {
+            # Java Checkstyle
+            name = "vscode-checkstyle";
+            publisher = "shengchen";
+            version = "1.4.2";
+            #sha256 = lib.fakeSha256;
+            sha256 = "21c860417f42510e77a6e2eed2597cccd97a1334a7543063eed4d4a393736630";
+          }
 
-      {
-        # German cSpell dictionary
-        name = "code-spell-checker-german";
-        publisher = "streetsidesoftware";
-        version = "2.3.1";
-        #sha256 = lib.fakeSha256;
-        sha256 = "sha256-LxgftSpGk7+SIUdZcNpL7UZoAx8IMIcwPYIGqSfVuDc=";
-      }
-
-      /*{ # Auto Completion IntelliCode
-        name = "vscodeintellicode";
-        publisher = "VisualStudioExptTeam";
-        version = "1.2.30";
-        sha256 = lib.fakeSha256;
-      }*/
-
-      { # Vue Volar
-        name = "volar";
-        publisher = "vue";
-        version = "1.8.27";
-        sha256 = "sha256-6FktlAJmOD3dQNn2TV83ROw41NXZ/MgquB0RFQqwwW0=";
-      }
-
-      /*{
-        # Java Checkstyle
-        name = "vscode-checkstyle";
-        publisher = "shengchen";
-        version = "1.4.2";
-        #sha256 = lib.fakeSha256;
-        sha256 = "21c860417f42510e77a6e2eed2597cccd97a1334a7543063eed4d4a393736630";
-      }*/
-
-      /*{ # Spring Boot Tools
-        name = "vscode-spring-boot";
-        publisher = "vmware";
-        version = "1.52.2024010405";
-        sha256 = lib.fakeSha256;
-      }
-      { # Spring Boot Dashboard
-        name = "vscode-spring-boot-dashboard";
-        publisher = "vscjava";
-        version = "0.13.2023072200";
-        #sha256 = lib.fakeSha256;
-        sha256 = "f3395bc26e1e79db9f2c406068987b362a746faf4093acfb1a3d274110a437bd";
-      }
-      { # Spring Boot Initializer
-        name = "vscode-spring-initializr";
-        publisher = "vscjava";
-        version = "0.11.2023070103";
-        #sha256 = lib.fakeSha256;
-      }*/
-
-      {
-        # Monokai Night Theme
-        name = "vscode-monokai-night";
-        publisher = "fabiospampinato";
-        version = "1.7.0";
-        #sha256 = lib.fakeSha256;
-        sha256 = "sha256-7Vm/Z46j2GG2c2XZkAlmJ9ZCZ9og+v3tboD2Tf23gGA=";
-      }
-
-      {
-        # Monokai Pro Theme
-        name = "theme-monokai-pro-vscode";
-        publisher = "monokai";
-        version = "1.2.2";
-        sha256 = "sha256-xeLzzNgj/GmNnSmrwSfJW6i93++HO3MPAj8RwZzwzR4=";
-      }
-    ];
+          {
+            # Spring Boot Tools
+            name = "vscode-spring-boot";
+            publisher = "vmware";
+            version = "1.52.2024010405";
+            sha256 = lib.fakeSha256;
+          }
+          {
+            # Spring Boot Dashboard
+            name = "vscode-spring-boot-dashboard";
+            publisher = "vscjava";
+            version = "0.13.2023072200";
+            #sha256 = lib.fakeSha256;
+            sha256 = "f3395bc26e1e79db9f2c406068987b362a746faf4093acfb1a3d274110a437bd";
+          }
+          {
+            # Spring Boot Initializer
+            name = "vscode-spring-initializr";
+            publisher = "vscjava";
+            #sha256 = lib.fakeSha256;
+            version = "0.11.2023070103";
+          }
+        ])
+    );
 
     languageSnippets = { };
 
     keybindings = [ ];
-
 
     userSettings = {
 
