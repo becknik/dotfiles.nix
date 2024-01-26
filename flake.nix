@@ -233,21 +233,17 @@
           system = "x86_64-darwin";
           defaultUser = "jbecker";
           specialArgs' = specialArgs // { inherit defaultUser; };
+          defaultNixPkgsSetup' = defaultNixPkgsSetup // { inherit system; };
         in
         darwin.lib.darwinSystem {
           inherit system;
 
           modules = [
-            ({ lib, pkgs, ... }@module-attrs: {
-              nixpkgs = defaultNixPkgsSetup // {
-                overlays = [
-                  globalOverlayUnstable
-                  globalOverlayCleanReplacement
-                ];
-              };
-            })
+            ({ lib, pkgs, ... }@module-attrs: { nixpkgs = defaultNixPkgsSetup'; })
+
             ./nix-darwin
             input-attrs.mac-app-util.darwinModules.default
+
             home-manager.darwinModules.home-manager
             ({ pkgs, ... }@module-attrs: {
               home-manager = {
