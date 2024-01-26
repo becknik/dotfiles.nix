@@ -1,5 +1,5 @@
 {
-  description = "NixOS configuration";
+  description = "NixOS/nix-darwin configurations for my desktop & laptops";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
@@ -7,6 +7,11 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     disko = {
       url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    darwin = {
+      url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -41,63 +46,63 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nixos-hardware, ... }@input-attrs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, nixos-hardware, ... }@input-attrs:
+    let
+      defaultUser = "jnnk";
+      flakeDirectory = "/home/${defaultUser}/devel/own/dotfiles.nix";
+      flakeLock = builtins.fromJSON (builtins.readFile ("${flakeDirectory}/flake.lock"));
+
+      stateVersion = "23.11";
+
+      system = "x86_64-linux";
+      permittedInsecurePackages = [ "electron-25.9.0" ];
+      # default nixpkgs config
+      config = {
+        inherit permittedInsecurePackages;
+        allowUnfree = true;
+        joypixels.acceptLicense = true;
+      };
+      defaultNixPkgsSetup = { inherit system config; };
+
+      globalOverlayUnstable = final: prev: {
+        unstable = import nixpkgs-unstable defaultNixPkgsSetup;
+      };
+      # For devices where no native building is set up
+      globalOverlayCleanReplacement = final: prev: {
+        clean = import nixpkgs defaultNixPkgsSetup;
+      };
+
+      specialArgs = {
+        inherit stateVersion flakeDirectory flakeLock defaultUser;
+        inherit (input-attrs) flockenzeit;
+      };
+
+      commonConfHomeManager = { laptopMode, pkgs, ... }:
+        let
+          additionalJDKs = with pkgs; [ temurin-bin-11 temurin-bin-17 ];
+        in
+        {
+          home-manager = {
+            extraSpecialArgs = specialArgs //
+              {
+                inherit laptopMode additionalJDKs system;
+                inherit (input-attrs) ohmyzsh;
+              };
+            useGlobalPkgs = true;
+            useUserPackages = true;
+
+            sharedModules = with input-attrs; [
+              sops-nix.homeManagerModules.sops
+              plasma-manager.homeManagerModules.plasma-manager
+              nixvim.homeManagerModules.nixvim
+            ];
+
+            users.${defaultUser} = import ./home-manager;
+          };
+        };
+    in
     {
       nixosConfigurations =
-        let
-          defaultUser = "jnnk";
-          flakeDirectory = "/home/${defaultUser}/devel/own/dotfiles.nix";
-          flakeLock = builtins.fromJSON (builtins.readFile ("${flakeDirectory}/flake.lock"));
-
-          stateVersion = "23.11";
-
-          system = "x86_64-linux";
-          permittedInsecurePackages = [ "electron-25.9.0" ];
-          # default nixpkgs config
-          config = {
-            inherit permittedInsecurePackages;
-            allowUnfree = true;
-            joypixels.acceptLicense = true;
-          };
-          defaultNixPkgsSetup = { inherit system config; };
-
-          globalOverlayUnstable = final: prev: {
-            unstable = import nixpkgs-unstable defaultNixPkgsSetup;
-          };
-          # For devices where no native building is set up
-          globalOverlayCleanReplacement = final: prev: {
-            clean = import nixpkgs defaultNixPkgsSetup;
-          };
-
-          specialArgs = {
-            inherit stateVersion flakeDirectory flakeLock defaultUser;
-            inherit (input-attrs) flockenzeit;
-          };
-
-          commonConfHomeManager = { laptopMode, pkgs, ... }:
-            let
-              additionalJDKs = with pkgs; [ temurin-bin-11 temurin-bin-17 ];
-            in
-            {
-              home-manager = {
-                extraSpecialArgs = specialArgs //
-                  {
-                    inherit laptopMode additionalJDKs flakeLock system;
-                    inherit (input-attrs) ohmyzsh flockenzeit;
-                  };
-                useGlobalPkgs = true;
-                useUserPackages = true;
-
-                sharedModules = with input-attrs; [
-                  sops-nix.homeManagerModules.sops
-                  plasma-manager.homeManagerModules.plasma-manager
-                  nixvim.homeManagerModules.nixvim
-                ];
-
-                users.${defaultUser} = import ./home-manager;
-              };
-            };
-        in
         {
           dnix = nixpkgs.lib.nixosSystem {
             inherit system specialArgs;
@@ -217,6 +222,37 @@
               )
             ];
           };
+        };
+
+      darwinConfigurations."wnix" =
+        let
+          system = "aarch64-darwin";
+          defaultUser = "findOutTheUserName";
+        in
+        darwin.lib.darwinSystem {
+          inherit system;
+
+          modules = [
+            ./nix-darwin
+            home-manager.darwinModules.home-manager
+            {
+              home-manager = {
+                extraSpecialArgs = specialArgs //
+                  {
+                    inherit system;
+                    inherit (input-attrs) ohmyzsh;
+                  };
+
+                useGlobalPkgs = true;
+                useUserPackages = true;
+
+                sharedModules = with input-attrs; [
+                  nixvim.homeManagerModules.nixvim
+                ];
+                users.${defaultUser} = import ./nix-darwin/home-manager.nix;
+              };
+            }
+          ];
         };
     };
 }
