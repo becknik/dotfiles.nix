@@ -10,6 +10,7 @@ in
     ../home-manager/desktop-env/folders-and-files.nix # also want the `$HOME/devel/*` structure
 
     ../home-manager/devel.nix
+    ../home-manager/secrets.nix
   ];
 
   home = {
