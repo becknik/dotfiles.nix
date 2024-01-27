@@ -10,7 +10,7 @@
   ];
 
   # Fixup of programs not available for darwin
-  services.gpg-agent.enable = (lib.mkDefault false);
+  services.gpg-agent.enable = (lib.mkOverride 50 false);
 
   home = {
     inherit stateVersion;
