@@ -17,7 +17,7 @@
       alefragnani.bookmarks
       gruntfuggly.todo-tree
       mkhl.direnv
-      (lib.modules.mkIf (system == "x86_64-linux") ms-vsliveshare.vsliveshare)
+      (if (system == "x86_64-linux") then ms-vsliveshare.vsliveshare else null)
       github.copilot
 
       ## Editor Config, Autocompletion, etc.
@@ -83,14 +83,14 @@
       vscjava.vscode-spring-initializr
 
       ### Rust
-      rust-lang.rust-analyzer
+      (if (system != "x86_64-darwin") then rust-lang.rust-analyzer else null)
 
       ### Cpp
-      llvm-vs-code-extensions.vscode-clangd
-      vadimcn.vscode-lldb
+      (if (system != "x86_64-darwin") then llvm-vs-code-extensions.vscode-clangd else null)
+      (if (system != "x86_64-darwin") then vadimcn.vscode-lldb else null)
       #ms-vscode.cpptools
       #twxs.cmake #?
-      ms-vscode.cmake-tools
+      (if (system != "x86_64-darwin") then ms-vscode.cmake-tools else null)
     ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (
       [
         {
@@ -170,13 +170,6 @@
             version = "0.13.2023072200";
             #sha256 = lib.fakeSha256;
             sha256 = "f3395bc26e1e79db9f2c406068987b362a746faf4093acfb1a3d274110a437bd";
-          }
-          {
-            # Spring Boot Initializer
-            name = "vscode-spring-initializr";
-            publisher = "vscjava";
-            #sha256 = lib.fakeSha256;
-            version = "0.11.2023070103";
           }
         ])
     );
