@@ -210,9 +210,11 @@
 
       shellAliases =
         let
-          commonRebuildString = isDarwin: argument: "sudo ${if isDarwin then "darwin" else "nixos"}-rebuild" +
+          commonRebuildString = isDarwin: argument:
+            "sudo ${if isDarwin then "darwin" else "nixos"}-rebuild " +
             "--flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix" +
-            "#\"$NIXOS_CONFIGURATION_NAME\"\" ${argument} --impure";
+            "#$NIXOS_CONFIGURATION_NAME\" " +
+            "${argument} --impure";
         in
         {
           # General
