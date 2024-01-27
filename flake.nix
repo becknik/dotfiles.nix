@@ -274,6 +274,8 @@
 
                 sharedModules = with input-attrs; [
                   nixvim.homeManagerModules.nixvim
+                  mac-app-util.homeManagerModules.default
+                  sops-nix.homeManagerModules.sops
                 ];
                 users.${defaultUser} = import ./nix-darwin/home-manager.nix;
               };
