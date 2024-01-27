@@ -1,5 +1,8 @@
 { stateVersion, defaultUser, lib, pkgs, ... }:
 
+let
+  mkForce = value: lib.mkOverride 50 value;
+in
 {
   imports = [
     ../home-manager/packages.nix
@@ -13,14 +16,17 @@
     inherit stateVersion;
 
     username = defaultUser;
-    homeDirectory = (lib.mkOverride 50 "/Users/${defaultUser}"); # mkOverride is necessary to prevent `/var/empty`
+    homeDirectory = (mkForce "/Users/${defaultUser}"); # mkOverride is necessary to prevent `/var/empty`
   };
 
   programs.home-manager.enable = true;
 
-  environment.variables."NIXOS_CONFIGURATION_NAME" = "wnix";
-
-  services.gpg-agent.enable = (lib.mkOverride 50 false);
+  # Settings changes from normal home-manager configuration
+  services.gpg-agent.enable = (lib.mkOverride 50 false); # incompatible with darwin
+  programs.git = {
+    userName = (mkForce "Jannik Becker");
+    userEmail = (mkForce "sprinteins.becker@extaccount.com");
+  };
 
   programs.kitty = {
     enable = true;

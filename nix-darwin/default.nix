@@ -1,6 +1,7 @@
 { mac-app-util, pkgs, ... }:
 
 {
+  environment.variables."NIXOS_CONFIGURATION_NAME" = "wnix";
   nix.useDaemon = true;
 
   programs.zsh.enable = true;
