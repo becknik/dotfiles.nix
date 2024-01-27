@@ -1,23 +1,6 @@
 { system, lib, pkgs, ... }:
 
-let
-  gpgAgentSetup = (lib.attrsets.optionalAttrs (system == "x86_64-linux") {
-    services. gpg-agent = {
-      # TODo use keychain instead?
-      enable = true;
-      enableSshSupport = true;
-      enableZshIntegration = true;
-      extraConfig = "";
-      pinentryFlavor = "gnome3";
-      #sshKeys = {}; # Expose GPG-keys as SSH-keys
-    };
-  });
-in
-# GPG-Agent
-gpgAgentSetup //
 {
-  programs. gpg. enable = true;
-
   imports = [
     ./devel/proglangs.nix # Installation of some programming languages
 
@@ -81,6 +64,18 @@ gpgAgentSetup //
       };
     };
   };
+
+  # GPG-Agent
+  services.gpg-agent = {
+    # TODO use keychain instead of gpg-agent?
+    enable = true;
+    enableSshSupport = true;
+    enableZshIntegration = true;
+    extraConfig = "";
+    pinentryFlavor = "gnome3";
+    #sshKeys = {}; # Expose GPG-keys as SSH-keys
+  };
+  programs. gpg. enable = true;
 
   # Manual Installations
   home.packages = with pkgs; [

@@ -237,6 +237,9 @@
           overlayUnstable = final: prev: {
             unstable = import nixpkgs-unstable defaultNixPkgsSetup';
           };
+          overlayCleanReplacement = final: prev: {
+            clean = import nixpkgs defaultNixPkgsSetup';
+          };
         in
         darwin.lib.darwinSystem {
           inherit system;
@@ -244,7 +247,7 @@
           modules = [
             ({ lib, pkgs, ... }@module-attrs: {
               nixpkgs = defaultNixPkgsSetup' // {
-                overlays = [ overlayUnstable ];
+                overlays = [ overlayUnstable overlayCleanReplacement ];
               };
             })
 

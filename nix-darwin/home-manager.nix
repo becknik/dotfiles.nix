@@ -9,6 +9,9 @@
     ../home-manager/devel.nix
   ];
 
+  # Fixup of programs not available for darwin
+  services.gpg-agent.enable = (lib.mkDefault false);
+
   home = {
     inherit stateVersion;
 
