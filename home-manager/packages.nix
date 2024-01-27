@@ -60,7 +60,7 @@
       ## Benchmarking
       speedtest-cli
       stress-ng
-      valgrind
+      (makeWhenNotDarwin valgrind)
       (makeWhenNotDarwin sysstat)
 
       ## Uni & TeX

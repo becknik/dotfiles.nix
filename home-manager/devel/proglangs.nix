@@ -5,7 +5,7 @@
     let
       isNotDarwin = (system != "x86_64-darwin");
       dummyPkg = pkgs.hello;
-      makeWhenNotDarwin = pkg: (if isNotDarwin then pkg else dummyPkg) ;
+      makeWhenNotDarwin = pkg: (if isNotDarwin then pkg else dummyPkg);
     in
     with pkgs; [
       # TeX Live
@@ -59,9 +59,10 @@
 
       # C++
       gcc_latest
-      (clang_17.overrideAttrs (oldAttrs: {
+      (makeWhenNotDarwin (clang_17.overrideAttrs (oldAttrs: {
         meta.priority = -10;
       }))
+      )
       clang-tools_17
       cmake
     ];
