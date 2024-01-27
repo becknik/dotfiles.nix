@@ -14,7 +14,7 @@
       let
         isNotDarwin = (system != "x86_64-darwin");
         dummyPkg = pkgs.vscode-extensions.alefragnani.project-manager;
-        makeWhenNotDarwin = pkg: (if isNotDarwin then pkg else dummyPkg) ;
+        makeWhenNotDarwin = pkg: (if isNotDarwin then pkg else dummyPkg);
       in
       with pkgs.vscode-extensions; [
 
@@ -134,22 +134,18 @@
             #sha256 = lib.fakeSha256;
             sha256 = "sha256-xeLzzNgj/GmNnSmrwSfJW6i93++HO3MPAj8RwZzwzR4=";
           }
-
-          /*{ # Auto Completion IntelliCode
-        name = "vscodeintellicode";
-        publisher = "VisualStudioExptTeam";
-        version = "1.2.30";
-        sha256 = lib.fakeSha256;
-          }*/
         ] ++
+
         (lib.lists.optional (system != "x86_64-linux")
           # VSCode Live Share (for MacOS etc due to incompatible package) TODO maybe already fixed
           {
             name = "vsliveshare";
             publisher = "MS-vsliveshare";
-            version = "1.0.5900";
-            sha256 = lib.fakeSha256;
+            version = "1.0.5905";
+            #sha256 = lib.fakeSha256;
+            sha256 = "sha256-y1MMO6fd/4a9PhdBpereEBPRk50CDgdiRc8Vwqn0PXY=";
           }) ++
+
         (lib.lists.optionals (system == "x86_64-darwin")
           # Use these packages on work device only
           [
@@ -167,7 +163,7 @@
               name = "vscode-spring-boot";
               publisher = "vmware";
               version = "1.52.2024010405";
-              sha256 = lib.fakeSha256;
+              sha256 = "sha256-JnSKMaSsy9qmzIFz2/U557uI1oetS3ozIqS4VQCURk0=";
             }
             {
               # Spring Boot Dashboard
