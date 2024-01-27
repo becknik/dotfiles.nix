@@ -89,8 +89,7 @@
         vscjava.vscode-spring-initializr
 
         ### Rust
-        # TODO is this necessary?
-        (makeWhenNotDarwin rust-lang.rust-analyzer)
+        rust-lang.rust-analyzer
 
         ### Cpp
         (makeWhenNotDarwin llvm-vs-code-extensions.vscode-clangd)
@@ -186,6 +185,8 @@
       #########################################################################
       # VSCode Settings
       #########################################################################
+
+      locale = "en";
 
       # Main Settings
       window = {

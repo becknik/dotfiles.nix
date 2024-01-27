@@ -68,11 +68,11 @@
       };
       defaultNixPkgsSetup = { inherit system config; };
 
-      globalOverlayUnstable = final: prev: {
+      overlay-unstable = final: prev: {
         unstable = import nixpkgs-unstable defaultNixPkgsSetup;
       };
-      # For devices where no native building is set up
-      globalOverlayCleanReplacement = final: prev: {
+      # Overlay to disable native compilation of packages with build flags
+      overlay-clean = final: prev: {
         clean = import nixpkgs defaultNixPkgsSetup;
       };
 
@@ -106,127 +106,118 @@
         };
     in
     {
-      nixosConfigurations =
-        {
-          dnix = nixpkgs.lib.nixosSystem {
-            inherit system specialArgs;
+      nixosConfigurations = {
+        dnix = nixpkgs.lib.nixosSystem {
+          inherit system specialArgs;
 
-            modules = with nixos-hardware.nixosModules; [
-              common-cpu-intel
-              common-pc
-              common-pc-ssd
-            ] ++ [
-              # nixpkgs, native building & overlay setup
-              (
-                { pkgs, lib, ... }@module-attrs:
-                let
-                  # Build Flags Setup (https://nixos.wiki/wiki/Build_flags#Building_the_whole_system_on_NixOS)
+          modules = with nixos-hardware.nixosModules; [
+            common-cpu-intel
+            common-pc
+            common-pc-ssd
+          ] ++ [
+            # nixpkgs, native building & overlay setup
+            (
+              { pkgs, lib, ... }@module-attrs:
+              let
+                # Build Flags Setup (https://nixos.wiki/wiki/Build_flags#Building_the_whole_system_on_NixOS)
+                arch = "alderlake"; # "raptorlake"
+                tune = arch;
+                platform = {
+                  inherit system;
+                  gcc = { inherit arch tune; };
+                  #rustc = { inherit arch tune; }; # TODO Research build flag attributes for rustc
+                  # https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/compilers/rust/rustc.nix
+                };
 
-                  arch = "alderlake"; # "raptorlake"
-                  tune = arch;
+                # Overlay Setup
 
-                  platform = {
-                    inherit system;
-                    gcc = { inherit arch tune; };
-                    #rustc = { inherit arch tune; }; # TODO Research build flag attributes for rustc
-                    # https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/compilers/rust/rustc.nix
+                unstable = final: prev: {
+                  # TODO might it be that unstable packages are not built optimized? :|
+                  unstable = import nixpkgs-unstable defaultNixPkgsSetup // {
+                    hostPlatform = platform;
                   };
+                };
 
-                  # Overlay Setup
-
-                  unstable = final: prev: {
-                    # TODO might it be that unstable packages are not built optimized? :|
-                    unstable = import nixpkgs-unstable defaultNixPkgsSetup // {
-                      hostPlatform = platform;
-                    };
-                  };
-
-                  ## Overlay to disable native compilation of packages with build flags
-                  clean = final: prev: {
-                    clean = import nixpkgs defaultNixPkgsSetup;
-                  };
-
-                  overlay-build-fixes = import ./overlays/build-fixes.nix module-attrs;
-
-                  overlay-packages = import ./overlays/packages.nix module-attrs;
-                in
-                {
-                  nixpkgs = defaultNixPkgsSetup // {
-                    # https://nix.dev/tutorials/cross-compilation.html
-                    #buildPlatform = platform; # platform where the executables are built
-                    hostPlatform = platform; # platform where the executables will run
-
-                    overlays = [
-                      clean
-                      unstable
-
-                      overlay-packages.fasterStdenv
-
-                      overlay-build-fixes.dependencyBuildSkip
-
-                      overlay-build-fixes.deactivateFailingTestsPython
-                      overlay-build-fixes.deactivateFailingTestsHaskell
-                      overlay-build-fixes.deactivateFailingTests
-
-                      overlay-packages.patched-linux-dnix
-                      overlay-packages.patched-librewolf-unwrapped
-                      #packages.obsidian
-                    ];
-                  };
-                }
-              )
-
-              # NixOS configuration
-              input-attrs.disko.nixosModules.disko
-              ./nixos
-              ./nixos/dnix
-
-              # home-manager basic setup & configuration import
-              home-manager.nixosModules.home-manager
-              (
-                { pkgs, ... }@module-attrs:
-                commonConfHomeManager {
-                  inherit pkgs;
-                  laptopMode = false;
-                }
-              )
-            ];
-          };
-
-          lnix = nixpkgs.lib.nixosSystem {
-            inherit system specialArgs;
-
-            modules = with nixos-hardware.nixosModules; [
-              common-cpu-amd
-              common-cpu-amd-pstate
-              common-pc-laptop
-              common-pc-laptop-ssd
-              #common-pc-laptop-acpi_call # "acpi_call makes tlp work for newer thinkpads"
-              asus-battery
-            ] ++ [
-              ({ lib, pkgs, ... }@module-attrs: {
+                build-fixes = import ./overlays/build-fixes.nix module-attrs;
+                packages = import ./overlays/packages.nix module-attrs;
+              in
+              {
                 nixpkgs = defaultNixPkgsSetup // {
+                  # https://nix.dev/tutorials/cross-compilation.html
+                  #buildPlatform = platform; # platform where the executables are built
+                  hostPlatform = platform; # platform where the executables will run
+
                   overlays = [
-                    globalOverlayUnstable
-                    globalOverlayCleanReplacement
-                    (import ./overlays/packages.nix module-attrs).patched-linux
+                    overlay-clean
+                    unstable
+
+                    packages.fasterStdenv
+
+                    build-fixes.dependencyBuildSkip
+
+                    build-fixes.deactivateFailingTestsPython
+                    build-fixes.deactivateFailingTestsHaskell
+                    build-fixes.deactivateFailingTests
+
+                    packages.patched-linux-dnix
+                    packages.patched-librewolf-unwrapped
+                    #packages.obsidian
                   ];
                 };
-              })
-              input-attrs.disko.nixosModules.disko
-              ./nixos
-              ./nixos/lnix
-              home-manager.nixosModules.home-manager
-              (
-                { pkgs, ... }@module-attrs:
-                commonConfHomeManager {
-                  inherit pkgs;
-                  laptopMode = true;
-                }
-              )
-            ];
-          };
+              }
+            )
+
+            # NixOS configuration
+            input-attrs.disko.nixosModules.disko
+            ./nixos
+            ./nixos/dnix
+
+            # home-manager basic setup & configuration import
+            home-manager.nixosModules.home-manager
+            (
+              { pkgs, ... }@module-attrs:
+              commonConfHomeManager {
+                inherit pkgs;
+                laptopMode = false;
+              }
+            )
+          ];
         };
+
+        lnix = nixpkgs.lib.nixosSystem {
+          inherit system specialArgs;
+
+          modules = with nixos-hardware.nixosModules; [
+            common-cpu-amd
+            common-cpu-amd-pstate
+            common-pc-laptop
+            common-pc-laptop-ssd
+            #common-pc-laptop-acpi_call # "acpi_call makes tlp work for newer thinkpads"
+            asus-battery
+          ] ++ [
+            ({ lib, pkgs, ... }@module-attrs: {
+              nixpkgs = defaultNixPkgsSetup // {
+                overlays = [
+                  overlay-unstable
+                  overlay-clean
+                  (import ./overlays/packages.nix module-attrs).patched-linux
+                ];
+              };
+            })
+            input-attrs.disko.nixosModules.disko
+            ./nixos
+            ./nixos/lnix
+            home-manager.nixosModules.home-manager
+            (
+              { pkgs, ... }@module-attrs:
+              commonConfHomeManager {
+                inherit pkgs;
+                laptopMode = true;
+              }
+            )
+          ];
+        };
+      };
 
       darwinConfigurations."wnix" =
         let
@@ -256,7 +247,7 @@
               };
             })
 
-            ./nix-darwin
+            ./nix-darwin/configuration.nix
             input-attrs.mac-app-util.darwinModules.default
 
             home-manager.darwinModules.home-manager
@@ -277,7 +268,7 @@
                   mac-app-util.homeManagerModules.default
                   sops-nix.homeManagerModules.sops
                 ];
-                users.${defaultUser} = import ./nix-darwin/home-manager.nix;
+                users.${defaultUser} = import ./nix-darwin/home.nix;
               };
             })
           ];
