@@ -89,6 +89,7 @@
         vscjava.vscode-spring-initializr
 
         ### Rust
+        # TODO is this necessary?
         (makeWhenNotDarwin rust-lang.rust-analyzer)
 
         ### Cpp

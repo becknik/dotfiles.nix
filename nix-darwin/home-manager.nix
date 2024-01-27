@@ -9,17 +9,18 @@
     ../home-manager/devel.nix
   ];
 
-  # Fixup of programs not available for darwin
-  services.gpg-agent.enable = (lib.mkOverride 50 false);
-
   home = {
     inherit stateVersion;
 
     username = defaultUser;
-    homeDirectory = (lib.mkDefault "/Users/${defaultUser}");
+    homeDirectory = (lib.mkOverride 50 "/Users/${defaultUser}"); # mkOverride is necessary to prevent `/var/empty`
   };
 
   programs.home-manager.enable = true;
+
+  environment.variables."NIXOS_CONFIGURATION_NAME" = "wnix";
+
+  services.gpg-agent.enable = (lib.mkOverride 50 false);
 
   programs.kitty = {
     enable = true;

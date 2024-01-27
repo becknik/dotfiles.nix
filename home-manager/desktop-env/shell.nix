@@ -15,15 +15,17 @@
       enable = true;
 
       # TODO zsh plugin setup is far from perfect
-      plugins = let
-        zshPathForNixpkg = (zshPluginName: "share/zsh/plugins/${zshPluginName}/${zshPluginName}.plugin.zsh");
-      in with pkgs; [
-        rec {
-          name = "you-should-use";
-          src = zsh-you-should-use;
-          file = zshPathForNixpkg name;
-        }
-      ];
+      plugins =
+        let
+          zshPathForNixpkg = (zshPluginName: "share/zsh/plugins/${zshPluginName}/${zshPluginName}.plugin.zsh");
+        in
+        with pkgs; [
+          rec {
+            name = "you-should-use";
+            src = zsh-you-should-use;
+            file = zshPathForNixpkg name;
+          }
+        ];
 
       #dotDir = "~/.config/zsh"; # Where zsh config files are placed; randomly creates new folders in $HOME or elsewhere
       envExtra =
@@ -206,27 +208,37 @@
         ;
       };
 
-      shellAliases = {
-        # General
-        fu = "sudo";
-        sduo = "sudo";
+      shellAliases =
+        let
+          commonRebuildString = isDarwin: argument: "sudo ${if isDarwin then "darwin" else "nixos"}-rebuild" +
+            "--flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix" +
+            "#\"$NIXOS_CONFIGURATION_NAME\"\" ${argument} --impure";
+        in
+        {
+          # General
+          fu = "sudo";
+          sduo = "sudo";
 
-        # Flake NixOS configuration equals hostname of machine
-        # `--impure` is due to flake.lock being referenced to determine version-tag of flake-input `programs.zsh.oh-my-zsh.package`
-        nrbt = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#$NIXOS_CONFIGURATION_NAME\" test --impure";
-        nrbs = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#$NIXOS_CONFIGURATION_NAME\" switch --impure";
-        nrbb = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#$NIXOS_CONFIGURATION_NAME\" boot --impure";
+          # Flake NixOS configuration equals hostname of machine
+          # `--impure` is due to flake.lock being referenced to determine version-tag of flake-input `programs.zsh.oh-my-zsh.package`
+          nrbs = (commonRebuildString false "switch");
+          nrbb = (commonRebuildString false "boot");
+          nrbt = (commonRebuildString false "test");
 
-        ngc = "sudo nix-collect-garbage";
-        ngckeep = "sudo nix-collect-garbage --delete-older-than";
-        ngcd = "sudo nix-collect-garbage -d";
-        ngcdu = "nix-collect-garbage -d";
+          drbs = (commonRebuildString true "switch");
+          drbb = (commonRebuildString true "build");
+          drbc = (commonRebuildString true "check");
 
-        # Git
-        gai = "git add --interactive";
-        grsst = "git restore --staged"; # = grst
-        "gaucn!" = "gau && gcn!";
-      };
+          ngc = "sudo nix-collect-garbage";
+          ngckeep = "sudo nix-collect-garbage --delete-older-than";
+          ngcd = "sudo nix-collect-garbage -d";
+          ngcdu = "nix-collect-garbage -d";
+
+          # Git
+          gai = "git add --interactive";
+          grsst = "git restore --staged"; # = grst
+          "gaucn!" = "gau && gcn!";
+        };
 
       #completionInit # "Oh-My-Zsh/Prezto calls compinit during initialization, calling it twice causes slight start up slowdown"
       #defaultKeymap = "viins"; # viins vicmd # ??
