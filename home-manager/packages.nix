@@ -75,7 +75,7 @@
       fortune
       sl
       cbonsai
-      oneko
+      (makeWhenNotDarwin oneko)
       uwuify
       #uwufetch # TODO uwufetch seems to be broken
     ];
