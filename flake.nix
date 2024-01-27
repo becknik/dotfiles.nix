@@ -232,8 +232,13 @@
         let
           system = "x86_64-darwin";
           defaultUser = "jbecker";
-          specialArgs' = specialArgs // { inherit defaultUser; };
+
+          flakeDirectory = "/Users/${defaultUser}/devel/own/dotfiles.nix";
+          flakeLock = builtins.fromJSON (builtins.readFile ("${flakeDirectory}/flake.lock"));
+
+          specialArgs' = specialArgs // { inherit defaultUser flakeDirectory flakeLock; };
           defaultNixPkgsSetup' = defaultNixPkgsSetup // { inherit system; };
+
           overlayUnstable = final: prev: {
             unstable = import nixpkgs-unstable defaultNixPkgsSetup';
           };
