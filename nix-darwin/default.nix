@@ -7,10 +7,10 @@
   programs.zsh.enable = true;
 
   homebrew = {
-    enable = true;
+    enable = false; # non-functional due to run as root...
     onActivation.autoUpdate = true; # updates homebrew packages on activation (can make darwin-rebuild much slower)
     casks = [
-      #"logseq"
+      "logseq"
     ];
   };
 
