@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ system, pkgs, ... }:
 
 {
   # Btop
@@ -18,62 +18,67 @@
   };
 
   # Manual Installations
-  home.packages = with pkgs; [
+  home.packages =
+    let
+      isNotDarwin = (system != "x86_64-darwin");
+      dummyPkg = pkgs.hello;
+      makeWhenNotDarwin = pkg: (if isNotDarwin then pkg else dummyPkg) ;
+    in
+    with pkgs; [
 
-    ## Utils
-    jq
-    curl
-    ripgrep
-    unzip
-    tldr
-    tree
-    bat
+      ## Utils
+      jq
+      curl
+      ripgrep
+      unzip
+      tldr
+      tree
+      bat
 
-    ### desktop-env
-    wl-clipboard
+      ### desktop-env
+      (makeWhenNotDarwin wl-clipboard)
 
-    ### Hardware
-    cpufetch
-    gparted
-    ventoy-full
-    powertop
+      ### Hardware
+      cpufetch
+      (makeWhenNotDarwin gparted)
+      (makeWhenNotDarwin ventoy-full)
+      (makeWhenNotDarwin powertop)
 
-    ## NixOS
-    nixos-option
+      ## NixOS
+      nixos-option
 
-    ### Secrets Management
-    sops
-    age
-    #age-plugin-yubikey # This isn't working with sops-nix atm due to sops... https://github.com/Mic92/sops-nix/issues/377
-    yubikey-manager-qt
-    yubikey-personalization-gui
+      ### Secrets Management (1)
+      sops
+      age
+      #age-plugin-yubikey # This isn't working with sops-nix atm due to sops... https://github.com/Mic92/sops-nix/issues/377
+      (makeWhenNotDarwin yubikey-manager-qt)
+      (makeWhenNotDarwin yubikey-personalization-gui)
 
-    ## Penetration Testing
-    nmap
+      ## Penetration Testing
+      nmap
 
-    ## Benchmarking
-    speedtest-cli
-    stress-ng
-    sysstat
-    valgrind
+      ## Benchmarking
+      speedtest-cli
+      stress-ng
+      (makeWhenNotDarwin valgrind)
+      (makeWhenNotDarwin sysstat)
 
-    ## Uni & TeX
-    gnuplot
-    pandoc
-    qtikz
-    anki
-    marp-cli
+      ## Uni & TeX
+      (makeWhenNotDarwin pandoc)
+      (makeWhenNotDarwin gnuplot)
+      (makeWhenNotDarwin qtikz)
+      marp-cli
 
-    ## Trash
-    neofetch
-    cmatrix
-    fortune
-    sl
-    cbonsai
-    oneko
-    uwuify
-    #uwufetch # TODO uwufetch seems to be broken
-  ];
+      ## Trash
+      neofetch
+      cmatrix
+      fortune
+      sl
+      cbonsai
+      (makeWhenNotDarwin oneko)
+      uwuify
+      #uwufetch # TODO uwufetch seems to be broken
+    ];
 
   # Missing packages in nixpkgs:
   # - qtqr (replaced)

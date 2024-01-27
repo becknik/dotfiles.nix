@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ system, lib, pkgs, ... }:
 
 {
   imports = [
@@ -66,7 +66,8 @@
   };
 
   # GPG-Agent
-  services.gpg-agent = { # TODo use keychain instead?
+  services.gpg-agent = {
+    # TODO use keychain instead of gpg-agent?
     enable = true;
     enableSshSupport = true;
     enableZshIntegration = true;
@@ -74,7 +75,7 @@
     pinentryFlavor = "gnome3";
     #sshKeys = {}; # Expose GPG-keys as SSH-keys
   };
-  programs.gpg.enable = true;
+  programs. gpg. enable = true;
 
   # Manual Installations
   home.packages = with pkgs; [

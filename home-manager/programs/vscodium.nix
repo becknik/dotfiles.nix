@@ -10,178 +10,183 @@
     mutableExtensionsDir = false; # Setting this to true disabled the java extensions to properly install
 
     # Plugins
-    extensions = with pkgs.vscode-extensions; [
+    extensions =
+      let
+        isNotDarwin = (system != "x86_64-darwin");
+        dummyPkg = pkgs.vscode-extensions.alefragnani.project-manager;
+        makeWhenNotDarwin = pkg: (if isNotDarwin then pkg else dummyPkg);
+      in
+      with pkgs.vscode-extensions; [
 
-      ## Management
-      alefragnani.project-manager
-      alefragnani.bookmarks
-      gruntfuggly.todo-tree
-      mkhl.direnv
-      (lib.modules.mkIf (system == "x86_64-linux") ms-vsliveshare.vsliveshare)
-      github.copilot
+        ## Management
+        alefragnani.project-manager
+        alefragnani.bookmarks
+        gruntfuggly.todo-tree
+        mkhl.direnv
+        (makeWhenNotDarwin ms-vsliveshare.vsliveshare)
+        github.copilot
 
-      ## Editor Config, Autocompletion, etc.
-      vscodevim.vim
-      #asvetliakov.vscode-neovim
-      formulahendry.code-runner
-      streetsidesoftware.code-spell-checker
-      christian-kohler.path-intellisense
-      usernamehw.errorlens
+        ## Editor Config, Autocompletion, etc.
+        vscodevim.vim
+        #asvetliakov.vscode-neovim
+        formulahendry.code-runner
+        streetsidesoftware.code-spell-checker
+        christian-kohler.path-intellisense
+        usernamehw.errorlens
 
-      ## Eye Candy
-      adpyke.codesnap
-      johnpapa.vscode-peacock
+        ## Eye Candy
+        adpyke.codesnap
+        johnpapa.vscode-peacock
 
-      ### Git
-      eamodio.gitlens
-      mhutchie.git-graph
+        ### Git
+        eamodio.gitlens
+        mhutchie.git-graph
 
-      ## Deployment
-      ms-azuretools.vscode-docker
+        ## Deployment
+        ms-azuretools.vscode-docker
 
-      ## Languages
+        ## Languages
 
-      ### Markup
-      yzhang.markdown-all-in-one
-      davidanson.vscode-markdownlint
-      redhat.vscode-yaml
-      tamasfe.even-better-toml
-      gencer.html-slim-scss-css-class-completion
-      redhat.vscode-xml
+        ### Markup
+        yzhang.markdown-all-in-one
+        davidanson.vscode-markdownlint
+        redhat.vscode-yaml
+        tamasfe.even-better-toml
+        gencer.html-slim-scss-css-class-completion
+        redhat.vscode-xml
 
-      ### Scripting
-      ms-python.python
-      ms-python.vscode-pylance
-      ms-pyright.pyright
+        ### Scripting
+        ms-python.python
+        ms-python.vscode-pylance
+        ms-pyright.pyright
 
-      #### JS/TS
-      esbenp.prettier-vscode
-      dbaeumer.vscode-eslint
+        #### JS/TS
+        esbenp.prettier-vscode
+        dbaeumer.vscode-eslint
 
-      #### Shell
-      mads-hartmann.bash-ide-vscode
+        #### Shell
+        mads-hartmann.bash-ide-vscode
 
-      ### Nix
-      jnoortheen.nix-ide
-      arrterian.nix-env-selector
+        ### Nix
+        jnoortheen.nix-ide
+        arrterian.nix-env-selector
 
-      ### LaTeX
-      james-yu.latex-workshop
+        ### LaTeX
+        james-yu.latex-workshop
 
-      ### Haskell
-      justusadam.language-haskell # Syntax highlighting
-      haskell.haskell # Linting etc.
+        ### Haskell
+        justusadam.language-haskell # Syntax highlighting
+        haskell.haskell # Linting etc.
 
-      ### JVM
-      scalameta.metals
-      redhat.java
-      vscjava.vscode-java-debug
-      vscjava.vscode-java-test
-      vscjava.vscode-maven
-      vscjava.vscode-java-dependency
-      vscjava.vscode-gradle
-      vscjava.vscode-spring-initializr
+        ### JVM
+        scalameta.metals
+        redhat.java
+        vscjava.vscode-java-debug
+        vscjava.vscode-java-test
+        vscjava.vscode-maven
+        vscjava.vscode-java-dependency
+        vscjava.vscode-gradle
+        vscjava.vscode-spring-initializr
 
-      ### Rust
-      rust-lang.rust-analyzer
+        ### Rust
+        rust-lang.rust-analyzer
 
-      ### Cpp
-      llvm-vs-code-extensions.vscode-clangd
-      vadimcn.vscode-lldb
-      #ms-vscode.cpptools
-      #twxs.cmake #?
-      ms-vscode.cmake-tools
-    ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+        ### Cpp
+        (makeWhenNotDarwin llvm-vs-code-extensions.vscode-clangd)
+        (makeWhenNotDarwin vadimcn.vscode-lldb)
+        #ms-vscode.cpptools
+        #twxs.cmake #?
+        (makeWhenNotDarwin ms-vscode.cmake-tools)
+      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (
+        [
+          {
+            # German cSpell dictionary
+            name = "code-spell-checker-german";
+            publisher = "streetsidesoftware";
+            version = "2.3.1";
+            #sha256 = lib.fakeSha256;
+            sha256 = "sha256-LxgftSpGk7+SIUdZcNpL7UZoAx8IMIcwPYIGqSfVuDc=";
+          }
 
-      (lib.modules.mkIf (system != "x86_64-linux")
-        # VSCode Live Share (for MacOS etc due to incompatible package) TODO maybe already fixed
-        {
-          name = "vsliveshare";
-          publisher = "MS-vsliveshare";
-          version = "1.0.5900";
-          #sha256 = lib.fakeSha256;
-        })
+          {
+            # Vue Volar
+            name = "volar";
+            publisher = "vue";
+            version = "1.8.27";
+            #sha256 = lib.fakeSha256;
+            sha256 = "sha256-6FktlAJmOD3dQNn2TV83ROw41NXZ/MgquB0RFQqwwW0=";
+          }
 
-      {
-        # German cSpell dictionary
-        name = "code-spell-checker-german";
-        publisher = "streetsidesoftware";
-        version = "2.3.1";
-        #sha256 = lib.fakeSha256;
-        sha256 = "sha256-LxgftSpGk7+SIUdZcNpL7UZoAx8IMIcwPYIGqSfVuDc=";
-      }
+          {
+            # Monokai Night Theme
+            name = "vscode-monokai-night";
+            publisher = "fabiospampinato";
+            version = "1.7.0";
+            #sha256 = lib.fakeSha256;
+            sha256 = "sha256-7Vm/Z46j2GG2c2XZkAlmJ9ZCZ9og+v3tboD2Tf23gGA=";
+          }
 
-      /*{ # Auto Completion IntelliCode
-        name = "vscodeintellicode";
-        publisher = "VisualStudioExptTeam";
-        version = "1.2.30";
-        sha256 = lib.fakeSha256;
-      }*/
+          {
+            # Monokai Pro Theme
+            name = "theme-monokai-pro-vscode";
+            publisher = "monokai";
+            version = "1.2.2";
+            #sha256 = lib.fakeSha256;
+            sha256 = "sha256-xeLzzNgj/GmNnSmrwSfJW6i93++HO3MPAj8RwZzwzR4=";
+          }
+        ] ++
 
-      { # Vue Volar
-        name = "volar";
-        publisher = "vue";
-        version = "1.8.27";
-        sha256 = "sha256-6FktlAJmOD3dQNn2TV83ROw41NXZ/MgquB0RFQqwwW0=";
-      }
+        (lib.lists.optional (system != "x86_64-linux")
+          # VSCode Live Share (for MacOS etc due to incompatible package) TODO maybe already fixed
+          {
+            name = "vsliveshare";
+            publisher = "MS-vsliveshare";
+            version = "1.0.5905";
+            #sha256 = lib.fakeSha256;
+            sha256 = "sha256-y1MMO6fd/4a9PhdBpereEBPRk50CDgdiRc8Vwqn0PXY=";
+          }) ++
 
-      /*{
-        # Java Checkstyle
-        name = "vscode-checkstyle";
-        publisher = "shengchen";
-        version = "1.4.2";
-        #sha256 = lib.fakeSha256;
-        sha256 = "21c860417f42510e77a6e2eed2597cccd97a1334a7543063eed4d4a393736630";
-      }*/
+        (lib.lists.optionals (system == "x86_64-darwin")
+          # Use these packages on work device only
+          [
+            {
+              # Java Checkstyle
+              name = "vscode-checkstyle";
+              publisher = "shengchen";
+              version = "1.4.2";
+              #sha256 = lib.fakeSha256;
+              sha256 = "21c860417f42510e77a6e2eed2597cccd97a1334a7543063eed4d4a393736630";
+            }
 
-      /*{ # Spring Boot Tools
-        name = "vscode-spring-boot";
-        publisher = "vmware";
-        version = "1.52.2024010405";
-        sha256 = lib.fakeSha256;
-      }
-      { # Spring Boot Dashboard
-        name = "vscode-spring-boot-dashboard";
-        publisher = "vscjava";
-        version = "0.13.2023072200";
-        #sha256 = lib.fakeSha256;
-        sha256 = "f3395bc26e1e79db9f2c406068987b362a746faf4093acfb1a3d274110a437bd";
-      }
-      { # Spring Boot Initializer
-        name = "vscode-spring-initializr";
-        publisher = "vscjava";
-        version = "0.11.2023070103";
-        #sha256 = lib.fakeSha256;
-      }*/
-
-      {
-        # Monokai Night Theme
-        name = "vscode-monokai-night";
-        publisher = "fabiospampinato";
-        version = "1.7.0";
-        #sha256 = lib.fakeSha256;
-        sha256 = "sha256-7Vm/Z46j2GG2c2XZkAlmJ9ZCZ9og+v3tboD2Tf23gGA=";
-      }
-
-      {
-        # Monokai Pro Theme
-        name = "theme-monokai-pro-vscode";
-        publisher = "monokai";
-        version = "1.2.2";
-        sha256 = "sha256-xeLzzNgj/GmNnSmrwSfJW6i93++HO3MPAj8RwZzwzR4=";
-      }
-    ];
+            {
+              # Spring Boot Tools
+              name = "vscode-spring-boot";
+              publisher = "vmware";
+              version = "1.52.2024010405";
+              sha256 = "sha256-JnSKMaSsy9qmzIFz2/U557uI1oetS3ozIqS4VQCURk0=";
+            }
+            {
+              # Spring Boot Dashboard
+              name = "vscode-spring-boot-dashboard";
+              publisher = "vscjava";
+              version = "0.13.2023072200";
+              #sha256 = lib.fakeSha256;
+              sha256 = "f3395bc26e1e79db9f2c406068987b362a746faf4093acfb1a3d274110a437bd";
+            }
+          ])
+      );
 
     languageSnippets = { };
 
     keybindings = [ ];
-
 
     userSettings = {
 
       #########################################################################
       # VSCode Settings
       #########################################################################
+
+      locale = "en";
 
       # Main Settings
       window = {
