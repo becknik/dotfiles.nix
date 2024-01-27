@@ -59,11 +59,8 @@
 
       # C++
       gcc_latest
-      (makeWhenNotDarwin (clang_17.overrideAttrs (oldAttrs: {
-        meta.priority = -10;
-      }))
-      )
-      clang-tools_17
+      (makeWhenNotDarwin (clang_17.overrideAttrs (oldAttrs: { meta.priority = -10; })))
+      (makeWhenNotDarwin clang-tools_17)
       cmake
     ];
 
