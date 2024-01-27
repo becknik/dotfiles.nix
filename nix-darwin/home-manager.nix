@@ -28,6 +28,7 @@ in
     userName = (mkForce "Jannik Becker");
     userEmail = (mkForce "sprinteins.becker@extaccount.com");
   };
+  programs.java.package = (lib.mkDefault pkgs.temurin-bin-17);
 
   programs.kitty = {
     enable = true;

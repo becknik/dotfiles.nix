@@ -266,7 +266,7 @@
                   {
                     inherit system;
                     inherit (input-attrs) ohmyzsh;
-                    additionalJDKs = with pkgs; [ temurin-bin-8 temurin-bin-11 temurin-bin-17 ];
+                    additionalJDKs = with pkgs; [ temurin-bin-8 temurin-bin-11 temurin-bin-21 ];
                   };
 
                 useGlobalPkgs = true;
