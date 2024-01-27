@@ -71,6 +71,7 @@
     (lib.trivial.throwIf (lib.strings.versionOlder "0.9.20" logseq.version) "logseq no longer requires EOL Electron"
       (logseq.override { electron_25 = elelctron_25-patched-for-wayland; })
     )
+    anki
     #birdtray # Actually not needing this
     planify
     nextcloud-client # Basically redundant, but still necessary for .desktop file in NIX_PATH...

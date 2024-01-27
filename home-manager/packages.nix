@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ system, pkgs, ... }:
 
 {
   # Btop
@@ -29,39 +29,28 @@
     tree
     bat
 
-    ### desktop-env
-    wl-clipboard
-
-    ### Hardware
+    ### Hardware (1)
     cpufetch
-    gparted
-    ventoy-full
-    powertop
 
     ## NixOS
     nixos-option
 
-    ### Secrets Management
+    ### Secrets Management (1)
     sops
     age
     #age-plugin-yubikey # This isn't working with sops-nix atm due to sops... https://github.com/Mic92/sops-nix/issues/377
-    yubikey-manager-qt
-    yubikey-personalization-gui
 
     ## Penetration Testing
     nmap
 
-    ## Benchmarking
+    ## Benchmarking (1)
     speedtest-cli
     stress-ng
-    sysstat
     valgrind
 
-    ## Uni & TeX
+    ## Uni & TeX (1)
     gnuplot
     pandoc
-    qtikz
-    anki
     marp-cli
 
     ## Trash
@@ -73,7 +62,36 @@
     oneko
     uwuify
     #uwufetch # TODO uwufetch seems to be broken
-  ];
+  ] ++
+  (lib.lists.optionals (system != "x86_64-darwin")
+    (with pkgs; [
+
+      ## Utils
+
+      ### desktop-env
+      wl-clipboard
+
+      ### Hardware (2)
+      gparted
+      ventoy-full
+      powertop
+
+      ## NixOS
+
+      ### Secrets Management (2)
+      yubikey-manager-qt
+      yubikey-personalization-gui
+
+      ## Benchmarking (2)
+      sysstat
+
+      ## Uni & TeX (1)
+      qtikz
+      anki
+
+    ])
+  )
+  ;
 
   # Missing packages in nixpkgs:
   # - qtqr (replaced)
