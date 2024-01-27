@@ -45,7 +45,6 @@
 
     ## Daily Software
     obsidian
-    logseq
 
     ## Privacy
     keepassxc
