@@ -18,80 +18,67 @@
   };
 
   # Manual Installations
-  home.packages = with pkgs; [
-
-    ## Utils
-    jq
-    curl
-    ripgrep
-    unzip
-    tldr
-    tree
-    bat
-
-    ### Hardware (1)
-    cpufetch
-
-    ## NixOS
-    nixos-option
-
-    ### Secrets Management (1)
-    sops
-    age
-    #age-plugin-yubikey # This isn't working with sops-nix atm due to sops... https://github.com/Mic92/sops-nix/issues/377
-
-    ## Penetration Testing
-    nmap
-
-    ## Benchmarking (1)
-    speedtest-cli
-    stress-ng
-    valgrind
-
-    ## Uni & TeX (1)
-    gnuplot
-    pandoc
-    marp-cli
-
-    ## Trash
-    neofetch
-    cmatrix
-    fortune
-    sl
-    cbonsai
-    oneko
-    uwuify
-    #uwufetch # TODO uwufetch seems to be broken
-  ] ++
-  (lib.lists.optionals (system != "x86_64-darwin")
-    (with pkgs; [
+  home.packages =
+    let
+      isNotDarwin = (system != "x86_64-darwin");
+      dummyPkg = pkgs.hello;
+      makeWhenNotDarwin = pkg: (if isNotDarwin then pkg else dummyPkg) ;
+    in
+    with pkgs; [
 
       ## Utils
+      jq
+      curl
+      ripgrep
+      unzip
+      tldr
+      tree
+      bat
 
       ### desktop-env
-      wl-clipboard
+      (makeWhenNotDarwin wl-clipboard)
 
-      ### Hardware (2)
-      gparted
-      ventoy-full
-      powertop
+      ### Hardware
+      cpufetch
+      (makeWhenNotDarwin gparted)
+      (makeWhenNotDarwin ventoy-full)
+      (makeWhenNotDarwin powertop)
 
       ## NixOS
+      nixos-option
 
-      ### Secrets Management (2)
-      yubikey-manager-qt
-      yubikey-personalization-gui
+      ### Secrets Management (1)
+      sops
+      age
+      #age-plugin-yubikey # This isn't working with sops-nix atm due to sops... https://github.com/Mic92/sops-nix/issues/377
+      (makeWhenNotDarwin yubikey-manager-qt)
+      (makeWhenNotDarwin yubikey-personalization-gui)
 
-      ## Benchmarking (2)
-      sysstat
+      ## Penetration Testing
+      nmap
 
-      ## Uni & TeX (1)
-      qtikz
-      anki
+      ## Benchmarking
+      speedtest-cli
+      stress-ng
+      valgrind
+      (makeWhenNotDarwin sysstat)
 
-    ])
-  )
-  ;
+      ## Uni & TeX
+      (makeWhenNotDarwin pandoc)
+      (makeWhenNotDarwin gnuplot)
+      (makeWhenNotDarwin qtikz)
+      marp-cli
+
+      ## Trash
+      neofetch
+      cmatrix
+      fortune
+      sl
+      cbonsai
+      oneko
+      uwuify
+      #uwufetch # TODO uwufetch seems to be broken
+    ];
 
   # Missing packages in nixpkgs:
   # - qtqr (replaced)

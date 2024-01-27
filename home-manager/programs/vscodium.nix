@@ -11,15 +11,19 @@
 
     # Plugins
     extensions =
-      let dummyPackage = pkgs.vscode-extensions.alefragnani.project-manager;
-      in with pkgs.vscode-extensions; [
+      let
+        isNotDarwin = (system != "x86_64-darwin");
+        dummyPkg = pkgs.vscode-extensions.alefragnani.project-manager;
+        makeWhenNotDarwin = pkg: (if isNotDarwin then pkg else dummyPkg) ;
+      in
+      with pkgs.vscode-extensions; [
 
         ## Management
         alefragnani.project-manager
         alefragnani.bookmarks
         gruntfuggly.todo-tree
         mkhl.direnv
-        (if (system == "x86_64-linux") then ms-vsliveshare.vsliveshare else dummyPackage)
+        (makeWhenNotDarwin ms-vsliveshare.vsliveshare)
         github.copilot
 
         ## Editor Config, Autocompletion, etc.
@@ -85,14 +89,14 @@
         vscjava.vscode-spring-initializr
 
         ### Rust
-        (if (system != "x86_64-darwin") then rust-lang.rust-analyzer else dummyPackage)
+        (makeWhenNotDarwin rust-lang.rust-analyzer)
 
         ### Cpp
-        (if (system != "x86_64-darwin") then llvm-vs-code-extensions.vscode-clangd else dummyPackage)
-        (if (system != "x86_64-darwin") then vadimcn.vscode-lldb else dummyPackage)
+        (makeWhenNotDarwin llvm-vs-code-extensions.vscode-clangd)
+        (makeWhenNotDarwin vadimcn.vscode-lldb)
         #ms-vscode.cpptools
         #twxs.cmake #?
-        (if (system != "x86_64-darwin") then ms-vscode.cmake-tools else dummyPackage)
+        (makeWhenNotDarwin ms-vscode.cmake-tools)
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (
         [
           {

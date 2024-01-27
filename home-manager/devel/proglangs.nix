@@ -1,14 +1,19 @@
-{ additionalJDKs, config, pkgs, ... }:
+{ system, additionalJDKs, config, pkgs, ... }:
 
 {
-  home.packages = with pkgs;
-    [
+  home.packages =
+    let
+      isNotDarwin = (system != "x86_64-darwin");
+      dummyPkg = pkgs.hello;
+      makeWhenNotDarwin = pkg: (if isNotDarwin then pkg else dummyPkg) ;
+    in
+    with pkgs; [
       # TeX Live
       # Source for new 23.11 interface: https://github.com/NixOS/nixpkgs/issues/250243
       /*(unstable.texlive.withPackages (ps: with ps; [
       scheme-full # Need xelatex which is included right here
       ]))*/
-      texliveFull
+      (makeWhenNotDarwin texliveFull)
 
       # JS / TypeScript
       nodePackages.eslint_d
