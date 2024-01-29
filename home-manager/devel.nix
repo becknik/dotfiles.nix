@@ -51,10 +51,9 @@
     # Source: https://github.com/nix-community/home-manager/blob/master/modules/programs/ssh.nix
     ssh = {
       enable = true;
-      extraConfig = "AddKeysToAgent confirm";
+      extraConfig = "AddKeysToAgent confirm"; #addKeysToAgent = "confirm"; isn't working?
       forwardAgent = true;
       hashKnownHosts = true;
-      #extraOptionOverrides = {};
       matchBlocks = {
         github_personal = {
           host = "github.com";

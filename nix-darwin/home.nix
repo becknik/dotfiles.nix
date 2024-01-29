@@ -24,11 +24,19 @@ in
 
   # Settings changes from normal home-manager configuration
   services.gpg-agent.enable = (lib.mkOverride 50 false); # incompatible with darwin
-  programs.git = {
-    userName = (mkForce "Jannik Becker");
-    userEmail = (mkForce "sprinteins.becker@extaccount.com");
+  programs = {
+    git = {
+      userName = (mkForce "Jannik Becker");
+      userEmail = (mkForce "sprinteins.becker@extaccount.com");
+    };
+    java.package = (lib.mkDefault pkgs.temurin-bin-17);
+    zsh = {
+      oh-my-zsh.plugins = [ "ssh-agent" ];
+      initExtra = "ssh-add --apple-load-keychain"; # load keys from previous sessions
+    };
+    # `ssh-add --apple-use-keychain ~/.ssh/<key>`
+    ssh.extraConfig = "UseKeychain yes";
   };
-  programs.java.package = (lib.mkDefault pkgs.temurin-bin-17);
 
   programs.kitty = {
     enable = true;
