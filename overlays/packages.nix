@@ -35,6 +35,8 @@
           NUMA = lib.mkDefault no;
 
           WINESYNC = no;
+
+          MALDERLAKE = yes; #GENERIC_CPU3 MRAPTORLAKE
         };
         # Disable errors in console compilation log
         ignoreConfigErrors = true;
