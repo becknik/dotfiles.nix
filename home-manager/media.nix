@@ -111,5 +111,6 @@
     pdfslicer
     ocrmypdf
     qpdf
+    pdfpc
   ];
 }

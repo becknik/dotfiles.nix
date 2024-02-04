@@ -1,5 +1,7 @@
 { flockenzeit, flakeDirectory, defaultUser, pkgs, ... }:
 
+# TODO ulimit -n 65536
+
 {
   # Auto Upgrade Systemd Service
 
