@@ -40,7 +40,7 @@
     enable = true;
     gtk3 = {
       bookmarks = [
-        "file:///home/${defaultUser}/nextcloud/Uni/current-courses"
+        "file:///home/${defaultUser}/nextcloud/uni/current-courses"
         "file:///home/${defaultUser}/devel"
         "file:///home/${defaultUser}/nextcloud"
       ];
