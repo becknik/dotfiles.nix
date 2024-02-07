@@ -208,9 +208,9 @@
   # Doesn't play with apparmor, therefore useless
   # $ sudo aa-enforce firejail-default
   # Can't find firejail-default in the system path list. ...
-  /* programs.firejail = {
+  programs.firejail = {
     enable = true;
-    wrappedBinaries =
+    /* wrappedBinaries =
       let
         packagesToWrap = [ "librewolf" ]; # TODO "discord"
 
@@ -232,8 +232,8 @@
           #extraArgs = "";
           #desktop = ""; .desktop file to modify. Only necessary if it uses the absolute path to the executable.
         };
-      };
-  }; */
+      }; */
+  };
 
 
   # User Setup
