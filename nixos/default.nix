@@ -151,7 +151,11 @@
     };
   };
 
-  services.resolved.enable = true; # systemd-resolved
+  services.resolved = {
+    enable = true; # systemd-resolved
+    dnssec = "allow-downgrade";
+    dnsovertls = "opportunistic";
+  };
   services.opensnitch.enable = true;
 
 
