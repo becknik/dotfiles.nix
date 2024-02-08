@@ -23,13 +23,13 @@ in
   programs.home-manager.enable = true;
 
   # Settings changes from normal home-manager configuration
-  services.gpg-agent.enable = (lib.mkOverride 50 false); # incompatible with darwin
+  services.gpg-agent.enable = (mkForce false); # incompatible with darwin
   programs = {
     git = {
       userName = (mkForce "Jannik Becker");
       userEmail = (mkForce "sprinteins.becker@extaccount.com");
     };
-    java.package = (lib.mkDefault pkgs.temurin-bin-17);
+    java.package = (mkForce pkgs.temurin-bin-17);
     zsh = {
       oh-my-zsh.plugins = [ "ssh-agent" ];
       initExtra = "ssh-add --apple-load-keychain"; # load keys from previous sessions
