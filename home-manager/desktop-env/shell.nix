@@ -3,7 +3,6 @@
 {
   programs = {
     # zsh & bash integration are enabled by default
-    hstr.enable = true; # Whether to enable Bash And Zsh shell history suggest box
     fzf.enable = true;
 
     bash = {
@@ -13,200 +12,178 @@
 
     zsh = {
       enable = true;
+      #enableVteIntegration = true; # implied by gnome
+      #defaultKeymap = "viins"; # viins vicmd # ??
 
-      # TODO zsh plugin setup is far from perfect
-      plugins =
-        let
-          zshPathForNixpkg = (zshPluginName: "share/zsh/plugins/${zshPluginName}/${zshPluginName}.plugin.zsh");
-        in
-        with pkgs; [
-          rec {
-            name = "you-should-use";
-            src = zsh-you-should-use;
-            file = zshPathForNixpkg name;
-          }
-        ];
-
-      #dotDir = "~/.config/zsh"; # Where zsh config files are placed; randomly creates new folders in $HOME or elsewhere
-      envExtra =
+      dotDir = ".config/zsh";
+      envExtra = # Added to .zshenv
         "export KEYTIMEOUT=5" # Esc key in vi mode is 0.4s by default, this sets it to 0.05s
       ;
 
-      enableAutosuggestions = true;
-      #enableVteIntegration = true; # implied by gnome
-
-      syntaxHighlighting.enable = true;
-      /*zsh-abbr = { # TODO zsh-abbr isn't working...
-        enable = true;
-        abbreviations = { # Alias which expansion after entering, like the ones in fish
-          nrbs = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#dnix\" switch";
-          nrbt = "sudo nixos-rebuild --flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix#dnix\" test";
-        };
-      };*/
-
-      historySubstringSearch.enable = true;
-      autocd = true; # Automatically cds into a path entered = setopt autocd
-
       history = {
-        extended = true; # Write the history file in the ":start:elapsed;command" format
+        extended = true; # Write timestamps ":start:elapsed;command"
         ignoreAllDups = true; # Delete old recorded entry if new entry is a duplicate
         ignoreDups = true; # Don't record an entry that was just recorded again
-        #path = "${config.programs.zsh.dotDir}/.zhistroy";
-        save = 10000; # Amount of lines to save
+        ignorePatterns = [ "alias *" "cd *" ]; # "gcsm *" "gcmsg *" "ls *" "la *"
+        ignoreSpace = true; # Don'd add commands to history if first character is a space
+        path = "${config.programs.zsh.dotDir}/.zhistory";
+        #save = 10000; # Amount of lines to save, the default
         share = true; # Share history between all sessions.
-        ignorePatterns = [ "alias" "cd" "gcsm" "gcmsg" "ls" "la" ]; # TODO this doesn't work...
-        ignoreSpace = true; # Share history between all sessions.
       };
 
-      localVariables = {
-        # variable definitions on top of .zshrc
-        # Further oh-my-zsh Settings
-        DISABLE_AUTO_TITLE = true; # automatic setting of terminal title
-        ENABLE_CORRECTION = false; # command auto corrections
-        COMPLETION_WAITING_DOTS = true;
-      };
+      ################################################################################
+      # .zshrc Setup Section
+      ################################################################################
 
-      initExtraFirst = "cbonsai --multiplier 5 -m 'It takes strength to resist the dark side. Only the weak embrace it.' -p"; # Placed on top of .zshrc
-      #initExtraBeforeCompInit = '''';
+      initExtraFirst = "cbonsai --life 42 -m 'It takes strength to resist the dark side. Only the weak embrace it' -p";
+
+      completionInit = "";
 
       initExtra =
-        # further history setup
+        let
+          keybindingsVi = ''
+            bindkey -v
+            # Enables Ctrl + Del to delete a full word
+            bindkey '^H' backward-kill-word
+
+            # VI-style Navigation in Menu Completion
+            zstyle ':completion:*' menu select
+            bindkey -M menuselect 'h' vi-backward-char
+            bindkey -M menuselect 'k' vi-up-line-or-history
+            bindkey -M menuselect 'l' vi-forward-char
+            bindkey -M menuselect 'j' vi-down-line-or-history
+
+            # VI-style History Navigation
+            bindkey '^k' up-history
+            bindkey '^j' down-history
+          '';
+          keybindingsBash = ''
+            # Enable Bash-like Feature I can't explain...
+            unsetopt flow_control
+            bindkey '^q' push-line
+          '';
+          keybindingsCustom = ''
+            # Auto-Complete with Ctrl + Space
+            bindkey '^ ' autosuggest-accept
+          '';
+          setupPlugins = ''
+            # you-should-use
+            YSU_MESSAGE_POSITION="after"
+
+            # Pure Prompt
+            autoload -U promptinit; promptinit
+            prompt pure
+            ## Pure Prompt Setup
+            #PROMPT='%F{white}%* '$PROMPT # TODO add timestamp to pure prompt
+            PURE_GIT_UNTRACKED_DIRTY=0
+            zstyle :prompt:pure:git:stash show yes
+          '';
+        in
+
+        ## History Setup (Continued)
         "setopt HIST_EXPIRE_DUPS_FIRST\n" # Expire duplicate entries first when trimming history.
-        + "setopt HIST_FIND_NO_DUPS\n" # Do not display a line previously found.
 
-        + "bindkey -v\n" # vim keybindings
-        + "bindkey '^H' backward-kill-word\n" # Enables Ctrl + Del to delete a full word
-        # vi-style navigation in menu completion
-        + "bindkey -M menuselect 'h' vi-backward-char\n"
-        + "bindkey -M menuselect 'k' vi-up-line-or-history\n"
-        + "bindkey -M menuselect 'l' vi-forward-char\n"
-        + "bindkey -M menuselect 'j' vi-down-line-or-history\n"
-        # vi-style history navigation
-        + "bindkey '^k' up-history\n"
-        + "bindkey '^j' down-history\n"
-        # bash-like history search
-        + "bindkey '^r' history-incremental-search-backward\n"
-        # enable bash-like feature i cant explain rn...
-        + "unsetopt flow_control\n"
-        + "bindkey '^q' push-line\n"
-        # auto-complete with Ctrl + Space
-        + "bindkey '^ ' autosuggest-accept\n"
-
-        # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git-escape-magic
-        + "autoload -Uz git-escape-magic\n"
-        + "git-escape-magic\n"
-
-        # oh-my-zsh git plugin extension function
-        + ''
-          function gwipmsg() {
-              git add -A
-              git rm $(git ls-files --deleted) 2> /dev/null
-              local message="--wip-- [skip ci]"
-              if [ -n "$1" ]; then
-                  message="$message "$1""
-              fi
-              git commit --no-verify --no-gpg-sign -m "$message"
-          }
-        ''
-
-        # pure plugin setup and initialization https://github.com/sindresorhus/pure#options
-        # adds the system time
-        + ''
-          autoload -U promptinit; promptinit
-          prompt pure
-          PROMPT='%F{white}%* '$PROMPT
-        ''
+        + keybindingsVi
+        + keybindingsBash
+        + keybindingsCustom
+        + setupPlugins
       ;
 
       oh-my-zsh = {
         enable = true;
         package =
-          let
-            ohmyzsh-source-locked-rev = flakeLock.nodes.ohmyzsh.locked.rev;
-          in
-          pkgs.oh-my-zsh.overrideAttrs (oldAttrs: {
+          let ohmyzsh-source-locked-rev = flakeLock.nodes.ohmyzsh.locked.rev;
+          in pkgs.oh-my-zsh.overrideAttrs (oldAttrs: {
             version = ohmyzsh-source-locked-rev;
             src = ohmyzsh;
           });
         theme = ""; # requirement for pure theme to work
 
-        ## ohmyzsh plugins
         plugins = [
-          "systemd"
-          #"timer" # handled by pure zsh prompt theme
-          "common-aliases"
+          ## Shell
+          "alias-finder"
           "bgnotify"
+          "common-aliases"
           "copyfile"
           "copypath"
+          "direnv"
           "dirhistory" # move with alt+up/down/etc
-          "alias-finder"
-          #"catimg"
-          #"chucknorris"
-          #"aws"
+          "singlechar"
+          "wd"
+          "zsh-interactive-cd"
+
+          ## Linux
+          "systemd"
+
+          ## Development
           "docker"
-          "podman"
-          "fzf"
+          "encode64"
           "git"
           "git-auto-fetch"
-          "git-escape-magic"
           "gitignore"
-          #"rust"
-          #"mvn"
-          #"pyenv"
-          #"python"
-          #"gradle"
-          #"hitchhiker"
-          #"httpie"
+          "gradle"
           "jsontools"
-          #"kubectl"
-          #"nmap"
-          #"npm"
-          #"microk8s"
-          #"man"
-          #"encode64"
-          #"extract"
-          "fancy-ctrl-z"
-          #"rand-quote"
-          "ripgrep"
-          #"ruby"
-          #"rsync"
-          #"scala"
-          "singlechar"
-          #"ssh-agent"
-          #"thefuck" # should conflict with the Esc^2 from sudo plugin
-          #"transfer" # file sharing, but idk if useful for me...
-          #"urltools"
+          "podman"
+          "urltools"
           "vscode"
-          "wd"
-          #"web-search"
-          #"zbell" # bgnotify is enough
-          "zsh-interactive-cd"
-          "direnv"
         ];
+        #"rust" "mvn" "pyenv" "python" "aws" "kubectl" "nmap" "npm" "microk8s" "ruby" "scala"
+        #"httpie" "extract" "rsync" "fancy-ctrl-z" "ripgrep" "fzf"
 
-        # oh-my-zsh extra settings for plugins
+        ## ohmyzsh Plugin Settings
         extraConfig = ''
           bgnotify_bell=false;
-          bgnotify_threshold=120;''
-        # $1=exit_status, $2=command, $3=elapsed_time
-        # this somehow doesn't work sometimes
-        /* + ''
-          function bgnotify_formatted {
-            [ $1 -eq 0 ] && title="Holy Smokes, Batman!" || title="Holy Graf Zeppelin!"
-            bgnotify "$title -- after $3 s" "$2";
+          bgnotify_threshold=120;
+
+          # ohmyzsh Git Plugin Extension Function
+          function gwipmsg() {
+            git add -A
+            git rm $(git ls-files --deleted) 2> /dev/null
+            local message="--wip-- [skip ci]"
+            if [ -n "$1" ]; then
+              message="$message "$1""
+            fi
+            git commit --no-verify --no-gpg-sign -m "$message"
           }
-        '' */
-        # zsh you should use
-        + ''
-          YSU_MESSAGE_POSITION="after"
-        ''
-        # theme/prompts:
-        + ''
-          PURE_GIT_UNTRACKED_DIRTY=0
-          zstyle :prompt:pure:git:stash show yes
-        ''
-        ;
+
+          # Fix for `cp: cannot create regular file '/home/jnnk/.cache/oh-my-zsh/completions/_docker': Permission denied`
+          chmod u+w $HOME/.cache/oh-my-zsh/completions/_docker
+        '';
       };
+
+      localVariables = {
+        # Variable definitions from top of ohmyzsh-generated .zshrc
+        DISABLE_AUTO_TITLE = true; # automatic setting of terminal title
+        ENABLE_CORRECTION = false; # command auto corrections
+        COMPLETION_WAITING_DOTS = true;
+      };
+
+      # Plugins
+
+      plugins =
+        let
+          zshPathPlugin = (zshPluginName: "share/zsh/plugins/${zshPluginName}/${zshPluginName}.plugin.zsh");
+          zshPathSiteFunction = (zshPluginName: "share/zsh/site-functions/${zshPluginName}.plugin.zsh");
+        in
+        [
+          rec {
+            name = "you-should-use";
+            src = pkgs.zsh-you-should-use;
+            file = zshPathPlugin name;
+          }
+          rec {
+            name = "fast-syntax-highlighting";
+            src = pkgs.zsh-fast-syntax-highlighting;
+            file = zshPathSiteFunction name;
+          }
+        ];
+
+      historySubstringSearch.enable = true;
+      enableAutosuggestions = true;
+      autocd = true; # Automatically cds into a path entered; = setopt autocd
+      syntaxHighlighting.enable = false;
+
+      # Aliases
 
       shellAliases =
         let
@@ -240,10 +217,9 @@
           gai = "git add --interactive";
           grsst = "git restore --staged"; # = grst
           "gaucn!" = "gau && gcn!";
+          "gcnpf" = "gcn! && gpf";
+          "gaucnpf" = "gau && gcn! && gpf";
         };
-
-      #completionInit # "Oh-My-Zsh/Prezto calls compinit during initialization, calling it twice causes slight start up slowdown"
-      #defaultKeymap = "viins"; # viins vicmd # ??
     };
   };
 

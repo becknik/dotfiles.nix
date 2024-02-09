@@ -31,7 +31,7 @@ in
     };
     java.package = (mkForce pkgs.temurin-bin-17);
     zsh = {
-      oh-my-zsh.plugins = [ "ssh-agent" ];
+      oh-my-zsh.plugins = [ "ssh-agent" "macos" ];
       initExtra = "ssh-add --apple-load-keychain"; # load keys from previous sessions
     };
     # `ssh-add --apple-use-keychain ~/.ssh/<key>`
