@@ -200,7 +200,7 @@
                 overlays = [
                   overlay-unstable
                   overlay-clean
-                  (import ./overlays/packages.nix module-attrs).patched-linux
+                  # (import ./overlays/packages.nix module-attrs).patched-linux # TODO Create the patched kernel lnix overlay
                 ];
               };
             })

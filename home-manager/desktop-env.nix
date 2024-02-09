@@ -46,7 +46,7 @@
       ];
       extraConfig = {
         gtk-recent-files-limit = 0;
-        gtk-application-prefer-dark-theme = 0; # Sets "Legacy Applications" to "Adwaita-dark" theme
+        gtk-application-prefer-dark-theme = 1; # Sets "Legacy Applications" to "Adwaita-dark" theme
       };
       # Minimizes the gtk-3 header-bar
       extraCss = ''

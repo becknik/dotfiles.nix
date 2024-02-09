@@ -9,7 +9,8 @@
 
   environment.variables."NIXOS_CONFIGURATION_NAME" = config.networking.hostName;
 
-  boot.kernelPackages = pkgs.linuxPackages_xanmod_latest_patched_lnix;
+  #boot.kernelPackages = pkgs.linuxPackages_xanmod_latest_patched_lnix;
+  boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
 
 
   networking = {
