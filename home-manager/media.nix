@@ -80,6 +80,7 @@
     keepassxc
     clean.tor-browser
     gpa
+    veracrypt
 
     ## Chat Clients
     element-desktop

@@ -87,6 +87,7 @@
         MinimizeOnStartup=true
         MinimizeToTray=true
         MonospaceNotes=true
+        MovableToolbar=false
         ShowExpiredEntriesOnDatabaseUnlock=false
         ShowTrayIcon=true
         TrayIconAppearance=colorful
@@ -96,7 +97,7 @@
         AdvancedMode=true
         Braces=true
         Dashes=true
-        EASCII=true
+        EASCII=false
         ExcludedChars=
         Length=64
         Logograms=true
@@ -106,8 +107,10 @@
         SpecialChars=true
 
         [Security]
+        EnableCopyOnDoubleClick=true
         IconDownloadFallback=true
         LockDatabaseIdle=true
+        LockDatabaseMinimize=true
       '';
     };
 
