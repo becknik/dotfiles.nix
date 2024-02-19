@@ -585,7 +585,7 @@
             majVersionComp = jdk1: jdk2: !(builtins.lessThan jdk1.majVersion jdk2.majVersion);
 
             # perhaps all packages with a `jre`-attribute are jdks
-            jdks = (builtins.filter (pkg: builtins.hasAttr "jre" pkg) (config.home.packages ++ additionalJDKs));
+            jdks = (builtins.filter (pkg: builtins.hasAttr "jre" pkg) ([config.programs.java.package] ++ additionalJDKs));
             jdksTransformed = builtins.map addMajVersion jdks;
             jdksSorted = builtins.sort majVersionComp jdksTransformed;
           in
