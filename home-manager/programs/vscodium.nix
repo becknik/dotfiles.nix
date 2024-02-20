@@ -210,8 +210,9 @@
         reduceMotion = "on";
         sideBar.location = "right";
 
-        tips.enabled = false;
+        tips.enabled = true;
 
+        tree.enableStickyScroll = true;
         #editor.autoLockGroups = {};
         #commandPalette.history = 0; # defaults to 50
         enableExperiments = false;
