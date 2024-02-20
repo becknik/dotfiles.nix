@@ -15,7 +15,6 @@
       #enableVteIntegration = true; # implied by gnome
       #defaultKeymap = "viins"; # viins vicmd # ??
 
-      dotDir = ".config/zsh";
       envExtra = # Added to .zshenv
         "export KEYTIMEOUT=5" # Esc key in vi mode is 0.4s by default, this sets it to 0.05s
       ;
@@ -26,7 +25,6 @@
         ignoreDups = true; # Don't record an entry that was just recorded again
         ignorePatterns = [ "alias *" "cd *" ]; # "gcsm *" "gcmsg *" "ls *" "la *"
         ignoreSpace = true; # Don'd add commands to history if first character is a space
-        path = "${config.programs.zsh.dotDir}/.zhistory";
         #save = 10000; # Amount of lines to save, the default
         share = true; # Share history between all sessions.
       };
