@@ -34,6 +34,7 @@
       tldr
       tree
       bat
+      eza
 
       ### desktop-env
       (makeWhenNotDarwin wl-clipboard)

@@ -157,6 +157,12 @@
     dnsovertls = "opportunistic";
   };
   services.opensnitch.enable = true;
+  programs.openvpn3.enable = true;
+  # TODO configure openvpn config using sops-nix for passwords and config
+  # https://nixos.wiki/wiki/OpenVPN
+  /*services.openvpn.servers = {
+    uniVPNv4Ov6 = { config = " config /root/nixos/openvpn/officeVPN.conf "; };
+  };*/
 
 
   # Firewall
@@ -275,8 +281,8 @@
     };
     gc = {
       automatic = true;
-      dates = "monthly"; # 1 day after automatic system upgrade
-      options = "--delete-older-than 30d";
+      dates = "Thu *-*-1..7"; # 1st Thursday every month
+      options = "--delete-older-than 28d";
     };
 
     channel.enable = false;
