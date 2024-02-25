@@ -59,19 +59,30 @@
       stateVersion = "23.11";
 
       system = "x86_64-linux";
-      permittedInsecurePackages = [ "electron-25.9.0" ];
-      # default nixpkgs config
+      # Default nixpkgs config
       config = {
-        inherit permittedInsecurePackages;
-        allowUnfree = true;
+        permittedInsecurePackages = [ "electron-25.9.0" ];
         joypixels.acceptLicense = true;
+        allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [
+          "brgenml1lpr"
+          "joypixels"
+          "clion"
+          "idea-ultimate"
+          "obsidian"
+          "veracrypt"
+          "discord"
+          "vscode-extension-ms-vsliveshare-vsliveshare"
+          "vscode-extension-github-copilot"
+          "vscode-extension-MS-python-vscode-pylance"
+        ];
       };
       defaultNixPkgsSetup = { inherit system config; };
 
+      # Shared overlays
       overlay-unstable = final: prev: {
         unstable = import nixpkgs-unstable defaultNixPkgsSetup;
       };
-      # Overlay to disable native compilation of packages with build flags
+      ## Overlay to disable native compilation of packages with build flags
       overlay-clean = final: prev: {
         clean = import nixpkgs defaultNixPkgsSetup;
       };
