@@ -53,9 +53,7 @@
       google-java-format
 
       # Rust
-      rustup
-      cargo
-      rustc
+      rustup #cargo rustc
       lldb
 
       # C++
