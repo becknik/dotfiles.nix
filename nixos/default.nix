@@ -36,7 +36,7 @@
   programs.git = {
     enable = true; # Necessary for managing the flakes
     config = {
-      # Necessary for systemd service fetching this git repo
+      # Necessary for systemd service fetching this git repo & autoUpgrade `--commit-lock-file`
       safe.directory = flakeDirectory;
       user = {
         name = "Nix Auto Upgrade";
@@ -90,7 +90,7 @@
       system76-scheduler
       perf
       turbostat
-      opensnitch-ebpf # TODO this might cause kernel warning?
+      #opensnitch-ebpf # TODO this might cause kernel warning? - tool not really necessary
       #virtualbox # broken, see `virtualization.nix`
     ];
 
@@ -128,6 +128,8 @@
     "net.ipv4.icmp_ignore_bogus_error_responses" = 1;
   };
 
+  environment.memoryAllocator.provider = "libc"; # "mimalloc" leads to various applications crashing
+
 
   # Systemd
 
@@ -156,7 +158,7 @@
     dnssec = "allow-downgrade";
     dnsovertls = "opportunistic";
   };
-  services.opensnitch.enable = true;
+  #services.opensnitch.enable = true;
   programs.openvpn3.enable = true;
   # TODO configure openvpn config using sops-nix for passwords and config
   # https://nixos.wiki/wiki/OpenVPN
@@ -300,7 +302,7 @@
 
   environment.systemPackages = with pkgs; [
     nix-tree
-    opensnitch-ui
+    #opensnitch-ui
     #firejail # if not included explicitly, `/etc/apparmor.d` wouldn't get symlinked...
     #apparmor-parser # aa-enable firejail-default isn't working
   ];
