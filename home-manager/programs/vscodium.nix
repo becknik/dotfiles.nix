@@ -284,6 +284,7 @@
         cursorBlinking = "smooth";
         minimap.renderCharacters = false;
         #roundedSelection = false; # Defaults to true
+        stickyScroll.enabled = true;
 
         ## Typography & Fonts
         lineHeight = 0;
@@ -295,10 +296,12 @@
         #fontWeight = "400"; # Does not work properly
 
         ## Suggestions
-        suggest.preview = true;
-        suggest.showStatusBar = true;
-        suggest.localityBonus = true;
-        suggest.filterGraceful = true;
+        suggest = {
+          preview = true;
+          showStatusBar = true;
+          localityBonus = true;
+          filterGraceful = true;
+        };
       };
       outline.collapseItems = "alwaysCollapse";
 
