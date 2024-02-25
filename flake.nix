@@ -139,33 +139,40 @@
                   #rustc = { inherit arch tune; }; # TODO Research build flag attributes for rustc
                   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/compilers/rust/rustc.nix
                 };
+                platformConfig = {
+                  # https://nix.dev/tutorials/cross-compilation.html
+                  #buildPlatform = platform; # platform where the executables are built
+                  hostPlatform = platform; # platform where the executables will run
+                };
 
                 # Overlay Setup
 
                 unstable = final: prev: {
                   # TODO might it be that unstable packages are not built optimized? :|
-                  unstable = import nixpkgs-unstable defaultNixPkgsSetup // {
-                    hostPlatform = platform;
-                  };
+                  unstable = import nixpkgs-unstable defaultNixPkgsSetup // platformConfig;
                 };
 
                 build-fixes = import ./overlays/build-fixes.nix module-attrs;
                 packages = import ./overlays/packages.nix module-attrs;
               in
               {
-                nixpkgs = defaultNixPkgsSetup // {
-                  # https://nix.dev/tutorials/cross-compilation.html
-                  #buildPlatform = platform; # platform where the executables are built
-                  hostPlatform = platform; # platform where the executables will run
+                nixpkgs = platformConfig // {
+                  inherit system;
+
+                  config = {
+                    replaceStdenv = { pkgs }: pkgs.fastStdenv;
+                    #(pkgs.withCFlags [ "-O3" ] pkgs.fastStdenv);
+                    # TODO error: The ‘env’ attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping: NIX_CFLAGS_COMPILE
+                  } // config;
+                  # Necessary due to `replaceStdenv` overwriting nixpkgs.config
 
                   overlays = [
                     overlay-clean
                     unstable
 
-                    packages.fasterStdenv
-
                     build-fixes.dependencyBuildSkip
 
+                    build-fixes.useCleanOverlay
                     build-fixes.deactivateFailingTestsPython
                     build-fixes.deactivateFailingTestsHaskell
                     build-fixes.deactivateFailingTests

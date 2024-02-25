@@ -1,14 +1,6 @@
 { pkgs, lib, ... }:
 
 {
-  fasterStdenv = final: prev: {
-    #stdenv = prev.fastStdenv;
-    fastStdenv.mkDerivation = {
-      # https://nixos.wiki/wiki/C#Faster_GCC_compiler (don't really know if this works...)
-      name = "env";
-    };
-  };
-
   patched-linux-dnix = final: prev: {
     linux_xanmod_latest_patched_dnix = pkgs.linuxPackagesFor (
       pkgs.linux_xanmod_latest.override (old: {

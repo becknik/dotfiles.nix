@@ -44,6 +44,14 @@
     );
 
   # Fixing Build Failures
+  useCleanOverlay = final: prev: {
+    # Failing due to errors as warnings (`cc1plus: all warnings being treated as errors`) + fastStdenv?
+    efivar = prev.clean.efivar;
+    criu = prev.clean.criu;
+    intel-compute-runtime = prev.clean.intel-compute-runtime;
+
+    pdfslicer = prev.clean.pdfslicer;
+  };
 
   ## Reddis
   # test 66 failing: https://github.com/redis/redis/issues/12792
@@ -89,6 +97,9 @@
             disabledTests = [
               "test_alt_missing_glyph"
             ] ++ oldAttrs.disabledTests;
+          });
+          img2pdf = python-prev.img2pdf.overridePythonAttrs (oldAttrs: {
+            doCheck = false;
           });
         }
       )
