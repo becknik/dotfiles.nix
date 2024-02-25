@@ -118,7 +118,7 @@
       }).postman
 
     ### SQL
-    clean.dbeaver
+    (dbeaver.override { jdk17 = temurin-bin-17; })
 
     ## CI / CD
     awscli2
