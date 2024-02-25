@@ -288,6 +288,15 @@
     channel.enable = false;
     daemonCPUSchedPolicy = "idle"; # "other", "batch"
   };
+  environment.shellInit =
+    let
+      # https://github.com/NixOS/nixpkgs/issues/41251
+      pow = n: i:
+        if i == 1 then n
+        else if i == 0 then 1
+        else n * pow n (i - 1);
+    in
+    "ulimit -n ${builtins.toString (pow 2 16)}";
 
   environment.systemPackages = with pkgs; [
     nix-tree
