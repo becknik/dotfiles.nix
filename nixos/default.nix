@@ -287,7 +287,7 @@
       options = "--delete-older-than 28d";
     };
 
-    channel.enable = false;
+    channel.enable = true; # false destroys some direnv `use nix` & oldschool nix-shell
     daemonCPUSchedPolicy = "idle"; # "other", "batch"
   };
   environment.shellInit =
