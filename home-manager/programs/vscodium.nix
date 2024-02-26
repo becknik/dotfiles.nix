@@ -486,6 +486,9 @@
         }*/
       ];
 
+      ## Live Share
+      liveshare.allowGuestDebugControl = true;
+
       ## Docker
       docker = {
         composeCommand = "podman compose";
