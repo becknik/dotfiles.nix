@@ -63,7 +63,7 @@
 
     ## Daily Software
     clean.libreoffice-fresh
-    (lib.trivial.throwIf (lib.strings.versionOlder "1.6" obsidian.version) "Obsidian no longer requires EOL Electron"
+    (lib.trivial.throwIf (lib.strings.versionOlder "1.5.7" obsidian.version) "Obsidian no longer requires EOL Electron"
       (obsidian.override { electron = elelctron_25-patched-for-wayland; })
     )
     # Options from laptop to get fcitx5 input working:
