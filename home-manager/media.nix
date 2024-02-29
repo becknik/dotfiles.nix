@@ -26,6 +26,41 @@
   };
 
   programs = {
+    librewolf = {
+      enable = true;
+      settings = {
+        "media.ffmpeg.vaapi.enabled" = true;
+        "widget.use-xdg-desktop-portal.file-picker" = 1;
+        "browser.gnome-search-provider.enabled" = true;
+        "browser.tabs.loadBookmarksInTabs" = true;
+        "browser.compactmode.show" = true;
+
+        ## Own Preferences
+        "browser.policies.runOncePerModification.setDefaultSearchEngine" = "Startpage";
+        "browser.ctrlTab.sortByRecentlyUsed" = true;
+        "general.autoScroll" = true;
+        "browser.translations.automaticallyPopup" = false;
+        "browser.download.useDownloadDir" = true; # Don't ask where to save files
+
+        ## Mozilla Accounts
+        "identity.fxaccounts.enabled" = true;
+
+        ## Enable Cookies
+        "network.cookie.lifetimePolicy" = 0; # Server decides about cookie lifetime
+        "privacy.clearOnShutdown.cookies" = false;
+
+        ## Privacy
+        "webgl.disabled" = false; # Actually anti-privacy...
+        "privacy.resistFingerprinting.letterboxing" = true;
+        # This override allows you to control when a cross-origin refer will be sent, allowing it exclusively when the host matches.
+        "network.http.referer.XOriginPolicy" = 2;
+        "signon.firefoxRelay.feature" = "disabled";
+        "places.history.enabled" = false;
+        ### DNS over TLS
+        "network.trr.mode" = 2;
+      };
+    };
+
     # Browsers
     chromium = {
       enable = true;

@@ -36,6 +36,7 @@ in
     };
     # `ssh-add --apple-use-keychain ~/.ssh/<key>`
     ssh.extraConfig = "UseKeychain yes";
+    librewolf.enable = mkForce false;
   };
 
   programs.kitty = {
