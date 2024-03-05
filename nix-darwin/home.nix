@@ -57,6 +57,7 @@ in
   programs.gpg.enable = true;
 
   home.packages = with pkgs; [
+    # media.nix leftovers
     ## Natural language
     hunspell
     hunspellDicts.de_DE
@@ -67,5 +68,8 @@ in
     ## Privacy
     keepassxc
     gpa
+
+    # build tools
+    kubernetes-helm
   ];
 }
