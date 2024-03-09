@@ -15,7 +15,25 @@
       lfs.enable = true;
 
       ## Diff syntax highlighting tools
-      diff-so-fancy.enable = true; # Like this better than delta
+      delta = {
+        enable = true;
+        options = {
+          features = "decorations";
+          true-color = "always";
+          theme = "Monokai Extended";
+          navigate = true;
+          line-numbers = true;
+          hyperlinks = true;
+          hyperlinks-file-link-format = "vscode://file/{path}:{line}";
+          interactive = {
+            keep-plus-minus-markers = false;
+          };
+        };
+      };
+      /* diff-so-fancy = {
+        enable = true;
+        markEmptyLines = false;
+      }; */
       #difftastic.enable = true; # Side-by-side diff view in terminal, looks odd to me
 
       ## (User) Config
@@ -27,12 +45,95 @@
           filemode = false; # ignores file permission changes
           autocrlf = "input"; # CRLF -> LF; use true for LF -> CRLF -> LF (intersting for Windows)
         };
-        push.dafault = "current";
-        merge.tool = "vscodium";
+        log.date = "iso";
+        help.autocorrect = 10; # 10 seconds to correct wrong command
+
+        fetch = {
+          #prune = true;
+          pruneTags = true;
+        };
+        commit.verbose = true;
+        diff = {
+          algorithm = "histogram";
+          context = 5;
+          colorMoved = "default";
+        };
+
+        pull.rebase = true;
+        push = {
+          dafault = "current";
+          autoSetupRemote = true;
+          followtags = true; # push tags with commits
+        };
+
+        tag.sort = "-taggerdate";
+        branch.sort = "-committerdate";
+        column.ui = "auto";
+        rerere.enabled = true;
+        # https://andrewlock.net/working-with-stacked-branches-in-git-is-easier-with-update-refs/
+        rebase.updateRefs = true;
+        merge = {
+          tool = "vscodium";
+          conflictstyle = "zdiff3";
+        };
         mergetool."vscodium".cmd = "vscodium --wait $MERGED";
+
         url."git@github.com:".insteadOf = "https://github.com/";
+
+        status.submoduleSummary = true;
+        diff.submodule = "log";
+
+        transfer.fsckobjects = true;
+        fetch.fsckobjects = true;
+        receive.fsckObjects = true;
       };
+
+      ignores = [ ".idea" ".vscode" ".DS_Store" "node_modules" "target" "build" "out" "dist" "bin" "logs" "log" "tmp" ];
+
+      includes = [
+        #{ condition = "gitdir:~/devel/work/"; content = ""; /* path = ""; */ }
+      ];
+
+      # Sources (not sure if working)
+      # https://gist.github.com/ruediger/5647207
+      # https://gist.github.com/tekin/12500956bd56784728e490d8cef9cb81
+      attributes = [
+        # TODO Enable binary diffs: https://gist.github.com/Konfekt/5ece511a94a8aa118aadbbb23dab1f21
+        "*.bib diff=bibtex"
+        "*.c diff=cpp"
+        "*.c++ diff=cpp"
+        "*.cc diff=cpp"
+        "*.cpp diff=cpp"
+        "*.css diff=css"
+        "*.cxx diff=cpp"
+        "*.ex diff=elixir"
+        "*.exs diff=elixir"
+        #"*.gif diff=exif"
+        "*.go diff=golang"
+        "*.h diff=cpp"
+        "*.h++ diff=cpp"
+        "*.hh diff=cpp"
+        "*.hpp diff=cpp"
+        "*.html diff=html"
+        #"*.jpeg diff=exif"
+        #"*.jpg diff=exif"
+        "*.md diff=markdown"
+        "*.pdf diff=pdf"
+        "*.pl diff=perl"
+        #"*.png diff=exif"
+        "*.py diff=python"
+        "*.rake diff=ruby"
+        "*.rb diff=ruby"
+        "*.rs diff=rust"
+        "*.tex diff=tex"
+        "*.xhtml diff=html"
+        "*.java diff=java"
+        "*.kt diff=kotlin"
+        "*.sh diff=bash"
+      ];
     };
+
+    gitui.enable = true; # TODO is this worth it?
 
     # GitHub CLI
     gh = {
