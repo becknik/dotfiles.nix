@@ -317,7 +317,9 @@
       ## Files
       files = {
         trimFinalNewlines = true;
-        autoSave = "afterDelay"; # autoSaveDelay = 1000ms
+        autoSave = "onFocusChange";
+        autoSaveDelay = 5000; # For language-specific `autoSave = "afterDelay";` overrides
+        autoSaveWhenNoErrors = false; # default value
         restoreUndoStack = false;
         simpleDialog.enable = true;
         hotExit = "off";
@@ -632,6 +634,11 @@
       # Language-specific Formatting section
       #########################################################################
 
+      # VSCodium applies this format from version 1.85 on autoamtically when opening projects
+      "[latex][markdown]" = {
+        file.autoSave = "afterDelay";
+        editor.wordBasedSuggestions = "off";
+      };
       "[markdown]" = {
         editor.defaultFormatter = "DavidAnson.vscode-markdownlint";
         editor.quickSuggestions = {
@@ -643,12 +650,10 @@
         cSpell.advanced.feature.useReferenceProviderWithRename = true;
         cSpell.advanced.feature.useReferenceProviderRemove = "/^#+\\s/"; # TODO Whats this for??
       };
-      "[dockercompose]".editor.defaultFormatter = "ms-azuretools.vscode-docker";
-      # VSCodium applies this change from version 1.85 on autoamtically when opening projects
-      "[latex][markdown]".editor.wordBasedSuggestions = "off";
       "[latex]" = {
         editor.defaultFormatter = "James-Yu.latex-workshop";
       };
+      "[dockercompose]".editor.defaultFormatter = "ms-azuretools.vscode-docker";
       "[java]".editor.defaultFormatter = "redhat.java";
       "[rust]".editor.defaultFormatter = "rust-lang.rust-analyzer";
     };
