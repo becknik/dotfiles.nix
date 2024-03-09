@@ -23,6 +23,7 @@ let
     use-theme-colors = false;
     use-theme-transparency = false;
     use-transparent-background = true;
+    scrollback-lines = 50000; # need this due to nom
   };
 
   file-cooser-settings = {
@@ -220,7 +221,7 @@ with lib.gvariant; {
       dynamic-workspaces = false;
       edge-tiling = true;
       experimental-features = [ "scale-monitor-framebuffer" "rt-scheduler" "autoclose-xwayland" ];
-      workspaces-only-on-primary = false; # TODO This should be enabled when using a laptop for presentations on external monitors
+      workspaces-only-on-primary = laptopMode;
     };
 
     "org/gnome/mutter/keybindings" = {
@@ -279,6 +280,7 @@ with lib.gvariant; {
     "org/gnome/shell/extensions/appindicator" = {
       icon-size = 22;
       tray-pos = "center";
+      legacy-tray-enabled = false;
     };
 
     "org/gnome/shell/extensions/auto-move-windows".application-list = [
@@ -625,6 +627,7 @@ with lib.gvariant; {
       show-all-sources = true;
       sources = [ (mkTuple [ "xkb" "eu" ]) (mkTuple [ "xkb" "us+altgr-intl" ]) ];
       xkb-options = [ "terminate:ctrl_alt_bksp" ];
+      input-sources = [ "terminate:ctrl_alt_bksp" "compose:rwin" "lv3:ralt_switch" ];
     };
   };
 }
