@@ -58,7 +58,15 @@
 
     # Files
 
-    ## cargo (target code optimization) config
+    "ghci" = {
+      enable = true;
+      target = ".ghci";
+      # Source: https://stackoverflow.com/a/53109980
+      text = ''
+        :set prompt "\ESC[0;34m\STX%s\n\ESC[1;31m\STXλ> \ESC[m\STX"
+      '';
+    };
+
     "cargo-config" = {
       enable = true;
       target = ".cargo/config";
