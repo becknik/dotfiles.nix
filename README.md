@@ -1,16 +1,19 @@
 # dotfiles.nix
 
-My way of declaratively syncing the state of my Linux-desktop setups between all my devices.
+My over-engineered approach of declaratively syncing my desktop setups between all my devices.
 
 ## Project Structure
+
+Rough repo structure with significant files:
 
 ```shell
 $ tree -a -I '\.git|\.vscode' .
 .
 ├── flake.nix
-├── flake.lock
+├── darwin
+│   ├── configuration.nix
+│   └── home.nix
 ├── disko
-│   ├── common-definitions.nix
 │   ├── ext4-encrypted.nix
 │   └── ext4-unencrypted.nix
 ├── home-manager
@@ -18,75 +21,80 @@ $ tree -a -I '\.git|\.vscode' .
 │   ├── desktop-env.nix
 │   ├── desktop-env
 │   │   ├── autostart.nix
-│   │   ├── dconf.nix
 │   │   ├── folders-and-files.nix
 │   │   ├── plasma.nix
-│   │   ├── shell.nix
-│   │   └── xdg-mime.nix
+│   │   └── shell.nix
 │   ├── devel.nix
-│   ├── devel
-│   │   └── proglangs.nix
+│   ├── devel / proglangs.nix
 │   ├── media.nix
-│   ├── media
-│   │   └── mail.nix
+│   ├── media / mail.nix (not working ._.)
 │   ├── packages.nix
 │   ├── programs
+│   │   ├── git.nix
 │   │   ├── neovim.nix
-│   │   ├── thunderbird.nix
 │   │   └── vscodium.nix
 │   ├── secrets.nix
 │   ├── secrets
 │   │   ├── git.yaml
 │   │   ├── gpg-personal.asc
-│   │   ├── keepassxc.key
-│   │   └── mail.yaml
+│   │   └── keepassxc.key
 │   └── .sops.yaml
 ├── nixos
-│   ├── browsers.nix
-│   ├── default.nix
-│   ├── desktop-env.nix
 │   ├── dnix
 │   │   ├── default.nix
 │   │   └── hardware-configuration.nix
+│   ├── lnix / --"--
+│   ├── default.nix
+│   ├── desktop-env.nix
 │   ├── gnome.nix
-│   ├── lnix
-│   │   ├── default.nix
-│   │   └── hardware-configuration.nix
 │   ├── packages.nix
 │   ├── systemd.nix
 │   └── virtualisation.nix
 ├── overlays
 │   ├── build-fixes.nix
-│   └── packages.nix
+│   ├── build-skips.nix
+│   ├── default.nix
+│   └── modifications.nix
+├── pkgs
+│   └── default.nix
 └── README.md
 ```
 
 ## Setup
 
-- Flake-based NixOS setup
+- [Misterio77](https://github.com/Misterio77/nix-starter-configs)-style Flake-based NixOS + [home-manager](https://github.com/nix-community/home-manager) setup
   - Configuration for laptop (`lnix`) & desktop (`dnix`)
   - [`nix-hardware`](https://github.com/NixOS/nixos-hardware) setup for each
+  - [nix-darwin](https://github.com/lnl7/nix-darwin) setup for work laptop (`wnix`), which uses a subset of the home-managed part
 - Target platform build optimization to Alderlake CPU architecture (on desktop only)
   - Overlays & systemd services to make this a bit more convenient
 - Highly customized GNOME Wayland DE with some KDE tools
-- [home-manager](https://github.com/nix-community/home-manager) for managing everything apart from system stuff, DE & browsers
-- home-managed [sops-nix](https://github.com/Mic92/sops-nix) with [age](https://github.com/FiloSottile/age) encryption
+- Home-manager is used for managing everything apart from system stuff
+- home-managed secrets with [sops-nix](https://github.com/Mic92/sops-nix); [age](https://github.com/FiloSottile/age) encrypted
+
+### Further great Projects used
+
 - [nixvim](https://github.com/nix-community/nixvim)
 - [plasma-manager](https://github.com/pjones/plasma-manager)
+- [disko](https://github.com/nix-community/disko): for NixOS partitioning & deployment
+- [Flockenzeit](https://github.com/balsoft/Flockenzeit): Date & time parsing and formatting in native Nix. Awesome!
+  - Used in conjunction with flake's `inputs.self.sourceInfo.lastModified` for systemd NixOS automatic rebuild logs :^)
+- [mac-app-util](https://github.com/hraban/mac-app-util): Automatically creating trampoline symlinks for home-managed Mac software
+  - I really hate MacOS, but this lib makes me hate using it with nix-darwin a bit less
 
 ### Features
 
+- Over-engineering in it's purest form (heh). Spent days on this config - and there are still ~80 TODOs :|
 - Systemd Services:
   - `nixos-upgrade-notify-send-(failure|success).service` - Sends desktop notification when nixos-upgrade unit finished
   - `nixos-upgrade-automatic-shutdown.service` - Shuts down the desktop when nixos-upgrade service finished
   > Disabled by default; Must be started manually
-  - `nixos-upgrade.service` writes logs to `/var/log/nixos-upgrade/`
+  - `nixos-upgrade.service` writes build logs to `/var/log/nixos-upgrade/`
 - `nixos-fetch-and-switch-on-change` - Pulls and executes `nixos-rebuild switch` when this repos local differs from remote
-- Shell alias (see [shell.nix](./home-manager/desktop-env/shell.nix) for specifics)
-  - `nrbt`, `nrbb` & `nrbs` - `nixos-rebuild test/boot/switch` for currently activated flake profile
-  - `ngc*` - Some common options on `nix-collect-garbage`
+  - TODO Sadly this needs love and isn't working
+- `nixos`/`darwin-rebuild` shell alias - see bottom of [shell.nix](./home-manager/desktop-env/shell.nix) file
 
-## Getting Started
+## Getting Started/ Deployment
 
 1. Partition disks with [disko](https://github.com/nix-community/disko):
 
@@ -104,14 +112,17 @@ sudo nix run github:nix-community/disko \
 4. `cd /mnt && sudo nixos-install --flake </home/nixos/>dotfiles.nix#(d|l)nix`
 5. `sudo cp /home/nixos/dotfiles.nix /mnt/home/<username>/devel/own`
 
-## TODOs After Installation
+### Todolist for after Installation
+
+Sometimes its nice to have a good starting point, when one spent hours on bringing a system to run :)
+Let's hope this projects break the hours down to minutes (assumed native building is disabled ofc)
 
 - [ ] Enable the installed GNOME-extensions
   - [ ] Setup `gsconnect`
 - [ ] Copy the nix-sops secret to the new system
 - [ ] (Configure the CPU-scheduler and profile in `cpupower-gui`)
 
-### Logins
+#### Logins
 
 - [ ] Thunderbird with Mail Accounts (because home-managed ones won't work :( )
 - [ ] Firefox
