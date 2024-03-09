@@ -80,7 +80,7 @@
           remote=$(git rev-parse main@{upstream})
           if [ $local != $remote ]; then
             git pull
-            nixos-rebuild --flake "$NIXOS_CONFIG_REPO_DIRECTORY#$NIXOS_CONFIGURATION_NAME" boot --impure
+            nixos-rebuild --flake "$NIXOS_CONFIG_REPO_DIRECTORY#$NIXOS_CONFIGURATION_NAME" boot
           fi
         '';
         #

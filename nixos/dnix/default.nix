@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ inputs, mkFlakeDir, userName, config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -6,6 +6,21 @@
 
     ./hardware-configuration.nix
   ];
+
+  system.autoUpgrade = {
+    enable = true;
+    operation = "boot";
+    flake = (mkFlakeDir userName config);
+    flags = (builtins.map
+      (flakeInput: "--update-input ${flakeInput}")
+      (lib.filter (name: name != "self") (lib.attrsets.mapAttrsToList (name: _: name) inputs))
+    ) ++ [
+      "-L" # print build logs
+      "--commit-lock-file"
+    ];
+    dates = "Sat";
+    randomizedDelaySec = "2h";
+  };
 
   networking.hostName = "dnix";
   environment.variables."NIXOS_CONFIGURATION_NAME" = config.networking.hostName;

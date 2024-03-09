@@ -12,29 +12,11 @@
 
 
   # System Settings
-  system = {
-    inherit stateVersion;
-
-    autoUpgrade = {
-      enable = true;
-      operation = "boot";
-      flake = (mkFlakeDir userName config);
-      flags = (builtins.map
-        (flakeInput: "--update-input ${flakeInput}")
-        (lib.attrsets.mapAttrsToList (name: _: name) inputs)
-      ) ++ [
-        "--impure"
-        "-L" # print build logs
-        "--commit-lock-file"
-      ];
-      dates = "Sat";
-      randomizedDelaySec = "1h";
-    };
-  };
+  system = { inherit stateVersion; };
   programs.git = {
-    enable = true; # Necessary for managing the flakes
+    enable = true;
     config = {
-      # Necessary for systemd service fetching this git repo & autoUpgrade `--commit-lock-file`
+      # Necessary for managing the flake in systemd & dnix scheduled `system.autoUpgrade` with `--commit-lock-file`
       safe.directory = (mkFlakeDir userName config);
       user = {
         name = "Nix Auto Upgrade";
@@ -255,8 +237,8 @@
     description = "jannik";
     hashedPassword = "$y$j9T$v2v24yeaoZcmnJRJqKVIb/$9/ERYx13TXXpCXA12dNvvrr1BOKx1/tgpO9M9fRlio4";
     extraGroups = [ "wheel" "networkmanager" "libvirtd" /* "docker" */ "vboxusers" "video" ]
-    # replaced docker with podman, docker wouldn't work rootless
-    # printing & scanning:
+      # replaced docker with podman, docker wouldn't work rootless
+      # printing & scanning:
       ++ [ "lp" "scanner" ];
     useDefaultShell = true;
   };
