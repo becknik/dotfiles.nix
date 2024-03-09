@@ -73,8 +73,8 @@
   # Kudos to @TLATER https://discourse.nixos.org/t/nix-language-question-linking-a-list-of-packages-to-home-files/38520
   home.file = (builtins.listToAttrs (builtins.map
     (jdk: {
-      name = ".jdks/${jdk.version}";
+      name = ".jdks/jdk-${jdk.version}";
       value = { source = jdk; };
     })
-    additionalJDKs));
+    [ pkgs.temurin-bin-17 ]));
 }

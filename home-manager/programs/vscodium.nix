@@ -580,29 +580,26 @@
           importOnFirstTimeStartup = "automatic";
         };
         jdt.ls.androidSupport.enabled = "off";
-        sharedIndexes.enabled = "off";
-        # Automatically add all home-manager installed jdks as runtimes and selects the highest version as `default`
+        sharedIndexes = {
+          enabled = "on";
+          locations = "~/.cache/.jdt/index";
+        };
         configuration.runtimes =
-          let
-            # helpers
-            addMajVersion = jdk: {
-              path = jdk;
-              majVersion = builtins.head (builtins.splitVersion jdk.version);
-            };
-            majVersionComp = jdk1: jdk2: !(builtins.lessThan jdk1.majVersion jdk2.majVersion);
+          with lib; let
+            # jdks from `programs.java` and ~/.jdks folder
+            jdks = unique ([ config.programs.java.package ] ++ (attrsets.mapAttrsToList (_name: value: value.source)
+              (attrsets.filterAttrs (name: _value: strings.hasInfix ".jdks/jdk-" name) config.home.file)));
 
-            jdks = ([ config.programs.java.package ] ++ additionalJDKs);
-            jdksTransformed = builtins.map addMajVersion jdks;
-            jdksSorted = builtins.sort majVersionComp jdksTransformed;
+            jdkToRuntime = jdks: builtins.map
+              (jdk: {
+                path = jdk;
+                majVersion = builtins.head (builtins.splitVersion jdk.version);
+                default = builtins.head (builtins.splitVersion jdk.version) == "17"; # Java language server can't handle 21 yet?
+                version = "JavaSE-${builtins.head (builtins.splitVersion jdk.version)}";
+              })
+              jdks;
           in
-          builtins.map
-            (jdk: {
-              inherit (jdk) path;
-              version = "JavaSE-${jdk.majVersion}";
-              default = if (jdk == builtins.head jdksSorted) then true else false;
-            }
-            )
-            jdksSorted;
+          builtins.map (jdk: { inherit (jdk) path default version; }) (jdkToRuntime jdks);
       };
 
       ## Rust
