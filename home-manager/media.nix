@@ -3,8 +3,6 @@
 {
   imports = [
     #./media/mail.nix # TODO home-manager account integration won't work with thunderbird...
-
-    #./programs/librewolf.nix
     ./programs/thunderbird.nix
   ];
 
@@ -25,9 +23,21 @@
     };*/
   };
 
+  # Browsers
+
+  home.file."gsconnect-librewolf-message-hosts" = {
+    target = ".librewolf/native-messaging-hosts/org.gnome.shell.extensions.gsconnect.json";
+    source = "${pkgs.gnomeExtensions.gsconnect}/lib/mozilla/native-messaging-hosts/org.gnome.shell.extensions.gsconnect.json";
+    # Also available under /etc(/opt)?/chrome/native-messaging-hosts/
+  };
   programs = {
     librewolf = {
       enable = true;
+      package = pkgs.librewolf-wayland.overrideAttrs (oldAttrs: {
+        extraNativeMessagingHosts = (with pkgs; [ gnomeExtensions.gsconnect keepassxc ]);
+      });
+      # necessary file for keepassxc integration is created in `folders-and-files.nix`
+
       settings = {
         "media.ffmpeg.vaapi.enabled" = true;
         "widget.use-xdg-desktop-portal.file-picker" = 1;
@@ -36,7 +46,7 @@
         "browser.compactmode.show" = true;
 
         ## Own Preferences
-        "browser.policies.runOncePerModification.setDefaultSearchEngine" = "Startpage";
+        "browser.policies.runOncePerModification.setDefaultSearchEngine" = "Startpage"; # Doesn't work
         "browser.ctrlTab.sortByRecentlyUsed" = true;
         "general.autoScroll" = true;
         "browser.translations.automaticallyPopup" = false;
@@ -44,10 +54,6 @@
 
         ## Mozilla Accounts
         "identity.fxaccounts.enabled" = true;
-
-        ## Enable Cookies
-        "network.cookie.lifetimePolicy" = 0; # Server decides about cookie lifetime
-        "privacy.clearOnShutdown.cookies" = false;
 
         ## Privacy
         "webgl.disabled" = false; # Actually anti-privacy...

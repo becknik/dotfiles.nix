@@ -1,4 +1,4 @@
-{ config, ... }:
+{ pkgs, ... }:
 
 {
   # Folder Setup
@@ -68,7 +68,6 @@
       '';
     };
 
-    ## keepassxc default config
     "keepassxc-config" = {
       enable = true;
       target = ".config/keepassxc/keepassxc.ini";
@@ -111,6 +110,22 @@
         IconDownloadFallback=true
         LockDatabaseIdle=true
         LockDatabaseMinimize=true
+      '';
+    };
+
+    "keepassxc-proxy-for-librewolf-message-hosts" = {
+      enable = true;
+      target = ".librewolf/native-messaging-hosts/org.keepassxc.keepassxc_browser.json";
+      text = ''
+        {
+            "allowed_extensions": [
+                "keepassxc-browser@keepassxc.org"
+            ],
+            "description": "KeePassXC integration with native messaging support",
+            "name": "org.keepassxc.keepassxc_browser",
+            "path": "${pkgs.keepassxc}/bin/keepassxc-proxy",
+            "type": "stdio"
+        }
       '';
     };
 

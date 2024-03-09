@@ -8,8 +8,6 @@
 
     ./systemd.nix # Systemd services (related to NixOS auto upgrade)
     ./virtualisation.nix
-
-    ./browsers.nix
   ];
 
 

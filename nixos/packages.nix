@@ -1,6 +1,26 @@
 { config, lib, pkgs, ... }:
 
 {
+  # Chromium (configuration policies only)
+  programs.chromium = {
+    enable = true;
+    #defaultSearchProviderEnabled = true; # doesn't work...
+    # homepageLocation = "https://chat.openai.com/?model=gpt-4"; # " - "
+    extraOpts = {
+      "SavingBrowserHistoryDisabled" = true;
+      "AllowDeletingBeowserHistory" = true;
+      # Source: https://discourse.nixos.org/t/how-to-configure-chromium/7334/2
+      "BrowserSignin" = 0;
+      "SyncDisabled" = true;
+      #"PasswordManagerEnabled" = false;
+      "BuiltInDnsClientEnabled" = false;
+      "MetricsReportingEnabled" = true;
+      "SpellcheckEnabled" = true;
+      "SpellcheckLanguage" = [ "de" "en-US" ];
+      "CloudPrintSubmitEnabled" = false;
+    };
+  };
+
   programs.neovim = {
     # Enable neovim for root account, besides of nixvim for home-manager user
     enable = true;
