@@ -1,4 +1,4 @@
-{ ohmyzsh, flakeLock, config, pkgs, ... }:
+{ config, mkFlakeDir, userName, pkgs, ... }:
 
 {
   programs = {
@@ -89,12 +89,7 @@
 
       oh-my-zsh = {
         enable = true;
-        package =
-          let ohmyzsh-source-locked-rev = flakeLock.nodes.ohmyzsh.locked.rev;
-          in pkgs.oh-my-zsh.overrideAttrs (oldAttrs: {
-            version = ohmyzsh-source-locked-rev;
-            src = ohmyzsh;
-          });
+        package = pkgs.oh-my-zsh-git;
         theme = ""; # requirement for pure theme to work
 
         plugins = [
@@ -185,11 +180,12 @@
 
       shellAliases =
         let
-          commonRebuildString = isDarwin: argument:
-            "sudo ${if isDarwin then "darwin" else "nixos"}-rebuild " +
-            "--flake \"${config.home.homeDirectory}/devel/own/dotfiles.nix" +
-            "#$NIXOS_CONFIGURATION_NAME\" " +
-            "${argument} --impure";
+        # no-link: Do not create symlinks to the build results.
+          mkNomFlakeBuildCmd = "nom build --quiet --no-link \"${(mkFlakeDir userName config)}#nixosConfigurations"
+            + ".$NIXOS_CONFIGURATION_NAME.config.system.build.toplevel\"";
+          mkRebuildCmd = isDarwin: argument: "sudo ${if isDarwin then "darwin" else "nixos"}-rebuild "
+            + "--flake \"${(mkFlakeDir userName config)}#$NIXOS_CONFIGURATION_NAME\" ${argument}";
+          mkBetterRebuildCmd = isDarwin: argument: "${mkNomFlakeBuildCmd} && ${mkRebuildCmd isDarwin argument} || exit 1";
         in
         {
           # General
@@ -197,14 +193,20 @@
           sduo = "sudo";
 
           # Flake NixOS configuration equals hostname of machine
-          # `--impure` is due to flake.lock being referenced to determine version-tag of flake-input `programs.zsh.oh-my-zsh.package`
-          nrbs = (commonRebuildString false "switch");
-          nrbb = (commonRebuildString false "boot");
-          nrbt = (commonRebuildString false "test");
+          # TODO this is ugly
+          nrbs = (mkBetterRebuildCmd false "switch");
+          nrbb = (mkBetterRebuildCmd false "boot");
+          nrbt = (mkBetterRebuildCmd false "test");
+          nrbsnn = (mkRebuildCmd false "switch");
+          nrbbnn = (mkRebuildCmd false "boot");
+          nrbtnn = (mkRebuildCmd false "test");
 
-          drbs = (commonRebuildString true "switch");
-          drbb = (commonRebuildString true "build");
-          drbc = (commonRebuildString true "check");
+          drbs = (mkBetterRebuildCmd true "switch");
+          drbb = (mkBetterRebuildCmd true "build");
+          drbc = (mkBetterRebuildCmd true "check");
+          drbsnn = (mkRebuildCmd true "switch");
+          drbbnn = (mkRebuildCmd true "build");
+          drbcnn = (mkRebuildCmd true "check");
 
           ngc = "sudo nix-collect-garbage";
           ngckeep = "sudo nix-collect-garbage --delete-older-than";

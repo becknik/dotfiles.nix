@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     disko = {
       url = "github:nix-community/disko";
@@ -50,88 +51,123 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, nixos-hardware, ... }@input-attrs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, nixos-hardware, ... }@inputs:
     let
-      defaultUser = "jnnk";
-      flakeDirectory = "/home/${defaultUser}/devel/own/dotfiles.nix";
-      flakeLock = builtins.fromJSON (builtins.readFile ("${flakeDirectory}/flake.lock"));
+      systems = [ "x86_64-darwin" "x86_64-linux" ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
 
       stateVersion = "23.11";
 
-      system = "x86_64-linux";
+      # Necessary e.g. for NixOS `config.system.autoUpgrade.flake` with `--commit-lockfile`
+      mkFlakeDir = userName: config: (if builtins.hasAttr "users" config then
+        "${config.users.users.${userName}.home}/devel/own/dotfiles.nix" else
+        "${config.home.homeDirectory}/devel/own/dotfiles.nix");
+
       # Default nixpkgs config
       config = {
         permittedInsecurePackages = [ "electron-25.9.0" ];
         joypixels.acceptLicense = true;
         allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [
           "brgenml1lpr"
+          "brscan5"
+          "brscan5-etc-files"
+          "libsane-dsseries"
           "joypixels"
-          "clion"
-          "idea-ultimate"
-          "obsidian"
+
           "veracrypt"
+          "obsidian"
           "discord"
+
+          "postman"
+          "jetbrains-toolbox"
+          "idea-ultimate"
+          "clion"
+          "vscode-extension-MS-python-vscode-pylance"
           "vscode-extension-ms-vsliveshare-vsliveshare"
           "vscode-extension-github-copilot"
-          "vscode-extension-MS-python-vscode-pylance"
+          "vscode-extension-github-copilot-chat"
         ];
       };
-      defaultNixPkgsSetup = { inherit system config; };
 
-      # Shared overlays
-      overlay-unstable = final: prev: {
-        unstable = import nixpkgs-unstable defaultNixPkgsSetup;
-      };
-      ## Overlay to disable native compilation of packages with build flags
-      overlay-clean = final: prev: {
-        clean = import nixpkgs defaultNixPkgsSetup;
+      # `nixpkgs-unstable'` necessary due to target platform config on `dnix`
+      defaultOverlays = nixpkgs-unstable': with self.overlays; [
+        default # Additions to `nixpkgs.lib`
+        nixpkgs-unstable'
+        modifications
+        additions # contents of ./pkgs
+      ];
+
+      # Default system specialArgs
+      args = userName: {
+        # https://discourse.nixos.org/t/flakes-accessing-selfs-revision/11237/6
+        inherit self inputs stateVersion userName mkFlakeDir;
+        inherit (inputs) flockenzeit;
       };
 
-      specialArgs = {
-        inherit stateVersion flakeDirectory flakeLock defaultUser;
-        inherit (input-attrs) flockenzeit;
-      };
-
-      commonConfHomeManager = { laptopMode, pkgs, ... }:
+      # home-manager config generation function
+      mkHomeManagerConf = { system, laptopMode, userName, ... }:
         let
-          additionalJDKs = with pkgs; [ temurin-bin-17 ];
+          isDarwinSystem = inputs.nixpkgs.lib.strings.hasInfix "darwin" system;
         in
         {
           home-manager = {
-            extraSpecialArgs = specialArgs //
-              {
-                inherit laptopMode additionalJDKs system;
-                inherit (input-attrs) ohmyzsh;
-              };
+            extraSpecialArgs = (args userName) // {
+              inherit system laptopMode isDarwinSystem;
+              inherit (inputs) ohmyzsh;
+            };
             useGlobalPkgs = true;
             useUserPackages = true;
 
-            sharedModules = with input-attrs; [
-              sops-nix.homeManagerModules.sops
-              plasma-manager.homeManagerModules.plasma-manager
-              nixvim.homeManagerModules.nixvim
-            ];
+            sharedModules = with inputs;
+              if (isDarwinSystem) then [
+                sops-nix.homeManagerModules.sops
+                nixvim.homeManagerModules.nixvim
+                mac-app-util.homeManagerModules.default
+              ] else [
+                sops-nix.homeManagerModules.sops
+                nixvim.homeManagerModules.nixvim
+                plasma-manager.homeManagerModules.plasma-manager
+              ];
 
-            users.${defaultUser} = import ./home-manager;
+            users.${userName} = import (if !isDarwinSystem then ./home-manager else ./nix-darwin/home.nix);
           };
         };
     in
     {
-      nixosConfigurations = {
-        dnix = nixpkgs.lib.nixosSystem {
-          inherit system specialArgs;
+      packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
 
-          modules = with nixos-hardware.nixosModules; [
-            common-cpu-intel
-            common-pc
-            common-pc-ssd
-          ] ++ [
-            # nixpkgs, native building & overlay setup
-            (
-              { pkgs, lib, ... }@module-attrs:
+      overlays = import ./overlays { inherit inputs config; };
+
+      #nixosModules = import ./modules/nixos;
+      #homeManagerModules = import ./modules/home-manager;
+
+      nixosConfigurations.dnix =
+        let
+          system = "x86_64-linux";
+          userName = "jnnk";
+        in
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = (args userName);
+
+          modules = with nixos-hardware.nixosModules; [ common-cpu-intel common-pc common-pc-ssd ] ++ [
+            inputs.disko.nixosModules.disko
+
+            ./nixos
+            ./nixos/dnix
+
+            home-manager.nixosModules.home-manager
+            (mkHomeManagerConf {
+              inherit system userName;
+              laptopMode = false;
+            })
+
+            # nixpkgs native build & overlay setup
+            # https://nixos.wiki/wiki/Build_flags#Building_the_whole_system_on_NixOS
+            ({ pkgs, ... }@module-inputs:
               let
-                # Build Flags Setup (https://nixos.wiki/wiki/Build_flags#Building_the_whole_system_on_NixOS)
-                arch = "alderlake"; # "raptorlake"
+                arch = "alderlake"; # TODO GCC13 -> "raptorlake"
                 tune = arch;
                 platform = {
                   inherit system;
@@ -139,71 +175,66 @@
                   #rustc = { inherit arch tune; }; # TODO Research build flag attributes for rustc
                   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/compilers/rust/rustc.nix
                 };
+                # https://nix.dev/tutorials/cross-compilation.html
                 platformConfig = {
-                  # https://nix.dev/tutorials/cross-compilation.html
+                  # https://github.com/NixOS/nixpkgs/issues/291271
                   #buildPlatform = platform; # platform where the executables are built
                   hostPlatform = platform; # platform where the executables will run
                 };
 
+                # TODO fastStdenv might not use arch flags if my thinkings not messed up...
+                config' = {
+                  replaceStdenv = { pkgs }: pkgs.fastStdenv;
+                  #(pkgs.withCFlags [ "-O3" ] pkgs.fastStdenv);
+                  # TODO error: The ‘env’ attribute set cannot contain any attributes passed to derivation.
+                  # The following attributes are overlapping: NIX_CFLAGS_COMPILE
+                } // config;
+                # This for of adding `nixpkgs.config` is necessary due to `replaceStdenv` else shadowing the options
+                # specified in `config`
+
+
                 # Overlay Setup
-
-                unstable = final: prev: {
-                  # TODO might it be that unstable packages are not built optimized? :|
-                  unstable = import nixpkgs-unstable defaultNixPkgsSetup // platformConfig;
+                nixpkgs-unstable-wit-platform = final: _prev: {
+                  unstable = import nixpkgs-unstable
+                    (platformConfig // {
+                      inherit system;
+                      config = config';
+                      overlays = with self.overlays; [
+                        default
+                        modifications
+                        additions
+                        nixpkgs-clean
+                        build-fixes
+                        build-skips
+                      ];
+                      # TODO error: attribute 'llvmPackages' missing?
+                    });
                 };
-
-                build-fixes = import ./overlays/build-fixes.nix module-attrs;
-                packages = import ./overlays/packages.nix module-attrs;
               in
               {
                 nixpkgs = platformConfig // {
                   inherit system;
+                  config = config';
 
-                  config = {
-                    replaceStdenv = { pkgs }: pkgs.fastStdenv;
-                    #(pkgs.withCFlags [ "-O3" ] pkgs.fastStdenv);
-                    # TODO error: The ‘env’ attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping: NIX_CFLAGS_COMPILE
-                  } // config;
-                  # Necessary due to `replaceStdenv` overwriting nixpkgs.config
-
-                  overlays = [
-                    overlay-clean
-                    unstable
-
-                    build-fixes.dependencyBuildSkip
-
-                    build-fixes.useCleanOverlay
-                    build-fixes.deactivateFailingTestsPython
-                    build-fixes.deactivateFailingTestsHaskell
-                    build-fixes.deactivateFailingTests
-
-                    packages.patched-linux-dnix
-                    packages.patched-librewolf-unwrapped
-                    #packages.obsidian
-                  ];
+                  overlays = (defaultOverlays nixpkgs-unstable-wit-platform) ++
+                    (with self.overlays; [
+                      nixpkgs-clean
+                      build-fixes
+                      build-skips
+                    ]);
                 };
-              }
-            )
-
-            # NixOS configuration
-            input-attrs.disko.nixosModules.disko
-            ./nixos
-            ./nixos/dnix
-
-            # home-manager basic setup & configuration import
-            home-manager.nixosModules.home-manager
-            (
-              { pkgs, ... }@module-attrs:
-              commonConfHomeManager {
-                inherit pkgs;
-                laptopMode = false;
-              }
-            )
+              })
           ];
         };
 
-        lnix = nixpkgs.lib.nixosSystem {
-          inherit system specialArgs;
+      nixosConfigurations.lnix =
+        let
+          system = "x86_64-linux";
+          userName = "jnnk";
+        in
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = (args userName);
 
           modules = with nixos-hardware.nixosModules; [
             common-cpu-amd
@@ -213,81 +244,46 @@
             #common-pc-laptop-acpi_call # "acpi_call makes tlp work for newer thinkpads"
             asus-battery
           ] ++ [
-            ({ lib, pkgs, ... }@module-attrs: {
-              nixpkgs = defaultNixPkgsSetup // {
-                overlays = [
-                  overlay-unstable
-                  overlay-clean
-                  # (import ./overlays/packages.nix module-attrs).patched-linux # TODO Create the patched kernel lnix overlay
-                ];
+            ({ lib, pkgs, ... }@module-inputs: {
+              nixpkgs = {
+                inherit system config;
+                overlays = (defaultOverlays self.overlays.nixpkgs-unstable);
               };
             })
-            input-attrs.disko.nixosModules.disko
+            inputs.disko.nixosModules.disko
             ./nixos
             ./nixos/lnix
             home-manager.nixosModules.home-manager
-            (
-              { pkgs, ... }@module-attrs:
-              commonConfHomeManager {
-                inherit pkgs;
-                laptopMode = true;
-              }
-            )
+            (mkHomeManagerConf {
+              inherit system userName;
+              laptopMode = true;
+            })
           ];
         };
-      };
 
       darwinConfigurations."wnix" =
         let
           system = "x86_64-darwin";
-          defaultUser = "jbecker";
-
-          flakeDirectory = "/Users/${defaultUser}/devel/own/dotfiles.nix";
-          flakeLock = builtins.fromJSON (builtins.readFile ("${flakeDirectory}/flake.lock"));
-
-          specialArgs' = specialArgs // { inherit defaultUser flakeDirectory flakeLock; };
-          defaultNixPkgsSetup' = defaultNixPkgsSetup // { inherit system; };
-
-          overlayUnstable = final: prev: {
-            unstable = import nixpkgs-unstable defaultNixPkgsSetup';
-          };
-          overlayCleanReplacement = final: prev: {
-            clean = import nixpkgs defaultNixPkgsSetup';
-          };
+          userName = "jbecker";
         in
         darwin.lib.darwinSystem {
           inherit system;
+          specialArgs = (args userName);
 
           modules = [
-            ({ lib, pkgs, ... }@module-attrs: {
-              nixpkgs = defaultNixPkgsSetup' // {
-                overlays = [ overlayUnstable overlayCleanReplacement ];
+            ({ lib, pkgs, ... }@module-inputs: {
+              nixpkgs = {
+                inherit system config;
+                overlays = (defaultOverlays self.overlays.nixpkgs-unstable);
               };
             })
-
-            ./nix-darwin/configuration.nix
-            input-attrs.mac-app-util.darwinModules.default
+            inputs.mac-app-util.darwinModules.default
+            ./darwin/configuration.nix
 
             home-manager.darwinModules.home-manager
-            ({ pkgs, ... }@module-attrs: {
-              home-manager = {
-                extraSpecialArgs = specialArgs' //
-                  {
-                    inherit system;
-                    inherit (input-attrs) ohmyzsh;
-                    additionalJDKs = with pkgs; [ temurin-bin-8 temurin-bin-11 temurin-bin-21 ];
-                  };
-
-                useGlobalPkgs = true;
-                useUserPackages = true;
-
-                sharedModules = with input-attrs; [
-                  nixvim.homeManagerModules.nixvim
-                  mac-app-util.homeManagerModules.default
-                  sops-nix.homeManagerModules.sops
-                ];
-                users.${defaultUser} = import ./nix-darwin/home.nix;
-              };
+            (mkHomeManagerConf {
+              inherit system userName;
+              laptopMode = false; # no dconf <=> no effect
             })
           ];
         };

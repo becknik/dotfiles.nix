@@ -1,24 +1,18 @@
-{ system, additionalJDKs, config, pkgs, ... }:
+{ isDarwinSystem, lib, config, pkgs, ... }:
 
 {
   home.packages =
     let
-      isNotDarwin = (system != "x86_64-darwin");
-      dummyPkg = pkgs.hello;
-      makeWhenNotDarwin = pkg: (if isNotDarwin then pkg else dummyPkg);
+      clangPackages = with pkgs; lib.optionals (!isDarwinSystem) [ clang_17 clang-tools_17 ];
+      texlive = with pkgs; lib.optional (!isDarwinSystem) texliveFull;
     in
-    with pkgs; [
-      # TeX Live
-      # Source for new 23.11 interface: https://github.com/NixOS/nixpkgs/issues/250243
-      /*(unstable.texlive.withPackages (ps: with ps; [
-      scheme-full # Need xelatex which is included right here
-      ]))*/
-      (makeWhenNotDarwin texliveFull)
+    with pkgs; texlive ++ [
 
       # JS / TypeScript
+      typescript
       nodePackages.eslint_d
       nodejs_latest
-      typescript
+      deno
 
       # Nix
       # https://github.com/nix-community/nixd
@@ -34,20 +28,10 @@
 
       # Haskell
       ghc
-      #clean.haskellPackages.ghcup
-      /* (haskellPackages.ghcup.override {
-      Cabal = haskellPackages.Cabal_3_6_3_0;
-      versions = (import (builtins.fetchGit {
-         # Descriptive name to make the store path easier to identify
-         name = "nixpkgs-unstable-versions-5.0.5";
-         url = "https://github.com/NixOS/nixpkgs/";
-         ref = "refs/heads/nixpkgs-unstable";
-         rev = "50a7139fbd1acd4a3d4cfa695e694c529dd26f3a";
-       }) {}).haskellPackages.versions;
-      }) */
 
+      # Java / JVM
       kotlin
-      dotty # = scala 3
+      dotty # = scala3
 
       ## Linting
       google-java-format
@@ -57,10 +41,8 @@
       lldb
 
       # C++
-      (makeWhenNotDarwin clang_17)
-      (makeWhenNotDarwin clang-tools_17)
       cmake
-    ];
+    ] ++ clangPackages;
 
   # JDK Setup
   programs.java = {

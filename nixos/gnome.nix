@@ -1,11 +1,6 @@
 { pkgs, lib, ... }:
 
-let
-  # Used to overwrite the lib.mkDefault which uses the lower priority of 1000
-  mkForce = value: lib.mkOverride 50 value;
-in
 {
-
   # Basic GNOME Desktop Environment Setup
   services = {
     xserver = {
@@ -32,14 +27,14 @@ in
 
       ### Override the implications of gnome.core-os-services
       #evolution-data-server.enable = lib.mkDefault false; # might be the cause for gnome shell crashes
-      gnome-online-accounts.enable = mkForce false;
-      gnome-online-miners.enable = lib.mkDefault false;
-      tracker-miners.enable = mkForce false;
-      tracker.enable = mkForce false;
+      gnome-online-accounts.enable = lib.mkForce false;
+      gnome-online-miners.enable = lib.mkForce false;
+      tracker-miners.enable = lib.mkForce false;
+      tracker.enable = lib.mkForce false;
 
       ### " gnome.core-shell
-      gnome-remote-desktop.enable = mkForce false;
-      gnome-initial-setup.enable = mkForce false;
+      gnome-remote-desktop.enable = lib.mkForce false;
+      gnome-initial-setup.enable = lib.mkForce false;
     };
   };
 
@@ -92,7 +87,7 @@ in
     #org.kde.dolphin.desktop[294371]: kf.service.services: KApplicationTrader: mimeType "x-scheme-handler/dav" not found
     #kf.kio.core: couldn't create worker: "Unknown protocol 'dav'
     gwenview
-    kate # This pulls in Konsole and I don't know if I can stop it from doing so, but its fine I guess
+    kate # TODO This pulls in Konsole and I don't know if I can stop it from doing so, but its fine I guess
     #(kate.override { propagatedUserEnvPkgs = []; })
     ktouch
     okular

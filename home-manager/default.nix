@@ -1,7 +1,8 @@
-{ lib, stateVersion, defaultUser, ... }:
+{ stateVersion, userName, ... }:
 
 {
-  /*options = { TODO find out where to declare the value of this option...
+  #  TODO find out where to declare the value of this option...
+  /*options = {
     customOptions.laptopMode = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -24,12 +25,15 @@
       inherit stateVersion;
 
       # Home Manager needs a bit of information about you and the paths it should manage.
-      username = defaultUser;
-      homeDirectory = "/home/${defaultUser}";
+      username = userName;
+      homeDirectory = "/home/${userName}";
     };
 
     # Lets Home Manager install and manage itself.
     programs.home-manager.enable = true;
+
+    # Nicely reload system units when changing configs
+    systemd.user.startServices = "sd-switch";
 
     # Backups
     programs = {

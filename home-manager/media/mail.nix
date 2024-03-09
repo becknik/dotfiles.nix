@@ -1,4 +1,4 @@
-{ defaultUser, ... }:
+{ userName, ... }:
 
 let
   getSecretPasswordCommand = provider: "cat $XDG_RUNTIME_DIR/secrets/mail/${provider}/password";
@@ -16,9 +16,9 @@ let
     {
       #name = Provider;
       /*
-        error: The option `home-manager.users.${defaultUser}.accounts.email.accounts.posteo.name' is read-only, but it's set multiple times. Definition values:
+        error: The option `home-manager.users.${userName}.accounts.email.accounts.posteo.name' is read-only, but it's set multiple times. Definition values:
        - In `/nix/var/nix/profiles/per-user/root/channels/home-manager/modules/accounts/email.nix': "posteo"
-       - In `/home/${defaultUser}/.config/home-manager/media/mail.nix': "Posteo"
+       - In `/home/${userName}/.config/home-manager/media/mail.nix': "Posteo"
       */
 
       address = mail-address; # Differing names necessary to avoid infinit recursion

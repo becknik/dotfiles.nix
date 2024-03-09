@@ -1,4 +1,4 @@
-{ system, lib, pkgs, ... }:
+{ isDarwinSystem, pkgs, ... }:
 
 {
   imports = [
@@ -53,17 +53,17 @@
   programs. gpg. enable = true;
 
   # Manual Installations
-  home.packages = with pkgs; [
+  home.packages = with pkgs.unstable; let
+    jetbrainsTools = with jetbrains; [ clion idea-ultimate ]
+      ++ lib.lists.optional (!isDarwinSystem) jetbrains-toolbox; # use this one for experiments
+  in
+  jetbrainsTools ++ [
     git-crypt
     meld
     wiggle
 
     # LLM (ChatGPT)
     shell_gpt
-
-    # JetBrains IDEs
-    unstable.jetbrains.clion
-    unstable.jetbrains.idea-ultimate
 
     ## OCI Containers
     dive # https://github.com/wagoodman/dive
@@ -77,27 +77,10 @@
     ## Testing
     httpie
     newman
-
-    # Latest postman build fails to download - last checked 2023.12.06
-    #> curl: (22) The requested URL returned error: 404
-    #> error: cannot download postman-10.18.6.tar.gz from any mirror
-    (import
-      (builtins.fetchGit {
-        name = "nixpkgs-unstable-postman-10.15.0";
-        url = "https://github.com/NixOS/nixpkgs/";
-        ref = "refs/heads/nixpkgs-unstable";
-        rev = "976fa3369d722e76f37c77493d99829540d43845";
-      })
-      {
-        inherit system;
-        config.allowUnfree = true;
-      }).postman
-
-    ### SQL
-    (dbeaver.override { jdk17 = temurin-bin-17; })
+    postman
 
     ## CI / CD
-    awscli2
+    #awscli2
     kubectl
     act
   ];

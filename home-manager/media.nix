@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [
@@ -67,10 +67,9 @@
       };
     };
 
-    # Browsers
     chromium = {
       enable = true;
-      package = pkgs.clean.ungoogled-chromium;
+      package = pkgs.ungoogled-chromium;
       commandLineArgs = [
         "--enable-features=UseOzonePlatform"
         "--ozone-platform=wayland"
@@ -90,23 +89,15 @@
 
 
   # Package Leftover
-  home.packages = with pkgs; let
-    # NixOS/nixpkgs#272912 NixOS/nixpkgs#273611
-    elelctron_25-patched-for-wayland = pkgs.electron_25.overrideAttrs (_: {
-      preFixup = "patchelf --add-needed ${pkgs.libglvnd}/lib/libEGL.so.1 $out/bin/electron";
-    });
-  in
-  [
+  home.packages = with pkgs; [
     ## Natural language
     hunspell
     hunspellDicts.de_DE
     hunspellDicts.en-us-large
 
     ## Daily Software
-    clean.libreoffice-fresh
-    (lib.trivial.throwIf (lib.strings.versionOlder "1.5.7" obsidian.version) "Obsidian no longer requires EOL Electron"
-      (obsidian.override { electron = elelctron_25-patched-for-wayland; })
-    )
+    libreoffice-fresh
+    obsidian
     # Options from laptop to get fcitx5 input working:
     # --enable-features=WaylandWindowsDecorations,UseOzonePlatform --ozone-platform-hint=wayland
     logseq
@@ -117,19 +108,16 @@
 
     ## Privacy
     keepassxc
-    clean.tor-browser
+    tor-browser
     gpa
-    veracrypt
+    veracrypt # TODO derivation with set WXSUPPRESS_SIZER_FLAGS_CHECK env var
 
     ## Chat Clients
     element-desktop
     telegram-desktop
     signal-desktop
     whatsapp-for-linux
-    (discord.override {
-      withOpenASAR = true;
-      withVencord = true;
-    })
+    discord-modified
     #teams-for-linux
 
     ## Media
@@ -144,7 +132,7 @@
     media-downloader # for yt-dlp
 
     ## Images
-    clean.krita
+    krita
     imagemagick
 
     ### PDF

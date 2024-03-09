@@ -21,33 +21,19 @@
   # Build Cache
   programs.ccache = {
     enable = true;
-    #cacheDir = ""
+    # TODO "self.ccacheStdenv" might break thing with fastStdenv
     packageNames = [
-      # TODO somehow determine long *compiling* (not building) packages which are updated infrequently
-      # TODO move some of the ccached packages to the dependency-compilation-skip overlay?
-      ## compilers
-      #"gcc"
-      #"xgcc"
-      #"gfortran"
-      #"clang"
-      #"llvm"
+      "gcc-wrapper"
+      "gcc"
+      "xgcc"
+      "gfortran" # why does this even exist? ...
 
-      ## PL on which much depends
-      #"bash"
-      #"perl"
-      #"vala"
+      "clang"
+      "llvm"
 
-      ## UNIX tooling on which much depends
-      #"binutils"
-      #"bison"
-      #"gmp"
+      "ghc" # this package is huge & builds forever!
 
-      ## frequently used build tools
-      #"yarn"
-      #"meson"
-
-      ## huge packages
-      #"electron"
+      "linux"
     ];
   };
 

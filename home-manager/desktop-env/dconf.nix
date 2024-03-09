@@ -1,4 +1,4 @@
-{ defaultUser, laptopMode, config, lib, ... }:
+{ userName, laptopMode, config, lib, ... }:
 
 let
   default-sidebar-width = 156;
@@ -42,7 +42,7 @@ in
 with lib.gvariant; {
 
   dconf.settings = {
-    "apps/seahorse/listing".keyrings-selected = [ "openssh:///home/${defaultUser}/.ssh" ];
+    "apps/seahorse/listing".keyrings-selected = [ "openssh:///home/${userName}/.ssh" ];
 
     "ca/desrt/dconf-editor".show-warning = false;
 
@@ -534,7 +534,7 @@ with lib.gvariant; {
       jpeg-quality = 100;
       photo-dpi = 600;
       postproc-enabled = false;
-      save-directory = "file:///home/${defaultUser}/dl/";
+      save-directory = "file:///home/${userName}/dl/";
       text-dpi = 600;
     };
 

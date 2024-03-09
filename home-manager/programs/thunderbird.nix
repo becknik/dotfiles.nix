@@ -1,14 +1,15 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 {
   programs.thunderbird = {
     enable = true;
+    package = pkgs.thunderbird;
     settings = {
       "privacy.donottrackheader.enabled" = true;
       "accessibility.typeaheadfind.flashBar" = 0;
 
       "browser.crashReports.unsubmittedCheck.autoSubmit2" = true;
-      "browser.download.lastDir" = "${config.home.homeDirectory}/dl"; #TODO access the home.xdg.userDirs directly?
+      "browser.download.lastDir" = config.xdg.userDirs.download;
 
       "calendar.alarms.defaultsnoozelength" = 10;
       "calendar.date.format" = 1;

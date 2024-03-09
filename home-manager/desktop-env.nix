@@ -1,4 +1,4 @@
-{ defaultUser, config, ... }:
+{ userName, config, ... }:
 
 {
   imports = [
@@ -33,16 +33,15 @@
       videos = "${config.home.homeDirectory}/vids";
     };
   };
-  #home.packages = with pkgs; [ handlr-regex ]; # Doesn't work on NixOS :(
 
   xdg.configFile."gtk-3.0/settings.ini".force = true; # Only necessary for first deployment (?)
   gtk = {
     enable = true;
     gtk3 = {
       bookmarks = [
-        "file:///home/${defaultUser}/nextcloud/uni/current-courses"
-        "file:///home/${defaultUser}/devel"
-        "file:///home/${defaultUser}/nextcloud"
+        "file:///home/${userName}/nextcloud/uni/current-courses"
+        "file:///home/${userName}/devel"
+        "file:///home/${userName}/nextcloud"
       ];
       extraConfig = {
         gtk-recent-files-limit = 0;

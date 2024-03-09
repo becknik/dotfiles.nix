@@ -1,4 +1,4 @@
-{ stateVersion, flakeDirectory, flakeLock, defaultUser, config, lib, pkgs, ... }:
+{ inputs, mkFlakeDir, stateVersion, userName, config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -18,10 +18,10 @@
     autoUpgrade = {
       enable = true;
       operation = "boot";
-      flake = "${config.users.users.${defaultUser}.home}/devel/own/dotfiles.nix";
+      flake = (mkFlakeDir userName config);
       flags = (builtins.map
         (flakeInput: "--update-input ${flakeInput}")
-        (lib.attrsets.mapAttrsToList (name: _: name) flakeLock.nodes.root.inputs)
+        (lib.attrsets.mapAttrsToList (name: _: name) inputs)
       ) ++ [
         "--impure"
         "-L" # print build logs
@@ -35,7 +35,7 @@
     enable = true; # Necessary for managing the flakes
     config = {
       # Necessary for systemd service fetching this git repo & autoUpgrade `--commit-lock-file`
-      safe.directory = flakeDirectory;
+      safe.directory = (mkFlakeDir userName config);
       user = {
         name = "Nix Auto Upgrade";
         email = "jannikb@posteo.de";
@@ -238,7 +238,7 @@
       in
       packagesToWrap'' // {
         ungoogled-chromium = {
-          #executable = "${lib.getBin pkgs.clean.ungoogled-chromium}/bin/chromium";
+          #executable = "${lib.getBin pkgs.ungoogled-chromium}/bin/chromium";
           executable = "/etc/per-user/jnnk/bin/chromium";
           profile = "${pkgs.firejail}/etc/firejail/chromium.profile";
           #extraArgs = "";
@@ -274,13 +274,27 @@
 
 
   # Nix
+
+  # This will add each flake input as a registry
+  # To make nix3 commands consistent with your flake
+  nix.registry = (lib.mapAttrs (_: flake: { inherit flake; })) ((lib.filterAttrs (_: lib.isType "flake")) inputs);
+
+  # This will additionally add your inputs to the system's legacy channels
+  # Making legacy nix commands consistent as well, awesome!
+  nix.nixPath = [ "/etc/nix/path" ];
+  environment.etc = lib.mapAttrs'
+    (name: value: {
+      name = "nix/path/${name}";
+      value.source = value.flake;
+    })
+    config.nix.registry;
+
   nix = {
     settings = {
       experimental-features = [
         "nix-command" # Enables some useful tools like the `nix edit '<nixpkgs>' <some-package-name>`
         "flakes"
       ];
-
       auto-optimise-store = true; # Automatic deduplication hardlinking in store
     };
     optimise = {
@@ -296,18 +310,11 @@
     channel.enable = true; # false destroys some direnv `use nix` & oldschool nix-shell
     daemonCPUSchedPolicy = "idle"; # "other", "batch"
   };
-  environment.shellInit =
-    let
-      # https://github.com/NixOS/nixpkgs/issues/41251
-      pow = n: i:
-        if i == 1 then n
-        else if i == 0 then 1
-        else n * pow n (i - 1);
-    in
-    "ulimit -n ${builtins.toString (pow 2 16)}";
+
+  # Avoids faling nix rebuilds due to too many open files
+  environment.shellInit = "ulimit -n ${builtins.toString (pkgs.lib.custom.pow 2 16)}";
 
   environment.systemPackages = with pkgs; [
-    nix-tree
     #opensnitch-ui
     #firejail # if not included explicitly, `/etc/apparmor.d` wouldn't get symlinked...
     #apparmor-parser # aa-enable firejail-default isn't working

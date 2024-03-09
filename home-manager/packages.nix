@@ -1,4 +1,4 @@
-{ system, pkgs, ... }:
+{ isDarwinSystem, pkgs, ... }:
 
 {
   # Btop
@@ -25,12 +25,8 @@
 
   # Manual Installations
   home.packages =
-    let
-      isNotDarwin = (system != "x86_64-darwin");
-      dummyPkg = pkgs.hello;
-      makeWhenNotDarwin = pkg: (if isNotDarwin then pkg else dummyPkg) ;
-    in
-    with pkgs; [
+    let makeWhenNotDarwin = pkg: (if isDarwinSystem then pkgs.hello else pkg);
+    in with pkgs; [
 
       ## Utils
       jq

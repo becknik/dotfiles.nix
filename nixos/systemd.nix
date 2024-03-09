@@ -1,6 +1,4 @@
-{ flockenzeit, flakeDirectory, defaultUser, pkgs, ... }:
-
-# TODO ulimit -n 65536
+{ inputs, flockenzeit, mkFlakeDir, userName, config, pkgs, ... }:
 
 {
   # Auto Upgrade Systemd Service
@@ -13,7 +11,7 @@
         description = "NixOS Upgrade Notification";
         serviceConfig = {
           Type = "oneshot";
-          User = defaultUser;
+          User = userName;
           Group = "users";
           ExecStart = "${pkgs.libnotify}/bin/notify-send "
             + "--urgency=${if critical then "critical --wait" else "normal --expire-time=10000"} "
@@ -29,7 +27,7 @@
       nixos-upgrade = {
         serviceConfig =
           let
-            currentDateTimeFormatted = with flockenzeit.lib.splitSecondsSinceEpoch {} builtins.currentTime; "${F}-${T}";
+            currentDateTimeFormatted = with flockenzeit.lib.splitSecondsSinceEpoch { } inputs.self.sourceInfo.lastModified; "${F}-${T}";
             logFilePath = "file:/var/log/nixos-upgrade/${"${currentDateTimeFormatted}.log"}";
           in
           {
@@ -72,7 +70,7 @@
         };
         path = with pkgs; [ git nixos-rebuild ];
         environment = {
-          NIXOS_CONFIG_REPO_DIRECTORY = flakeDirectory;
+          NIXOS_CONFIG_REPO_DIRECTORY = (mkFlakeDir userName config);
         };
         script = ''
           cd $NIXOS_CONFIG_REPO_DIRECTORY
