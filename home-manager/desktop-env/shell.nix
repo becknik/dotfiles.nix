@@ -214,9 +214,12 @@
           # Git
           gai = "git add --interactive";
           grsst = "git restore --staged"; # = grst
+          grhp = "git reset -p"; # useful for unstaging staged hunks
+
+          ## Frankensteins
           "gaucn!" = "gau && gcn!";
-          "gcnpf" = "gcn! && gpf";
-          "gaucnpf" = "gau && gcn! && gpf";
+          gcnpf = "gcn! && gpf";
+          gaucnpf = "gau && gcn! && gpf";
         };
     };
   };
