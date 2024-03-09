@@ -50,8 +50,13 @@
       (makeWhenNotDarwin ventoy-full)
       (makeWhenNotDarwin powertop)
 
-      ## NixOS
+      ## Nix(OS)
       nixos-option
+      nix-output-monitor
+      nix-diff
+      nix-update
+      nix-tree
+      nix-index
 
       ### Secrets Management (1)
       sops
