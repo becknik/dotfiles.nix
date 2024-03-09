@@ -78,9 +78,15 @@
   };
 
 
-  # Software for common Hardware
+  # Common Hardware
   services.fstrim.interval = "weekly"; # enabled by nixos-hardware
   #services.hardware.bolt.enable = true; # implied by gnome.core-os-services
+  hardware.sane = {
+    enable = true;
+    dsseries.enable = true;
+    brscan5 .enable = true;
+    #extraBackends = [ pkgs.sane-backends ];
+  };
 
 
   # Boot Process
@@ -246,12 +252,14 @@
 
   # User Setup
   users.mutableUsers = false;
-  users.users.${defaultUser} = {
+  users.users.${userName} = {
     isNormalUser = true;
     description = "jannik";
     hashedPassword = "$y$j9T$v2v24yeaoZcmnJRJqKVIb/$9/ERYx13TXXpCXA12dNvvrr1BOKx1/tgpO9M9fRlio4";
-    extraGroups = [ "wheel" "networkmanager" "libvirtd" /* "docker" */ "vboxusers" "video" ];
+    extraGroups = [ "wheel" "networkmanager" "libvirtd" /* "docker" */ "vboxusers" "video" ]
     # replaced docker with podman, docker wouldn't work rootless
+    # printing & scanning:
+      ++ [ "lp" "scanner" ];
     useDefaultShell = true;
   };
   users.users.root.hashedPassword = "!"; # disable root account
