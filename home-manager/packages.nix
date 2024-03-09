@@ -2,18 +2,24 @@
 
 {
   # Btop
-  programs.btop = {
-    enable = true;
-    settings = {
-      color_theme = "flat-remix.theme";
-      theme_background = false;
-      vim_keys = true;
-      update_ms = 2500;
-      proc_sorting = "cpu direct";
-      proc_per_core = true;
-      proc_filter_kernel = true;
-      show_io_stat = false;
-      io_mode = true;
+  programs = {
+    btop = {
+      enable = true;
+      settings = {
+        color_theme = "flat-remix.theme";
+        theme_background = false;
+        vim_keys = true;
+        update_ms = 2500;
+        proc_sorting = "cpu direct";
+        proc_per_core = true;
+        proc_filter_kernel = true;
+        show_io_stat = false;
+        io_mode = true;
+      };
+    };
+    eza = {
+      enable = true;
+      git = true;
     };
   };
 
@@ -34,7 +40,6 @@
       tldr
       tree
       bat
-      eza
 
       ### desktop-env
       (makeWhenNotDarwin wl-clipboard)
