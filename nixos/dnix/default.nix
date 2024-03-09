@@ -20,9 +20,8 @@
 
   # Build Cache
   programs.ccache = {
-    enable = true;
-    # TODO "self.ccacheStdenv" might break thing with fastStdenv
-    packageNames = [
+    enable = false; # TODO "self.ccacheStdenv" breaks thing with fastStdenv
+    /* packageNames = [
       "gcc-wrapper"
       "gcc"
       "xgcc"
@@ -34,7 +33,7 @@
       "ghc" # this package is huge & builds forever!
 
       "linux"
-    ];
+    ]; */
   };
 
   nix.settings = {
