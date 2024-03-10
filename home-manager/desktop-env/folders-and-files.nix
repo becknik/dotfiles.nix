@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   # Folder Setup
@@ -6,52 +6,43 @@
 
     ## devel Folder Structure
     "foreign" = {
-      enable = true;
       target = "devel/foreign/.keep"; # path relative to home
       text = "";
     };
     "own" = {
-      enable = true;
       target = "devel/own/.keep";
       text = "";
     };
     "ide" = {
-      enable = true;
       target = "devel/ide/.keep";
       text = "";
     };
     "lab" = {
-      enable = true;
       target = "devel/lab/.keep";
       text = "";
     };
 
     "scripts" = {
-      enable = true;
       target = "scripts/.keep";
       text = "";
     };
 
     ## Nextcould Sync Folders
     "nextcloud/uni" = {
-      enable = true;
       target = "nextcloud/uni/.keep";
       text = "";
     };
     "nextcloud/archive" = {
-      enable = true;
       target = "nextcloud/archive/.keep";
       text = "";
     };
     "nextcloud/transfer" = {
-      enable = true;
       target = "nextcloud/transfer/.keep";
       text = "";
     };
 
     ## sops .config folder where the keys.txt should live in to decrypt the secrets of sops-nix
     "sops" = {
-      enable = true;
       target = ".config/sops/age/.keep";
       text = '''';
     };
@@ -59,7 +50,6 @@
     # Files
 
     "ghci" = {
-      enable = true;
       target = ".ghci";
       # Source: https://stackoverflow.com/a/53109980
       text = ''
@@ -68,7 +58,6 @@
     };
 
     "cargo-config" = {
-      enable = true;
       target = ".cargo/config";
       text = ''
         [target.x86_64-unknown-linux-gnu]
@@ -77,7 +66,6 @@
     };
 
     "keepassxc-config" = {
-      enable = true;
       target = ".config/keepassxc/keepassxc.ini";
       text = ''
         [General]
@@ -121,26 +109,8 @@
       '';
     };
 
-    "keepassxc-proxy-for-librewolf-message-hosts" = {
-      enable = true;
-      target = ".librewolf/native-messaging-hosts/org.keepassxc.keepassxc_browser.json";
-      text = ''
-        {
-            "allowed_extensions": [
-                "keepassxc-browser@keepassxc.org"
-            ],
-            "description": "KeePassXC integration with native messaging support",
-            "name": "org.keepassxc.keepassxc_browser",
-            "path": "${pkgs.keepassxc}/bin/keepassxc-proxy",
-            "type": "stdio"
-        }
-      '';
-    };
-
     ## VM Script
     "vm-executer-script" = {
-      enable = true;
-      executable = true;
       target = "vm/run.sh";
       text = ''
         #!/bin/bash

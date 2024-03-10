@@ -25,11 +25,18 @@
 
   # Browsers
 
-  home.file."gsconnect-librewolf-message-hosts" = {
-    target = ".librewolf/native-messaging-hosts/org.gnome.shell.extensions.gsconnect.json";
-    source = "${pkgs.gnomeExtensions.gsconnect}/lib/mozilla/native-messaging-hosts/org.gnome.shell.extensions.gsconnect.json";
-    # Also available under /etc(/opt)?/chrome/native-messaging-hosts/
+  home.file = {
+    "gsconnect-librewolf-message-hosts" = {
+      target = ".librewolf/native-messaging-hosts/org.gnome.shell.extensions.gsconnect.json";
+      source = "${pkgs.gnomeExtensions.gsconnect}/lib/mozilla/native-messaging-hosts/org.gnome.shell.extensions.gsconnect.json";
+      # Also available under /etc(/opt)?/chrome/native-messaging-hosts/
+    };
+    "keepassxc-proxy-for-librewolf-message-hosts" = {
+      source = "${pkgs.keepassxc}/lib/mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json";
+      target = ".librewolf/native-messaging-hosts/org.keepassxc.keepassxc_browser.json";
+    };
   };
+
   programs = {
     librewolf = {
       enable = true;
