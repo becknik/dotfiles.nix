@@ -185,7 +185,7 @@
             + ".$NIXOS_CONFIGURATION_NAME.config.system.build.toplevel\"";
           mkRebuildCmd = isDarwin: argument: "sudo ${if isDarwin then "darwin" else "nixos"}-rebuild "
             + "--flake \"${(mkFlakeDir userName config)}#$NIXOS_CONFIGURATION_NAME\" ${argument}";
-          mkBetterRebuildCmd = isDarwin: argument: "${mkNomFlakeBuildCmd} && ${mkRebuildCmd isDarwin argument} || exit 1";
+          mkBetterRebuildCmd = isDarwin: argument: "${mkNomFlakeBuildCmd} && ${mkRebuildCmd isDarwin argument}";
         in
         {
           # General
