@@ -33,6 +33,7 @@
   additions = final: _prev: import ../pkgs { pkgs = final; };
 
   modifications = (import ./modifications.nix { inherit inputs; });
+  modifications-perf = (import ./modifications-perf.nix { inherit inputs; });
 
   build-fixes = import ./build-fixes.nix { inherit inputs; };
 

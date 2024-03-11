@@ -202,6 +202,7 @@
                       overlays = with self.overlays; [
                         default
                         modifications
+                        modifications-perf
                         additions
                         nixpkgs-clean
                         build-fixes
@@ -218,6 +219,7 @@
 
                   overlays = (defaultOverlays nixpkgs-unstable-wit-platform) ++
                     (with self.overlays; [
+                      modifications-perf
                       nixpkgs-clean
                       build-fixes
                       build-skips

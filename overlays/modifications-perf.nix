@@ -23,35 +23,4 @@ final: prev: {
       configureFlags = configureFlags'';
       preConfigure = oldAttrs.preConfigure + "export RUSTFLAGS=\"-C debuginfo=0 -C target-cpu=native -C opt-level=3\"\n";
     });
-
-  ## Linux Kernel
-
-  linux_xanmod_latest_patched_dnix = prev.pkgs.linuxPackagesFor (
-    prev.pkgs.linux_xanmod_latest.override (old: with prev.lib; {
-
-      # TODO https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=linux-clear
-      kernelPatches = [ ];
-
-      # Maybe interesting: https://discourse.nixos.org/t/overriding-nativebuildinputs-on-buildlinux/24934
-      structuredExtraConfig = with kernel; {
-        # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/kernel/xanmod-kernels.nix
-        # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/kernel/common-config.nix
-        DEBUG_KERNEL = mkDefault no;
-        NUMA = mkDefault no;
-        WINESYNC = no;
-        MALDERLAKE = yes; # TODO GCC13 -> MRAPTORLAKE GENERIC_CPU3
-      };
-      # Disable errors in console compilation log
-      ignoreConfigErrors = true;
-    })
-  );
-
-  linux_xanmod_latest_patched_lnix = prev.pkgs.linuxPackages_xanmod_latest;
-  /* pkgs.linuxPackagesFor (
-      pkgs.linux_xanmod_latest.override (old: {
-        # TODO https://wiki.archlinux.org/title/ASUS_Zenbook_UM3402YA
-        kernelPatches = [ ];
-        ignoreConfigErrors = true;
-      })
-    ); */
 }
