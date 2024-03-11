@@ -104,24 +104,30 @@
           "singlechar"
           "wd"
           "zsh-interactive-cd"
+          "extract"
 
           ## Linux
           "systemd"
 
           ## Development
-          "docker"
-          "encode64"
           "git"
           "git-auto-fetch"
           "gitignore"
-          "gradle"
-          "jsontools"
+
           "podman"
+          "docker"
+          "kubectl"
+
+          "mvn"
+          "gradle"
+
+          "encode64"
+          "jsontools"
           "urltools"
           "vscode"
         ];
-        #"rust" "mvn" "pyenv" "python" "aws" "kubectl" "nmap" "npm" "microk8s" "ruby" "scala"
-        #"httpie" "extract" "rsync" "fancy-ctrl-z" "ripgrep" "fzf"
+        #"rust" "pyenv" "python" "aws" "nmap" "npm" "ruby" "scala"
+        #"httpie" "rsync" "fancy-ctrl-z" "ripgrep" "fzf"
 
         ## ohmyzsh Plugin Settings
         extraConfig = ''
@@ -180,7 +186,7 @@
 
       shellAliases =
         let
-        # no-link: Do not create symlinks to the build results.
+          # no-link: Do not create symlinks to the build results.
           mkNomFlakeBuildCmd = "nom build --quiet --no-link \"${(mkFlakeDir userName config)}#nixosConfigurations"
             + ".$NIXOS_CONFIGURATION_NAME.config.system.build.toplevel\"";
           mkRebuildCmd = isDarwin: argument: "sudo ${if isDarwin then "darwin" else "nixos"}-rebuild "
