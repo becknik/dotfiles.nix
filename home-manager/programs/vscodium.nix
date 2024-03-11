@@ -44,6 +44,7 @@
 
       ## Deployment
       ms-azuretools.vscode-docker
+      ms-kubernetes-tools.vscode-kubernetes-tools
 
       ## Languages
 
