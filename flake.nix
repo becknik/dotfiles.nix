@@ -129,7 +129,7 @@
                 plasma-manager.homeManagerModules.plasma-manager
               ];
 
-            users.${userName} = import (if !isDarwinSystem then ./home-manager else ./nix-darwin/home.nix);
+            users.${userName} = import (if !isDarwinSystem then ./home-manager else ./darwin/home.nix);
           };
         };
     in
@@ -274,7 +274,20 @@
             ({ lib, pkgs, ... }@module-inputs: {
               nixpkgs = {
                 inherit system config;
-                overlays = (defaultOverlays self.overlays.nixpkgs-unstable);
+                overlays = with self.overlays; [
+                  (final: prev: {
+                    unstable = import inputs.nixpkgs-unstable {
+                      inherit config;
+                      system = final.system;
+                    };
+                  })
+                  # error: A definition for option `nixpkgs.overlays."[definition 1-entry 1]"' is not of type `nixpkgs overlay'. Definition values:
+                  # - In `<unknown-file>'
+                  #nixpkgs-unstable
+                  default
+                  modifications
+                  additions
+                ];
               };
             })
             inputs.mac-app-util.darwinModules.default

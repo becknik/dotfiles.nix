@@ -2,7 +2,15 @@
 
 {
   environment.variables."NIXOS_CONFIGURATION_NAME" = "wnix";
-  nix.useDaemon = true;
+  nix = {
+    useDaemon = true;
+    settings = {
+      experimental-features = [
+        "nix-command" # Enables some useful tools like the `nix edit '<nixpkgs>' <some-package-name>`
+        "flakes"
+      ];
+    };
+  };
 
   programs.zsh.enable = true;
 

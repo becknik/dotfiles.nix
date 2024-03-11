@@ -201,12 +201,14 @@
           nrbbnn = (mkRebuildCmd false "boot");
           nrbtnn = (mkRebuildCmd false "test");
 
-          drbs = (mkBetterRebuildCmd true "switch");
-          drbb = (mkBetterRebuildCmd true "build");
-          drbc = (mkBetterRebuildCmd true "check");
-          drbsnn = (mkRebuildCmd true "switch");
-          drbbnn = (mkRebuildCmd true "build");
-          drbcnn = (mkRebuildCmd true "check");
+          # drbs = (mkBetterRebuildCmd true "switch");
+          # drbb = (mkBetterRebuildCmd true "build");
+          # drbc = (mkBetterRebuildCmd true "check");
+          # FIXME git+file:///Users/jbecker/devel/own/dotfiles.nix' does not provide attribute 'packages.x86_64-darwin.nixosConfigurations.wnix.config.system.build.toplevel',
+          # 'legacyPackages.x86_64-darwin.nixosConfigurations.wnix.config.system.build.toplevel' or 'nixosConfigurations.wnix.config.system.build.toplevel'
+          drbs = (mkRebuildCmd true "switch");
+          drbb = (mkRebuildCmd true "build");
+          drbc = (mkRebuildCmd true "check");
 
           ngc = "sudo nix-collect-garbage";
           ngckeep = "sudo nix-collect-garbage --delete-older-than";
