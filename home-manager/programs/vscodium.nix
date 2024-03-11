@@ -58,8 +58,7 @@
 
       ### Scripting
       ms-python.python
-      ms-python.vscode-pylance
-      ms-pyright.pyright
+      ms-python.vscode-pylance #ms-pyright.pyright is included in pylance
 
       #### JS/TS
       esbenp.prettier-vscode
