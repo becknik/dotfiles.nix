@@ -285,12 +285,17 @@
     };
     gc = {
       automatic = true;
-      dates = "Thu *-*-1..7"; # 1st Thursday every month
-      options = "--delete-older-than 28d";
+      dates = "Fri";
+      #options = "--delete-older-than 28d";
     };
 
     channel.enable = true; # false destroys some direnv `use nix` & oldschool nix-shell
     daemonCPUSchedPolicy = "idle"; # "other", "batch"
+
+    # https://discourse.nixos.org/t/why-does-nix-direnv-recommend-setting-nix-settings-keep-outputs/31081
+    extraOptions = ''
+      keep-outputs = true
+    '';
   };
 
   # Avoids faling nix rebuilds due to too many open files
