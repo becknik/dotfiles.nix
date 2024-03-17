@@ -1,4 +1,4 @@
-{ isDarwinSystem, pkgs, ... }:
+{ devenv, isDarwinSystem, pkgs, ... }:
 
 {
   # Btop
@@ -47,6 +47,8 @@
       (makeWhenNotDarwin powertop)
 
       ## Nix(OS)
+      #cachix
+      devenv.packages."${pkgs.system}".devenv
       nixos-option
       nix-output-monitor
       nix-diff

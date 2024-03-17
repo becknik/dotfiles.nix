@@ -1,6 +1,11 @@
 {
   description = "NixOS/nix-darwin configurations for my desktop & laptops";
 
+  nixConfig = {
+    extra-trusted-public-keys = "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=";
+    extra-substituters = "https://devenv.cachix.org";
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -10,6 +15,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # devenv = {
+    #   url = "github:balsoft/devenv";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     darwin = {
       url = "github:lnl7/nix-darwin";
@@ -51,7 +60,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, nixos-hardware, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, nixos-hardware, devenv, ... }@inputs:
     let
       systems = [ "x86_64-darwin" "x86_64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
@@ -115,7 +124,7 @@
         {
           home-manager = {
             extraSpecialArgs = (args userName) // {
-              inherit system laptopMode isDarwinSystem;
+              inherit system laptopMode isDarwinSystem devenv;
               inherit (inputs) ohmyzsh;
             };
             useGlobalPkgs = true;
@@ -302,6 +311,30 @@
             (mkHomeManagerConf {
               inherit system userName;
               laptopMode = false; # no dconf <=> no effect
+            })
+          ];
+        };
+
+      devShell.x86_64-linux =
+        let
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        in
+        devenv.lib.mkShell {
+          inherit inputs pkgs;
+          modules = [
+            ({ pkgs, config, ... }: {
+              # https://devenv.sh/guides/using-with-flakes/
+              # https://devenv.sh/reference/options/
+              # https://github.com/expipiplus1/update-nix-fetchgit
+              packages = [ pkgs.update-nix-fetchgit ];
+
+              languages.nix.enable = true;
+
+              pre-commit.hooks = {
+                nixpkgs-fmt.enable = true;
+              };
+
+              scripts.update-fetchgit.exec = "update-nix-fetchgit $DEVENV_ROOT/overlays/modifications.nix";
             })
           ];
         };
