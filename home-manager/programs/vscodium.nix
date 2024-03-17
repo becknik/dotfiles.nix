@@ -1,6 +1,24 @@
 { isDarwinSystem, config, lib, pkgs, ... }:
 
 {
+  imports = [
+    # Make vscode settings file writable
+    # Source: https://gist.github.com/piousdeer/b29c272eaeba398b864da6abf6cb5daa
+
+    (import
+      (builtins.fetchurl {
+        url = "https://gist.githubusercontent.com/piousdeer/b29c272eaeba398b864da6abf6cb5daa/raw/41e569ba110eb6ebbb463a6b1f5d9fe4f9e82375/mutability.nix";
+        sha256 = "4b5ca670c1ac865927e98ac5bf5c131eca46cc20abf0bd0612db955bfc979de8";
+      })
+      { inherit config lib; })
+    (import
+      (builtins.fetchurl {
+        url = "https://gist.githubusercontent.com/piousdeer/b29c272eaeba398b864da6abf6cb5daa/raw/41e569ba110eb6ebbb463a6b1f5d9fe4f9e82375/vscode.nix";
+        sha256 = "fed877fa1eefd94bc4806641cea87138df78a47af89c7818ac5e76ebacbd025f";
+      })
+      { inherit config lib pkgs; })
+  ];
+
   programs.vscode = {
     enable = true;
     # Unstable holds only version compatible to all plugins as it seems...
@@ -96,12 +114,12 @@
       #twxs.cmake #?
     ] ++ cppTools ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (
       [
-        {
+        /* { # Mapping keymaps 1:1 between IntelliJ and VSCode sadly isn't possible, e.g. <C>+K, <C>+O not working any more
           name = "intellij-idea-keybindings";
           publisher = "k--kato";
           version = "1.6.0";
           sha256 = "sha256-doBsMa4SvdFzLdKgjc4qxLOwMB2KFG73zn9a24N6CWs=";
-        }
+        } */
         {
           name = "code-spell-checker-german";
           publisher = "streetsidesoftware";
