@@ -53,9 +53,9 @@
   programs. gpg. enable = true;
 
   # Manual Installations
-  home.packages = with pkgs.unstable; let
-    jetbrainsTools = with jetbrains; [ clion idea-ultimate ]
-      ++ lib.lists.optional (!isDarwinSystem) jetbrains-toolbox; # use this one for experiments
+  home.packages = with pkgs; let
+    jetbrainsTools = with unstable.jetbrains; [ clion idea-ultimate ]
+      ++ lib.lists.optional (!isDarwinSystem) unstable.jetbrains-toolbox; # use this one for experiments
   in
   jetbrainsTools ++ [
     git-crypt
@@ -65,19 +65,20 @@
     # LLM (ChatGPT)
     shell_gpt
 
-    ## OCI Containers
-    dive # https://github.com/wagoodman/dive
-    trivy
-
     ## Build Tools
     gradle
     maven
     gnumake
 
     ## Testing
-    httpie
     newman
-    postman
+    unstable.postman
+    httpie
+    jq
+
+    ## OCI Containers
+    dive # https://github.com/wagoodman/dive
+    trivy
 
     ## CI / CD
     #awscli2

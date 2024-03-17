@@ -1,7 +1,6 @@
 { devenv, isDarwinSystem, pkgs, ... }:
 
 {
-  # Btop
   programs = {
     btop = {
       enable = true;
@@ -17,9 +16,27 @@
         io_mode = true;
       };
     };
-    eza = {
+    bat = {
       enable = true;
-      git = true;
+      config = {
+        theme = "Visual Studio Dark+";
+        style = "changes"; # numbers,
+      };
+    };
+    broot = {
+      enable = true;
+      settings = {
+        modal = true; # vim mode
+      };
+    };
+    ripgrep = {
+      enable = true;
+    };
+
+    ## Nix specific
+    nix-index = {
+      enable = true;
+      # TODO the nix-index-database conflict for package derivations that differ from cache.nixos.org
     };
   };
 
@@ -29,16 +46,26 @@
     in with pkgs; [
 
       ## Utils
-      jq
       curl
-      ripgrep
       unzip
-      tldr
       tree
-      bat
-
-      ### desktop-env
       (makeWhenNotDarwin wl-clipboard)
+
+      # https://github.com/ibraheemdev/modern-unix
+      # including tools from some open issues, repo's unmaintained
+      fd # finde for humans
+      sd # sed for humans
+      silver-searcher # `ag`: fast code searching tool to replace ack
+      choose # unifies cut with some aspects of awk
+      cheat
+      tealdeer # tldr in rust
+      hyperfine # benchmarking
+      gping # ping with plots
+      procs
+      dogdns # dig alternative
+      grex # regex generator
+      asciinema
+      tailspin # log file highlighter
 
       ### Hardware
       cpufetch
@@ -54,7 +81,7 @@
       nix-diff
       nix-update
       nix-tree
-      nix-index
+      nixpkgs-review
 
       ### Secrets Management (1)
       sops

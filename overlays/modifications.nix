@@ -1,16 +1,73 @@
-{ inputs, ... }:
+{ ... }:
 
 final: prev: {
-  oh-my-zsh-git = prev.pkgs.oh-my-zsh.overrideAttrs (with inputs; oldAttrs: {
-    #version = ohmyzsh.shortRev or ohmyzsh.rev or self.shortRev or self.dirtyShortRev or self.lastModified or "unknown";
-    #version = ohmyzsh.rev;
-    src = ohmyzsh;
-  });
-
   discord-modified = prev.discord.override {
     withOpenASAR = true;
     withVencord = true;
   };
+
+  oh-my-zsh-git = prev.pkgs.oh-my-zsh.overrideAttrs (oldAttrs: {
+    src = prev.fetchFromGitHub {
+      owner = "ohmyzsh";
+      repo = "ohmyzsh";
+      rev = "0fed36688f9a60d8b1f2182f27de7fdc8a1e6b72";
+      sha256 = "1fc6d3svc6iq8bblr9f9m8izx32ph6slsdmlg4iln93gaz7c6gwk";
+    };
+    version = "unstable-2024-03-16";
+  });
+
+  pure-prompt-patched = prev.pure-prompt.overrideAttrs (oldAttrs: {
+    patches = [ ./modifications/pure-prompt.patch ];
+  });
+
+  fzf-git-sh-patched = prev.fzf-git-sh.overrideAttrs (oldAttrs: {
+    src = prev.fetchFromGitHub {
+      owner = "junegunn";
+      repo = "fzf-git.sh";
+      rev = "2b93e957684f7daca8b28cb74c9a7e7fc606e81e";
+      sha256 = "1mpm4v3393dr5720ik9x6wr87md1ch2sq1dd43bs26dh3v1p38fh";
+    };
+    version = "unstable-2024-02-17";
+    patches = [ ./modifications/fzf-git-sh-feat-vim-keybindings.patch ];
+    postPatch = with prev; ''
+      sed -i \
+        -e "s,\bbash\b,${bash}/bin/bash," \
+        -e "s,\bcat\b,${coreutils}/bin/cat," \
+        -e "s,\bcut\b,${coreutils}/bin/cut," \
+        -e "s,\bhead\b,${coreutils}/bin/head," \
+        -e "s,\buniq\b,${coreutils}/bin/uniq," \
+        -e "s,\bgrep\b,${gnugrep}/bin/grep," \
+        -e "s,\bsed\b,${gnused}/bin/sed," \
+        -e "s,\bxargs\b,${findutils}/bin/xargs," \
+        -e "s,\bcolumn\b,${util-linux}/bin/column," \
+        -e "s,\bawk\b,${gawk}/bin/awk," \
+        -e "s,\bbat\b,${bat}/bin/bat," \
+        -e "s,\bxdg-open\b,${xdg-utils}/bin/xdg-open," \
+        -e "s,\bfzf-tmux\b,${fzf}/bin/fzf-tmux," \
+        -e "/fzf-tmux/!s,\btmux\b,${tmux}/bin/tmux," \
+        \
+        -e "/display-message\|fzf-git-\$o-widget\|^\( \)*url=\|\$remote_url =~ ^/!s,\bgit\b,${git}/bin/git,g" \
+        -e "s,__fzf_git=.*BASH_SOURCE.*,__fzf_git=$out/share/${oldAttrs.pname}/fzf-git.sh," \
+        -e "/__fzf_git=.*readlink.*/d" \
+        fzf-git.sh
+    '';
+  });
+
+  zsh-forgit-patched = prev.zsh-forgit.overrideAttrs (oldAttrs: {
+    src = prev.fetchFromGitHub {
+      owner = "wfxr";
+      repo = "forgit";
+      rev = "2436fc4e11dd39dd0c795edb8304b8694a9ba96d";
+      sha256 = "015v72dqzjn3gbhyzq2qic9rmyc5g8q32r4d232m3f3pdhfr0w8f";
+    };
+    version = "unstable-2024-03-14";
+    postPatch = ''
+      sed -i "/# determine installation path/,/fi/d" forgit.plugin.zsh
+      substituteInPlace forgit.plugin.zsh \
+        --replace "\$FORGIT_INSTALL_DIR/bin/git-forgit" "$out/bin/git-forgit"
+    '';
+    installPhase = (builtins.replaceStrings [ "install -D completions/git-forgit.zsh $out/share/zsh/zsh-forgit/git-forgit.zsh\n" ] [ "" ] oldAttrs.installPhase);
+  });
 
   # Fixes
 
@@ -29,21 +86,6 @@ final: prev: {
       preFixup = oldAttrs.preFixup or "" + "patchelf --add-needed ${pkgs.libglvnd}/lib/libEGL.so.1 $out/bin/electron";
     });
   };
-
-  # Latest postman build fails to download
-  #> curl: (22) The requested URL returned error: 404
-  #> error: cannot download postman-10.18.6.tar.gz from any mirror
-  postman =
-    let version = "10.23.5";
-    in prev.postman.overrideAttrs (oldAttrs: {
-      inherit version;
-      src =
-        builtins.fetchurl {
-          url = "https://dl.pstmn.io/download/version/${version}/linux64";
-          sha256 = "sha256:0k02g57n7ywlic1bxygnigklbwc7x2hv6n6pdhbn5zgq7rzmnzil";
-          name = "${prev.postman.pname}-${version}.tar.gz";
-        };
-    });
 
   # Own Packages
 

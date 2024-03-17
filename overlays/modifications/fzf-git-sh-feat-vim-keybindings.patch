@@ -1,0 +1,31 @@
+From 3fd48aa784aa796e8be6157213859ec5a3c6d00b Mon Sep 17 00:00:00 2001
+From: Chris Hamill <chamill@ets.org>
+Date: Tue, 16 Jan 2024 15:33:53 -0500
+Subject: [PATCH] Make zsh keybindings work for all modes
+
+---
+ fzf-git.sh | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/fzf-git.sh b/fzf-git.sh
+index f75f6dd..3693782 100644
+--- a/fzf-git.sh
++++ b/fzf-git.sh
+@@ -252,12 +252,14 @@ elif [[ -n "${ZSH_VERSION:-}" ]]; then
+   }
+
+   __fzf_git_init() {
+-    local o
++    local m o
+     for o in "$@"; do
+       eval "fzf-git-$o-widget() { local result=\$(_fzf_git_$o | __fzf_git_join); zle reset-prompt; LBUFFER+=\$result }"
+       eval "zle -N fzf-git-$o-widget"
+-      eval "bindkey '^g^${o[1]}' fzf-git-$o-widget"
+-      eval "bindkey '^g${o[1]}' fzf-git-$o-widget"
++      for m in emacs vicmd viins; do
++        eval "bindkey -M $m '^g^${o[1]}' fzf-git-$o-widget"
++        eval "bindkey -M $m '^g${o[1]}' fzf-git-$o-widget"
++      done
+     done
+   }
+ fi

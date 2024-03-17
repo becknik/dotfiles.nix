@@ -9,16 +9,15 @@
     delta = {
       enable = true;
       options = {
-        features = "decorations";
-        true-color = "always";
-        theme = "Monokai Extended";
-        navigate = true;
+        syntax-theme = "Visual Studio Dark+";
         line-numbers = true;
+        navigate = true;
+        keep-plus-minus-markers = false;
+
         hyperlinks = true;
         hyperlinks-file-link-format = "vscode://file/{path}:{line}";
-        interactive = {
-          keep-plus-minus-markers = false;
-        };
+        # TODO https://github.com/dandavison/open-in-editor
+        #"vim://file/{path}:{line}"; # :{column} vim supports this, but it isn't implemented in delta
       };
     };
     /* diff-so-fancy = {
