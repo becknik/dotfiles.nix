@@ -31,8 +31,7 @@
 
   # Manual Installation
   environment.systemPackages = with pkgs; [
-    linux-firmware
-    libnotify # For the noixos-upgrade systemd Unit override - Should be included implicitly
+    libnotify # For the noixos-upgrade systemd notifier units
 
     ## Utils
     efibootmgr

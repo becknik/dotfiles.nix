@@ -59,6 +59,8 @@
 
 
   # Common Hardware
+  #hardware.enableAllFirmware = true;
+  hardware.enableRedistributableFirmware = true;
   services.fstrim.interval = "weekly"; # enabled by nixos-hardware
   #services.hardware.bolt.enable = true; # implied by gnome.core-os-services
   hardware.sane = {

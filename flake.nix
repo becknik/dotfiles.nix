@@ -49,6 +49,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
       #inputs.pre-commit-hooks.inputs.nixpkgs-stable.follows = "nixpkgs"; # TODO Doesn't follows the nixvim inputs - bug report?
     };
+    nix-index-database.url = "github:nix-community/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
     # Libraries
     flockenzeit.url = "github:balsoft/Flockenzeit";
@@ -125,21 +127,21 @@
           home-manager = {
             extraSpecialArgs = (args userName) // {
               inherit system laptopMode isDarwinSystem devenv;
-              inherit (inputs) ohmyzsh;
             };
             useGlobalPkgs = true;
             useUserPackages = true;
 
-            sharedModules = with inputs;
+            sharedModules = with inputs; [
+              sops-nix.homeManagerModules.sops
+              nixvim.homeManagerModules.nixvim
+              nix-index-database.hmModules.nix-index
+            ] ++ (
               if (isDarwinSystem) then [
-                sops-nix.homeManagerModules.sops
-                nixvim.homeManagerModules.nixvim
                 mac-app-util.homeManagerModules.default
               ] else [
-                sops-nix.homeManagerModules.sops
-                nixvim.homeManagerModules.nixvim
                 plasma-manager.homeManagerModules.plasma-manager
-              ];
+              ]
+            );
 
             users.${userName} = import (if !isDarwinSystem then ./home-manager else ./darwin/home.nix);
           };
