@@ -108,6 +108,25 @@ final: prev: {
   #"execute_test_file $data" (procedure "test_client_main" line 10) invoked from within
   #"test_client_main $::test_server_port "
 
+  upower = prev.upower.overrideAttrs (_oldAttrs: { doCheck = false; });
+  #  49/67 Tests.test_sibling_priority_no_overwrite                   FAIL            0.46s   exit status 1
+  #        >
+  #        > Ok:                 66
+  #        > Expected Fail:      0
+  #        > Fail:               1
+  #        > Unexpected Pass:    0
+  #        > Skipped:            0
+  #        > Timeout:            0
+  #        >
+  #        > Full log written to /build/source/build/meson-logs/testlog.txt
+
+  xdg-desktop-portal = prev.clean.xdg-desktop-portal;
+  # [8/28] 🌗 xdg-desktop-portal:portals / test-portals-inhibit                            0/ 30s^M[8/28] 🌘 xdg-desktop-portal:portals / test-portals-inhibit                            0/ 30s   1 subtests passed^M[8/28] 🌑 xdg-desktop-portal:portals / test-portals-inhibit                            1/ 30s   7 subtests passed^M[8/28] 🌒 xdg-desktop-portal:portals / test-portals-inhibit                            2/ 30s   7/8 subtests passed^M 8/28 xdg-desktop-portal:portals / test-portals-inhibit               ERROR            2.23s   killed by signal 6 SIGABRT
+  # >>> XDP_UNINSTALLED=1 XDG_CURRENT_DESKTOP=test XDG_DATA_DIRS=/build/source/build/tests/share G_DEBUG=gc-friendly G_TEST_SRCDIR=/build/source/tests MALLOC_PERTURB_=199 G_TEST_BUILDDIR=/build/source/build/tests /build/source/build/tests/test-portals --verbose --keep-going --tap -p /portal/inhibit
+
+  # > Program pytest-3 pytest found: NO
+  # > tests/meson.build:268:9: ERROR: Program 'pytest-3 pytest' not found or not executable
+
   libsecret = prev.libsecret.overrideAttrs (_oldAttrs: { doCheck = false; });
   # [7-24/24] 🌓 libsecret:secret-tool / test-secret-tool.sh                  0s^M 7/24 libsecret:libsecret / test-prompt
   #     FAIL            0.12s   killed by signal 6 SIGABRT
