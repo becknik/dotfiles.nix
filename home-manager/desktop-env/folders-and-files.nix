@@ -54,6 +54,7 @@
       # Source: https://stackoverflow.com/a/53109980
       text = ''
         :set prompt "\ESC[0;34m\STX%s\n\ESC[1;31m\STXλ> \ESC[m\STX"
+        :set editor nvim
       '';
     };
 
