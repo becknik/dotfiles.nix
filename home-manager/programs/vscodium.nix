@@ -256,6 +256,7 @@
         rulers = [{ column = 80; } { column = 120; }];
         autoClosingDelete = "always"; # delete adjacent braces or "
         stickyTabStops = true;
+        tabSize = 2;
 
         parameterHints.cycle = true;
         dragAndDrop = false;
