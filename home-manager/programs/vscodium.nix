@@ -104,7 +104,6 @@
       vscjava.vscode-maven
       vscjava.vscode-java-dependency
       vscjava.vscode-gradle
-      vscjava.vscode-spring-initializr
 
       ### Rust
       rust-lang.rust-analyzer
@@ -114,24 +113,18 @@
       #twxs.cmake #?
     ] ++ cppTools ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (
       [
-        /* { # Mapping keymaps 1:1 between IntelliJ and VSCode sadly isn't possible, e.g. <C>+K, <C>+O not working any more
+        {
+          # Mapping keymaps 1:1 between IntelliJ and VSCode sadly isn't possible, e.g. <C>+K, <C>+O not working any more
           name = "intellij-idea-keybindings";
           publisher = "k--kato";
           version = "1.6.0";
           sha256 = "sha256-doBsMa4SvdFzLdKgjc4qxLOwMB2KFG73zn9a24N6CWs=";
-        } */
+        }
         {
           name = "code-spell-checker-german";
           publisher = "streetsidesoftware";
           version = "2.3.1";
           sha256 = "sha256-LxgftSpGk7+SIUdZcNpL7UZoAx8IMIcwPYIGqSfVuDc=";
-        }
-
-        {
-          name = "volar";
-          publisher = "vue";
-          version = "1.8.27";
-          sha256 = "sha256-6FktlAJmOD3dQNn2TV83ROw41NXZ/MgquB0RFQqwwW0=";
         }
 
         {
@@ -157,31 +150,7 @@
           version = "1.0.5905";
           #sha256 = lib.fakeSha256;
           sha256 = "sha256-y1MMO6fd/4a9PhdBpereEBPRk50CDgdiRc8Vwqn0PXY=";
-        }) ++
-
-      (lib.lists.optionals isDarwinSystem
-        # Use these packages on work device only
-        [
-          {
-            name = "vscode-checkstyle"; # Java Checkstyle
-            publisher = "shengchen";
-            version = "1.4.2";
-            sha256 = "21c860417f42510e77a6e2eed2597cccd97a1334a7543063eed4d4a393736630";
-          }
-
-          {
-            name = "vscode-spring-boot"; # Spring Boot Tools
-            publisher = "vmware";
-            version = "1.52.2024010405";
-            sha256 = "sha256-JnSKMaSsy9qmzIFz2/U557uI1oetS3ozIqS4VQCURk0=";
-          }
-          {
-            name = "vscode-spring-boot-dashboard";
-            publisher = "vscjava";
-            version = "0.13.2023072200";
-            sha256 = "f3395bc26e1e79db9f2c406068987b362a746faf4093acfb1a3d274110a437bd";
-          }
-        ])
+        })
     );
 
     languageSnippets = { };
