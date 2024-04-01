@@ -15,10 +15,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # devenv = {
-    #   url = "github:balsoft/devenv";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    devenv = {
+      url = "github:cachix/devenv";
+      inputs.nixpkgs.follows = "nixpkgs-unstable"; # requires > rustc-1.74.0
+    };
 
     darwin = {
       url = "github:lnl7/nix-darwin";
