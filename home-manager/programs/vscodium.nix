@@ -389,6 +389,10 @@
         excludeBySource = [
           "cSpell"
         ];
+        messageMaxChars = 60;
+        onSave = true;
+        scrollbarHackEnabled = true;
+        statusBarIconsEnabled = true;
       };
 
       ## Git Lense
