@@ -3,65 +3,159 @@
 {
   # Neovim TODO https://mipmip.github.io/home-manager-option-search/?query=neovim
   programs = {
-    /*neovim = { # Conflicts with nixvim below. Default editor set in desktop.env file
-      enable = true;
-      defaultEditor = true; # redundant
-    };*/
-
     nixvim = {
       enable = true;
+
       defaultEditor = true;
       viAlias = true;
       vimAlias = true;
-      #colorschemes.moneokai.enable = true; # TODO
+
+      clipboard.providers.wl-copy.enable = true;
+      colorschemes.oxocarbon.enable = true;
+
       # Sources:
       # https://gist.github.com/Nazerbayev/641ad1367cdc3044a0f3b3866e52e1b6
       # https://medium.com/geekculture/neovim-configuration-for-beginners-b2116dbbde84
 
+      plugins = {
+        nvim-cmp = {
+          enable = true;
+
+          performance.fetchingTimeout = 200;
+          experimental = { ghost_text = true; };
+
+          autoEnableSources = true;
+          snippet = { expand = "luasnip"; };
+          formatting = { fields = [ "kind" "abbr" "menu" ]; };
+          sources = [
+            { name = "nvim_lsp"; }
+            { name = "emoji"; }
+            {
+              name = "buffer"; # text within current buffer
+              option.get_bufnrs.__raw = "vim.api.nvim_list_bufs";
+              keywordLength = 3;
+            }
+            {
+              name = "path"; # file system paths
+              keywordLength = 3;
+            }
+            {
+              name = "luasnip"; # snippets
+              keywordLength = 3;
+            }
+          ];
+
+          window = {
+            completion = {
+              border = "rounded";
+              winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None";
+            };
+            documentation = { border = "rounded"; };
+          };
+
+          mapping = {
+            "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
+            "<C-j>" = "cmp.mapping.select_next_item()";
+            "<C-k>" = "cmp.mapping.select_prev_item()";
+            "<C-e>" = "cmp.mapping.abort()";
+            "<C-b>" = "cmp.mapping.scroll_docs(-4)";
+            "<C-f>" = "cmp.mapping.scroll_docs(4)";
+            "<C-Space>" = "cmp.mapping.complete()";
+            "<CR>" = "cmp.mapping.confirm({ select = true })";
+            "<S-CR>" = "cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })";
+          };
+        };
+
+        lsp.servers = { lua-ls.enable = true; };
+        cmp-emoji.enable = true;
+        cmp-nvim-lsp.enable = true;
+        cmp-buffer.enable = true;
+        cmp-path.enable = true; # file system paths
+        cmp_luasnip.enable = true;
+        cmp-cmdline.enable = false; # autocomplete for cmdline
+
+        treesitter = {
+          enable = true;
+          indent = true;
+          folding = true;
+          nixvimInjections = true;
+        };
+        treesitter-context.enable = true;
+        treesitter-textobjects.enable = false; # TODO
+
+        luasnip.enable = true;
+
+        nix.enable = true;
+        nix-develop.enable = true;
+
+        telescope.enable = false; # TODO
+        todo-comments.enable = true;
+        gitsigns.enable = true;
+
+        lualine.enable = true;
+        # transparent.enable = false; # TODO first need terminal support for this
+
+        # obsidian.enable = false; # TODO
+      };
+
       options = {
         encoding = "utf-8";
         spell = true;
-        spelllang = [ "en" "de" ]; # Requires german language dictionary
+        spelllang = [ "en" "de" ];
 
-        ## Colors
-        termguicolors = true; # Proper terminal coloring support
-        #colorscheme moneokai
+        termguicolors = true; # 24-bit terminal coloring support
 
-        ## UI
+        # Enable persistent undo history
+        swapfile = false;
+        backup = false;
+        undofile = true;
+
+        # UI
         number = true;
         relativenumber = true;
         colorcolumn = [ 80 120 ];
-        rulerformat = ""; # TODO
-        # Make Neovim look weird:
-        #breakindent = true;
-        #cursorline = true;
-        #cursorcolumn = true;
+        wrap = true;
+        # Always keep 8 lines above/below cursor unless at start/end of file
+        scrolloff = 8;
+        # More space in the neovim command line for displaying messages
+        cmdheight = 0;
 
-        ## Indentation
+        # Tab stops
         tabstop = 2;
         softtabstop = 2;
-        shiftround = true;
-        shiftwidth = 2; # Rounds the amount of shifts according to shiftwidth
-        #set autoindent smarttab - default is on " Use expandtab option to ident with spaces
+        expandtab = true;
 
+        # Enable auto indenting and set it to spaces
+        smartindent = true;
+        shiftwidth = 2;
+        breakindent = true; # Enable smart indenting
+        # source: https://stackoverflow.com/questions/1204149/smart-wrap-in-vim
+        #shiftround = true;
 
-        ## Line & Blank Formatting
+        # Special symbol formatting
         list = true;
         listchars = "tab:»\ ,extends:›,precedes:‹,trail:·,nbsp:·";
 
-        ## Search
+        # Search
+        incsearch = true;
+        hlsearch = true;
         ignorecase = true;
-        smartcase = true; #	Ignore case when no upper cased letters are contained in search string
-        #"set gdefault " Sets the g option to substitute by default & when set manually apply on one or all selections
-        #"set incsearch " Incremental search
-        #"set wildmode=longest,list,full wildmenu
+        smartcase = true; #	Don't ignore case when with capitals
+        grepprg = "rg --vimgrep";
+        grepformat = "%f:%l:%c:%m";
 
-        ## Completion
-        completeopt = [ "menu" "menuone" "longest" ];
-
+        # Better splitting
         splitright = true;
         splitbelow = true;
-        matchpairs = "<:>,=:;"; # Maybe change this to HTML, XML & Generics
+
+        # Cursor movement
+        matchpairs = "(:),{:},[:],<:>,=:;"; # first three are default ones
+        mouse = "a"; # Enable mouse mode
+
+        # Completion
+        updatetime = 50; # faster completion (4000ms default)
+        # Set completeopt to have a better completion experience
+        completeopt = [ "menuone" "noselect" "noinsert" ];
       };
     };
   };

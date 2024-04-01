@@ -5,7 +5,7 @@
     ./devel/proglangs.nix # Installation of some programming languages
 
     ./programs/git.nix
-    ./programs/neovim.nix # Nixvim neovim configuration
+    ./programs/nixvim.nix # Nixvim neovim configuration
     ./programs/vscodium.nix
   ];
 

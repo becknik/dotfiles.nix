@@ -75,6 +75,7 @@ $ tree -a -I '\.git|\.vscode' .
 ### Further great Projects used
 
 - [nixvim](https://github.com/nix-community/nixvim)
+  - [elythh's config](https://github.com/elythh/nixvim) is highly recommendable to get started
 - [plasma-manager](https://github.com/pjones/plasma-manager)
 - [disko](https://github.com/nix-community/disko): for NixOS partitioning & deployment
 - [Flockenzeit](https://github.com/balsoft/Flockenzeit): Date & time parsing and formatting in native Nix. Awesome!
