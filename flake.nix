@@ -39,11 +39,6 @@
       inputs.nixpkgs-stable.follows = ""; # https://github.com/Mic92/sops-nix/issues/353
     };
 
-    plasma-manager = {
-      url = "github:pjones/plasma-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
     nixvim = {
       url = "github:nix-community/nixvim/nixos-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -129,13 +124,9 @@
               sops-nix.homeManagerModules.sops
               nixvim.homeManagerModules.nixvim
               nix-index-database.hmModules.nix-index
-            ] ++ (
-              if (isDarwinSystem) then [
-                mac-app-util.homeManagerModules.default
-              ] else [
-                plasma-manager.homeManagerModules.plasma-manager
-              ]
-            );
+            ] ++
+            nixpkgs.lib.optional isDarwinSystem [ mac-app-util.homeManagerModules.default ]
+            ;
 
             users.${userName} = import (if !isDarwinSystem then ./home-manager else ./darwin/home.nix);
           };

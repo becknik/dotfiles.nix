@@ -1,6 +1,10 @@
 { ... }:
 
 {
+  imports = [
+    ./plasma.nix
+  ];
+
   # Folder Setup
   home.file = {
 
