@@ -176,12 +176,25 @@
               rm -f -- "$tmp"
             }
           '';
+
+          scriptsCustom = ''
+            rerun-previous-command-if-empty() {
+              if [[ -z $BUFFER ]]; then
+                zle up-history
+                zle accept-line
+              else
+                zle .accept-line
+              fi
+            }
+            zle -N accept-line rerun-previous-command-if-empty
+          '';
         in
         keybindingsVi
         + keybindingsBash
         + keybindingsCustom
         + pluginSource
         + pluginSetup
+        + scriptsCustom
       ;
 
       oh-my-zsh = {
