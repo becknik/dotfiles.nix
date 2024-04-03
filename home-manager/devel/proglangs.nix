@@ -27,7 +27,10 @@
       python3
 
       # Haskell
-      ghc
+      unstable.ghc
+      unstable.haskell-language-server
+      unstable.cabal-install
+
 
       # Java / JVM
       kotlin
