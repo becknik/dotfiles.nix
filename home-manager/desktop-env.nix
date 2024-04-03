@@ -1,4 +1,4 @@
-{ userName, config, ... }:
+{ userName, pkgs, config, ... }:
 
 {
   imports = [
@@ -33,8 +33,8 @@
       videos = "${config.home.homeDirectory}/vids";
     };
   };
-
   xdg.configFile."gtk-3.0/settings.ini".force = true; # Only necessary for first deployment (?)
+
   gtk = {
     enable = true;
     gtk3 = {
@@ -58,4 +58,10 @@
       '';
     };
   };
+  dconf.settings."org/gnome/desktop/interface" = {
+    gtk-theme = "Adwaita-dark";
+    color-scheme = "prefer-dark";
+    icon-theme = "Tela-dark";
+  };
+  home.packages = with pkgs; [ tela-icon-theme ];
 }

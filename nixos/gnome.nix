@@ -1,5 +1,68 @@
 { pkgs, lib, ... }:
 
+let
+  gnomeAdditionalTools = with pkgs.gnome; [
+    dconf-editor
+    ghex
+    gnome-sound-recorder
+    gnome-tweaks
+    gnome-themes-extra
+    pomodoro
+    gnome-power-manager
+    gnome-software
+  ] ++ (with pkgs; [
+    gnome-decoder
+    gnome-extension-manager
+    # networkmanagerapplet
+    # redundant (see desktop-env), but necessary for home-manager to find the .desktop file
+  ]);
+
+  gnomeExtensions = with pkgs.gnomeExtensions; [
+    alphabetical-app-grid
+    appindicator
+    blur-my-shell
+    dash-to-dock
+    espresso
+    gsconnect
+    gtile
+    just-perfection
+    kimpanel # GTK-ish fcitx5 theming
+    logo-menu
+    #pixel-saver
+    quick-settings-tweaker
+    rounded-window-corners
+    vitals
+
+    #auto-move-windows # redundant & causes collisions warnings on gnome 45
+    #launch-new-instance # redundant & causes collision warnings on gnome 45
+    #workspace-indicator-2 # gnome-45 might bring a good default one making this unnecessary
+
+    # Missing: windowsNavigator nasa-pod window-list places-menu gtk4-ding apps-menu (what's this?!)
+  ];
+
+  kdeCompat = with pkgs; [
+    gedit
+    colord-kde
+  ]
+  ++ (with unstable; [
+    qadwaitadecorations
+    qadwaitadecorations-qt6
+  ]);
+
+  ## Replacements for GNOME Tools
+  kdeAdditionalTools = (with pkgs.libsForQt5; [
+    dolphin
+    dolphin-plugins
+    kio-extras # Solves spam of "serviceType "ThumbCreator" not found"
+    # TODO find a way to enable dav connections and further network protocols in dolphin
+    #org.kde.dolphin.desktop[294371]: kf.service.services: KApplicationTrader: mimeType "x-scheme-handler/dav" not found
+    #kf.kio.core: couldn't create worker: "Unknown protocol 'dav'
+    gwenview
+    kate # TODO remove konsole
+    ktouch
+    okular
+  ]);
+in
 {
   # Basic GNOME Desktop Environment Setup
   services = {
@@ -11,10 +74,7 @@
       xkbVariant = "";
 
       ## GDM
-      displayManager.gdm = {
-        enable = true;
-        #wayland = true; # redundant
-      };
+      displayManager.gdm.enable = true;
       desktopManager.gnome.enable = true;
     };
 
@@ -38,95 +98,22 @@
     };
   };
 
+  # Leftover KDE Support
+  qt = {
+    enable = true;
+    style = "breeze";
+  };
 
   # Additional GNOME Programs
   programs.gnome-terminal.enable = lib.mkDefault true; # TODO add fedora transparency patches
   #programs.gpaste.enable = true;
-
-  ## Manual Installation of additional Tools
-  environment.systemPackages = with pkgs.gnome; [
-    dconf-editor
-    ghex
-    gnome-sound-recorder
-    gnome-tweaks
-    gnome-themes-extra
-    pomodoro
-    gnome-power-manager
-    gnome-software
-  ] ++ (with pkgs; [
-    tela-icon-theme
-    gnome-decoder
-    gnome-extension-manager
-    networkmanagerapplet # redundant (see desktop-env), but necessary for home-manager to find the .desktop file
-  ])
+  environment.systemPackages = gnomeAdditionalTools
+    ++ gnomeExtensions
+    ++ kdeCompat
+    ++ kdeAdditionalTools;
 
 
-  # KDE/ Qt Support
-
-  ## Manual Installations
-  ++ (with pkgs; [
-    gedit
-    colord-kde
-    adwaita-qt
-    adwaita-qt6
-    # Should be redundant due to the qt.platformTheme setting below...
-    qgnomeplatform
-    qgnomeplatform-qt6
-
-    #libsForQt5.qtstyleplugin-kvantum
-    #qt6Packages.qtstyleplugin-kvantum
-  ])
-
-
-  ## Replacements for GNOME Tools
-  ++ (with pkgs.libsForQt5; [
-    dolphin
-    dolphin-plugins
-    kio-extras # Solves spam of "serviceType "ThumbCreator" not found"
-    # TODO find a way to enable dav connections and further network protocols in dolphin
-    #org.kde.dolphin.desktop[294371]: kf.service.services: KApplicationTrader: mimeType "x-scheme-handler/dav" not found
-    #kf.kio.core: couldn't create worker: "Unknown protocol 'dav'
-    gwenview
-    kate # TODO This pulls in Konsole and I don't know if I can stop it from doing so, but its fine I guess
-    #(kate.override { propagatedUserEnvPkgs = []; })
-    ktouch
-    okular
-  ])
-
-
-  # Adding some GNOME Extensions
-  ++ (with pkgs.gnomeExtensions; [
-    alphabetical-app-grid
-    appindicator
-    blur-my-shell
-    dash-to-dock
-    espresso
-    gsconnect
-    gtile
-    just-perfection
-    kimpanel # GTK-ish fcitx5 theming
-    logo-menu
-    #pixel-saver
-    quick-settings-tweaker
-    rounded-window-corners
-    vitals
-
-    #auto-move-windows # redundant & causes collisions warnings on gnome 45
-    #launch-new-instance # redundant & causes collision warnings on gnome 45
-    #workspace-indicator-2 # gnome-45 might bring a good default one making this unnecessary
-
-    # Missing: windowsNavigator nasa-pod window-list places-menu gtk4-ding apps-menu (what's this?!)
-  ]);
-
-  ## Leftover KDE Support
-  qt = {
-    enable = true;
-    platformTheme = "gnome"; # leverages qgnomeplatform package; redundant due to gnome.core-os-services
-    style = "adwaita-dark";
-  };
-
-
-  # Remove Bloat & Tools to be replaced
+  # Remove Bloat & Tools replaced by KDE ones
   environment.gnome.excludePackages = (with pkgs.gnome; [
     epiphany
     evince
@@ -150,9 +137,7 @@
     gnome-user-docs
   ]);
 
-
-  ## Konsole removal (not working)... :(
-  /*environment.libsForQt5.excludePackages = (with pkgs; [
-    libsForQt5.konsole
-  ]);*/
+  environment.variables = {
+    QT_WAYLAND_DECORATION = "adwaita";
+  };
 }

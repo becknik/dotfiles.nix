@@ -82,12 +82,10 @@ with lib.gvariant; {
     "org/gnome/desktop/search-providers".disable-external = true;
 
     "org/gnome/desktop/interface" = {
-      color-scheme = "prefer-dark";
       clock-show-weekday = true;
       enable-animations = false;
       enable-hot-corners = true; # Can be useful when no keyboard is available
-      icon-theme = "Tela-dark";
-      show-battery-percentage = true;
+      show-battery-percentage = laptopMode;
       text-scaling-factor = 0.97;
     };
 

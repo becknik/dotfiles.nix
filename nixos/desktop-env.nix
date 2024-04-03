@@ -94,7 +94,7 @@
     NIXOS_OZONE_WL = "1";
     MOZ_ENABLE_WAYLAND = "1"; # Just to make sure
     OBSIDIAN_USE_WAYLAND = "1"; # "
-    QT_QPA_PLATFORM = "wayland;xcb";
+    QT_QPA_PLATFORM = "wayland";
 
     ## Fcitx5
     #GTK_IM_MODULE = "fcitx"; # redundant
