@@ -72,6 +72,8 @@
       (makeWhenNotDarwin gparted)
       (makeWhenNotDarwin ventoy-full)
       (makeWhenNotDarwin powertop)
+      (makeWhenNotDarwin vial)
+      (makeWhenNotDarwin via)
 
       ## Nix(OS)
       #cachix
