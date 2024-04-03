@@ -269,32 +269,29 @@
 
       shellAliases =
         let
-          # no-link: Do not create symlinks to the build results.
-          mkNomFlakeBuildCmd = "nom build --quiet --no-link \"${(mkFlakeDir userName config)}#nixosConfigurations"
-            + ".$NIXOS_CONFIGURATION_NAME.config.system.build.toplevel\"";
-          mkRebuildCmd = isDarwin: argument: "sudo ${if isDarwin then "darwin" else "nixos"}-rebuild "
+          mkRebuildCmd = isDarwin: argument:
+            "sudo ${if isDarwin then "darwin" else "nixos"}-rebuild "
             + "--flake \"${(mkFlakeDir userName config)}#$NIXOS_CONFIGURATION_NAME\" ${argument}";
-          mkBetterRebuildCmd = isDarwin: argument: "${mkNomFlakeBuildCmd} && ${mkRebuildCmd isDarwin argument}";
+
+          mkRebuildCmdNh = argument: "nh os ${argument} ${(mkFlakeDir userName config)} --hostname $NIXOS_CONFIGURATION_NAME";
         in
         {
-          # General
-          fu = "sudo";
-          sduo = "sudo";
-
           # Flake NixOS configuration equals hostname of machine
           # TODO this is ugly
-          nrbs = (mkBetterRebuildCmd false "switch");
-          nrbb = (mkBetterRebuildCmd false "boot");
-          nrbt = (mkBetterRebuildCmd false "test");
-          nrbsnn = (mkRebuildCmd false "switch");
-          nrbbnn = (mkRebuildCmd false "boot");
-          nrbtnn = (mkRebuildCmd false "test");
+          nrbs = (mkRebuildCmd false "switch");
+          nrbb = (mkRebuildCmd false "boot");
+          nrbt = (mkRebuildCmd false "test");
+
+          nhs = (mkRebuildCmdNh "switch");
+          nht = (mkRebuildCmdNh "boot");
+          nhb = (mkRebuildCmdNh "test");
 
           # drbs = (mkBetterRebuildCmd true "switch");
           # drbb = (mkBetterRebuildCmd true "build");
           # drbc = (mkBetterRebuildCmd true "check");
           # FIXME git+file:///Users/jbecker/devel/own/dotfiles.nix' does not provide attribute 'packages.x86_64-darwin.nixosConfigurations.wnix.config.system.build.toplevel',
           # 'legacyPackages.x86_64-darwin.nixosConfigurations.wnix.config.system.build.toplevel' or 'nixosConfigurations.wnix.config.system.build.toplevel'
+
           drbs = (mkRebuildCmd true "switch");
           drbb = (mkRebuildCmd true "build");
           drbc = (mkRebuildCmd true "check");
@@ -303,6 +300,10 @@
           ngckeep = "sudo nix-collect-garbage --delete-older-than";
           ngcd = "sudo nix-collect-garbage -d";
           ngcdu = "nix-collect-garbage -d";
+
+          # General
+          fu = "sudo";
+          sduo = "sudo";
 
           # Git
           gai = "git add --interactive";

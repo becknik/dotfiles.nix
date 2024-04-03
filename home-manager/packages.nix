@@ -82,6 +82,7 @@
       nix-update
       nix-tree
       nixpkgs-review
+      unstable.nh
 
       ### Secrets Management (1)
       sops
