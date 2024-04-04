@@ -297,28 +297,30 @@
           ];
         };
 
-      devShell.x86_64-linux =
-        let
-          pkgs = nixpkgs.legacyPackages."x86_64-linux";
-        in
-        devenv.lib.mkShell {
-          inherit inputs pkgs;
-          modules = [
-            ({ pkgs, config, ... }: {
-              # https://devenv.sh/guides/using-with-flakes/
-              # https://devenv.sh/reference/options/
-              # https://github.com/expipiplus1/update-nix-fetchgit
-              packages = [ pkgs.update-nix-fetchgit ];
+      devShell = forAllSystems
+        (system:
+          let
+            pkgs = nixpkgs.legacyPackages.${system};
+          in
+          devenv.lib.mkShell {
+            inherit inputs pkgs;
+            modules = [
+              ({ pkgs, config, ... }: {
+                # https://devenv.sh/guides/using-with-flakes/
+                # https://devenv.sh/reference/options/
+                # https://github.com/expipiplus1/update-nix-fetchgit
+                packages = [ pkgs.update-nix-fetchgit ];
 
-              languages.nix.enable = true;
+                languages.nix.enable = true;
 
-              pre-commit.hooks = {
-                nixpkgs-fmt.enable = true;
-              };
+                pre-commit.hooks = {
+                  nixpkgs-fmt.enable = true;
+                };
 
-              scripts.update-fetchgit.exec = "update-nix-fetchgit $DEVENV_ROOT/overlays/modifications.nix";
-            })
-          ];
-        };
+                scripts.update-fetchgit.exec = "update-nix-fetchgit $DEVENV_ROOT/overlays/modifications.nix";
+              })
+            ];
+          }
+        );
     };
 }
