@@ -119,8 +119,8 @@
               sops-nix.homeManagerModules.sops
               nixvim.homeManagerModules.nixvim
               nix-index-database.hmModules.nix-index
-            ] ++
-            nixpkgs.lib.optional isDarwinSystem [ mac-app-util.homeManagerModules.default ]
+            ]
+            ++ nixpkgs.lib.optional isDarwinSystem mac-app-util.homeManagerModules.default
             ;
 
             users.${userName} = import (if !isDarwinSystem then ./home-manager else ./darwin/home.nix);
