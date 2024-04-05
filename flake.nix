@@ -287,7 +287,7 @@
               };
             })
             inputs.mac-app-util.darwinModules.default
-            ./darwin/configuration.nix
+            ./darwin
 
             home-manager.darwinModules.home-manager
             (mkHomeManagerConf {

@@ -283,7 +283,7 @@
       shellAliases =
         let
           mkRebuildCmd = isDarwin: argument:
-            "sudo ${if isDarwin then "darwin" else "nixos"}-rebuild "
+            "${if isDarwin then "darwin" else "sudo nixos"}-rebuild "
             + "--flake \"${(mkFlakeDir userName config)}#$NIXOS_CONFIGURATION_NAME\" ${argument}";
 
           mkRebuildCmdNh = argument: "nh os ${argument} ${(mkFlakeDir userName config)} --hostname $NIXOS_CONFIGURATION_NAME";
