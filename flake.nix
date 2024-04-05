@@ -35,9 +35,8 @@
     };
 
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-23.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-      #inputs.pre-commit-hooks.inputs.nixpkgs-stable.follows = "nixpkgs"; # TODO Doesn't follows the nixvim inputs - bug report?
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
@@ -116,7 +115,6 @@
 
             sharedModules = with inputs; [
               sops-nix.homeManagerModules.sops
-              nixvim.homeManagerModules.nixvim
               nix-index-database.hmModules.nix-index
             ]
             ++ nixpkgs.lib.optional isDarwinSystem mac-app-util.homeManagerModules.default;
@@ -127,8 +125,16 @@
         };
     in
     {
-      packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
+
+      # using standalone variant of nixvim to enable "bleeding edge" features & plugins, hence using systems with stateVersion=23.11
+      packages = forAllSystems (system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+          pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+          nixvim = inputs.nixvim.legacyPackages.${system};
+        in
+        import ./pkgs { inherit pkgs pkgs-unstable nixvim; });
 
       overlays = import ./overlays { inherit inputs config; };
 

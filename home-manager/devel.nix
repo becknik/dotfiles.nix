@@ -5,7 +5,6 @@
     ./devel/proglangs.nix # Installation of some programming languages
 
     ./programs/git.nix
-    ./programs/nixvim.nix # Nixvim neovim configuration
     ./programs/vscodium.nix
   ];
 
@@ -84,5 +83,9 @@
     #awscli2
     kubectl
     act
-  ];
+  ]
+  # custom standalone variant of nixvim
+  ++ [ nixvim ];
+
+  home.sessionVariables.EDITOR = pkgs.nixvim;
 }

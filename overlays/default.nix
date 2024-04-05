@@ -29,8 +29,12 @@
     };
   };
 
-  # Brings in custom packages from '/pkgs'
-  additions = final: _prev: import ../pkgs { pkgs = final; };
+  # Brings in custom packages from '/pkgs', including unstable nixvim
+  additions = final: _prev: import ../pkgs {
+    pkgs = final;
+    pkgs-unstable = final.unstable;
+    nixvim = inputs.nixvim.legacyPackages.${final.system};
+  };
 
   modifications = (import ./modifications.nix { inherit inputs; });
   modifications-perf = (import ./modifications-perf.nix { inherit inputs; });
