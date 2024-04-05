@@ -1,5 +1,5 @@
 {
-  description = "NixOS/nix-darwin configurations for my desktop & laptops";
+  description = "flake for nixos, nix-darwin & more I've running on my desktop & laptops";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
@@ -46,7 +46,7 @@
     flockenzeit.url = "github:balsoft/Flockenzeit";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, nixos-hardware, devenv, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, nixos-hardware, ... }@inputs:
     let
       systems = [ "x86_64-darwin" "x86_64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
@@ -60,11 +60,8 @@
 
       # Default nixpkgs config
       config = {
-        permittedInsecurePackages = [
-          "electron-25.9.0"
-          "nix-2.16.2"
-        ];
-        joypixels.acceptLicense = true;
+        permittedInsecurePackages = [ "electron-25.9.0" ];
+
         allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [
           "brgenml1lpr"
           "brscan5"
@@ -85,10 +82,11 @@
           "vscode-extension-github-copilot"
           "vscode-extension-github-copilot-chat"
         ];
+        joypixels.acceptLicense = true;
       };
 
-      # `nixpkgs-unstable'` necessary due to target platform config on `dnix`
-      defaultOverlays = nixpkgs-unstable': with self.overlays; [
+      # `nixpkgs-unstable'` varies between hosts due to target platform modification config on `dnix`
+      defaultOverlays = { nixpkgs-unstable' ? nixpkgs-unstable }: with self.overlays; [
         default # Additions to `nixpkgs.lib`
         nixpkgs-unstable'
         modifications
@@ -110,7 +108,8 @@
         {
           home-manager = {
             extraSpecialArgs = (args userName) // {
-              inherit system laptopMode isDarwinSystem devenv;
+              inherit (inputs) devenv;
+              inherit system laptopMode isDarwinSystem;
             };
             useGlobalPkgs = true;
             useUserPackages = true;
@@ -120,9 +119,9 @@
               nixvim.homeManagerModules.nixvim
               nix-index-database.hmModules.nix-index
             ]
-            ++ nixpkgs.lib.optional isDarwinSystem mac-app-util.homeManagerModules.default
-            ;
+            ++ nixpkgs.lib.optional isDarwinSystem mac-app-util.homeManagerModules.default;
 
+            # home-manager on darwin doesn't support all options
             users.${userName} = import (if !isDarwinSystem then ./home-manager else ./darwin/home.nix);
           };
         };
@@ -188,7 +187,7 @@
 
 
                 # Overlay Setup
-                nixpkgs-unstable-wit-platform = final: _prev: {
+                nixpkgs-unstable-with-platform = final: _prev: {
                   unstable = import nixpkgs-unstable
                     (platformConfig // {
                       inherit system;
@@ -211,13 +210,13 @@
                   inherit system;
                   config = config';
 
-                  overlays = (defaultOverlays nixpkgs-unstable-wit-platform) ++
-                    (with self.overlays; [
-                      modifications-perf
-                      nixpkgs-clean
-                      build-fixes
-                      build-skips
-                    ]);
+                  overlays = (defaultOverlays { nixpkgs-unstable' = nixpkgs-unstable-with-platform; })
+                    ++ (with self.overlays; [
+                    modifications-perf
+                    nixpkgs-clean
+                    build-fixes
+                    build-skips
+                  ]);
                 };
               })
           ];
@@ -243,7 +242,7 @@
             ({ lib, pkgs, ... }@module-inputs: {
               nixpkgs = {
                 inherit system config;
-                overlays = (defaultOverlays self.overlays.nixpkgs-unstable);
+                overlays = defaultOverlays { };
               };
             })
             inputs.disko.nixosModules.disko
@@ -302,7 +301,7 @@
           let
             pkgs = nixpkgs.legacyPackages.${system};
           in
-          devenv.lib.mkShell {
+          inputs.devenv.lib.mkShell {
             inherit inputs pkgs;
             modules = [
               ({ pkgs, config, ... }: {
