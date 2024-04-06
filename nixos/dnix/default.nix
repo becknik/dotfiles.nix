@@ -15,10 +15,11 @@
       (flakeInput: "--update-input ${flakeInput}")
       (lib.filter (name: name != "self") (lib.attrsets.mapAttrsToList (name: _: name) inputs))
     ) ++ [
-      "-L" # print build logs
+      "-L" # print build logs (interesting in combination with nix-output-monitor)
+      # `tail -n +1 -f .log |& nom`
       "--commit-lock-file"
     ];
-    dates = "Sat";
+    dates = "Sat * 12:00";
     randomizedDelaySec = "2h";
   };
 
