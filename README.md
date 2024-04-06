@@ -2,6 +2,8 @@
 
 My over-engineered approach of declaratively syncing my desktop setups between all my devices.
 
+Some nice *bits of knowledge* I came across along the buildup of this flake are ~~documented~~ accumulated [right here](./BITS.md)
+
 ## Project Structure
 
 ```shell
