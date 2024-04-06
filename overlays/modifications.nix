@@ -20,7 +20,7 @@ final: prev: {
     patches = [ ./modifications/pure-prompt.patch ];
   });
 
-  fzf-git-sh-patched = prev.fzf-git-sh.overrideAttrs (oldAttrs: {
+  fzf-git-sh-patched = prev.unstable.fzf-git-sh.overrideAttrs (oldAttrs: {
     src = prev.fetchFromGitHub {
       owner = "junegunn";
       repo = "fzf-git.sh";
@@ -29,28 +29,6 @@ final: prev: {
     };
     version = "unstable-2024-02-17";
     patches = [ ./modifications/fzf-git-sh-feat-vim-keybindings.patch ];
-    postPatch = with prev; ''
-      sed -i \
-        -e "s,\bbash\b,${bash}/bin/bash," \
-        -e "s,\bcat\b,${coreutils}/bin/cat," \
-        -e "s,\bcut\b,${coreutils}/bin/cut," \
-        -e "s,\bhead\b,${coreutils}/bin/head," \
-        -e "s,\buniq\b,${coreutils}/bin/uniq," \
-        -e "s,\bgrep\b,${gnugrep}/bin/grep," \
-        -e "s,\bsed\b,${gnused}/bin/sed," \
-        -e "s,\bxargs\b,${findutils}/bin/xargs," \
-        -e "s,\bcolumn\b,${util-linux}/bin/column," \
-        -e "s,\bawk\b,${gawk}/bin/awk," \
-        -e "s,\bbat\b,${bat}/bin/bat," \
-        -e "s,\bxdg-open\b,${xdg-utils}/bin/xdg-open," \
-        -e "s,\bfzf-tmux\b,${fzf}/bin/fzf-tmux," \
-        -e "/fzf-tmux/!s,\btmux\b,${tmux}/bin/tmux," \
-        \
-        -e "/display-message\|fzf-git-\$o-widget\|^\( \)*url=\|\$remote_url =~ ^/!s,\bgit\b,${git}/bin/git,g" \
-        -e "s,__fzf_git=.*BASH_SOURCE.*,__fzf_git=$out/share/${oldAttrs.pname}/fzf-git.sh," \
-        -e "/__fzf_git=.*readlink.*/d" \
-        fzf-git.sh
-    '';
   });
 
   zsh-forgit-patched = prev.zsh-forgit.overrideAttrs (oldAttrs: {

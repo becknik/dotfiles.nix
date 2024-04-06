@@ -10,7 +10,6 @@
 
       # JS / TypeScript
       typescript
-      nodePackages.eslint_d
       nodejs_latest
       deno
 

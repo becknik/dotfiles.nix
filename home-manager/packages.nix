@@ -76,15 +76,17 @@
       (makeWhenNotDarwin via)
 
       ## Nix(OS)
-      #cachix
       devenv.packages."${pkgs.system}".devenv
-      nixos-option
-      nix-output-monitor
-      nix-diff
-      nix-update
-      nix-tree
-      nixpkgs-review
+
       unstable.nh
+      nix-output-monitor
+
+      nvd
+      nix-diff
+      nix-tree
+
+      nix-update
+      nixpkgs-review
 
       ### Secrets Management (1)
       sops
