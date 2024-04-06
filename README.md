@@ -4,60 +4,42 @@ My over-engineered approach of declaratively syncing my desktop setups between a
 
 ## Project Structure
 
-Rough repo structure with significant files:
-
 ```shell
-$ tree -a -I '\.git|\.vscode' .
+$ tree -a -I '\.git|\.vscode|\.direnv' . # slightly modified for better context/ overview
 .
-├── flake.nix
-├── darwin
-│   ├── configuration.nix
-│   └── home.nix
-├── disko
-│   ├── ext4-encrypted.nix
-│   └── ext4-unencrypted.nix
-├── home-manager
-│   ├── default.nix
-│   ├── desktop-env.nix
-│   ├── desktop-env
-│   │   ├── autostart.nix
-│   │   ├── folders-and-files.nix
-│   │   ├── plasma.nix
-│   │   └── shell.nix
-│   ├── devel.nix
-│   ├── devel / proglangs.nix
-│   ├── media.nix
-│   ├── media / mail.nix (not working ._.)
-│   ├── packages.nix
-│   ├── programs
-│   │   ├── git.nix
-│   │   ├── neovim.nix
-│   │   └── vscodium.nix
-│   ├── secrets.nix
-│   ├── secrets
-│   │   ├── git.yaml
-│   │   ├── gpg-personal.asc
-│   │   └── keepassxc.key
-│   └── .sops.yaml
-├── nixos
-│   ├── dnix
-│   │   ├── default.nix
-│   │   └── hardware-configuration.nix
-│   ├── lnix / --"--
-│   ├── default.nix
-│   ├── desktop-env.nix
-│   ├── gnome.nix
-│   ├── packages.nix
-│   ├── systemd.nix
-│   └── virtualisation.nix
-├── overlays
-│   ├── build-fixes.nix
-│   ├── build-skips.nix
-│   ├── default.nix
-│   └── modifications.nix
-├── pkgs
-│   └── default.nix
-└── README.md
+├─────────────────────────────────────────── home-manager
+├── flake.nix                                ├── default.nix
+├── flake.lock                               ├── desktop-env.nix
+├── darwin                                   ├── desktop-env
+│   ├── default.nix                          │   ├── autostart.nix
+├── .devenv                                  │   ├── dconf.nix
+├── disko                                    │   ├── folders-and-files.nix
+│   ├── ext4-encrypted.nix                   │   ├── files
+│   └── ext4-unencrypted.nix                 │   │   ├── plasma ── ...
+├── nixos                                    │   │   ├── .zshrc.initExtra.zsh
+│   ├── dnix                                 │   │   └── ...
+│   │   ├── default.nix                      │   ├── plasma.nix
+│   │   └── hardware-configuration.nix       │   ├── shell.nix
+│   ├── lnix ── -- same as dnix --           │   └── xdg-mime.nix
+│   ├── default.nix                          ├── devel.nix
+│   ├── desktop-env.nix                      ├── devel ── proglangs.nix
+│   ├── gnome.nix                            ├── media.nix
+│   ├── packages.nix                         ├── media ── mail.nix (not working ._.)
+│   ├── systemd.nix                          ├── packages.nix
+│   └── virtualisation.nix                   ├── programs
+├── nixvim                                   │   ├── git.nix
+│   ├── default.nix                          │   ├── thunderbird.nix
+│   └── ...                                  │   └── vscodium.nix
+├── overlays                                 ├── secrets.nix
+│   ├── build-fixes.nix                      ├── secrets
+│   ├── build-skips.nix                      │   ├── git.yaml
+│   ├── default.nix                          │   ├── gpg-personal.asc
+│   ├── modifications.nix                    │   ├── keepassxc.key
+│   ├── modification ── ...                  │   └── mail.yaml
+│   └── modifications-pref.nix               ├── .sops.yaml
+├── pkgs                                     └── users
+│   └── default.nix                              ├── darwin.nix
+└── README.md                                    └── nixos.nix
 ```
 
 ## Setup
@@ -69,14 +51,13 @@ $ tree -a -I '\.git|\.vscode' .
 - Target platform build optimization to Alderlake CPU architecture (on desktop only)
   - Overlays & systemd services to make this a bit more convenient
 - Highly customized GNOME Wayland DE with some KDE tools
-- Home-manager is used for managing everything apart from system stuff
-- home-managed secrets with [sops-nix](https://github.com/Mic92/sops-nix); [age](https://github.com/FiloSottile/age) encrypted
+- `home-manager` is used for managing everything apart from system stuff
+- Home-managed secrets with [sops-nix](https://github.com/Mic92/sops-nix) ([age](https://github.com/FiloSottile/age) encrypted)
+- [nixvim](https://github.com/nix-community/nixvim) setup with standalone approach to enable `main` branch despite using "stable" `home-manager`
+  - Used [elythh's config](https://github.com/elythh/nixvim) as a starting point
 
 ### Further great Projects used
 
-- [nixvim](https://github.com/nix-community/nixvim)
-  - [elythh's config](https://github.com/elythh/nixvim) is highly recommendable to get started
-- [plasma-manager](https://github.com/pjones/plasma-manager)
 - [disko](https://github.com/nix-community/disko): for NixOS partitioning & deployment
 - [Flockenzeit](https://github.com/balsoft/Flockenzeit): Date & time parsing and formatting in native Nix. Awesome!
   - Used in conjunction with flake's `inputs.self.sourceInfo.lastModified` for systemd NixOS automatic rebuild logs :^)
@@ -93,9 +74,12 @@ $ tree -a -I '\.git|\.vscode' .
   - `nixos-upgrade.service` writes build logs to `/var/log/nixos-upgrade/`
 - `nixos-fetch-and-switch-on-change` - Pulls and executes `nixos-rebuild switch` when this repos local differs from remote
   - TODO Sadly this needs love and isn't working
-- `nixos`/`darwin-rebuild` shell alias - see bottom of [shell.nix](./home-manager/desktop-env/shell.nix) file
+- `nixos`/ `darwin-rebuild` shell alias - see bottom of [shell.nix](./home-manager/desktop-env/shell.nix) file
 
 ## Getting Started/ Deployment
+
+> I think the steps 2 & 3 should be obsolete due to utilization of `disko`'s NixOS module, which magically handles the partition mounting
+> If the modules is really smart, step 1 could also be neglected
 
 1. Partition disks with [disko](https://github.com/nix-community/disko):
 
@@ -110,10 +94,10 @@ sudo nix run github:nix-community/disko \
   - `cat /mnt/etc/nixos/hardware-configuration.nix >> ./nixos/<profile>/hardware-configuration.nix`
   - Adjust it to your needs
 3. Replace in `default.nix` of `<profile>` the `kernelPackages = pkgs.linux_xanmod_latest_patched_<profile>;` line with `pkgs.linux_xanmod_latest` to avoid compilation;
-4. `cd /mnt && sudo nixos-install --flake </home/nixos/>dotfiles.nix#(d|l)nix`
+4. `cd /mnt && sudo nixos-install --flake </home/nixos/>dotfiles.nix#<host>`
 5. `sudo cp /home/nixos/dotfiles.nix /mnt/home/<username>/devel/own`
 
-### Todolist for after Installation
+# Todolist for Post-Installation
 
 Sometimes its nice to have a good starting point, when one spent hours on bringing a system to run :)
 Let's hope this projects break the hours down to minutes (assumed native building is disabled ofc)
@@ -123,7 +107,7 @@ Let's hope this projects break the hours down to minutes (assumed native buildin
 - [ ] Copy the nix-sops secret to the new system
 - [ ] (Configure the CPU-scheduler and profile in `cpupower-gui`)
 
-#### Logins
+## Logins
 
 - [ ] Thunderbird with Mail Accounts (because home-managed ones won't work :( )
 - [ ] Firefox
@@ -135,7 +119,7 @@ Let's hope this projects break the hours down to minutes (assumed native buildin
 - [ ] Anki
 - [ ] (Teams)
 
-### Manually Enable Autostart
+## Autostart must be manually Enable
 
 - [ ] keepassxc
 - [ ] telegram-desktop
