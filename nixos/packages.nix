@@ -21,19 +21,14 @@
     };
   };
 
-  programs.neovim = {
-    # Enable neovim for root account, besides of nixvim for home-manager user
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-  };
+  environment.variables.EDITOR = "nvim";
 
   # Manual Installation
   environment.systemPackages = with pkgs; [
     libnotify # For the noixos-upgrade systemd notifier units
 
     ## Utils
+    nixvim
     efibootmgr
     usbutils
     cryptsetup
