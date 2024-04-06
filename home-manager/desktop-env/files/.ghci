@@ -1,0 +1,7 @@
+:set prompt "\ESC[0;34m\STX%s\n\ESC[1;31m\STXλ> \ESC[m\STX"
+:set editor nvim
+:set +m
+:set +t
+:set -Wall
+:set -fbreak-on-exception
+:set -ferror-spans
