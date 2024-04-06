@@ -120,7 +120,11 @@
             ++ nixpkgs.lib.optional isDarwinSystem mac-app-util.homeManagerModules.default;
 
             # home-manager on darwin doesn't support all options
-            users.${userName} = import (if !isDarwinSystem then ./home-manager else ./darwin/home.nix);
+            users.${userName} = nixpkgs.lib.concatStringsSep "/" [
+              ./home-manager
+              "users"
+              (if isDarwinSystem then "darwin.nix" else "nixos.nix")
+            ];
           };
         };
     in

@@ -1,31 +1,19 @@
-{ stateVersion, userName, lib, config, pkgs, ... }:
+{ userName, lib, pkgs, ... }:
 
 {
   imports = [
-    # This module extends home.file, xdg.configFile and xdg.dataFile with the `mutable` option.
-    (import
-      (builtins.fetchurl {
-        url = "https://gist.githubusercontent.com/piousdeer/b29c272eaeba398b864da6abf6cb5daa/raw/41e569ba110eb6ebbb463a6b1f5d9fe4f9e82375/mutability.nix";
-        sha256 = "4b5ca670c1ac865927e98ac5bf5c131eca46cc20abf0bd0612db955bfc979de8";
-      })
-      { inherit config lib; })
+    ../default.nix
 
-    ../home-manager/packages.nix
-    ../home-manager/desktop-env/shell.nix
-    ../home-manager/desktop-env/folders-and-files.nix # also want the `$HOME/devel/*` structure
+    ../packages.nix
+    ../desktop-env/shell.nix
+    ../desktop-env/folders-and-files.nix # also want the `$HOME/devel/*` folder structure
+    # TODO this also includes the manually created plasma config files...
 
-    ../home-manager/devel.nix
-    ../home-manager/secrets.nix
+    ../devel.nix
+    ../secrets.nix
   ];
 
-  home = {
-    inherit stateVersion;
-
-    username = userName;
-    homeDirectory = (lib.mkForce "/Users/${userName}"); # mkForce is necessary to prevent `/var/empty`
-  };
-
-  programs.home-manager.enable = true;
+  home.homeDirectory = (lib.mkForce "/Users/${userName}"); # mkForce is necessary to prevent `/var/empty`
 
   # Settings changes from normal home-manager configuration
   services.gpg-agent.enable = (lib.mkForce false); # incompatible with darwin
