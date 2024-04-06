@@ -24,7 +24,7 @@
   };
 
   networking.hostName = "dnix";
-  environment.variables."NIXOS_CONFIGURATION_NAME" = config.networking.hostName;
+  environment.variables."FLAKE_NIXOS_HOST" = config.networking.hostName;
 
   # Source: https://github.com/NixOS/nixpkgs/issues/54707
   # The following only makes sense when building huge packages like the Linux kernel is failing with something like

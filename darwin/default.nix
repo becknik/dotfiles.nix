@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  environment.variables."NIXOS_CONFIGURATION_NAME" = "wnix";
+  environment.variables."FLAKE_NIXOS_HOST" = "wnix";
   nix = {
     useDaemon = true;
     settings = {

@@ -142,9 +142,9 @@
         let
           mkRebuildCmd = isDarwin: argument:
             "${if isDarwin then "darwin" else "sudo nixos"}-rebuild "
-            + "--flake \"${(mkFlakeDir userName config)}#$NIXOS_CONFIGURATION_NAME\" ${argument}";
+            + "--flake \"${(mkFlakeDir userName config)}#$FLAKE_NIXOS_HOST\" ${argument}";
 
-          mkRebuildCmdNh = argument: "nh os ${argument} ${(mkFlakeDir userName config)} --hostname $NIXOS_CONFIGURATION_NAME";
+          mkRebuildCmdNh = argument: "nh os ${argument} ${(mkFlakeDir userName config)} --hostname $FLAKE_NIXOS_HOST";
         in
         {
           # Flake NixOS configuration equals hostname of machine

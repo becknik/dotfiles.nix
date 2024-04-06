@@ -58,7 +58,7 @@ $ tree -a -I '\.git|\.vscode|\.direnv' . # slightly modified for better context/
 
 ### Further great Projects used
 
-- [disko](https://github.com/nix-community/disko): for NixOS partitioning & deployment
+- [disko](https://github.com/nix-community/disko): For NixOS partitioning & deployment
 - [Flockenzeit](https://github.com/balsoft/Flockenzeit): Date & time parsing and formatting in native Nix. Awesome!
   - Used in conjunction with flake's `inputs.self.sourceInfo.lastModified` for systemd NixOS automatic rebuild logs :^)
 - [mac-app-util](https://github.com/hraban/mac-app-util): Automatically creating trampoline symlinks for home-managed Mac software
@@ -72,9 +72,8 @@ $ tree -a -I '\.git|\.vscode|\.direnv' . # slightly modified for better context/
   - `nixos-upgrade-automatic-shutdown.service` - Shuts down the desktop when nixos-upgrade service finished
   > Disabled by default; Must be started manually
   - `nixos-upgrade.service` writes build logs to `/var/log/nixos-upgrade/`
-- `nixos-fetch-and-switch-on-change` - Pulls and executes `nixos-rebuild switch` when this repos local differs from remote
-  - TODO Sadly this needs love and isn't working
-- `nixos`/ `darwin-rebuild` shell alias - see bottom of [shell.nix](./home-manager/desktop-env/shell.nix) file
+- `nixos-fetch-flake-changes.service` - Checks for upstream changes of flake and executes `nixos-rebuild switch` if so
+- rebuild shell alias: See bottom of [shell.nix](./home-manager/desktop-env/shell.nix)
 
 ## Getting Started/ Deployment
 

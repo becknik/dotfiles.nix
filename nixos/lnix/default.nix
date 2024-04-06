@@ -7,7 +7,7 @@
     ./hardware-configuration.nix
   ];
 
-  environment.variables."NIXOS_CONFIGURATION_NAME" = config.networking.hostName;
+  environment.variables."FLAKE_NIXOS_HOST" = config.networking.hostName;
 
   #boot.kernelPackages = pkgs.linuxPackages_xanmod_latest_patched_lnix;
   boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;

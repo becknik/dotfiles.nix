@@ -33,20 +33,13 @@
           {
             StandardOutput = logFilePath;
             StandardError = logFilePath;
+
+            Restart = "on-abort";
+            # User = userName;
+            # Group = "users";
           };
         onFailure = [ "nixos-upgrade-notify-send-failure.service" ];
         onSuccess = [ "nixos-upgrade-notify-send-success.service" ];
-        #After = [];
-      };
-
-      nixos-upgrade-automatic-shutdown = {
-        description = "Automatic shutdown after nixos-upgrade.service";
-        after = [ "nixos-upgrade.service" ];
-        #wantedBy = [ "nixos-upgrade.service" ];
-        enable = true;
-        serviceConfig = {
-          ExecStart = "${pkgs.systemd}/bin/systemctl poweroff";
-        };
       };
 
       nixos-upgrade-notify-send-success = (nixosUpgradeNotifySend {
@@ -58,32 +51,50 @@
         critical = true;
       });
 
-      # TODO nixos-fetch-and-switch-on-change systemd service seems to no start on boot?
-      nixos-fetch-and-switch-on-change = {
-        description = "Triggers the nixos-upgrade.service when the remote config git repo is != local";
-        unitConfig = {
-          After = "network.target";
+      nixos-upgrade-automatic-shutdown = {
+        description = "Shutdown after nixos-upgrade.service (intended to be triggered manually)";
+        after = [ "nixos-upgrade.service" ];
+        #wantedBy = [ "nixos-upgrade.service" ];
+        enable = true;
+        serviceConfig = {
+          ExecStart = "${pkgs.systemd}/bin/systemctl poweroff";
         };
+      };
+
+      nixos-fetch-flake-changes = {
+        description = "Runs `nixos-rebuild` when flake upstream is ahead of local";
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
 
         serviceConfig = {
           Type = "oneshot";
+          # User = userName; # TODO error: cannot run ssh: No such file or directory  fatal: unable to fork
+          # Group = "users";
         };
+
         path = with pkgs; [ git nixos-rebuild ];
         environment = {
-          NIXOS_CONFIG_REPO_DIRECTORY = (mkFlakeDir userName config);
+          FLAKE = (mkFlakeDir userName config);
+          FLAKE_NIXOS_HOST = config.environment.variables.FLAKE_NIXOS_HOST;
         };
         script = ''
-          cd $NIXOS_CONFIG_REPO_DIRECTORY
+          cd $FLAKE
 
           git fetch
-          local=$(git rev-parse main)
-          remote=$(git rev-parse main@{upstream})
-          if [ $local != $remote ]; then
+          local_commit_date=$(git show -s --format=%ci main)
+          remote_commit_date=$(git show -s --format=%ci main@{upstream})
+
+          if [[ "$local_commit_date" < "$remote_commit_date" ]]; then
+            echo "Detected changes in flake main@{upstream} from $remote_commit_date"
+            echo "Trying to pull & checkout"
+
             git pull
-            nixos-rebuild --flake "$NIXOS_CONFIG_REPO_DIRECTORY#$NIXOS_CONFIGURATION_NAME" boot
+            git switch main
+            nixos-rebuild --flake "$FLAKE#$FLAKE_NIXOS_HOST" switch
           fi
+          echo "No changes found in flake main@{upstream}"
         '';
-        #
       };
     };
 
