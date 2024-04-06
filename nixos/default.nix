@@ -141,10 +141,15 @@
     };
   };
 
+  networking.nameservers = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
   services.resolved = {
     enable = true; # systemd-resolved
-    dnssec = "allow-downgrade";
-    dnsovertls = "opportunistic";
+    #dnssec = "allow-downgrade";
+    dnssec = "true";
+    domains = [ "~." ];
+    fallbackDns = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
+    #dnsovertls = "opportunistic";
+    dnsovertls = "true";
   };
   #services.opensnitch.enable = true;
   programs.openvpn3.enable = true;
