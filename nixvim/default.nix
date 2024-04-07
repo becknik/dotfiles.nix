@@ -2,10 +2,10 @@
 
 {
   imports = [
-    ./plugins.nix
     ./options.nix
+    ./plugins.nix
+    ./keymaps.nix
   ];
-
 
   config = {
     viAlias = true;
