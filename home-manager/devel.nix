@@ -87,5 +87,5 @@
   # custom standalone variant of nixvim
   ++ [ nixvim ];
 
-  home.sessionVariables.EDITOR = pkgs.nixvim;
+  home.sessionVariables.EDITOR = "nvim";
 }
