@@ -1,4 +1,4 @@
-{ ... }:
+{ inputs, ... }:
 
 final: prev: {
   discord-modified = prev.discord.override {
@@ -6,14 +6,9 @@ final: prev: {
     withVencord = true;
   };
 
-  oh-my-zsh-git = prev.pkgs.oh-my-zsh.overrideAttrs (oldAttrs: {
-    src = prev.fetchFromGitHub {
-      owner = "ohmyzsh";
-      repo = "ohmyzsh";
-      rev = "0fed36688f9a60d8b1f2182f27de7fdc8a1e6b72";
-      sha256 = "1fc6d3svc6iq8bblr9f9m8izx32ph6slsdmlg4iln93gaz7c6gwk";
-    };
-    version = "unstable-2024-03-16";
+  oh-my-zsh-git = prev.pkgs.oh-my-zsh.overrideAttrs (with inputs; oldAttrs: {
+    version = ohmyzsh.rev;
+    src = ohmyzsh;
   });
 
   pure-prompt-patched = prev.pure-prompt.overrideAttrs (oldAttrs: {

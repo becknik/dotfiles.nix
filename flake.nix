@@ -43,6 +43,12 @@
 
     # Libraries
     flockenzeit.url = "github:balsoft/Flockenzeit";
+
+    # Non-Flake Inputs
+    "ohmyzsh" = {
+      url = "github:ohmyzsh/ohmyzsh";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, nixos-hardware, ... }@inputs:

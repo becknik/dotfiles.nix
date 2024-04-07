@@ -827,6 +827,22 @@
         "type": "github"
       }
     },
+    "ohmyzsh": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1712424199,
+        "narHash": "sha256-jeHhYK6mSZiLWSnElYSo/8YLcLm478/u9AP8RKZ0BWw=",
+        "owner": "ohmyzsh",
+        "repo": "ohmyzsh",
+        "rev": "bf713e2c112ee1f0daf10deffa1215c982513f9b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ohmyzsh",
+        "repo": "ohmyzsh",
+        "type": "github"
+      }
+    },
     "poetry2nix": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -947,6 +963,7 @@
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixvim": "nixvim",
+        "ohmyzsh": "ohmyzsh",
         "sops-nix": "sops-nix"
       }
     },
