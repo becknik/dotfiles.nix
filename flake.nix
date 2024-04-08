@@ -91,7 +91,7 @@
       };
 
       # `nixpkgs-unstable'` varies between hosts due to target platform modification config on `dnix`
-      defaultOverlays = { nixpkgs-unstable' ? nixpkgs-unstable }: with self.overlays; [
+      defaultOverlays = { nixpkgs-unstable' ? self.overlays.nixpkgs-unstable }: with self.overlays; [
         default # Additions to `nixpkgs.lib`
         nixpkgs-unstable'
         modifications
