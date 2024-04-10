@@ -25,8 +25,6 @@
       "general.autoScroll" = true;
       "general.smoothScroll" = true;
 
-      "intl.locale.requested" = "en-US,de";
-
       "mail.SpellCheckBeforeSend" = true;
       "mail.compose.add_link_preview" = true;
       "mail.compose.default_to_paragraph" = false;

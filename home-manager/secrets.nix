@@ -1,22 +1,20 @@
 { config, ... }:
 
 let
-  createMailSecret = provider-name: {
-    "${provider-name}/address" = {
+  createMailSecret = providerName: {
+    "mail/${providerName}/address" = {
       sopsFile = ./secrets/mail.yaml;
-      key = "${provider-name}/address";
+      key = "${providerName}/address";
     };
-
-    "${provider-name}/password" = {
+    "mail/${providerName}/password" = {
       sopsFile = ./secrets/mail.yaml;
-      key = "${provider-name}/password";
+      key = "${providerName}/password";
     };
   };
 
   mail-secret-posteo = createMailSecret "posteo";
   mail-secret-gmx = createMailSecret "gmx";
   mail-secret-uni = createMailSecret "uni";
-  #mailSecretWork1 = createMailSecret "work1";
 in
 {
   # Sources:

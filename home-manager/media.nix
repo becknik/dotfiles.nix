@@ -2,7 +2,9 @@
 
 {
   imports = [
-    #./media/mail.nix # TODO home-manager account integration won't work with thunderbird...
+    ./media/gpg.nix
+
+    ./media/mail.nix
     ./programs/thunderbird.nix
   ];
 

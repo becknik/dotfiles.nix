@@ -1,88 +1,94 @@
-{ userName, ... }:
+{ ... }:
 
 let
-  getSecretPasswordCommand = provider: "cat $XDG_RUNTIME_DIR/secrets/mail/${provider}/password";
+  secretPasswordCommand = provider: "cat $XDG_RUNTIME_DIR/secrets/mail/${provider}/password";
 
-  # `provider` should be a lower case string
-  getDefaultMailAccountSettings = { provider, mail-address, server-username ? provider }:
-    let
-      # Provides a `Provider` variable with the first letter uppercased
-      /*
-        firstProviderLetter = lib.substring 0 1 provider;
-        restOfProvider = lib.substring 1 (lib.stringLength provider) provider;
-        Provider = lib.concatStrings [(lib.toUpper firstProviderLetter) restOfProvider];
-      */
-    in
+  # `provider` should be a lower case string to match the secrets
+  mkDefaultMailAccountSettings = { provider, mailAddress, serverUsername ? mailAddress }:
     {
-      #name = Provider;
-      /*
-        error: The option `home-manager.users.${userName}.accounts.email.accounts.posteo.name' is read-only, but it's set multiple times. Definition values:
-       - In `/nix/var/nix/profiles/per-user/root/channels/home-manager/modules/accounts/email.nix': "posteo"
-       - In `/home/${userName}/.config/home-manager/media/mail.nix': "Posteo"
-      */
-
-      address = mail-address; # Differing names necessary to avoid infinit recursion
+      address = mailAddress;
       realName = "Jannik Becker";
-      passwordCommand = getSecretPasswordCommand provider;
-
-      userName = server-username;
-
+      userName = serverUsername;
+      # thunderbird doesn't use this (https://github.com/nix-community/home-manager/issues/4680#issuecomment-1869389857)
+      passwordCommand = secretPasswordCommand provider;
 
       /*mbsync = {
-      enable = true;
-      create = "maildir";
+        enable = true;
+        create = "maildir";
       };*/
       aerc.enable = false;
       neomutt.enable = false;
       notmuch.enable = false;
+
+      thunderbird.enable = true;
+      thunderbird.profiles = [ "default" ];
     };
 in
 {
   accounts.email.accounts = {
 
-    "posteo" = (getDefaultMailAccountSettings {
+    "posteo" = (mkDefaultMailAccountSettings {
       provider = "posteo";
       mailAddress = "jannikb@posteo.de";
     }) // {
       primary = true;
       aliases = [ "meinctutw@posteo.de" "spaeo@posteo.de" ];
 
-      /*signature = {
+      smtp = {
+        host = "posteo.de";
+        port = 465;
+        # tls.enable = true; # default
+      };
+      imap = {
+        host = "posteo.de";
+        port = 993;
+      };
+
+      # TODO get gpg signing & gpg setup working & right
+      /* gpg = {
+        key = "483342532448204D";
+        signByDefault = true;
+      }; */
+
+      signature = {
         #command =
         #delimiter =
         #showSignature = "append";
         #text = "";
-      };*/
-      /*gpg = {
-        key = ""; # TODO gpg --list-keys
-        signByDefault = true;
-      };*/
+      };
 
       #thunderbird.perIdentitySettings
       #thunderbird.settings # account settings
     };
 
-    "gmx" = (getDefaultMailAccountSettings {
+    "gmx" = (mkDefaultMailAccountSettings {
       provider = "gmx";
       mailAddress = "jannikb33@gmx.de";
     }) // {
-      imap.host = "imap.gmx.net";
       smtp = {
         host = "mail.gmx.net";
-        #port = 587;
+        port = 587;
+        tls.useStartTls = true;
+      };
+      imap = {
+        host = "imap.gmx.net";
+        port = 993;
       };
     };
 
-    "uni" = (getDefaultMailAccountSettings {
+    "uni" = (mkDefaultMailAccountSettings {
       provider = "uni";
       mailAddress = "st177878@stud.uni-stuttgart.de";
       serverUsername = "st177878";
     }) // {
-      imap.host = "imap.uni-stuttgart.de";
+      imap = {
+        host = "imap.uni-stuttgart.de";
+        port = 993;
+      };
       smtp = {
         host = "smpt.uni-stuttgart.de";
         port = 587;
-        tls.useStartTls = true; # TODO really?!
+        tls.useStartTls = true;
       };
     };
   };
@@ -98,7 +104,7 @@ in
       profiles."default" = {
         isDefault = true;
         withExternalGnupg = true;
-      }; # this was necessary...
+      };
 
       settings = {
         "privacy.donottrackheader.enabled" = true;
