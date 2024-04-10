@@ -77,6 +77,7 @@ final: prev: {
         DEBUG_KERNEL = mkDefault no;
         NUMA = mkDefault no;
         WINESYNC = no;
+
         MALDERLAKE = yes; # TODO GCC13 -> MRAPTORLAKE GENERIC_CPU3
       };
       # Disable errors in console compilation log
@@ -84,12 +85,18 @@ final: prev: {
     })
   );
 
-  linux_xanmod_latest_patched_lnix = prev.pkgs.linuxPackages_xanmod_latest;
-  /* pkgs.linuxPackagesFor (
-      pkgs.linux_xanmod_latest.override (old: {
-        # TODO https://wiki.archlinux.org/title/ASUS_Zenbook_UM3402YA
-        kernelPatches = [ ];
-        ignoreConfigErrors = true;
-      })
-    ); */
+  # https://wiki.archlinux.org/title/ASUS_Zenbook_UM3402YA
+  linux_xanmod_latest_patched_lnix = prev.pkgs.linuxPackagesFor (
+    prev.pkgs.linux_xanmod_latest.override (old: with prev.lib; {
+      kernelPatches = [ ];
+      structuredExtraConfig = with kernel; {
+        DEBUG_KERNEL = mkDefault no;
+        NUMA = mkDefault no;
+        WINESYNC = no;
+
+        MZEN3 = yes;
+      };
+      ignoreConfigErrors = true;
+    })
+  );
 }

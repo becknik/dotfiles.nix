@@ -79,9 +79,6 @@ $ tree -a -I '\.git|\.vscode|\.direnv' . # slightly modified for better context/
 
 ## Getting Started/ Deployment
 
-> I think the steps 2 & 3 should be obsolete due to utilization of `disko`'s NixOS module, which magically handles the partition mounting
-> If the modules is really smart, step 1 could also be neglected
-
 1. Partition disks with [disko](https://github.com/nix-community/disko):
 
 ```shell
@@ -91,14 +88,10 @@ sudo nix run github:nix-community/disko \
 # If the command succeeds, the partitions are automatically mounted under /mnt
 ```
 
-2. `sudo nixos-generate-config --root /mnt`, then merge/ configure `hardware-configuration.nix`:
-  - `cat /mnt/etc/nixos/hardware-configuration.nix >> ./nixos/<profile>/hardware-configuration.nix`
-  - Adjust it to your needs
-3. Replace in `default.nix` of `<profile>` the `kernelPackages = pkgs.linux_xanmod_latest_patched_<profile>;` line with `pkgs.linux_xanmod_latest` to avoid compilation;
-4. `cd /mnt && sudo nixos-install --flake </home/nixos/>dotfiles.nix#<host>`
-5. `sudo cp /home/nixos/dotfiles.nix /mnt/home/<username>/devel/own`
+2. `sudo nixos-install --flake </home/nixos/>dotfiles.nix#<host>`
+3. `sudo cp /home/nixos/dotfiles.nix /mnt/home/<username>/devel/own`
 
-# Todolist for Post-Installation
+## Todo List for Post-Installation
 
 Sometimes its nice to have a good starting point, when one spent hours on bringing a system to run :)
 Let's hope this projects break the hours down to minutes (assumed native building is disabled ofc)
@@ -108,7 +101,7 @@ Let's hope this projects break the hours down to minutes (assumed native buildin
 - [ ] Copy the nix-sops secret to the new system
 - [ ] (Configure the CPU-scheduler and profile in `cpupower-gui`)
 
-## Logins
+### Logins
 
 - [ ] Thunderbird with Mail Accounts (because home-managed ones won't work :( )
 - [ ] Firefox
@@ -118,13 +111,11 @@ Let's hope this projects break the hours down to minutes (assumed native buildin
 - [ ] Discord, Element
 - [ ] Obsidian
 - [ ] Anki
-- [ ] (Teams)
 
-## Autostart must be manually Enable
+### Autostart must be manually Enable
 
 - [ ] keepassxc
 - [ ] telegram-desktop
 - [ ] planify
 - [x] element-desktop (manually created in `autostart.nix`)
 - [x] whatsapp-for-linux ( " )
-- [ ] (teams-for-linux)

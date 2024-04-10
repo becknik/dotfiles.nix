@@ -13,6 +13,10 @@
 
     gc.automatic = true;
     optimise.automatic = true;
+    settings = {
+      max-jobs = 1;
+      cores = 4;
+    };
   };
 
   homebrew = {

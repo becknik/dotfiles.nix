@@ -25,7 +25,9 @@
       kernelModules = [ ];
     };
 
-    kernelParams = [ ]; # "amd_pstate" managed by nixos-hardware
+    kernelParams = [ "usbcore.autosuspend=-1" ]; # "amd_pstate" managed by nixos-hardware
+    # sources:
+    # https://discourse.nixos.org/t/external-mouse-and-keyboard-sleep-when-they-stay-untouched-for-a-few-seconds/14900/10
   };
 
 
@@ -50,18 +52,13 @@
   hardware.acpilight.enable = true; # backlight
   services.fprintd.enable = true;
   sound.extraConfig = "options snd-hda-intel model=asus-zenboook power_save=1";
+
   # options snd-hda-intel model=alc294-lenovo-mic
   # asus-zenbook-ux31a position_fix=*
   # options snd-hda-intel model=asus-zenboook power_save=0
   # options snd-hda-intel model=asus-zenboook-ux31a power_save=0
   # options snd-hda-intel model=asus-laptop power_save=0
   # options snd-intel-dspcfg dsp_driver=1
-
-
-  # Power Management
-  powerManagement.powertop.enable = true;
-  # https://github.com/AdnanHodzic/auto-cpufreq
-  services.auto-cpufreq.enable = false; # TODO journalctl spam in auto-cpufreq-1.9.9: `line 105: echo: write error: Device or resource busy`
 
   hardware.asus.battery.chargeUpto = 85; # @nixos-hardware, doesn't work
 
