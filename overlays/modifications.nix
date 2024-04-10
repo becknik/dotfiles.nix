@@ -42,6 +42,7 @@ final: prev: {
     installPhase = (builtins.replaceStrings [ "install -D completions/git-forgit.zsh $out/share/zsh/zsh-forgit/git-forgit.zsh\n" ] [ "" ] oldAttrs.installPhase);
   });
 
+
   # Fixes
 
   # NixOS/nixpkgs#272912 NixOS/nixpkgs#273611
@@ -59,6 +60,12 @@ final: prev: {
       preFixup = oldAttrs.preFixup or "" + "patchelf --add-needed ${pkgs.libglvnd}/lib/libEGL.so.1 $out/bin/electron";
     });
   };
+
+  auto-cpufreq = with prev; auto-cpufreq.overrideAttrs (oldAttrs: {
+    # https://github.com/AdnanHodzic/auto-cpufreq/issues/661
+    patches = oldAttrs.patches ++ [ ./modifications/auto-cpufreq_pipe-log-spam.patch ];
+  });
+
 
   # Own Packages
 
