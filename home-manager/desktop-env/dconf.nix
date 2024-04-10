@@ -133,10 +133,10 @@ with lib.gvariant; {
       move-to-monitor-up = [ "<Shift><Control><Super>k" ];
 
       # Never used these
-      #move-to-side-e = [ "<Super><Alt>L" ];
-      #move-to-side-n = [ "<Super><Alt>K" ];
-      #move-to-side-s = [ "<Super><Alt>J" ];
-      #move-to-side-w = [ "<Super><Alt>H" ];
+      move-to-side-e = [ "<Super><Alt>L" ];
+      move-to-side-n = [ "<Super><Alt>K" ];
+      move-to-side-s = [ "<Super><Alt>J" ];
+      move-to-side-w = [ "<Super><Alt>H" ];
 
       # TODO Collides with the "open multiple instances" shortcuts
       move-to-workspace-1 = [ "<Shift><Super>1" ];
