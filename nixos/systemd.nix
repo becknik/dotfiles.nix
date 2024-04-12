@@ -71,6 +71,7 @@
           Type = "oneshot";
           # User = userName; # TODO error: cannot run ssh: No such file or directory  fatal: unable to fork
           # Group = "users";
+          onFailure = [ "nixos-upgrade-notify-send-failure.service" ];
         };
 
         path = with pkgs; [ git nixos-rebuild ];
@@ -89,7 +90,7 @@
             echo "Detected changes in flake main@{upstream} from $remote_commit_date"
             echo "Trying to pull & checkout"
 
-            git pull
+            git pull --rebase --autostash
             git switch main
             nixos-rebuild --flake "$FLAKE#$FLAKE_NIXOS_HOST" switch
           fi
