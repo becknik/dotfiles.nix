@@ -19,7 +19,7 @@
       # `tail -n +1 -f .log |& nom`
       "--commit-lock-file"
     ];
-    dates = "Sat * 12:00";
+    dates = "Sat *-*-* 12:00";
     randomizedDelaySec = "2h";
   };
 

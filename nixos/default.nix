@@ -180,7 +180,7 @@
 
   # Security & Secrets
   security = {
-    /* sudo = {
+    sudo = {
       enable = true; # redundant
       execWheelOnly = true;
       extraConfig =
@@ -190,13 +190,8 @@
         + "Defaults insults\n"
         #+ "Defaults editor=${pkgs.neovim}/bin/nvim";
         + "Defaults:root,%wheel env_keep+=EDITOR"; # Enables sudo-prepended programs like `systemctl edit ...` to use the specified default editor https://github.com/NixOS/nixpkgs/issues/276778
-        }; */
-    #please.enable = true; # Tool that enables executing a command as another user
-    sudo-rs = {
-      enable = true;
-      execWheelOnly = true;
-      extraConfig = "Defaults env_keep+=EDITOR";
     };
+    #please.enable = true; # Tool that enables executing a command as another user
   };
 
   services.pcscd.enable = true; # Must be running for age-plugin-yubikey

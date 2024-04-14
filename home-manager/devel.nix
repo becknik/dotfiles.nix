@@ -54,7 +54,8 @@
   # Manual Installations
   home.packages = with pkgs; let
     jetbrainsTools = with unstable.jetbrains; [ clion idea-ultimate ]
-      ++ lib.lists.optional (!isDarwinSystem) unstable.jetbrains-toolbox; # use this one for experiments
+      ++ lib.lists.optional (!isDarwinSystem) jetbrains-toolbox; # use this one for experiments
+    # not using unstable.jetbrains-toolbox because it depends on to much & I'm not using it that often
   in
   jetbrainsTools ++ [
     git-crypt
