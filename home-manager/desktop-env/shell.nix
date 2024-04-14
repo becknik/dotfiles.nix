@@ -188,6 +188,9 @@
 
           # Aliases for zsh-forgit
           sgds = "sgd --staged";
+
+          # Commands
+          initlua = "tail -c 59 /etc/profiles/per-user/${userName}/bin/nvim | cut -d\" \" -f1";
         };
     };
   };

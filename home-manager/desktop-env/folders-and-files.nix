@@ -26,6 +26,10 @@
       text = "";
     };
 
+    "luasnips" = {
+      target = ".nvim/luasnips/.keep";
+      text = "";
+    };
     "scripts" = {
       target = "scripts/.keep";
       text = "";
