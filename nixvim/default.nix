@@ -3,8 +3,9 @@
 {
   imports = [
     ./options.nix
-    ./plugins.nix
     ./keymaps.nix
+
+    ./plugins
   ];
 
   config = {
@@ -14,8 +15,12 @@
     clipboard = {
       providers.wl-copy.enable = true;
     };
-    colorschemes.oxocarbon.enable = true;
 
-    plugins.lazy.enable = true;
+    colorschemes.catppuccin.enable = true;
+    # colorschemes.oxocarbon.enable = true;
+    # colorschemes.onedark.enable = true;
+    # colorschemes.tokyonight.enable = true;
+
+    # plugins.lazy.enable = true;
   };
 }
