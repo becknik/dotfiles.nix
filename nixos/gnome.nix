@@ -9,12 +9,10 @@ let
     gnome-themes-extra
     pomodoro
     gnome-power-manager
-    gnome-software
   ] ++ (with pkgs; [
     gnome-decoder
     gnome-extension-manager
-    # networkmanagerapplet
-    # redundant (see desktop-env), but necessary for home-manager to find the .desktop file
+    networkmanagerapplet # redundant (see desktop-env), but necessary for home-manager to link the .desktop file
   ]);
 
   gnomeExtensions = with pkgs.gnomeExtensions; [
@@ -28,16 +26,8 @@ let
     just-perfection
     kimpanel # GTK-ish fcitx5 theming
     logo-menu
-    #pixel-saver
     quick-settings-tweaker
-    rounded-window-corners
     vitals
-
-    #auto-move-windows # redundant & causes collisions warnings on gnome 45
-    #launch-new-instance # redundant & causes collision warnings on gnome 45
-    #workspace-indicator-2 # gnome-45 might bring a good default one making this unnecessary
-
-    # Missing: windowsNavigator nasa-pod window-list places-menu gtk4-ding apps-menu (what's this?!)
   ];
 
   kdeCompat = with pkgs; [

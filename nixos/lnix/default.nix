@@ -14,8 +14,11 @@
     cores = 4;
   };
 
-  boot.kernelPackages = pkgs.linux_xanmod_latest_patched_lnix;
-  # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
+  boot = {
+    tmp.tmpfsSize = "80%";
+    # kernelPackages = pkgs.linux_xanmod_latest_patched_lnix;
+    kernelPackages = pkgs.linuxPackages_xanmod_latest;
+  };
 
 
   networking = {
