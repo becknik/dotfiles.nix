@@ -14,7 +14,8 @@
 
     dockerls.enable = true;
 
-    # rnix-lsp.enable = true;
+    nixd.enable = true;
+    # nil_ls.enable = true;
     sqls.enable = true;
     texlab.enable = true;
 

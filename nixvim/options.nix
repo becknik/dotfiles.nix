@@ -30,7 +30,7 @@
 
       # Cursor Movement
       matchpairs = "(:),{:},[:]" # default, because += doesn't exist?
-        + ",<:>,=:;";
+        + ",<:>";
       mouse = "a"; # Enable mouse mode for modes: normal, visual, insert, command-line
 
       # Tab stops

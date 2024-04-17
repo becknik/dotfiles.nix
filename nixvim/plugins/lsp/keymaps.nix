@@ -41,29 +41,11 @@
 
         # Conform
         {
-          key = "<leader>f";
+          key = "<leader>F";
           # action = "function() vim.lsp.buf.format {async = true} end";
           action = "function() require(\"conform\").format { async = true, lsp_fallback = true } end";
           lua = true;
         }
-
-        # Telescope
-        {
-          key = "gr";
-          action = "function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end";
-          lua = true;
-        }
-        {
-          key = "<leader>s";
-          action = "function() require('telescope.builtin').lsp_document_symbols() end";
-          lua = true;
-        }
-        {
-          key = "<leader>S";
-          action = "function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end";
-          lua = true;
-        }
-
 
         # LspSaga
         {
@@ -91,6 +73,11 @@
           key = "gt";
         }
 
+        {
+          # action = "<cmd>Lspsaga project_replace<CR>";
+          action = "<cmd>Lspsaga outline<CR>";
+          key = "<leader>o";
+        }
         {
           # action = "<cmd>Lspsaga project_replace<CR>";
           action = "<cmd>Lspsaga rename<CR>";

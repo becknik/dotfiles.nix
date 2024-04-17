@@ -2,6 +2,8 @@
 
 {
   # TODO sort out the default values
+  # TODO is https://github.com/stevearc/dressing.nvim a better alternative?
+  # TODO is telescope a better replacement for this plugin?
 
   # https://nix-community.github.io/nixvim/plugins/lspsaga/index.html
   # https://nvimdev.github.io/lspsaga/
@@ -37,8 +39,6 @@
       };
     };
 
-    # :Lspsaga peek_definition; :Lspsaga peek_type_definition;
-    # :Lspsaga goto_definition; :Lspsaga goto_type_definition
     definition = {
       height = .5;
       width = .6;

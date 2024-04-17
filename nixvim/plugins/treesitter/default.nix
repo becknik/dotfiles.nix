@@ -30,8 +30,8 @@
 
   keymaps = [{
     # https://github.com/nvim-treesitter/nvim-treesitter-context?tab=readme-ov-file#jumping-to-context-upwards
-    action = "function() require(\"treesitter-context\").go_to_context(vim.v.count1) end";
-    key = "<leader>c";
+    action = "function() require('treesitter-context').go_to_context(vim.v.count1) end";
+    key = "<leader>con";
     options = defaultKeymapOptions;
   }];
 }

@@ -8,6 +8,10 @@
 
     ./luasnip.nix
     ./telescope.nix
+
+    ./oil.nix
+    ./bufferline.nix
+    ./nvim-tree.nix
   ];
 
   opts.foldenable = false; # disable tree-sitter to fold the code on startup
@@ -36,6 +40,7 @@
     # Navigation & Editing
     surround.enable = true;
     vim-matchup.enable = true;
+    nvim-autopairs.enable = true;
     # eyeliner
     # vim-unimpaired
     # nvim-ts-context-commentstring
@@ -54,7 +59,7 @@
     # ^ bleeding-edge plugins from flake inputs
     # which-key-nvim
 
-    nix.enable = true;
+    # nix.enable = true;
     nix-develop.enable = true;
 
     # transparent.enable = false; # TODO first need terminal support for this
