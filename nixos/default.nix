@@ -294,6 +294,7 @@
   environment.shellInit = "ulimit -n ${builtins.toString (pkgs.lib.custom.pow 2 16)}";
 
   environment.systemPackages = with pkgs; [
+    openvpn
     #opensnitch-ui
     #firejail # if not included explicitly, `/etc/apparmor.d` wouldn't get symlinked...
     #apparmor-parser # aa-enable firejail-default isn't working

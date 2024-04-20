@@ -180,6 +180,7 @@
           gai = "git add --interactive";
           grsst = "git restore --staged"; # = grst
           grhp = "git reset -p"; # useful for unstaging staged hunks
+          gclb = "git clone --recurse-submodules --bare";
 
           ## Frankensteins
           "gaucn!" = "gau && gcn!";
