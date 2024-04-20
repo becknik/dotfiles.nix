@@ -1,4 +1,4 @@
-{ helpers, defaultKeymapOptions, ... }:
+{ helpers, withDefaultKeymapOptions, ... }:
 
 {
   # disable netrw
@@ -36,9 +36,7 @@
     onAttach = helpers.mkRaw (builtins.readFile ./nvim-tree.lua);
   };
 
-  keymaps = [{
-    action = "<cmd>NvimTreeToggle<CR>";
-    key = "<C-h>";
-    options = defaultKeymapOptions;
-  }];
+  keymaps = withDefaultKeymapOptions [
+    { key = "<c-h>"; action = "<cmd>NvimTreeToggle<cr>"; }
+  ];
 }

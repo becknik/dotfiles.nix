@@ -1,23 +1,25 @@
-{ ... }:
+{ withDefaultKeymapOptions, ... }:
 
 {
   plugins.bufferline = {
     enable = true;
+    themable = false;
 
     diagnostics = "nvim_lsp";
-    numbers = "ordinal";
+    numbers = "none"; # ordinal
     maxNameLength = 32;
     maxPrefixLength = 24;
     separatorStyle = "thick";
   };
 
-  keymaps = [
-    { key = "H"; action = "<cmd>BufferLineCyclePrev<CR>"; }
-    { key = "L"; action = "<cmd>BufferLineCycleNext<CR>"; }
+  keymaps = withDefaultKeymapOptions [
+    # https://neovim.io/doc/user/windows.html#windows so many shortcuts
+    { key = "H"; action = "<cmd>BufferLineCyclePrev<cr>"; }
+    { key = "L"; action = "<cmd>BufferLineCycleNext<cr>"; }
 
-    { key = "<leader>bd"; action = "<cmd>bdelete<CR>"; }
-    { key = "<leader>br"; action = "<cmd>BufferLineCloseLeft<CR>"; }
-    { key = "<leader>bl"; action = "<cmd>BufferLineCloseRight<CR>"; }
-    { key = "<leader>bp"; action = "<cmd>BufferLineTogglePin<CR>"; }
+    { key = "<leader>bd"; action = "<cmd>bdelete<cr>"; }
+    { key = "<leader>br"; action = "<cmd>BufferLineCloseLeft<cr>"; }
+    { key = "<leader>bl"; action = "<cmd>BufferLineCloseRight<cr>"; }
+    { key = "<leader>bp"; action = "<cmd>BufferLineTogglePin<cr>"; }
   ];
 }

@@ -12,7 +12,7 @@
     };
     lspBuf = {
       # K = "hover";
-      "<C-k>" = "signature_help";
+      "<c-k>" = "signature_help";
 
       # gd = "definition";
       # gr = "references";
@@ -38,85 +38,39 @@
           lua = true;
         }
 
-
         # Conform
         {
           key = "<leader>F";
           # action = "function() vim.lsp.buf.format {async = true} end";
-          action = "function() require(\"conform\").format { async = true, lsp_fallback = true } end";
+          action = "function() require('conform').format { async = true, lsp_fallback = true } end";
           lua = true;
         }
 
         # LspSaga
-        {
-          action = "<cmd>Lspsaga hover_doc<CR>";
-          key = "K";
-        }
+        { key = "K"; action = "<cmd>Lspsaga hover_doc<cr>"; }
 
-        {
-          # action = "<cmd>Lspsaga goto_definition<CR>";
-          # action = "<cmd>Lspsaga peek_definition<CR>";
-          action = "<cmd>Lspsaga finder def<CR>";
-          key = "gd";
-        }
-        /* {
-          action = "<cmd>Lspsaga finder ref<CR>";
-          key = "gr";
-        } */
-        {
-          action = "<cmd>Lspsaga finder imp<CR>";
-          key = "gi";
-        }
-        {
-          # action = "<cmd>Lspsaga finder type_definition<CR>";
-          action = "<cmd>Lspsaga peek_type_definition<CR>";
-          key = "gt";
-        }
+        # action = "<cmd>Lspsaga goto_definition<cr>";
+        # action = "<cmd>Lspsaga peek_definition<cr>";
+        { key = "gd"; action = "<cmd>Lspsaga finder def<cr>"; }
+        { key = "gr"; action = "<cmd>Lspsaga finder ref<cr>"; }
+        { key = "gi"; action = "<cmd>Lspsaga finder imp<cr>"; }
+        { key = "gt"; action = "<cmd>Lspsaga peek_type_definition<cr>"; }
+        # action = "<cmd>Lspsaga finder type_definition<cr>";
 
-        {
-          # action = "<cmd>Lspsaga project_replace<CR>";
-          action = "<cmd>Lspsaga outline<CR>";
-          key = "<leader>o";
-        }
-        {
-          # action = "<cmd>Lspsaga project_replace<CR>";
-          action = "<cmd>Lspsaga rename<CR>";
-          key = "<leader>rn";
-        }
-        {
-          action = "<cmd>Lspsaga lsp_rename mode=n<CR>";
-          key = "<leader>rN";
-        }
-        {
-          action = "<cmd>Lspsaga code_action<CR>";
-          key = "<leader>ca";
-        }
+        { key = "<leader>o"; action = "<cmd>Lspsaga outline<cr>"; }
+        # action = "<cmd>Lspsaga project_replace<cr>";
+        { key = "<leader>rn"; action = "<cmd>Lspsaga rename<cr>"; }
+        # action = "<cmd>Lspsaga project_replace<cr>";
+        { key = "<leader>rN"; action = "<cmd>Lspsaga lsp_rename mode=n<cr>"; }
+        { key = "<leader>ca"; action = "<cmd>Lspsaga code_action<cr>"; }
         # vim.keymap.set({'n','t', '<A-d>', '<cmd>Lspsaga term_toggle'})
 
-        {
-          action = "<cmd>Lspsaga diagnostic_jump_next<CR>";
-          key = "<leader>dn";
-        }
-        {
-          action = "<cmd>Lspsaga diagnostic_jump_prev<CR>";
-          key = "<leader>dp";
-        }
-        {
-          action = "<cmd>Lspsaga show_cursor_diagnostics<CR>";
-          key = "<leader>dc";
-        }
-        {
-          action = "<cmd>Lspsaga show_line_diagnostics<CR>";
-          key = "<leader>dl";
-        }
-        {
-          action = "<cmd>Lspsaga show_buf_diagnostics<CR>";
-          key = "<leader>db";
-        }
-        {
-          action = "<cmd>Lspsaga show_workspace_diagnostics<CR>";
-          key = "<leader>dw";
-        }
+        { key = "<leader>dn"; action = "<cmd>Lspsaga diagnostic_jump_next<cr>"; }
+        { key = "<leader>dp"; action = "<cmd>Lspsaga diagnostic_jump_prev<cr>"; }
+        { key = "<leader>dc"; action = "<cmd>Lspsaga show_cursor_diagnostics<cr>"; }
+        { key = "<leader>dl"; action = "<cmd>Lspsaga show_line_diagnostics<cr>"; }
+        { key = "<leader>db"; action = "<cmd>Lspsaga show_buf_diagnostics<cr>"; }
+        { key = "<leader>dw"; action = "<cmd>Lspsaga show_workspace_diagnostics<cr>"; }
       ];
   };
 }

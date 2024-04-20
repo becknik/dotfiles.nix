@@ -1,4 +1,4 @@
-{ pkgs, helpers, defaultKeymapOptions, ... }:
+{ pkgs, helpers, withDefaultKeymapOptions, ... }:
 
 {
   globals.zoxide_use_select = true;
@@ -10,19 +10,9 @@
     telescope-zoxide
   ];
   extraConfigLuaPre = builtins.readFile ./neoclip.lua;
-  keymaps = [
-    {
-      action = "<cmd>Telescope neoclip<CR>";
-      key = "<leader>fy";
-      options = defaultKeymapOptions;
-    }
-
-    {
-      action = "require('telescope').extensions.zoxide.list";
-      key = "<leader>cd";
-      lua = true;
-      options = defaultKeymapOptions;
-    }
+  keymaps = withDefaultKeymapOptions [
+    { key = "<leader>fy"; action = "<cmd>Telescope neoclip<cr>"; }
+    { key = "<leader>cd"; action = "require('telescope').extensions.zoxide.list"; lua = true; }
   ];
 
   extraConfigLuaPost = "require('telescope').load_extension('zoxide')";
@@ -45,16 +35,16 @@
         # https://github.com/nvim-telescope/telescope.nvim/blob/master/doc/telescope.txt
         mappings = {
           i = {
-            "<C-f>" = helpers.mkRaw "require('telescope.actions').add_selected_to_qflist + require('telescope.actions').open_qflist";
+            "<c-f>" = helpers.mkRaw "require('telescope.actions').add_selected_to_qflist + require('telescope.actions').open_qflist";
 
-            "<C-k>" = "cycle_history_next";
-            "<C-j>" = "cycle_history_prev";
+            "<c-k>" = "cycle_history_next";
+            "<c-j>" = "cycle_history_prev";
           };
           n = {
-            "<C-f>" = helpers.mkRaw "require('telescope.actions').add_selected_to_qflist + require('telescope.actions').open_qflist";
+            "<c-f>" = helpers.mkRaw "require('telescope.actions').add_selected_to_qflist + require('telescope.actions').open_qflist";
 
-            "<C-k>" = "cycle_history_next";
-            "<C-j>" = "cycle_history_prev";
+            "<c-k>" = "cycle_history_next";
+            "<c-j>" = "cycle_history_prev";
 
             "<esc>" = "close";
           };
@@ -90,12 +80,12 @@
       "<leader>gb" = "git_branches";
       # Lists all branches with log preview
       # checkout action <cr>
-      # track action <C-t>
-      # rebase action<C-r>
-      # create action <C-a>
-      # switch action <C-s>
-      # delete action <C-d>
-      # merge action <C-y>
+      # track action <c-t>
+      # rebase action<c-r>
+      # create action <c-a>
+      # switch action <c-s>
+      # delete action <c-d>
+      # merge action <c-y>
     };
   };
 }

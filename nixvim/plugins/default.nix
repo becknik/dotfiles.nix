@@ -6,29 +6,34 @@
     ./lsp
     ./treesitter
 
+    ./git
+    ./languages
+
     ./luasnip.nix
     ./telescope.nix
 
     ./oil.nix
-    ./bufferline.nix
     ./nvim-tree.nix
+    ./bufferline.nix
+    ./lualine.nix
+
+    ./refactoring.nix
   ];
 
   opts.foldenable = false; # disable tree-sitter to fold the code on startup
 
   plugins = {
 
-    # Git Integration Plugins
-    gitsigns.enable = true;
-    neogit.enable = true;
+    # Git Integration
     # fugitive.enable = false; # TODO redundancy?
     diffview.enable = true;
 
-    # Telescope & Extensions
-    telescope.enable = true;
-
     # UI
-    lualine.enable = true;
+    notify = {
+      enable = true;
+      fps = 60;
+    };
+    which-key.enable = true;
     navic.enable = true;
     todo-comments.enable = true;
     # https://gitlab.com/HiPhish/rainbow-delimiters.nvim
@@ -44,16 +49,11 @@
     # eyeliner
     # vim-unimpaired
     # nvim-ts-context-commentstring
+    # vim-repeat
 
     # Etc.
     # nvim-unception # Prevent nested neovim sessions | nvim-unception
 
-    # libraries that other plugins depend on
-    # sqlite-lua
-    # plenary-nvim
-    # nvim-web-devicons
-    # vim-repeat
-    # ^ libraries that other plugins depend on
     # bleeding-edge plugins from flake inputs
     # (mkNvimPlugin inputs.wf-nvim "wf.nvim") # (example) keymap hints | https://github.com/Cassin01/wf.nvim
     # ^ bleeding-edge plugins from flake inputs

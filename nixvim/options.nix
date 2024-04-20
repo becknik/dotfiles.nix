@@ -36,7 +36,7 @@
       # Tab stops
       tabstop = 4;
       softtabstop = 0; # default
-      expandtab = false; # default; use tabs instead of spaces
+      expandtab = true;
 
       # Indentation
       shiftwidth = 2; # indent with 4 spaces
@@ -58,7 +58,7 @@
       splitbelow = true;
 
       # Completion
-      updatetime = 50; # faster completion (4000ms default)
+      updatetime = 400; # faster completion (4000ms default)
       completeopt = [ "menuone" "noinsert" ]; # completion window; "preview" "popup"
     };
   };

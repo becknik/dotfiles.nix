@@ -31,12 +31,12 @@ require('neoclip').setup({
       telescope = {
         i = {
           -- TODO this doesn't work
-          move_selection_previous = '<C-p>',
-          paste = '<C-P>',
-          -- paste_behind = '<C-P>',
-          replay = '<C-q>',
-          delete = '<C-d>',
-          edit = '<C-e>',
+          move_selection_previous = '<c-p>',
+          paste = '<c-P>',
+          -- paste_behind = '<c-P>',
+          replay = '<c-q>',
+          delete = '<c-d>',
+          edit = '<c-e>',
         },
         n = {
           paste = 'p',
