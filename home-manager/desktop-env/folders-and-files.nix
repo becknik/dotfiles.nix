@@ -15,6 +15,8 @@
       "devel/own"
       "devel/ide"
       "devel/lab"
+      "devel/work"
+      "devel/uni"
 
       "nextcloud/uni"
       "nextcloud/archive"

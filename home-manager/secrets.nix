@@ -54,6 +54,18 @@ in
         path = "${config.home.homeDirectory}/.ssh/github-personal";
       };
 
+      "gitlab-sopra.pub" = {
+        sopsFile = ./secrets/git.yaml;
+        key = "gitlab/sopra/pub.ed25519";
+        mode = "0400";
+        /*symlink-*/ path = "${config.home.homeDirectory}/.ssh/gitlab-sopra.pub";
+      };
+      "gitlab-sopra" = {
+        sopsFile = ./secrets/git.yaml;
+        key = "gitlab/sopra/.ed25519";
+        path = "${config.home.homeDirectory}/.ssh/gitlab-sopra";
+      };
+
       # Creation of secrets from binaries: `sops -e ./desktop-env/secrets/keepass.key > ./desktop-env/secrets/keepassxc.yaml`
       # The path must - likewise to the other secret files - match the golang regex-pattern from the `.sops` file
 
