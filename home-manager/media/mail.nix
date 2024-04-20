@@ -86,7 +86,7 @@ in
         port = 993;
       };
       smtp = {
-        host = "smpt.uni-stuttgart.de";
+        host = "smtp.uni-stuttgart.de";
         port = 587;
         tls.useStartTls = true;
       };
