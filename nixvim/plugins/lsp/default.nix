@@ -4,7 +4,7 @@
   # https://www.reddit.com/r/neovim/comments/15oue2o/finally_a_robust_autoformatting_solution/
   # https://www.reddit.com/r/neovim/comments/16hpxwu/conformnvim_another_plugin_to_replace_nullls/
   imports = [
-    ./servers.nix
+    ./language-servers.nix
     ./keymaps.nix
 
     ./lspsaga.nix

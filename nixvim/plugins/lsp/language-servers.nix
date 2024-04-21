@@ -13,6 +13,7 @@
     yamlls.enable = true;
 
     dockerls.enable = true;
+    docker-compose-language-service.enable = true;
 
     nixd.enable = true;
     # nil_ls.enable = true;
