@@ -1,4 +1,4 @@
-{ userName, lib, pkgs, ... }:
+{ userName, config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -18,16 +18,10 @@
   # Settings changes from normal home-manager configuration
   services.gpg-agent.enable = (lib.mkForce false); # incompatible with darwin
   programs = {
-    zsh =
-      # TODO infinite recursion when using `lib.lists.subtractLists`
-      /* let
-        oh-my-zsh-default-plugins = builtins.getAttr "plugins" config.programs.zsh.oh-my-zsh;
-        plugins' = lib.lists.subtractLists [ "podman" "bgnotify" "systemd" ] oh-my-zsh-default-plugins;
-      in */
-      {
-        oh-my-zsh.plugins = /* lib.mkForce */ [ "ssh-agent" "macos" ] /* ++ plugins' */;
-        initExtra = "ssh-add --apple-load-keychain"; # load keys from previous sessions
-      };
+    zsh = {
+      oh-my-zsh.plugins = lib.mkAfter [ "ssh-agent" "macos" ];
+      initExtra = "ssh-add --apple-load-keychain"; # load keys from previous sessions
+    };
     # `ssh-add --apple-use-keychain ~/.ssh/<key>`
     ssh.extraConfig = "UseKeychain yes";
     librewolf.enable = lib.mkForce false;
