@@ -468,7 +468,7 @@
       liveshare.allowGuestDebugControl = true;
 
       ## Docker
-      docker = {
+      docker = lib.attrsets.optionalAttrs (!isDarwinSystem) {
         composeCommand = "podman compose";
         dockerPath = "podman";
       };

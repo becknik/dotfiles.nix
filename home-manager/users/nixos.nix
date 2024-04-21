@@ -1,4 +1,4 @@
-{ stateVersion, userName, ... }:
+{ lib, userName, ... }:
 
 {
   #  TODO find out where to declare the value of this option...
@@ -24,6 +24,7 @@
 
   config = {
     home.homeDirectory = "/home/${userName}";
+    programs.zsh.oh-my-zsh.plugins = lib.mkAfter [ "podman" "bgnotify" "systemd" ];
 
     # Nicely reload system units when changing configs
     systemd.user.startServices = "sd-switch";

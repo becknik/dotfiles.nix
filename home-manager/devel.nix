@@ -35,6 +35,12 @@
           user = "git";
           identityFile = "~/.ssh/github-personal";
         };
+        gitlab_sopra = {
+          host = "sopra.informatik.uni-stuttgart.de";
+          user = "git";
+          identityFile = "~/.ssh/gitlab-sopra";
+          addressFamily = "inet";
+        };
       };
     };
   };
@@ -49,7 +55,7 @@
     pinentryFlavor = "gnome3";
     #sshKeys = {}; # Expose GPG-keys as SSH-keys
   };
-  programs. gpg. enable = true;
+  programs.gpg.enable = true;
 
   # Manual Installations
   home.packages = with pkgs; let

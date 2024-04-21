@@ -1,4 +1,4 @@
-{ defaultKeymapOptions, pkgs, ... }:
+{ withDefaultKeymapOptions, pkgs, ... }:
 
 {
   extraPlugins = with pkgs; [
@@ -33,21 +33,13 @@
       };
 
       keymaps = {
-        "<C-q>" = "actions.close";
+        "<c-q>" = "actions.close";
       };
     };
   };
 
-  keymaps = [
-    {
-      action = "<cmd>Oil<CR>";
-      key = "-";
-      options = defaultKeymapOptions;
-    }
-    {
-      action = "<cmd>Browse<CR>"; # gx-nvim
-      key = "gx";
-      options = defaultKeymapOptions;
-    }
+  keymaps = withDefaultKeymapOptions [
+    { key = "-"; action = "<cmd>Oil<cr>"; }
+    { key = "gx"; action = "<cmd>Browse<cr>"; } # gx-nvim
   ];
 }

@@ -1,26 +1,38 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
+  extraPackages = with pkgs; [
+    codespell
+    jq
+    yamllint # FIXME "no config found" - not detected by conform.nvim
+    yamlfmt
+    # FIXME markdownfmt is missing
+    markdownlint-cli # markdownlint-cli2
+    nixpkgs-fmt # FIXME "no config found" - not detected by conform.nvim
+    sqlfluff
+    stylua
+    shellcheck # shellchek-minimal
+    shfmt
+    isort
+    black
+    prettierd
+    google-java-format
+    rustfmt
+  ] ++ (with pkgs.nodePackages_latest; [
+    fixjson
+  ]);
+
   # https://github.com/stevearc/conform.nvim
   plugins.conform-nvim = {
     enable = true;
 
     logLevel = "warn";
     # TODO auto-formatting on git hunks only?
-    formatOnSave = ''
-      function()
-        -- Disable with a global or buffer-local variable
-        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-          return
-        end
-        return { timeout_ms = 500, lsp_fallback = true }
-      end
-    '';
 
     # https://github.com/stevearc/conform.nvim?tab=readme-ov-file#formatters
     # TODO not installed (see https://github.com/nix-community/nixvim/issues/1141)
     formattersByFt =
-      let prettier = [ [ "prettierd" "prettier" ] ];
+      let prettier = [ [ "prettierd" /* "prettier" */ ] ];
       in
       {
         "*" = [ "codespell" ];
@@ -30,11 +42,11 @@
         css = prettier; # stylelint?
         json = [ "fixjson" "jq" ]; # TODO is this even necessary due to ls?
         yaml = [ "yamllint" "yamlfmt" ]; # TODO is this even necessary due to ls?
-        markdown = [ "markdownlint" "markdownfmt" "markdown-toc" ]; # TODO is this even necessary due to ls?
+        markdown = [ "markdownlint" "markdownfmt" ]; # TODO is this even necessary due to ls?
 
         # bibtex-tidy
         nix = [ "nixpkgs-fmt" ];
-        sql = [ "sqlfmt" ]; # sqlfluff # TODO is this even necessary due to ls?
+        sql = [ "sqlfluff" ]; # "sql_formatter" "sqlfmt" # TODO is this even necessary due to ls?
 
         lua = [ "stylua" ]; # TODO is this even necessary due to ls?
         bash = [ "shellcheck" "shfmt" ]; # beautysh # TODO is this even necessary due to ls?

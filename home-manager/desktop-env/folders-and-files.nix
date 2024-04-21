@@ -6,71 +6,44 @@
   ];
 
   # Folder Setup
-  home.file = {
+  home.file =
+    let
+      mkKeepDirectory = path: { "${path}" = { target = path + "/.keep"; text = ""; }; };
+    in
+    (builtins.foldl' (acc: x: acc // mkKeepDirectory x) { } [
+      "devel/foreign"
+      "devel/own"
+      "devel/ide"
+      "devel/lab"
+      "devel/work"
+      "devel/uni"
 
-    ## devel Folder Structure
-    "foreign" = {
-      target = "devel/foreign/.keep"; # path relative to home
-      text = "";
-    };
-    "own" = {
-      target = "devel/own/.keep";
-      text = "";
-    };
-    "ide" = {
-      target = "devel/ide/.keep";
-      text = "";
-    };
-    "lab" = {
-      target = "devel/lab/.keep";
-      text = "";
-    };
+      "nextcloud/uni"
+      "nextcloud/archive"
+      "nextcloud/transfer"
 
-    "luasnips" = {
-      target = ".nvim/luasnips/.keep";
-      text = "";
-    };
-    "scripts" = {
-      target = "scripts/.keep";
-      text = "";
-    };
+      ".nvim/luasnips"
+      "scripts"
+      "vm"
+      "vpn"
+      # sops .config folder where the keys.txt should live in to decrypt the secrets of sops-nix
+      ".config/sops/age"
+    ]) //
+    {
+      "ghci" = {
+        target = ".ghci";
+        # prompt styling source: https://stackoverflow.com/a/53109980
+        source = ./files/.ghci;
+      };
 
-    ## Nextcould Sync Folders
-    "nextcloud/uni" = {
-      target = "nextcloud/uni/.keep";
-      text = "";
-    };
-    "nextcloud/archive" = {
-      target = "nextcloud/archive/.keep";
-      text = "";
-    };
-    "nextcloud/transfer" = {
-      target = "nextcloud/transfer/.keep";
-      text = "";
-    };
+      "config-cargo" = {
+        target = ".cargo/config";
+        source = ./files/cargo.toml;
+      };
 
-    ## sops .config folder where the keys.txt should live in to decrypt the secrets of sops-nix
-    "sops" = {
-      target = ".config/sops/age/.keep";
-      text = "";
+      "config-keepassxc" = {
+        target = ".config/keepassxc/keepassxc.ini";
+        source = ./files/keepassxc.ini;
+      };
     };
-
-    # Files
-
-    "ghci" = {
-      target = ".ghci";
-      # prompt styling source: https://stackoverflow.com/a/53109980
-      source = ./files/.ghci;
-    };
-
-    "cargo-config" = {
-      target = ".cargo/config";
-      source = ./files/cargo.toml;
-    };
-
-    "keepassxc-config" = {
-      target = ".config/keepassxc/keepassxc.ini";
-      source = ./files/keepassxc.ini;
-    };
-  };
 }

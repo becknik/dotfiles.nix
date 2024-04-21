@@ -17,7 +17,7 @@
       layout = "float";
 
       keys = {
-        close = "<C-c>k";
+        close = "<c-c>k";
         edit = "e";
         quit = "q";
         shuttle = "[w";
@@ -29,12 +29,11 @@
     };
 
     codeAction = {
-      extendGitSigns = false;
-      numShortcut = true;
+      extendGitSigns = true;
       onlyInCursor = true;
 
       keys = {
-        exec = "<CR>";
+        exec = "<cr>";
         quit = [ "<ESC>" "q" ];
       };
     };
@@ -44,12 +43,12 @@
       width = .6;
 
       keys = {
-        close = "<C-c>k";
-        edit = "<C-c>o";
+        close = "<c-c>k";
+        edit = "<c-c>o";
         quit = "q";
-        split = "<C-c>i";
-        tabe = "<C-c>t";
-        vsplit = "<C-c>v";
+        split = "<c-c>i";
+        tabe = "<c-c>t";
+        vsplit = "<c-c>v";
       };
     };
 
@@ -73,7 +72,7 @@
         execAction = "o";
         quit = "q";
         quitInShow = [ "<ESC>" "q" ];
-        toggleOrJump = "<CR>";
+        toggleOrJump = "<cr>";
       };
     };
 
@@ -124,15 +123,15 @@
       projectMaxWidth = .5;
 
       keys = {
-        exec = "<CR>";
-        quit = "<C-e>";
+        exec = "<cr>";
+        quit = "<c-e>";
         select = "x";
       };
     };
 
     scrollPreview = {
-      scrollDown = "<C-f>";
-      scrollUp = "<C-b>";
+      scrollDown = "<c-f>";
+      scrollUp = "<c-b>";
     };
 
     symbolInWinbar = {

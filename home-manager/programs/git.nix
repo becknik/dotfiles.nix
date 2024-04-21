@@ -20,15 +20,22 @@
         #"vim://file/{path}:{line}"; # :{column} vim supports this, but it isn't implemented in delta
       };
     };
-    /* diff-so-fancy = {
-        enable = true;
-        markEmptyLines = false;
-      }; */
-    #difftastic.enable = true; # Side-by-side diff view in terminal, looks odd to me
 
-    ## (User) Config
     userName = "becknik";
     userEmail = "jannikb@posteo.de";
+    includes = [
+      {
+        # If the pattern ends with /, ** will be automatically added
+        condition = "gitdir:~/devel/uni/";
+        contents = {
+          user = {
+            name = "Jannik Becker";
+            email = "st177878@stud.uni-stuttgart.de";
+          };
+        };
+      }
+    ];
+
     extraConfig = {
       init.defaultBranch = "main";
       core = {
@@ -91,10 +98,6 @@
       "logs"
       "log"
       "tmp"
-    ];
-
-    includes = [
-      #{ condition = "gitdir:~/devel/work/"; content = ""; /* path = ""; */ }
     ];
 
     # Sources (not sure if working)

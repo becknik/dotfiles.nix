@@ -56,6 +56,7 @@ $ tree -a -I '\.git|\.vscode|\.direnv' . # slightly modified for better context/
 - `home-manager` is used for managing everything apart from system stuff
 - Home-managed secrets with [sops-nix](https://github.com/Mic92/sops-nix) ([age](https://github.com/FiloSottile/age) encrypted)
 - [nixvim](https://github.com/nix-community/nixvim) setup with standalone approach to enable `main` branch despite using "stable" `home-manager`
+  - To checkout my nixvim setup, don't hesitate to use `nix run .#nixvim <some-file>`
   - Used [elythh's config](https://github.com/elythh/nixvim) as a starting point
 
 ### Further great Projects used

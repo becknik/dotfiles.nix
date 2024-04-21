@@ -1,7 +1,11 @@
 { ... }:
 
 {
-  extraConfigLuaPre = builtins.readFile ./cmp.lua;
+  extraConfigLuaPre = (builtins.readFile ./cmp.lua)
+    + ''
+
+    local lsnip = require('luasnip')
+  '';
 
   # https://github.com/hrsh7th/nvim-cmp
   plugins.cmp = {
@@ -67,26 +71,25 @@
       };
 
       mapping = {
-        # "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
-        # TODO somehow remove redundant "require(luasnip)"s
-        "<Tab>" = ''
+        # "<tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
+        "<tab>" = ''
           cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
-            elseif require('luasnip').locally_jumpable(1) then
-              require('luasnip').jump(1)
+            elseif lsnip.locally_jumpable(1) then
+              lsnip.jump(1)
             else
               fallback()
             end
           end, { "i", "s" })
         '';
-        # "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
-        "<S-Tab>" = ''
+        # "<s-tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
+        "<s-tab>" = ''
           cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_prev_item()
-            elseif require('luasnip').locally_jumpable(-1) then
-              require('luasnip').jump(-1)
+            elseif lsnip.locally_jumpable(-1) then
+              lsnip.jump(-1)
             else
               fallback()
             end
@@ -94,25 +97,25 @@
         '';
 
 
-        "<C-j>" = "cmp.mapping.select_next_item()";
-        "<C-k>" = "cmp.mapping.select_prev_item()";
+        "<c-j>" = "cmp.mapping.select_next_item()";
+        "<c-k>" = "cmp.mapping.select_prev_item()";
         # TODO double mappings might be a bad idea
-        "<C-p>" = "cmp.mapping.select_prev_item()";
-        "<C-n>" = "cmp.mapping.select_next_item()";
-        "<C-e>" = "cmp.mapping.abort()";
+        "<c-p>" = "cmp.mapping.select_prev_item()";
+        "<c-n>" = "cmp.mapping.select_next_item()";
+        "<c-e>" = "cmp.mapping.abort()";
 
-        "<C-u>" = "cmp.mapping.scroll_docs(-4)";
-        "<C-d>" = "cmp.mapping.scroll_docs(4)";
+        "<c-u>" = "cmp.mapping.scroll_docs(-4)";
+        "<c-d>" = "cmp.mapping.scroll_docs(4)";
 
-        "<C-Space>" = "cmp.mapping.complete()";
-        "<S-Space>" = "cmp.mapping.complete()";
+        "<c-Space>" = "cmp.mapping.complete()";
+        "<s-Space>" = "cmp.mapping.complete()";
 
-        # "<CR>" = "cmp.mapping.confirm({ select = true })";
-        "<CR>" = ''
+        # "<cr>" = "cmp.mapping.confirm({ select = true })";
+        "<cr>" = ''
           cmp.mapping(function(fallback)
             if cmp.visible() then
-              if require('luasnip').expandable() then
-                require('luasnip').expand()
+              if lsnip.expandable() then
+                lsnip.expand()
               else
                 cmp.confirm { select = true }
               end
@@ -121,7 +124,7 @@
             end
           end)
         '';
-        "<S-CR>" = ''
+        "<s-cr>" = ''
           cmp.mapping.confirm {
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,

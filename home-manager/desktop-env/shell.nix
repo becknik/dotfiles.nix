@@ -77,10 +77,10 @@
         package = pkgs.oh-my-zsh-git;
         theme = ""; # requirement for pure theme to work
 
+        # some plugins also configured in the nixos.nix / darwin.nix profile files
         plugins = [
           ## Shell
           "alias-finder"
-          "bgnotify"
           "common-aliases"
           "copyfile"
           "copypath"
@@ -91,16 +91,11 @@
           "zsh-interactive-cd"
           "extract"
 
-          ## Linux
-          "systemd"
-
           ## Development
           "git"
           "git-auto-fetch"
           "gitignore"
 
-          "podman"
-          "docker"
           "kubectl"
 
           "mvn"
@@ -180,6 +175,7 @@
           gai = "git add --interactive";
           grsst = "git restore --staged"; # = grst
           grhp = "git reset -p"; # useful for unstaging staged hunks
+          gclb = "git clone --recurse-submodules --bare";
 
           ## Frankensteins
           "gaucn!" = "gau && gcn!";
