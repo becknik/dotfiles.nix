@@ -20,21 +20,13 @@
         show_hidden = true;
         show_symlink = true;
       };
-      theme = {
-        manager = {
-          syntect_theme = "Catppuccin Mocha"; # Catppuccin Frappe
-        };
-      };
     };
     zellij = {
       enable = true;
       #settings = {};
     };
 
-    bash = {
-      enable = true;
-      #enableVteIntegration = true; # implied by gnome
-    };
+    bash.enable = true;
     zsh = {
       enable = true;
       #enableVteIntegration = true; # implied by gnome

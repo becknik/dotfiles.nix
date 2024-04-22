@@ -20,4 +20,9 @@
 
   # Lets Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  catppuccin = {
+    enable = true;
+    flavour = "mocha";
+  };
 }

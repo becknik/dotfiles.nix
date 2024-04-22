@@ -301,4 +301,9 @@
   ];
 
   services.v4l2-relayd.instances = { }; # TODO proper camera setup
+
+  catppuccin = {
+    enable = true;
+    flavour = "mocha";
+  };
 }

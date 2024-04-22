@@ -82,6 +82,7 @@ with lib.gvariant; {
     "org/gnome/desktop/search-providers".disable-external = true;
 
     "org/gnome/desktop/interface" = {
+      cursor-theme = lib.mkForce "Adwaita"; # disliking the default Catppuccin cursor
       clock-show-weekday = true;
       enable-animations = false;
       enable-hot-corners = true; # Can be useful when no keyboard is available

@@ -58,7 +58,7 @@
     };
   };
   dconf.settings."org/gnome/desktop/interface" = {
-    gtk-theme = "Adwaita-dark";
+    # gtk-theme = "Adwaita-dark";
     color-scheme = "prefer-dark";
     icon-theme = "Tela-dark";
   };

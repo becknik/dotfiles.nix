@@ -5,7 +5,6 @@
     btop = {
       enable = true;
       settings = {
-        color_theme = "flat-remix.theme";
         theme_background = false;
         vim_keys = true;
         update_ms = 2500;
@@ -19,7 +18,7 @@
     bat = {
       enable = true;
       config = {
-        theme = "Visual Studio Dark+";
+        # theme = "Visual Studio Dark+";
         style = "changes"; # numbers,
       };
     };

@@ -40,6 +40,7 @@
     };
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
+    catppuccin.url = "github:catppuccin/nix";
 
     # Libraries
     flockenzeit.url = "github:balsoft/Flockenzeit";
@@ -122,6 +123,7 @@
             sharedModules = with inputs; [
               sops-nix.homeManagerModules.sops
               nix-index-database.hmModules.nix-index
+              catppuccin.homeManagerModules.catppuccin
             ]
             ++ nixpkgs.lib.optional isDarwinSystem mac-app-util.homeManagerModules.default;
 
@@ -235,6 +237,7 @@
                   ]);
                 };
               })
+            inputs.catppuccin.nixosModules.catppuccin
           ];
         };
 
@@ -269,6 +272,7 @@
               inherit system userName;
               laptopMode = true;
             })
+            inputs.catppuccin.nixosModules.catppuccin
           ];
         };
 
