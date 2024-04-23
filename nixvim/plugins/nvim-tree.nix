@@ -37,6 +37,7 @@
   };
 
   keymaps = withDefaultKeymapOptions [
-    { key = "<c-h>"; action = "<cmd>NvimTreeToggle<cr>"; }
+    { key = "<c-f>"; action = "<cmd>NvimTreeToggle<cr>"; }
+    { key = "<leader>T"; action = "<cmd>NvimTreeToggle<cr>"; }
   ];
 }

@@ -15,8 +15,8 @@
     dockerls.enable = true;
     docker-compose-language-service.enable = true;
 
-    nixd.enable = true;
-    # nil_ls.enable = true;
+    # nixd.enable = true;
+    nil_ls.enable = true;
     sqls.enable = true;
     texlab.enable = true;
 
@@ -36,7 +36,7 @@
     hls.enable = true;
     # zls.enable = true;
 
-    java-language-server.enable = true;
+    # java-language-server.enable = true; # handled better by nvim-jdtls
     kotlin-language-server.enable = true;
     # metals.enable = true;
   };

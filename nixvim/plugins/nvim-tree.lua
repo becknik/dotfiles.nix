@@ -9,10 +9,10 @@ function(bufnr)
   -- conflicting with normal mode H remapped for buffer cycling
   -- vim.keymap.set("n", "H", api.tree.collapse_all)
 
-  local function edit_or_open()
+  local edit_or_open = function()
     local node = api.tree.get_node_under_cursor()
 
-    if node.nodes ~= nil then
+    if node ~= nil and node.nodes ~= nil then
       api.node.open.edit() -- expand or collapse folder
     else
       api.node.open.edit() -- open file
@@ -21,7 +21,7 @@ function(bufnr)
   end
   vim.keymap.set("n", "l", edit_or_open)
 
-  local  function git_add()
+  local git_add = function()
     local node = api.tree.get_node_under_cursor()
     local gs = node.git_status.file
 

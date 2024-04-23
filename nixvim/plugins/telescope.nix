@@ -67,6 +67,7 @@
       "<leader>fr" = "registers";
       "<leader>fk" = "keymaps";
       "<leader>fo" = "oldfiles";
+      "<leader>f." = "resume";
 
       # lsp
       "<leader>fd" = "diagnostics";

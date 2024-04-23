@@ -18,8 +18,13 @@
     { key = "L"; action = "<cmd>BufferLineCycleNext<cr>"; }
 
     { key = "<leader>bd"; action = "<cmd>bdelete<cr>"; }
+    { key = "<leader>bw"; action = "<cmd>bdelete!<cr>"; }
     { key = "<leader>br"; action = "<cmd>BufferLineCloseLeft<cr>"; }
     { key = "<leader>bl"; action = "<cmd>BufferLineCloseRight<cr>"; }
+    { key = "<leader>bo"; action = "<cmd>BufferLineCloseOthers<cr>"; }
     { key = "<leader>bp"; action = "<cmd>BufferLineTogglePin<cr>"; }
+
+    { key = "<c-s>"; action = "<cmd>:write<cr>"; }
+    { key = "<leader>W"; action = "<cmd>:write<cr>"; }
   ];
 }

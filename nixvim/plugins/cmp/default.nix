@@ -13,9 +13,8 @@
     autoEnableSources = true;
 
     settings = {
-      experimental = { ghost_text = true; };
-
-      completion = { keywordLength = 2; };
+      experimental.ghost_text = true;
+      performance.max_view_entries = 50;
 
       formatting = {
         fields = [ "kind" "abbr" "menu" ];
@@ -31,33 +30,31 @@
 
       # performance = { fetchingTimeout = 200; maxViewEntries = 50; };
 
-      snippet = { expand = "luasnip"; };
+      snippet.expand = ''function(args) require('luasnip').lsp_expand(args.body) end'';
 
       # https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources
       # https://github.com/nix-community/nixvim/blob/ad6a08b69528fdaf7e12c90da06f9a34f32d7ea6/plugins/completion/cmp/cmp-helpers.nix#L23-L67
       sources = [
         # cmp recommendations
-        { name = "nvim_lsp"; group_index = 1; priority = 1000; }
-        { name = "nvim_lsp_signature_help"; group_index = 1; priority = 1000; }
-        { name = "luasnip"; group_index = 1; priority = 1000; }
-
-        { name = "spell"; group_index = 1; priority = 750; }
-        # { name = "yanky"; group_index = 1; priority = 750; } # TODO
-        { name = "path"; group_index = 1; priority = 500; }
-        # { name = "async_path"; group_index = 1; priority = 500; }
-        { name = "git"; group_index = 1; priority = 500; }
-        { name = "buffer"; group_index = 1; priority = 250; }
-        { name = "calc"; group_index = 1; priority = 250; }
-        # { name = "vim_lsp"; group_index = 1; priority = 250; } # TODO what does vim-lsp even contain?
+        { name = "nvim_lsp"; priority = 1000; }
+        # { name = "nvim_lsp_signature_help"; priority = 1000; }
+        { name = "luasnip"; priority = 900; }
+        { name = "spell"; priority = 850; }
+        { name = "path"; priority = 700; }
+        { name = "buffer"; priority = 600; keyword_length = 3; }
+        { name = "git"; priority = 500; }
+        { name = "calc"; priority = 400; }
+        { name = "dotenv"; priority = 300; }
+        { name = "emoji"; priority = 100; }
 
         # TODO https://github.com/zbirenbaum/copilot-cmp
-        { name = "copilot"; group_index = 2; priority = 1000; } # TODO disable suggestion, panel module, as it can interfere with completions
-        { name = "rg"; group_index = 2; priority = 750; }
-        { name = "treesitter"; group_index = 2; priority = 750; }
-        { name = "dotenv"; group_index = 2; priority = 500; }
-        { name = "nvim_lua"; group_index = 2; priority = 250; } # neovim's lua api
+        # { name = "copilot"; group_index = 2; priority = 1000; } # TODO disable suggestion, panel module, as it can interfere with completions
+        # { name = "rg"; group_index = 2; priority = 750; }
+        # { name = "treesitter"; group_index = 2; priority = 750; }
+        # { name = "yanky"; group_index = 1; priority = 750; } # TODO
+        # { name = "async_path"; group_index = 1; priority = 500; }
+        # { name = "vim_lsp"; group_index = 1; priority = 250; } # TODO what does vim-lsp even contain?
 
-        { name = "emoji"; group_index = 3; }
         # { name = "digraphs"; group_index = 3; } # https://vimhelp.org/digraph.txt.html
 
         # { name = "tags"; priority = 10; }
@@ -159,6 +156,9 @@
       };
 
     filetype = let dap = [{ name = "dap"; }]; in {
+      lua.sources = [
+        { name = "nvim_lua"; } # neovim's lua api
+      ];
       gitcommit.sources = [
         { name = "git"; }
         {

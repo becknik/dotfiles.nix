@@ -1,4 +1,4 @@
-{ ... }:
+{ withDefaultKeymapOptions, ... }:
 
 {
   imports = [
@@ -8,6 +8,7 @@
 
     ./git
     ./languages
+    ./dap.nix
 
     ./luasnip.nix
     ./telescope.nix
@@ -17,53 +18,55 @@
     ./bufferline.nix
     ./lualine.nix
 
+    ./noice.nix
+    ./toggle-term.nix
+
     ./refactoring.nix
+    ./comment.nix
+    ./todo-comments.nix
   ];
 
   opts.foldenable = false; # disable tree-sitter to fold the code on startup
 
   plugins = {
-
-    # Git Integration
-    # fugitive.enable = false; # TODO redundancy?
+    # UI
+    notify.enable = true;
     diffview.enable = true;
 
-    # UI
-    notify = {
-      enable = true;
-      fps = 60;
-    };
-    which-key.enable = true;
-    navic.enable = true;
-    todo-comments.enable = true;
     # https://gitlab.com/HiPhish/rainbow-delimiters.nvim
     rainbow-delimiters.enable = true;
     indent-blankline.enable = true;
-    # https://github.com/shellRaining/hlchunk.nvim is this necessary?
     # statuscol-nvim
+    # which-key.enable = true; # personally finding this annoying
+    # transparent.enable = false; # TODO first need terminal support for this
 
     # Navigation & Editing
     surround.enable = true;
+
     vim-matchup.enable = true;
-    nvim-autopairs.enable = true;
+    nvim-autopairs = {
+      enable = true;
+      settings.check_ts = true;
+    };
+    ts-autotag.enable = true;
+
+    # TODO
     # eyeliner
     # vim-unimpaired
     # nvim-ts-context-commentstring
     # vim-repeat
-
-    # Etc.
     # nvim-unception # Prevent nested neovim sessions | nvim-unception
 
     # bleeding-edge plugins from flake inputs
     # (mkNvimPlugin inputs.wf-nvim "wf.nvim") # (example) keymap hints | https://github.com/Cassin01/wf.nvim
-    # ^ bleeding-edge plugins from flake inputs
-    # which-key-nvim
 
-    # nix.enable = true;
+    # Further Tooling
+
+    ## Language-specific
+    nix.enable = true;
     nix-develop.enable = true;
 
-    # transparent.enable = false; # TODO first need terminal support for this
-
+    ## Application-specific
     #obsidian.enable = true; # TODO https://github.com/epwalsh/obsidian.nvim
   };
 }

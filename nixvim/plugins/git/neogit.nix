@@ -6,12 +6,12 @@
     enable = true;
 
     settings = {
-      disable_line_numbers = true; # default
+      disable_line_numbers = false;
       disable_signs = true;
       fetch_after_checkout = true;
       # git_services =
       graph_style = "unicode";
-      kind = "tab"; # “split”, “vsplit”, “split_above”, “tab”, “floating”, “replace”, “auto”
+      kind = "replace"; # “split”, “vsplit”, “split_above”, “tab”, “floating”, “replace”, “auto”
       use_default_keymaps = true; # default
     };
   };

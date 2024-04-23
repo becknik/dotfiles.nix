@@ -8,11 +8,11 @@
     diagnostic = {
       # "<leader>p" = "goto_prev";
       # "<leader>n" = "goto_next";
-      "<leader>e" = "open_float"; # TODO is this even doing something???
+      # "<leader>e" = "open_float";
     };
     lspBuf = {
       # K = "hover";
-      "<c-k>" = "signature_help";
+      "<leader>k" = "signature_help";
 
       # gd = "definition";
       # gr = "references";
@@ -38,12 +38,24 @@
           lua = true;
         }
 
+        {
+          key = "<leader>ca";
+          action = "<cmd>vim.lsp.buf.range_code_action()<cr>";
+          mode = "v";
+        }
+
         # Conform
         {
           key = "<leader>F";
+          mode = [ "n" ];
           # action = "function() vim.lsp.buf.format {async = true} end";
           action = "function() require('conform').format { async = true, lsp_fallback = true } end";
           lua = true;
+        }
+        {
+          key = "<leader>F";
+          mode = [ "v" ];
+          action = "<cmd>ConformFormat<cr>"; # works on ranges
         }
 
         # LspSaga
@@ -51,11 +63,13 @@
 
         # action = "<cmd>Lspsaga goto_definition<cr>";
         # action = "<cmd>Lspsaga peek_definition<cr>";
-        { key = "gd"; action = "<cmd>Lspsaga finder def<cr>"; }
+        { key = "gd"; action = "<cmd>Lspsaga peek_definition<cr>"; }
         { key = "gr"; action = "<cmd>Lspsaga finder ref<cr>"; }
         { key = "gi"; action = "<cmd>Lspsaga finder imp<cr>"; }
         { key = "gt"; action = "<cmd>Lspsaga peek_type_definition<cr>"; }
         # action = "<cmd>Lspsaga finder type_definition<cr>";
+        { key = "gl"; action = "<cmd>Lspsaga lsp_finder<cr>"; }
+        { key = "gl"; action = "<cmd>Lspsaga preview_definition<cr>"; }
 
         { key = "<leader>o"; action = "<cmd>Lspsaga outline<cr>"; }
         # action = "<cmd>Lspsaga project_replace<cr>";
