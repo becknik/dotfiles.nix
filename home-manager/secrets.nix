@@ -22,7 +22,8 @@ in
   # https://github.com/FiloSottile/age
 
   sops = {
-    # Source: https://github.com/Mic92/sops-nix/blob/master/modules/home-manager/sops.nix
+    # mount secrets to /run/user/<uid>/secrets which was
+    defaultSymlinkPath = "%r/secrets";
 
     # Intentionally set to the default path for the sops (not sops-nix) executables private-keys search:
     age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
@@ -37,6 +38,7 @@ in
       # The name of the secret file in `/run/...`, which must be an element of this secrets sopsFile attribute
       # (or element of the defaultSopsFile, if it's set above)
 
+      # Source: https://github.com/Mic92/sops-nix/blob/master/modules/home-manager/sops.nix
       "github-personal.pub" = {
         sopsFile = ./secrets/git.yaml;
         format = "yaml";
