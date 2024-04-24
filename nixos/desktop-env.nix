@@ -32,7 +32,10 @@
       alsa.enable = true;
       pulse.enable = true;
     };
+
+    dictd.enable = true; # really should remember this one
   };
+  environment.wordlist.enable = true;
 
   ## PipeWire (2/2)
   sound.enable = true;
