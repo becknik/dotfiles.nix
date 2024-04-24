@@ -36,20 +36,7 @@
 
   # Packaging Leftovers
 
-  programs.kitty = {
-    enable = true;
-    darwinLaunchOptions = [
-      "--single-instance"
-    ];
-    settings = {
-      scrollback_lines = 25000;
-      enable_audio_bell = true;
-      update_check_interval = 0;
-    };
-    theme = "Desert";
-  };
-
-  ## Add java packages
+  ## Add Java Packages
   home.file = with pkgs; (builtins.listToAttrs (builtins.map
     (jdk: {
       name = ".jdks/jdk-${jdk.version}";
@@ -75,7 +62,7 @@
     keepassxc
     gpa
 
-    # build tools
+    # Build Tools
     kubernetes-helm
   ];
 }

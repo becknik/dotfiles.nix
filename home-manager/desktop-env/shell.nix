@@ -2,6 +2,43 @@
 
 {
   programs = {
+    alacritty = {
+      enable = true;
+      settings = {
+        general = {
+          live_config_reload = false;
+          ipc_socket = true; # default
+        };
+        window = {
+          decorations = "Full"; # default; "Transparent"i "Buttonless" "None"
+          decorations_theme_variant = "Dark"; # "Light" "None"
+          opacity = 1.0;
+          blur = true;
+          dynamic_title = false;
+          resize_increments = true; # Prefer resizing window by discrete steps equal to cell dimensions.
+          # option_as_alt
+        };
+        scrolling = {
+          history = 10000;
+          multiplier = 3; # lines scrolled per increment
+        };
+        font = {
+          normal = { family = "Fira Code Nerd Font Mono"; style = "Retina"; };
+          bold = { style = "SemiBold"; };
+          size = 11; # default
+        };
+        colors.transparent_background_colors = false; # default
+        bell.duration = 200;
+        cursor.shape = "Underline";
+        terminal.osc52 = "OnlyCopy"; # "Disabled" | "OnlyCopy" | "OnlyPaste" | "CopyPaste"
+        mouse.hide_when_typing = true;
+        keyboard.bindings = [
+          { key = "N"; mods = "Control"; action = "CreateNewWindow"; }
+          # { key = "Esc"; mods = "Control"; action = ""; }
+        ];
+      };
+    };
+
     # zsh & bash integration are enabled by default
     # https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md#oh-my-zsh
     fzf.enable = true;

@@ -245,7 +245,7 @@ with lib.gvariant; {
 
     "org/gnome/shell" = {
       favorite-apps = [
-        "org.gnome.Terminal.desktop"
+        "Alacritty.desktop"
         "org.kde.dolphin.desktop"
         "librewolf.desktop"
         "codium.desktop"
