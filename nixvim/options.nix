@@ -7,7 +7,7 @@
     opts = {
       encoding = "utf-8";
       spell = true;
-      spelllang = [ "en" "de" ];
+      spelllang = [ "en_us" "en_gb" "de_20" ];
       termguicolors = true; # 24-bit terminal coloring support
 
       # Enable persistent Undo-History

@@ -1,27 +1,26 @@
 function(bufnr)
   local api = require("nvim-tree.api")
-  vim.keymap.set('n', 'g?', api.tree.toggle_help)
-
+  local opts =  {buffer = bufnr, noremap = true, silent = true, nowait = true }
   api.config.mappings.default_on_attach(bufnr)
 
-  vim.keymap.set("n", "h", api.node.navigate.parent_close)
-  vim.keymap.set("n", "<esc>", api.tree.close)
-  -- conflicting with normal mode H remapped for buffer cycling
-  -- vim.keymap.set("n", "H", api.tree.collapse_all)
+  vim.keymap.set('n', 'g?', api.tree.toggle_help, opts)
+  vim.keymap.set("n", "h", api.node.navigate.parent_close, opts)
+  vim.keymap.set("n", "H", api.tree.collapse_all, opts)
+  vim.keymap.set("n", "<esc>", api.tree.close, opts)
 
-  local edit_or_open = function()
+  local function edit_or_open()
     local node = api.tree.get_node_under_cursor()
 
-    if node ~= nil and node.nodes ~= nil then
+    if node.nodes ~= nil then
       api.node.open.edit() -- expand or collapse folder
     else
       api.node.open.edit() -- open file
       api.tree.close() -- Close the tree if file was opened
     end
   end
-  vim.keymap.set("n", "l", edit_or_open)
+  vim.keymap.set("n", "l", edit_or_open, opts)
 
-  local git_add = function()
+  local function git_add()
     local node = api.tree.get_node_under_cursor()
     local gs = node.git_status.file
 
@@ -41,7 +40,7 @@ function(bufnr)
     end
     api.tree.reload()
   end
-  vim.keymap.set('n', 'ga', git_add)
+  vim.keymap.set('n', 'ga', git_add, opts)
 
   -- TODO write recursive function to expand all subdirs
 --[[   local function expand_all_subdirs()
@@ -56,6 +55,6 @@ function(bufnr)
       end
     end
   end
-  vim.keymap.set('n', 'gl', expand_all_subdirs) ]]
+  vim.keymap.set('n', 'gl', expand_all_subdirs, opts) ]]
 
 end

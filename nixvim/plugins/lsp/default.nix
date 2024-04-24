@@ -33,9 +33,19 @@
     lspkind.enable = false; # configured manually in cmp.lua
   };
 
-  # TODO neodev doesn't work?
   extraPlugins = with pkgs; [
+    # TODO neodev doesn't work?
     vimPlugins.neodev-nvim
+    # TODO nvim-lsp-file-operations don't work?
+    (pkgs.vimUtils.buildVimPlugin {
+      name = "nvim-lsp-file-operations";
+      src = pkgs.fetchFromGitHub {
+        owner = "antosha417";
+        repo = "nvim-lsp-file-operations";
+        rev = "223aca86b737dc66e9c51ebcda8788a8d9cc6cf2";
+        hash = "sha256-eXOqhfzDK+Jv5bV1wdWT4IA/wBAdkhWV+75HoNcYaR8=";
+      };
+    })
   ];
 
   # https://github.com/folke/neodev.nvim?tab=readme-ov-file#-setup
@@ -44,6 +54,10 @@
     require("neodev").setup({
       -- override = functionn(root_dir, options) end,
     })
+  '';
+
+  extraConfigLuaPost = ''
+    require("lsp-file-operations").setup()
   '';
   # plugins.lsp.servers.lua-ls.settings.Lua.completion.callSnippet = "Replace";
 }

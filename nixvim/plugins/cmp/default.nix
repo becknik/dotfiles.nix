@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   extraConfigLuaPre = (builtins.readFile ./cmp.lua)
@@ -37,9 +37,16 @@
       sources = [
         # cmp recommendations
         { name = "nvim_lsp"; priority = 1000; }
+        { name = "nvim_lua"; priority = 950; } # neovim's lua api (when loading as filetype, the other sources are excluded...)
         # { name = "nvim_lsp_signature_help"; priority = 1000; }
         { name = "luasnip"; priority = 900; }
-        { name = "spell"; priority = 850; }
+        {
+          name = "look";
+          priority = 850;
+          keyword_length = 3;
+          options = { convert_case = true; loud = true; dict = "${pkgs.scowl}/share/dict/words.txt"; };
+        }
+        { name = "spell"; priority = 800; options = { keep_all_entries = true; }; }
         { name = "path"; priority = 700; }
         { name = "buffer"; priority = 600; keyword_length = 3; }
         { name = "git"; priority = 500; }
@@ -156,14 +163,9 @@
       };
 
     filetype = let dap = [{ name = "dap"; }]; in {
-      lua.sources = [
-        { name = "nvim_lua"; } # neovim's lua api
-      ];
       gitcommit.sources = [
         { name = "git"; }
-        {
-          name = "conventionalcommits"; # TODO requires https://commitlint.js.org/#/
-        }
+        { name = "conventionalcommits"; } # TODO requires https://commitlint.js.org/#/
       ];
       # this might not be enough to enable the dap-cmp: https://github.com/rcarriga/cmp-dap
       dap-repl.sources = dap;
