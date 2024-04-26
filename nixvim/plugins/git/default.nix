@@ -14,13 +14,13 @@
 
   keymaps = withDefaultKeymapOptions [
     {
-      key = "<leader>ws";
-      action = "require('telescope').extensions.git_worktree.git_worktrees";
+      key = "<leader>fw";
+      action = "function() require('telescope').extensions.git_worktree.git_worktrees() end";
       lua = true;
     }
     {
-      key = "<leader>wa";
-      action = "require('telescope').extensions.git_worktree.create_git_worktree";
+      key = "<leader>wt";
+      action = "function() require('telescope').extensions.git_worktree.create_git_worktree() end";
       lua = true;
     }
     # <Enter> - switches to that worktree
