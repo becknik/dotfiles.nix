@@ -4,6 +4,7 @@
   extraConfigLua = builtins.readFile ./textobjects.lua;
 
   # https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+  # tets 
   plugins.treesitter-textobjects = {
     enable = true;
     lspInterop = {
@@ -31,29 +32,6 @@
       # using `%` to get moving to gotoPreviousStart and gotoNextEnd
       # or use `,` and `<opposite bracket><same mnemonic>`
       gotoNextStart = {
-        "[/" = "@comment.inner";
-        "[n" = "@number.inner";
-        "[R" = "@regex.inner";
-
-        "[=" = "@assignment.outer";
-        "[." = "@call.*";
-        "[(" = "@call.inner";
-
-        "[r" = "@return.inner";
-
-        "[p" = "@parameter.inner";
-        "[a" = "@attribute.*";
-
-        "[sc" = "@scopename.outer";
-        "[c" = "@conditional.inner";
-        "[l" = "@loop.inner";
-
-        "[f" = "@function.outer";
-        "[C" = "@class.outer";
-        "[b" = "@block.outer";
-        "[F" = "@frame.outer";
-      };
-      gotoPreviousEnd = {
         "]/" = "@comment.inner";
         "]n" = "@number.inner";
         "]R" = "@regex.inner";
@@ -64,10 +42,10 @@
 
         "]r" = "@return.inner";
 
-        "]p" = "@parameter.inner";
+        "]P" = "@parameter.inner";
         "]a" = "@attribute.*";
 
-        "]sc" = "@scopename.outer";
+        # "[sc" = "@scopename.outer";
         "]c" = "@conditional.inner";
         "]l" = "@loop.inner";
 
@@ -75,6 +53,29 @@
         "]C" = "@class.outer";
         "]b" = "@block.outer";
         "]F" = "@frame.outer";
+      };
+      gotoPreviousStart = {
+        "[/" = "@comment.inner";
+        "[n" = "@number.inner";
+        "[R" = "@regex.inner";
+
+        "[=" = "@assignment.outer";
+        "[." = "@call.*";
+        "[(" = "@call.inner";
+
+        "[r" = "@return.inner";
+
+        "[P" = "@parameter.inner";
+        "[a" = "@attribute.*";
+
+        # "[sc" = "@scopename.outer";
+        "[c" = "@conditional.inner";
+        "[l" = "@loop.inner";
+
+        "[f" = "@function.outer";
+        "[C" = "@class.outer";
+        "[b" = "@block.outer";
+        "[F" = "@frame.outer";
       };
     };
 
@@ -113,7 +114,7 @@
             (generatePairs "r" "return")
             { "ist" = "@statement.outer"; }
 
-            (generatePairs "p" "parameter")
+            (generatePairs "P" "parameter")
             (generatePairs "a" "attribute") # html/jsx attributes?
 
             { "isc" = "@scopename.inner"; } # TODO what is this?

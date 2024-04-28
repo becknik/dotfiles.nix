@@ -22,7 +22,6 @@
       "nextcloud/archive"
       "nextcloud/transfer"
 
-      ".nvim/luasnips"
       "scripts"
       "vm"
       "vpn"

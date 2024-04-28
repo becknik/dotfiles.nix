@@ -336,7 +336,7 @@
                   nixpkgs-fmt.enable = true;
                 };
 
-                scripts.update-fetchgit.exec = "update-nix-fetchgit $DEVENV_ROOT/overlays/modifications.nix";
+                scripts.update-fetchgit.exec = builtins.readFile ./update-fetchgit.sh;
               })
             ];
           }

@@ -1,7 +1,7 @@
 { withDefaultKeymapOptions, ... }:
 
 {
-  # https://github.com/folke/trouble.nvim/tree/dev
+  # https://github.com/folke/trouble.nvim
   plugins.trouble = {
     enable = true;
 
@@ -23,8 +23,10 @@
     };
   };
   keymaps = withDefaultKeymapOptions [
-    { key = "<leader>tt"; action = "<cmd>TroubleToggle<cr>"; }
-    { key = "<leader>tw"; action = "<cmd>TroubleToggle workspace_diagnostics<cr>"; }
-    { key = "<leader>td"; action = "<cmd>TroubleToggle document_diagnostics<cr>"; }
+    { key = "<leader>xt"; action = "<cmd>TroubleToggle<cr>"; }
+    { key = "<leader>xw"; action = "<cmd>TroubleToggle workspace_diagnostics<cr>"; }
+    { key = "<leader>xd"; action = "<cmd>TroubleToggle document_diagnostics<cr>"; }
+    { key = "<leader>xq"; action = "<cmd>TroubleToggle quickfix<cr>"; }
+    { key = "<leader>xl"; action = "<cmd>TroubleToggle loclist<cr>"; }
   ];
 }

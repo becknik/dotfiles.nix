@@ -5,7 +5,29 @@
     + ''
 
     local lsnip = require('luasnip')
+    require('cmp_git').setup()
   '';
+
+  # https://github.com/petertriho/cmp-git?tab=readme-ov-file#config
+
+  # TODO doesn't work
+  extraPackages = with pkgs; [
+    curl
+    git
+    gh
+    glab
+    vimPlugins.cmp-git
+
+    (vimUtils.buildVimPlugin {
+      name = "cmp-dotenv";
+      src = fetchFromGitHub {
+        owner = "SergioRibera";
+        repo = "cmp-dotenv";
+        rev = "7af67e7ed4fd9e5b20127a624d22452fbd505ccd";
+        hash = "sha256-/aQlOE92LPSSv+X968MDw8Mb1Yy4SeqS5xVb4PTBbcw=";
+      };
+    })
+  ];
 
   # https://github.com/hrsh7th/nvim-cmp
   plugins.cmp = {
@@ -21,11 +43,44 @@
         # makes use of contents of ./cmp.lua
         format = ''
           function(entry, vim_item)
-            vim_item.kind = symbols[vim_item.kind]
-            vim_item.menu = '[' .. entry.source.name .. ']'
+            if symbols[vim_item.kind] == nill then
+              vim_item.kind = vim_item.kind
+            else
+              vim_item.kind = string.format('%s %s', symbols[vim_item.kind], vim_item.kind)
+            end
+            vim_item.menu = ({
+              buffer = "[Buf]",
+              nvim_lsp = "[LSP]",
+              luasnip = "[Snip]",
+              nvim_lua = "[Lua]",
+              latex_symbols = "[]",
+              look = "[Look]",
+              dotenv = "[Env]",
+              spell = "[Spell]",
+              path = "[Path]",
+              git = "[]",
+              calc = "[󱖦]",
+              emoji = "[󰞅]",
+            })[entry.source.name]
             return vim_item
           end
         '';
+      };
+
+      view.entries = {
+        name = "custom";
+        selection_order = "near_cursor";
+      };
+
+      sorting = {
+        comparators = [
+          "require('cmp.config.compare').offset"
+          "require('cmp.config.compare').exact"
+          "require('cmp.config.compare').score"
+          "require('cmp.config.compare').locality"
+          "require('cmp.config.compare').recently_used"
+          "require('cmp.config.compare').kind"
+        ];
       };
 
       # performance = { fetchingTimeout = 200; maxViewEntries = 50; };
@@ -35,24 +90,32 @@
       # https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources
       # https://github.com/nix-community/nixvim/blob/ad6a08b69528fdaf7e12c90da06f9a34f32d7ea6/plugins/completion/cmp/cmp-helpers.nix#L23-L67
       sources = [
-        # cmp recommendations
-        { name = "nvim_lsp"; priority = 1000; }
-        { name = "nvim_lua"; priority = 950; } # neovim's lua api (when loading as filetype, the other sources are excluded...)
+        { name = "luasnip"; priority = 1000; }
+        { name = "nvim_lsp"; priority = 900; }
         # { name = "nvim_lsp_signature_help"; priority = 1000; }
-        { name = "luasnip"; priority = 900; }
+        {
+          name = "buffer";
+          priority = 800;
+          keyword_length = 3;
+          options = { get_buffnr = "function() return vim.api.nvim_list_bufs() end"; };
+        }
         {
           name = "look";
-          priority = 850;
+          priority = 700;
           keyword_length = 3;
           options = { convert_case = true; loud = true; dict = "${pkgs.scowl}/share/dict/words.txt"; };
         }
-        { name = "spell"; priority = 800; options = { keep_all_entries = true; }; }
-        { name = "path"; priority = 700; }
-        { name = "buffer"; priority = 600; keyword_length = 3; }
-        { name = "git"; priority = 500; }
-        { name = "calc"; priority = 400; }
-        { name = "dotenv"; priority = 300; }
-        { name = "emoji"; priority = 100; }
+        # https://github.com/SergioRibera/cmp-dotenv
+        { name = "dotenv"; priority = 500; }
+        # spell is rather useful as code-action than recommendation
+        { name = "spell"; priority = 400; options = { keep_all_entries = true; }; }
+        { name = "nvim_lua"; priority = 300; } # neovim's lua api (when loading as filetype, the other sources are excluded...)
+
+        # no priority due to prefix triggers
+        { name = "path"; }
+        { name = "git"; }
+        { name = "calc"; }
+        { name = "emoji"; }
 
         # TODO https://github.com/zbirenbaum/copilot-cmp
         # { name = "copilot"; group_index = 2; priority = 1000; } # TODO disable suggestion, panel module, as it can interfere with completions
@@ -79,7 +142,7 @@
         "<tab>" = ''
           cmp.mapping(function(fallback)
             if cmp.visible() then
-              cmp.select_next_item()
+              cmp.confirm { select = true }
             elseif lsnip.locally_jumpable(1) then
               lsnip.jump(1)
             else
@@ -90,9 +153,7 @@
         # "<s-tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
         "<s-tab>" = ''
           cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_prev_item()
-            elseif lsnip.locally_jumpable(-1) then
+            if lsnip.locally_jumpable(-1) then
               lsnip.jump(-1)
             else
               fallback()
@@ -101,9 +162,6 @@
         '';
 
 
-        "<c-j>" = "cmp.mapping.select_next_item()";
-        "<c-k>" = "cmp.mapping.select_prev_item()";
-        # TODO double mappings might be a bad idea
         "<c-p>" = "cmp.mapping.select_prev_item()";
         "<c-n>" = "cmp.mapping.select_next_item()";
         "<c-e>" = "cmp.mapping.abort()";

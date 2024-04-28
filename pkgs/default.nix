@@ -11,12 +11,13 @@
         # TODO unique leads to errors on mappings like `<leader>wl`, `<leader>f`, K (which doesn't make any sense to me)
       };
       withDefaultKeymapOptions = keymaps: map (keymap: { options = defaultKeymapOptions; } // keymap) keymaps;
+      fetchFromGitHub = pkgs-unstable.fetchFromGitHub;
     in
     nixvim.makeNixvimWithModule {
       pkgs = pkgs-unstable;
 
       module = ../nixvim;
-      extraSpecialArgs = { inherit defaultKeymapOptions withDefaultKeymapOptions; };
+      extraSpecialArgs = { inherit defaultKeymapOptions withDefaultKeymapOptions fetchFromGitHub; };
     };
 
   # example = pkgs.callPackage ./example { };

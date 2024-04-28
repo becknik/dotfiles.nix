@@ -4,13 +4,15 @@
   programs = {
     alacritty = {
       enable = true;
+
       settings = {
         general = {
           live_config_reload = false;
           ipc_socket = true; # default
         };
         window = {
-          decorations = "Full"; # default; "Transparent"i "Buttonless" "None"
+          dimensions = { columns = 132; lines = 43; };
+          decorations = "Full"; # default; "Transparent" "Buttonless" "None"
           decorations_theme_variant = "Dark"; # "Light" "None"
           opacity = 1.0;
           blur = true;
@@ -19,22 +21,24 @@
           # option_as_alt
         };
         scrolling = {
-          history = 10000;
+          history = 25000;
           multiplier = 3; # lines scrolled per increment
         };
         font = {
-          normal = { family = "Fira Code Nerd Font Mono"; style = "Retina"; };
+          normal = { family = "Fira Code Nerd Font Mono"; style = "Retina"; }; # ligatures aren't supported tho
+          # https://github.com/alacritty/alacritty/pull/5696
           bold = { style = "SemiBold"; };
-          size = 11; # default
+          size = 11;
         };
         colors.transparent_background_colors = false; # default
         bell.duration = 200;
         cursor.shape = "Underline";
         terminal.osc52 = "OnlyCopy"; # "Disabled" | "OnlyCopy" | "OnlyPaste" | "CopyPaste"
-        mouse.hide_when_typing = true;
+        mouse.hide_when_typing = false;
+        # TODO `= true` causes a bug which doesn't bing up the mouse visibility in this and other windows again...
         keyboard.bindings = [
-          { key = "N"; mods = "Control"; action = "CreateNewWindow"; }
-          # { key = "Esc"; mods = "Control"; action = ""; }
+          { mods = "Control|Shift"; key = "N"; action = "CreateNewWindow"; } # TODO not working?
+          # { mods = "Control|Shift"; key = "Return"; action = "SpawnNewInstance"; }
         ];
       };
     };
@@ -199,6 +203,7 @@
           # General
           fu = "sudo";
           sduo = "sudo";
+          nivm = "nvim";
 
           # Git
           gai = "git add --interactive";

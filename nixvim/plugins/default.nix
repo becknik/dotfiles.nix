@@ -36,13 +36,20 @@
     # https://gitlab.com/HiPhish/rainbow-delimiters.nvim
     rainbow-delimiters.enable = true;
     indent-blankline.enable = true;
+    auto-save = {
+      enable = true;
+      debounceDelay = 2000;
+      # TODO https://github.com/NixOS/nixpkgs/issues/307501
+      extraOptions.execution_message.enabled = false;
+    };
     # statuscol-nvim
     # which-key.enable = true; # personally finding this annoying
     # transparent.enable = false; # TODO first need terminal support for this
 
     # Navigation & Editing
+    # TODO replace old tpope's surround with nvim one: https://github.com/nix-community/nixvim/issues/1346
+    # https://github.com/kylechui/nvim-surround
     surround.enable = true;
-
     vim-matchup.enable = true;
     nvim-autopairs = {
       enable = true;
@@ -65,8 +72,17 @@
     ## Language-specific
     nix.enable = true;
     nix-develop.enable = true;
+    vimtex = {
+      enable = true;
+      texlivePackage = null;
+      # settings.view_method = "okular";
+    };
 
     ## Application-specific
-    #obsidian.enable = true; # TODO https://github.com/epwalsh/obsidian.nvim
+    obsidian = {
+      enable = false; # plugin's useless in my obsidian workflow...
+
+      dir = "~/obsidian";
+    };
   };
 }
