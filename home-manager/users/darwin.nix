@@ -35,6 +35,7 @@
   };
 
   # Packaging Leftovers
+  xdg.enable = true;
 
   ## Add Java Packages
   home.file = with pkgs; (builtins.listToAttrs (builtins.map

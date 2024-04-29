@@ -14,7 +14,7 @@
     gc.automatic = true;
     optimise.automatic = true;
     settings = {
-      max-jobs = 1;
+      max-jobs = 2;
       cores = 4;
     };
   };
@@ -27,7 +27,8 @@
       upgrade = true;
     };
     # nix packages sadly not working with x86_64-darwin
-    casks = [ "logseq" "eloston-chromium" "firefox" ];
+    # brew tap homebrew/cask-fonts
+    casks = [ "logseq" "eloston-chromium" "firefox" "font-fira-code-nerd-font" ];
   };
 
   programs.zsh.enable = true;
