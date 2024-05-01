@@ -108,6 +108,7 @@
       (makeWhenNotDarwin gnuplot)
       (makeWhenNotDarwin qtikz)
       marp-cli
+      plantuml
 
       ## Trash
       neofetch
@@ -130,5 +131,5 @@
   # - deezer: TODO https://github.com/Shawn8901/nix-configuration/blob/main/packages/deezer/default.nix
 
   # Packages I found unnecessary with nix shell:
-  # [ mypy perf plantuml postgresql prettier(d)? ]
+  # [ mypy perf postgresql ]
 }

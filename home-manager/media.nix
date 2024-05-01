@@ -142,7 +142,7 @@
 
     ## Images
     krita
-    imagemagick
+    imagemagickBig
 
     ### PDF
     pdfslicer
