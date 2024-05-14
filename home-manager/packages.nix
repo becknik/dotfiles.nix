@@ -75,8 +75,6 @@
       (makeWhenNotDarwin via)
 
       ## Nix(OS)
-      devenv.packages."${pkgs.system}".devenv
-
       unstable.nh
       nix-output-monitor
 
@@ -86,6 +84,9 @@
 
       nix-update
       nixpkgs-review
+
+      comma
+      # devenv.packages."${pkgs.system}".devenv # commented out due to https://github.com/cachix/devenv/issues/1200
 
       ### Secrets Management (1)
       sops

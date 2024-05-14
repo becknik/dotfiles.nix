@@ -219,6 +219,12 @@ final: prev: {
           "test_rolling_var_numerical_issues"
         ] ++ oldAttrs.disabledTests;
       });
+      pytest-httpbin = pPrev.pytest-httpbin.overridePythonAttrs (oldAttrs: {
+        disabledTests = [
+          "test_dont_crash_on_handshake_timeout"
+        ] ++ oldAttrs.disabledTests;
+      });
+
       paperwork-backend = pPrev.paperwork-backend.overridePythonAttrs (oldAttrs: {
         doCheck = false;
       });
