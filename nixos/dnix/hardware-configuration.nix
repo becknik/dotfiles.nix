@@ -43,4 +43,7 @@
     enable = false;
     powerOnBoot = false;
   };
+
+  services.hardware.openrgb.enable = true;
+  systemd.services.openrgb.enable = false; # disable openrgb starting in server mode on port 6742
 }
