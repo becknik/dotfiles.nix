@@ -6,7 +6,7 @@ Some nice *bits of knowledge* I came across along the buildup of this flake are 
 
 ## Project Structure
 
-```shell
+```bash
 $ tree -a -I '\.git|\.vscode|\.direnv' . # slightly modified for better context/ overview
 .
 ├─────────────────────────────────────────── home-manager
