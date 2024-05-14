@@ -72,4 +72,13 @@
   #RUSTFLAGS="-C opt-level=3 -C target-cpu=native"
   #-- Make Flags: change this for DistCC/SMP systems
   #MAKEFLAGS="-j12"
+
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+
+    # sadly, this still compiles some i686 dependencies...
+    package = (pkgs.clean.steam.override { withGameSpecificLibraries = false; });
+  };
 }

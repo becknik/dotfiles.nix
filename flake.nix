@@ -79,6 +79,10 @@
           "obsidian"
           "discord"
 
+          "steam"
+          "steam-original"
+          "steam-run"
+
           "postman"
           "jetbrains-toolbox"
           "idea-ultimate"
