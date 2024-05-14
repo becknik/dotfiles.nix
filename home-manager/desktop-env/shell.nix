@@ -79,7 +79,15 @@
         extended = true; # Write timestamps ":start:elapsed;command"
         ignoreAllDups = true; # Delete old recorded entry if new entry is a duplicate
         ignoreDups = true; # Don't record an entry that was just recorded again
-        ignorePatterns = [ "alias *" "cd *" "*/nix/store/*" "z *" ]; # "gcsm *" "gcmsg *" "ls *" "la *"
+        # "gcsm *" "gcmsg *" "ls *" "la *"
+        ignorePatterns = [
+          "alias *"
+          "cd *"
+          "*/nix/store/*"
+          "z *"
+          "nvim *"
+          "gcmsg *" # oh-my-zsh `git commit -m` alias
+        ];
         ignoreSpace = true; # Don'd add commands to history if first character is a space
         #save = 10000; # Amount of lines to save, the default
         share = true; # Share history between all sessions.
