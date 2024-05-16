@@ -30,8 +30,6 @@
       userName = (lib.mkForce "Jannik Becker");
       userEmail = (lib.mkForce "sprinteins.becker@extaccount.com");
     };
-
-    java.package = (lib.mkForce pkgs.temurin-bin-17);
   };
 
   # Packaging Leftovers
@@ -43,7 +41,7 @@
       name = ".jdks/jdk-${jdk.version}";
       value = { source = jdk; };
     })
-    [ temurin-bin-21 temurin-bin-11 temurin-bin-8 ]));
+    [ temurin-bin-8 temurin-bin-11 ]));
 
 
   programs.gpg.enable = true;

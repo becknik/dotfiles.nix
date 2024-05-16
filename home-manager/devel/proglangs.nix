@@ -60,5 +60,5 @@
       name = ".jdks/jdk-${jdk.version}";
       value = { source = jdk; };
     })
-    [ pkgs.temurin-bin-17 ]));
+    [ pkgs.temurin-bin-17 pkgs.temurin-bin-21 ]));
 }
