@@ -28,7 +28,7 @@
     };
     # nix packages sadly not working with x86_64-darwin
     # brew tap homebrew/cask-fonts
-    casks = [ "logseq" "eloston-chromium" "firefox" "font-fira-code-nerd-font" ];
+    casks = [ "logseq" "eloston-chromium" "firefox" "font-fira-code-nerd-font" "font-fira-code-nerd-font" ];
   };
 
   programs.zsh.enable = true;
