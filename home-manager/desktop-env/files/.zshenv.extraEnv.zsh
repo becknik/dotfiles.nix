@@ -1,6 +1,10 @@
 # Esc key in vi mode is 0.4s by default, this sets it to 0.05s
 export KEYTIMEOUT=5
 
+if [ -f ~/.zshenv.local ]; then
+    source ~/.zshenv.local
+fi
+
 # fzf vim binding with ctrl/alt
 export FZF_DEFAULT_OPTS="--bind 'ctrl-j:down,ctrl-k:up,alt-j:preview-down,alt-k:preview-up'"
 
