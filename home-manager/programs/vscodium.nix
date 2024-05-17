@@ -28,8 +28,7 @@
         ms-vscode.cmake-tools
       ];
     in
-    (lib.lists.optional (!isDarwinSystem) ms-vsliveshare.vsliveshare)
-    ++ [
+    [
       ## Management
       alefragnani.project-manager
       alefragnani.bookmarks
@@ -107,6 +106,13 @@
       #twxs.cmake #?
     ] ++ cppTools ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (
       [
+        # nix-packaged extensions doesn't work
+        {
+          name = "vsliveshare";
+          publisher = "MS-vsliveshare";
+          version = "1.0.5905";
+          sha256 = "sha256-y1MMO6fd/4a9PhdBpereEBPRk50CDgdiRc8Vwqn0PXY=";
+        }
         {
           # Mapping keymaps 1:1 between IntelliJ and VSCode sadly isn't possible, e.g. <C>+K, <C>+O not working any more
           name = "intellij-idea-keybindings";
@@ -134,17 +140,7 @@
           version = "1.2.2";
           sha256 = "sha256-xeLzzNgj/GmNnSmrwSfJW6i93++HO3MPAj8RwZzwzR4=";
         }
-      ] ++
-
-      (lib.lists.optional isDarwinSystem
-        # VSCode Live Share (for MacOS etc due to incompatible package)
-        {
-          name = "vsliveshare";
-          publisher = "MS-vsliveshare";
-          version = "1.0.5905";
-          #sha256 = lib.fakeSha256;
-          sha256 = "sha256-y1MMO6fd/4a9PhdBpereEBPRk50CDgdiRc8Vwqn0PXY=";
-        })
+      ]
     );
 
     languageSnippets = { };
@@ -624,7 +620,7 @@
         };
         cSpell.fixSpellingWithRenameProvider = true;
         cSpell.advanced.feature.useReferenceProviderWithRename = true;
-        cSpell.advanced.feature.useReferenceProviderRemove = "/^#+\\s/"; # TODO Whats this for??
+        cSpell.advanced.feature.useReferenceProviderRemove = "/^#+\\s/"; # TODO What's this for??
       };
       "[latex]" = {
         editor.defaultFormatter = "James-Yu.latex-workshop";
