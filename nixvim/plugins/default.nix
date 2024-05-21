@@ -82,7 +82,7 @@
     obsidian = {
       enable = false; # plugin's useless in my obsidian workflow...
 
-      dir = "~/obsidian";
+      settings.dir = "~/obsidian";
     };
   };
 }

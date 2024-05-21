@@ -27,9 +27,11 @@
 
   plugins.treesitter-context = {
     enable = true;
-    mode = "cursor"; # "topline"
-    multilineThreshold = 10; # max: function with 10 newline-separated variables; default: 20
-    maxLines = 20;
+    settings = {
+      mode = "cursor"; # "topline"
+      multilineThreshold = 10; # max: function with 10 newline-separated variables; default: 20
+      maxLines = 20;
+    };
   };
 
   autoCmd = [
