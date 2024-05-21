@@ -47,6 +47,7 @@
       ## Utils
       curl
       unzip
+      zip
       tree
       (makeWhenNotDarwin wl-clipboard)
 
@@ -65,6 +66,7 @@
       grex # regex generator
       asciinema
       tailspin # log file highlighter
+      fastgron # make JSON greppable!
 
       ### Hardware
       cpufetch
@@ -72,7 +74,6 @@
       (makeWhenNotDarwin ventoy-full)
       (makeWhenNotDarwin powertop)
       (makeWhenNotDarwin vial)
-      (makeWhenNotDarwin via)
 
       ## Nix(OS)
       unstable.nh
