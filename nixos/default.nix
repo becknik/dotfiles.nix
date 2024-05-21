@@ -95,10 +95,7 @@
       cleanOnBoot = true;
     };
 
-    plymouth = {
-      enable = true;
-      theme = "breeze";
-    };
+    plymouth.enable = true;
   };
 
 

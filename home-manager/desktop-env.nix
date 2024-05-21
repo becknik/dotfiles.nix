@@ -1,4 +1,4 @@
-{ userName, pkgs, config, ... }:
+{ userName, pkgs, config, lib, ... }:
 
 {
   imports = [
@@ -60,7 +60,7 @@
   dconf.settings."org/gnome/desktop/interface" = {
     # gtk-theme = "Adwaita-dark";
     color-scheme = "prefer-dark";
-    icon-theme = "Tela-dark";
+    icon-theme = lib.mkDefault "Tela-dark";
   };
   home.packages = with pkgs; [ tela-icon-theme ];
 }
