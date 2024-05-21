@@ -51,7 +51,7 @@
 
         "]f" = "@function.outer";
         "]C" = "@class.outer";
-        "]b" = "@block.outer";
+        "]B" = "@block.outer";
         "]F" = "@frame.outer";
       };
       gotoPreviousStart = {
@@ -74,7 +74,7 @@
 
         "[f" = "@function.outer";
         "[C" = "@class.outer";
-        "[b" = "@block.outer";
+        "[B" = "@block.outer";
         "[F" = "@frame.outer";
       };
     };
@@ -124,7 +124,7 @@
             (generatePairs "f" "function")
             (generatePairs "C" "class")
 
-            (generatePairs "b" "block")
+            (generatePairs "B" "block")
             (generatePairs "F" "frame")
           ];
     };

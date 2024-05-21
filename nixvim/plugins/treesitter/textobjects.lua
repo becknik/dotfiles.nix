@@ -12,5 +12,5 @@ vim.keymap.set({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T)
 
 local gs = require("gitsigns")
 local hunk_repeat_next, hunk_repeat_prev = ts_repeat_move.make_repeatable_move_pair(gs.next_hunk, gs.prev_hunk)
-vim.keymap.set({ "n", "x", "o" }, "[h", hunk_repeat_next)
-vim.keymap.set({ "n", "x", "o" }, "]h", hunk_repeat_prev)
+vim.keymap.set({ "n", "x", "o" }, "]h", hunk_repeat_next)
+vim.keymap.set({ "n", "x", "o" }, "[h", hunk_repeat_prev)
