@@ -4,6 +4,12 @@
   programs.thunderbird = {
     enable = true;
     package = pkgs.thunderbird;
+
+    profiles."default" = {
+      isDefault = true;
+      withExternalGnupg = true;
+    };
+
     settings = {
       "privacy.donottrackheader.enabled" = true;
       "accessibility.typeaheadfind.flashBar" = 0;
@@ -39,10 +45,6 @@
       "network.cookie.cookieBehavior" = 3;
       "places.history.enabled" = false;
       "spellchecker.dictionary" = "en-US,de-DE";
-    };
-    profiles."default" = {
-      isDefault = true;
-      withExternalGnupg = true;
     };
   };
 }

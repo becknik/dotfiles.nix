@@ -92,23 +92,4 @@ in
       };
     };
   };
-
-  programs = {
-    /*mbsync = {
-      enable = true;
-      #frequency ="*:0/1";
-    };*/
-    thunderbird = {
-      enable = true;
-
-      profiles."default" = {
-        isDefault = true;
-        withExternalGnupg = true;
-      };
-
-      settings = {
-        "privacy.donottrackheader.enabled" = true;
-      };
-    };
-  };
 }
