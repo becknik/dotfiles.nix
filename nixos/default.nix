@@ -278,12 +278,14 @@
       #options = "--delete-older-than 28d";
     };
 
-    channel.enable = true; # false destroys some direnv `use nix` & oldschool nix-shell
+    channel.enable = false; # default true; this is useless due to `nix.extraOptions` fixing `nix-shell` & direnv
     daemonCPUSchedPolicy = "idle"; # "other", "batch"
 
     # https://discourse.nixos.org/t/why-does-nix-direnv-recommend-setting-nix-settings-keep-outputs/31081
     extraOptions = ''
       keep-outputs = true
+      # fix `nix-shell -p` (& direnv's `use nix` directive ?)
+      extra-nix-path = nixpkgs=flake:nixpkgs
     '';
   };
 

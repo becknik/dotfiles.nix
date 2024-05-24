@@ -118,6 +118,7 @@
     ## Privacy
     keepassxc
     tor-browser
+    # floorp
     gpa
     veracrypt # TODO derivation with set WXSUPPRESS_SIZER_FLAGS_CHECK env var
 
