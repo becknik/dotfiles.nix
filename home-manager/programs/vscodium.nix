@@ -114,6 +114,12 @@
           sha256 = "sha256-y1MMO6fd/4a9PhdBpereEBPRk50CDgdiRc8Vwqn0PXY=";
         }
         {
+          name = "toggle-case";
+          publisher = "ryanlaws";
+          version = "1.0.2";
+          sha256 = "sha256-tvgLHSKmX3FBLwi4JikJR4PUieK6iKGzBMj+Zz58SFI=";
+        }
+        {
           # Mapping keymaps 1:1 between IntelliJ and VSCode sadly isn't possible, e.g. <C>+K, <C>+O not working any more
           name = "intellij-idea-keybindings";
           publisher = "k--kato";
@@ -133,7 +139,6 @@
           version = "1.7.0";
           sha256 = "sha256-7Vm/Z46j2GG2c2XZkAlmJ9ZCZ9og+v3tboD2Tf23gGA=";
         }
-
         {
           name = "theme-monokai-pro-vscode";
           publisher = "monokai";
