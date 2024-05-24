@@ -60,7 +60,7 @@
   dconf.settings."org/gnome/desktop/interface" = {
     # gtk-theme = "Adwaita-dark";
     color-scheme = "prefer-dark";
-    icon-theme = lib.mkDefault "Tela-dark";
+    icon-theme = lib.mkForce "Tela-dark";
   };
   home.packages = with pkgs; [ tela-icon-theme ];
 }
