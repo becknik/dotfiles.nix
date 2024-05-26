@@ -19,8 +19,8 @@
       # `tail -n +1 -f .log |& nom`
       "--commit-lock-file"
     ];
-    dates = "Sat *-*-* 12:00";
-    randomizedDelaySec = "2h";
+    dates = "Sat *-*-* 8:00";
+    randomizedDelaySec = "20m";
   };
 
   networking.hostName = "dnix";
