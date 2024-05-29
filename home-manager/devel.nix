@@ -36,9 +36,9 @@
           identityFile = "~/.ssh/github-personal";
         };
         gitlab_sopra = {
-          host = "sopra.informatik.uni-stuttgart.de";
+          host = "gila24.informatik.uni-stuttgart.de";
           user = "git";
-          identityFile = "~/.ssh/gitlab-sopra";
+          identityFile = "~/.ssh/gitlab-est";
           addressFamily = "inet";
         };
       };

@@ -42,7 +42,7 @@ in
       "github-personal.pub" = {
         sopsFile = ./secrets/git.yaml;
         format = "yaml";
-        key = "github/personal/pub.ed25519"; # "No tested [yaml]-data structures [apart from strings] are supported right now" - including directories?!
+        key = "github/personal/ed25519.pub"; # "No tested [yaml]-data structures [apart from strings] are supported right now" - including directories?!
         mode = "0400";
         /*symlink-*/ path = "${config.home.homeDirectory}/.ssh/github-personal.pub";
       };
@@ -56,16 +56,16 @@ in
         path = "${config.home.homeDirectory}/.ssh/github-personal";
       };
 
-      "gitlab-sopra.pub" = {
+      "gitlab-est.pub" = {
         sopsFile = ./secrets/git.yaml;
-        key = "gitlab/sopra/pub.ed25519";
+        key = "gitlab/est/ed25519.pub";
         mode = "0400";
-        /*symlink-*/ path = "${config.home.homeDirectory}/.ssh/gitlab-sopra.pub";
+        path = "${config.home.homeDirectory}/.ssh/gitlab-est.pub";
       };
-      "gitlab-sopra" = {
+      "gitlab-est" = {
         sopsFile = ./secrets/git.yaml;
-        key = "gitlab/sopra/.ed25519";
-        path = "${config.home.homeDirectory}/.ssh/gitlab-sopra";
+        key = "gitlab/est/.ed25519";
+        path = "${config.home.homeDirectory}/.ssh/gitlab-est";
       };
 
       # Creation of secrets from binaries: `sops -e ./desktop-env/secrets/keepass.key > ./desktop-env/secrets/keepassxc.yaml`
