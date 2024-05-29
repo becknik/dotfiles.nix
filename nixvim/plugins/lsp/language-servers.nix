@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   plugins.lsp.servers = {
@@ -22,7 +22,10 @@
 
     lua-ls.enable = true;
     bashls.enable = true;
-    pyright.enable = true;
+    pyright = {
+      enable = true;
+      package = pkgs.basedpyright;
+    };
 
     eslint.enable = true;
     tsserver.enable = true;
