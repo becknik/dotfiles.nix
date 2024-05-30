@@ -43,7 +43,6 @@ in
         sopsFile = ./secrets/git.yaml;
         format = "yaml";
         key = "github/personal/ed25519.pub"; # "No tested [yaml]-data structures [apart from strings] are supported right now" - including directories?!
-        mode = "0400";
         /*symlink-*/ path = "${config.home.homeDirectory}/.ssh/github-personal.pub";
       };
 
@@ -52,19 +51,18 @@ in
       # TODO secrets are symlinked twice?!
       "github-personal" = {
         sopsFile = ./secrets/git.yaml;
-        key = "github/personal/.ed25519";
+        key = "github/personal/ed25519";
         path = "${config.home.homeDirectory}/.ssh/github-personal";
       };
 
       "gitlab-est.pub" = {
         sopsFile = ./secrets/git.yaml;
         key = "gitlab/est/ed25519.pub";
-        mode = "0400";
         path = "${config.home.homeDirectory}/.ssh/gitlab-est.pub";
       };
       "gitlab-est" = {
         sopsFile = ./secrets/git.yaml;
-        key = "gitlab/est/.ed25519";
+        key = "gitlab/est/ed25519";
         path = "${config.home.homeDirectory}/.ssh/gitlab-est";
       };
 
