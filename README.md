@@ -33,8 +33,8 @@ $ tree -a -I '\.git|\.vscode|\.direnv' . # slightly modified for better context/
 │   ├── default.nix                          │   ├── thunderbird.nix
 │   └── ...                                  │   └── vscodium.nix
 ├── overlays                                 ├── secrets.nix
-│   ├── build-fixes.nix                      ├── secrets
-│   ├── build-skips.nix                      │   ├── git.yaml
+│   ├── ~~build-fixes.nix~~                  ├── secrets
+│   ├── ~~build-skips.nix~~                  │   ├── git.yaml
 │   ├── default.nix                          │   ├── gpg-personal.asc
 │   ├── modifications.nix                    │   ├── keepassxc.key
 │   ├── modification ── ...                  │   └── mail.yaml
@@ -63,6 +63,7 @@ $ tree -a -I '\.git|\.vscode|\.direnv' . # slightly modified for better context/
   > I think this should've gone faster on any other OS, perhaps even on a Gentoo system and is in the end just my own perfectinism and maybe a few percent of performance improvements for some packages making my life harder...
   >
   > Hence due to all these concerns/ issues and the problems with 24.05 & (perhaps) `fastStdenv`, I decided to just let the architecture-optimization be and based my `dnix` system closure back to the default, stable & non-optimized `stdenv` enabling the caching for most packages :^)
+  > See [here](https://github.com/becknik/dotfiles.nix/releases/tag/cpu-optimization) for working state of optimized build
 
   - Overlays & systemd services to make this a bit more convenient
 - Highly customized GNOME Wayland DE with some KDE tools
