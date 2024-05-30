@@ -21,14 +21,6 @@
     };
   };
 
-  # Used to avoid building packages with local build config
-  nixpkgs-clean = final: _prev: {
-    clean = import inputs.nixpkgs {
-      inherit config;
-      system = final.system;
-    };
-  };
-
   # Brings in custom packages from '/pkgs', including unstable nixvim
   additions = final: _prev: import ../pkgs {
     pkgs = final;
@@ -37,10 +29,6 @@
   };
 
   modifications = (import ./modifications.nix { inherit inputs; });
+
   modifications-perf = (import ./modifications-perf.nix { inherit inputs; });
-
-  build-fixes = import ./build-fixes.nix { inherit inputs; };
-
-  build-skips = import ./build-skips.nix { inherit inputs; };
-
 }

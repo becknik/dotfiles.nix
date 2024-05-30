@@ -12,7 +12,7 @@
     };
     devenv = {
       url = "github:cachix/devenv";
-      inputs.nixpkgs.follows = "nixpkgs"; # requires > rustc-1.74.0
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     darwin = {
@@ -219,9 +219,6 @@
                         modifications
                         modifications-perf
                         additions
-                        nixpkgs-clean
-                        build-fixes
-                        build-skips
                       ];
                     });
                 };
@@ -231,8 +228,8 @@
                   inherit system;
                   config = config/*'*/;
 
-                  overlays = (defaultOverlays { /* nixpkgs-unstable' = nixpkgs-unstable-with-platform; */ });
-                  # ++ (with self.overlays; [ modifications-perf nixpkgs-clean build-fixes build-skips ]);
+                  overlays = (defaultOverlays { /* nixpkgs-unstable' = nixpkgs-unstable-with-platform; */ })
+                    ++ (with self.overlays; [ modifications-perf ]);
                 };
               })
           ];

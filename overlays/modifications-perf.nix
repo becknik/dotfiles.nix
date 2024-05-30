@@ -1,11 +1,6 @@
 { ... }:
 
 final: prev: {
-  python3 = prev.python3.override {
-    reproducibleBuild = false;
-    enableOptimizations = true;
-  };
-
   librewolf-unwrapped = prev.librewolf-unwrapped.overrideAttrs (oldAttrs:
     let
       # Source: https://firefox-source-docs.mozilla.org/setup/configuring_build_options.html
