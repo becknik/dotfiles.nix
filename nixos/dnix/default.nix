@@ -34,32 +34,13 @@
     kernelPackages = pkgs.linux_xanmod_latest_patched_dnix;
   };
 
-  # Build Cache
-  programs.ccache = {
-    enable = false; # TODO "self.ccacheStdenv" breaks thing with fastStdenv
-    /* packageNames = [
-      "gcc-wrapper"
-      "gcc"
-      "xgcc"
-      "gfortran" # why does this even exist? ...
-
-      "clang"
-      "llvm"
-
-      "ghc" # this package is huge & builds forever!
-
-      "linux"
-    ]; */
-  };
-
   nix.settings = {
     max-jobs = 3;
     cores = 7;
 
-    system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ]
-      # Source: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/config/nix.nix
-      ++ [ "gccarch-alderlake" ];
-    # TODO alderlake flag is available in GCC 13.1, but not sure how to change the system env compiler from gcc (12.3.1) to gcc13...
+    # system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ]
+    # Source: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/config/nix.nix
+    # ++ [ "gccarch-alderlake" ]; # TODO raptorlake needs to be added to architectures.nix for this to work (?)
   };
 
   # Arch Linux compilation flags setup
@@ -79,6 +60,6 @@
     dedicatedServer.openFirewall = true;
 
     # sadly, this still compiles some i686 dependencies...
-    package = (pkgs.clean.steam.override { withGameSpecificLibraries = false; });
+    package = (pkgs.steam.override { withGameSpecificLibraries = false; });
   };
 }

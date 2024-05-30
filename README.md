@@ -50,10 +50,23 @@ $ tree -a -I '\.git|\.vscode|\.direnv' . # slightly modified for better context/
   - Configuration for laptop (`lnix`) & desktop (`dnix`)
   - [`nix-hardware`](https://github.com/NixOS/nixos-hardware) setup for each
   - [nix-darwin](https://github.com/lnl7/nix-darwin) setup for work laptop (`wnix`), which uses a subset of the home-managed part
-- Target platform build optimization to Alderlake CPU architecture (on desktop only)
+- ~~Target platform build optimization to alderlake CPU architecture (on desktop only)~~
+
+  > After upgrading this flake to the NixOS 24.05 release on the `dnix` system, I noticed that many packages failed to build due to the `pkgs.fastStdenv` I was using to speed up my system closure's build time - or at least that's what I'm making responsible for it.
+  >
+  > The package build errors were caused by gcc errors like `-Wincompatible-pointer-types` or `-Wimplicit-function-declaration`.
+  > When around 300 of the actual systems packages finally had been built, I had to manually use the "clean", non-optimized package overlays for around 7 dependency packages by adding them to my `overlays/build-fixes.nix` file.
+  > This not only was really annoying when running builds asynchronous like I typically do, but also it reminded me of some concerns I had about the CPU-architecture specific optimization in general.
+  > The CPU-tailored builds not only take way to long - even tho my build machine features a raptorlake i7 -, but they also waste a lot of energy, emit much heat and also kind of revert the beauty of the NixOS system.
+  > I mean in theory, it should be possible to boot my flake from any other machine, or propagate changes from the config into the running system in no time.
+  > For instance, I saw myself waiting around one hour for the steam NixOS module to compile, so that I could simply join some friends on a game they were playing.
+  > I think this should've gone faster on any other OS, perhaps even on a Gentoo system and is in the end just my own perfectinism and maybe a few percent of performance improvements for some packages making my life harder...
+  >
+  > Hence due to all these concerns/ issues and the problems with 24.05 & (perhaps) `fastStdenv`, I decided to just let the architecture-optimization be and based my `dnix` system closure back to the default, stable & non-optimized `stdenv` enabling the caching for most packages :^)
+
   - Overlays & systemd services to make this a bit more convenient
 - Highly customized GNOME Wayland DE with some KDE tools
-- `home-manager` is used for managing everything apart from system stuff
+- `home-manager` for managing everything apart from system stuff
 - Home-managed secrets with [sops-nix](https://github.com/Mic92/sops-nix) ([age](https://github.com/FiloSottile/age) encrypted)
 - [nixvim](https://github.com/nix-community/nixvim) setup with standalone approach to enable `main` branch despite using "stable" `home-manager`
   - To checkout my nixvim setup, don't hesitate to use `nix run .#nixvim <some-file>`

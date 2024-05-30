@@ -15,13 +15,13 @@
 
   programs.vscode = {
     enable = true;
-    # Unstable holds only version compatible to all plugins as it seems...
+    # Only unstable version is compatible with all plugins as it seems...
     package = pkgs.unstable.vscodium;
 
     mutableExtensionsDir = false; # Setting this to true disabled the java extensions to properly install
 
     # Plugins
-    extensions = with pkgs.vscode-extensions; let
+    extensions = with pkgs.unstable.vscode-extensions; let
       cppTools = with pkgs; lib.optionals (!isDarwinSystem) [
         llvm-vs-code-extensions.vscode-clangd
         vadimcn.vscode-lldb

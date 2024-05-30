@@ -59,7 +59,7 @@
       defaultNetwork.settings = {
         dns_enabled = true;
       };
-     
+
     };
   };
   environment.variables = {

@@ -52,7 +52,7 @@
     enableSshSupport = true;
     enableZshIntegration = true;
     extraConfig = "";
-    pinentryFlavor = "gnome3";
+    pinentryPackage = pkgs.pinentry-gnome3;
     #sshKeys = {}; # Expose GPG-keys as SSH-keys
   };
   programs.gpg.enable = true;
@@ -69,7 +69,7 @@
     wiggle
 
     # LLM (ChatGPT)
-    shell_gpt
+    shell-gpt
 
     ## Build Tools
     gradle
@@ -78,7 +78,7 @@
 
     ## Testing
     newman
-    unstable.postman
+    postman
     httpie
     jq
 

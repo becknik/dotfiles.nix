@@ -19,7 +19,7 @@ let
     (name: value: (lib.strings.hasPrefix "llvm" name)
       && (name != "llvmPackages" || name != "llvmPackages_16" || name != "llvmPackages_17"))
     prev;
-    /* && value != prev.llvmPackages */ # TODO: Inifinte recursion
+  /* && value != prev.llvmPackages */ # TODO: Inifinte recursion
 
   packagesClang = lib.attrsets.filterAttrs
     (name: value: lib.strings.hasPrefix "clang" name && (name != "clang" || name != "clang_16" || name != "clang_17"))

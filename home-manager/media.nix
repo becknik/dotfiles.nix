@@ -150,6 +150,6 @@
     ocrmypdf
     qpdf
     pdfpc
-    unstable.paper-clip # not available in stable atm
+    paper-clip
   ];
 }

@@ -76,7 +76,7 @@
       (makeWhenNotDarwin vial)
 
       ## Nix(OS)
-      unstable.nh
+      nh
       nix-output-monitor
 
       nvd

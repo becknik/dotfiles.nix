@@ -2,7 +2,7 @@
   description = "flake for nixos, nix-darwin & more I've running on my desktop & laptops";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -12,7 +12,7 @@
     };
     devenv = {
       url = "github:cachix/devenv";
-      inputs.nixpkgs.follows = "nixpkgs-unstable"; # requires > rustc-1.74.0
+      inputs.nixpkgs.follows = "nixpkgs"; # requires > rustc-1.74.0
     };
 
     darwin = {
@@ -25,7 +25,7 @@
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
+      url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
@@ -57,7 +57,7 @@
       systems = [ "x86_64-darwin" "x86_64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
 
-      stateVersion = "23.11";
+      stateVersion = "24.05";
 
       # Necessary e.g. for NixOS `config.system.autoUpgrade.flake` with `--commit-lockfile`
       mkFlakeDir = userName: config: (if builtins.hasAttr "users" config then
@@ -66,8 +66,6 @@
 
       # Default nixpkgs config
       config = {
-        permittedInsecurePackages = [ "electron-25.9.0" ];
-
         allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [
           "brgenml1lpr"
           "brscan5"
@@ -143,7 +141,7 @@
     {
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
 
-      # using standalone variant of nixvim to enable "bleeding edge" features & plugins, hence using systems with stateVersion=23.11
+      # using standalone variant of nixvim to enable "bleeding edge" features & plugins, hence nixos stable stateVersion
       packages = forAllSystems (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
@@ -178,11 +176,13 @@
               laptopMode = false;
             })
 
-            # nixpkgs native build & overlay setup
+            inputs.catppuccin.nixosModules.catppuccin
+
+            # DEPRECATED: nixpkgs native build & overlay setup
             # https://nixos.wiki/wiki/Build_flags#Building_the_whole_system_on_NixOS
             ({ pkgs, ... }@module-inputs:
               let
-                arch = "alderlake"; # TODO GCC13 -> "raptorlake"
+                arch = "alderlake"; # TODO "raptorlake"
                 tune = arch;
                 platform = {
                   inherit system;
@@ -223,25 +223,18 @@
                         build-fixes
                         build-skips
                       ];
-                      # TODO error: attribute 'llvmPackages' missing?
                     });
                 };
               in
               {
-                nixpkgs = platformConfig // {
+                nixpkgs = /* platformConfig // */ {
                   inherit system;
-                  config = config';
+                  config = config/*'*/;
 
-                  overlays = (defaultOverlays { nixpkgs-unstable' = nixpkgs-unstable-with-platform; })
-                    ++ (with self.overlays; [
-                    modifications-perf
-                    nixpkgs-clean
-                    build-fixes
-                    build-skips
-                  ]);
+                  overlays = (defaultOverlays { /* nixpkgs-unstable' = nixpkgs-unstable-with-platform; */ });
+                  # ++ (with self.overlays; [ modifications-perf nixpkgs-clean build-fixes build-skips ]);
                 };
               })
-            inputs.catppuccin.nixosModules.catppuccin
           ];
         };
 
@@ -280,7 +273,7 @@
           ];
         };
 
-      darwinConfigurations."wnix" =
+      darwinConfigurations.wnix =
         let
           system = "x86_64-darwin";
           userName = "jbecker";
@@ -294,7 +287,7 @@
               nixpkgs = {
                 inherit system config;
                 overlays = with self.overlays; [
-                  (final: prev: {
+                  (final: _prev: {
                     unstable = import inputs.nixpkgs-unstable {
                       inherit config;
                       system = final.system;
@@ -319,6 +312,7 @@
             })
           ];
         };
+
 
       devShell = forAllSystems
         (system:

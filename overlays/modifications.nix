@@ -45,22 +45,6 @@ final: prev: {
 
   # Fixes
 
-  # NixOS/nixpkgs#272912 NixOS/nixpkgs#273611
-  obsidian = with prev;
-    (lib.trivial.throwIf (lib.strings.versionOlder "1.5.7" obsidian.version) "Obsidian no longer requires EOL Electron"
-      (obsidian.override {
-        electron = electron_25.overrideAttrs (oldAttrs: {
-          preFixup = oldAttrs.preFixup or "" + "patchelf --add-needed ${prev.pkgs.libglvnd}/lib/libEGL.so.1 $out/bin/electron";
-        });
-      })
-    );
-
-  logseq = with prev; logseq.override {
-    electron_27 = electron_27.overrideAttrs (oldAttrs: {
-      preFixup = oldAttrs.preFixup or "" + "patchelf --add-needed ${pkgs.libglvnd}/lib/libEGL.so.1 $out/bin/electron";
-    });
-  };
-
   auto-cpufreq = with prev; auto-cpufreq.overrideAttrs (oldAttrs: {
     # https://github.com/AdnanHodzic/auto-cpufreq/issues/661
     patches = oldAttrs.patches ++ [ ./modifications/auto-cpufreq_pipe-log-spam.patch ];
@@ -85,7 +69,7 @@ final: prev: {
         NUMA = mkDefault no;
         WINESYNC = no;
 
-        MALDERLAKE = yes; # TODO GCC13 -> MRAPTORLAKE GENERIC_CPU3
+        MRAPTORLAKE = yes;
       };
       # Disable errors in console compilation log
       ignoreConfigErrors = true;

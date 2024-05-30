@@ -33,11 +33,9 @@ let
   kdeCompat = with pkgs; [
     gedit
     colord-kde
-  ]
-  ++ (with unstable; [
     qadwaitadecorations
     qadwaitadecorations-qt6
-  ]);
+  ];
 
   ## Replacements for GNOME Tools
   kdeAdditionalTools = (with pkgs.libsForQt5; [
