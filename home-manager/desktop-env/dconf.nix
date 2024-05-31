@@ -441,7 +441,7 @@ with lib.gvariant; {
       notification-banner-position = 2;
       osd = true;
       osd-position = 0;
-      panel = false;
+      panel = !laptopMode;
       panel-arrow = false;
       panel-button-padding-size = 0;
       panel-corner-size = 1;

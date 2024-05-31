@@ -6,10 +6,6 @@
       enable = true;
 
       settings = {
-        general = {
-          live_config_reload = false;
-          ipc_socket = true; # default
-        };
         window = {
           dimensions = { columns = 132; lines = 43; };
           decorations = "Transparent"; # default; "Transparent" "Buttonless" "None" "Full"
