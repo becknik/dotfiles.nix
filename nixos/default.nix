@@ -256,40 +256,46 @@
 
   # Nix
 
-  # This will add each flake input as a registry
-  # To make nix3 commands consistent with your flake
-  nix.registry = (lib.mapAttrs (_: flake: { inherit flake; })) ((lib.filterAttrs (_: lib.isType "flake")) inputs);
+  nix =
+    let
+      flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+    in
+    {
+      settings = {
+        experimental-features = [
+          "nix-command" # Enables some useful tools like the `nix edit '<nixpkgs>' <some-package-name>`
+          "flakes"
+        ];
+        auto-optimise-store = true; # Automatic deduplication hard-linking in store
+        # Opinionated: disable global registry
+        flake-registry = "";
+        # Workaround for https://github.com/NixOS/nix/issues/9574
+        nix-path = config.nix.nixPath;
+      };
+      optimise = {
+        automatic = true;
+        dates = [ "20:00" ]; # Don't want it to run at 3:45
+      };
+      gc = {
+        automatic = true;
+        dates = "Fri";
+        #options = "--delete-older-than 28d";
+      };
 
-  nix = {
-    settings = {
-      experimental-features = [
-        "nix-command" # Enables some useful tools like the `nix edit '<nixpkgs>' <some-package-name>`
-        "flakes"
-      ];
-      auto-optimise-store = true; # Automatic deduplication hardlinking in store
+      # Opinionated: make flake registry and nix path match flake inputs
+      registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
+      nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+
+      channel.enable = false;
+      daemonCPUSchedPolicy = "idle"; # "other", "batch"
+
+      # https://discourse.nixos.org/t/why-does-nix-direnv-recommend-setting-nix-settings-keep-outputs/31081
+      extraOptions = ''
+        keep-outputs = true
+      '';
     };
-    optimise = {
-      automatic = true;
-      dates = [ "20:00" ]; # Don't want it to run at 3:45
-    };
-    gc = {
-      automatic = true;
-      dates = "Fri";
-      #options = "--delete-older-than 28d";
-    };
 
-    channel.enable = false; # default true; this is useless due to `nix.extraOptions` fixing `nix-shell` & direnv
-    daemonCPUSchedPolicy = "idle"; # "other", "batch"
-
-    # https://discourse.nixos.org/t/why-does-nix-direnv-recommend-setting-nix-settings-keep-outputs/31081
-    extraOptions = ''
-      keep-outputs = true
-      # fix `nix-shell -p` (& direnv's `use nix` directive ?)
-      extra-nix-path = nixpkgs=flake:nixpkgs
-    '';
-  };
-
-  # Avoids faling nix rebuilds due to too many open files
+  # Avoids failing nix rebuilds due to too many open files
   environment.shellInit = "ulimit -n ${builtins.toString (pkgs.lib.custom.pow 2 16)}";
 
   environment.systemPackages = with pkgs; [
