@@ -19,7 +19,6 @@
 
   plugins.telescope = {
     enable = true;
-    keymapsSilent = true;
 
     # https://youtu.be/u_OORAL_xSM?feature=shared&t=442
     extensions = {

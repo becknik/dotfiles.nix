@@ -4,9 +4,7 @@
   plugins.refactoring = {
     enable = true;
     # TODO doesn't work
-    extraOptions = {
-      show_success_message = true;
-    };
+    settings.show_success_message = true;
   };
 
   keymaps = withDefaultKeymapOptions [
