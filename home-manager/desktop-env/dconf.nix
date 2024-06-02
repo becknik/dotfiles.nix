@@ -3,29 +3,6 @@
 let
   default-sidebar-width = 156;
 
-  org-gnome-terminal-legacy-default-profile = {
-    allow-bold = true;
-    audible-bell = false;
-    background-transparency-percent = 15;
-    backspace-binding = "auto";
-    bold-color-same-as-fg = true;
-    bold-is-bright = false;
-    cursor-blink-mode = "system";
-    cursor-colors-set = true;
-    cursor-shape = "block";
-    default-size-columns = 132;
-    default-size-rows = 42;
-    delete-binding = "auto";
-    font = "FiraCode Nerd Font 10";
-    title-mode = "ignore";
-    use-system-font = false;
-    use-theme-background = false;
-    use-theme-colors = false;
-    use-theme-transparency = false;
-    use-transparent-background = true;
-    scrollback-lines = 50000; # need this due to nom
-  };
-
   file-cooser-settings = {
     expand-folders = true;
     location-mode = "path-bar";
@@ -465,7 +442,7 @@ with lib.gvariant; {
       workspace-popup = true;
       workspace-switcher-should-show = false;
       workspace-switcher-size = 10;
-      workspace-wrap-around = false;
+      workspace-wrap-around = true;
       workspaces-in-app-grid = false;
     };
 
@@ -486,7 +463,6 @@ with lib.gvariant; {
     #volume-mixer-position='top'
 
     "org/gnome/shell/extensions/rounded-window-corners" = {
-      black-list = [ "gnome-terminal-server" ];
       border-color = "(0.5 0.5 0.5 1.0)";
       border-width = 0;
       enable-preferences-entry = true;
@@ -536,76 +512,6 @@ with lib.gvariant; {
     };
 
     "org/gnome/system/location".enabled = true;
-
-    "org/gnome/terminal/legacy" = {
-      tab-position = "bottom";
-      theme-variant = "dark";
-    };
-
-    "org/gnome/terminal/legacy/profiles:" = {
-      default = "dd180816-99e9-4947-bd75-2af5159e839b";
-      list = [ "4a3fbad7-a54d-4910-b51a-808fea7e70e2" "dd180816-99e9-4947-bd75-2af5159e839b" ];
-    };
-
-    "org/gnome/terminal/legacy/profiles:/:4a3fbad7-a54d-4910-b51a-808fea7e70e2" = (
-      # Gogh's 'Desert' theme
-      org-gnome-terminal-legacy-default-profile // {
-        background-color = "#333333333333";
-        bold-color = "#FFFFFFFFFFFF";
-        cursor-background-color = "#FFFFFFFFFFFF";
-        cursor-foreground-color = "#333333333333";
-        foreground-color = "#FFFFFFFFFFFF";
-        palette = [
-          "#4D4D4D4D4D4D"
-          "#FFFF2B2B2B2B"
-          "#9898FBFB9898"
-          "#F0F0E6E68C8C"
-          "#CDCD85853F3F"
-          "#FFFFDEDEADAD"
-          "#FFFFA0A0A0A0"
-          "#F5F5DEDEB3B3"
-          "#555555555555"
-          "#FFFF55555555"
-          "#5555FFFF5555"
-          "#FFFFFFFF5555"
-          "#8787CECEFFFF"
-          "#FFFF5555FFFF"
-          "#FFFFD7D70000"
-          "#FFFFFFFFFFFF"
-        ];
-        visible-name = "Desert";
-      }
-    );
-
-    "org/gnome/terminal/legacy/profiles:/:dd180816-99e9-4947-bd75-2af5159e839b" = (
-      # Gogh's 'Panda' theme
-      org-gnome-terminal-legacy-default-profile // {
-        background-color = "#1D1D1E1E2020";
-        bold-color = "#F0F0F0F0F0F0";
-        cursor-background-color = "#F0F0F0F0F0F0";
-        cursor-foreground-color = "#1D1D1E1E2020";
-        foreground-color = "#F0F0F0F0F0F0";
-        palette = [
-          "#1F1F1F1F2020"
-          "#FBFB05055A5A"
-          "#2626FFFFD4D4"
-          "#FDFDAAAA5A5A"
-          "#5C5C9F9FFFFF"
-          "#FCFC5959A6A6"
-          "#2626FFFFD4D4"
-          "#F0F0F0F0F0F0"
-          "#5C5C63637070"
-          "#FBFB05055A5A"
-          "#2626FFFFD4D4"
-          "#FEFEBEBE7E7E"
-          "#5555ADADFFFF"
-          "#FDFD9595D0D0"
-          "#2626FFFFD4D4"
-          "#F0F0F0F0F0F0"
-        ];
-        visible-name = "Panda";
-      }
-    );
 
     "org/gtk/settings/file-chooser" = file-cooser-settings;
     "org/gtk/gtk4/settings/file-chooser" = file-cooser-settings;

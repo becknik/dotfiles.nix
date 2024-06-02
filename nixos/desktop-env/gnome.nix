@@ -10,6 +10,7 @@ let
     pomodoro
     gnome-power-manager
   ] ++ (with pkgs; [
+    gedit
     gnome-decoder
     gnome-extension-manager
     networkmanagerapplet # redundant (see desktop-env), but necessary for home-manager to link the .desktop file
@@ -17,21 +18,20 @@ let
 
   gnomeExtensions = with pkgs.gnomeExtensions; [
     alphabetical-app-grid
-    appindicator
+    appindicator # causing crashes
     blur-my-shell
     dash-to-dock
     espresso
     gsconnect
     gtile
     just-perfection
-    kimpanel # GTK-ish fcitx5 theming
+    kimpanel # GTK-ish fcitx5 theming; causing crashes
     logo-menu
     quick-settings-tweaker
     vitals
   ];
 
   kdeCompat = with pkgs; [
-    gedit
     colord-kde
     qadwaitadecorations
     qadwaitadecorations-qt6
@@ -46,8 +46,6 @@ let
     #org.kde.dolphin.desktop[294371]: kf.service.services: KApplicationTrader: mimeType "x-scheme-handler/dav" not found
     #kf.kio.core: couldn't create worker: "Unknown protocol 'dav'
     gwenview
-    kate # TODO remove konsole
-    ktouch
     okular
   ]);
 in
@@ -93,7 +91,7 @@ in
   };
 
   # Additional GNOME Programs
-  programs.gnome-terminal.enable = lib.mkDefault true; # TODO add fedora transparency patches
+  programs.gnome-terminal.enable = false;
   #programs.gpaste.enable = true;
   environment.systemPackages = gnomeAdditionalTools
     ++ gnomeExtensions
