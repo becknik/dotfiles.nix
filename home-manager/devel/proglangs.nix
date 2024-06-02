@@ -1,4 +1,4 @@
-{ isDarwinSystem, lib, config, pkgs, ... }:
+{ inputs, isDarwinSystem, lib, config, pkgs, ... }:
 
 {
   home.packages =
@@ -7,6 +7,7 @@
       texlive = with pkgs; lib.optional (!isDarwinSystem) texliveFull;
     in
     with pkgs; texlive ++ [
+      inputs.amber.packages.${pkgs.system}.default
 
       # JS / TypeScript
       typescript
