@@ -17,7 +17,7 @@
 
     darwin = {
       url = "github:lnl7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     mac-app-util = {
       url = "github:hraban/mac-app-util";
