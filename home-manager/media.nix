@@ -140,6 +140,7 @@
     trash-cli
     yt-dlp
     media-downloader # for yt-dlp
+    cider
 
     ## Images
     krita
