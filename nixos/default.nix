@@ -2,9 +2,7 @@
 
 {
   imports = [
-    ./packages.nix # Installation of a few system packages & browsers
-    ./gnome.nix # Addition of some kde tools, removal of bloat, etc.
-    ./desktop-env.nix # Setup of services for desktop-experience like sound, input, printing, ...
+    ./desktop-env # Setup of services for desktop-experience like sound, input, printing, ...
 
     ./systemd.nix # Systemd services (related to NixOS auto upgrade)
     ./virtualisation.nix

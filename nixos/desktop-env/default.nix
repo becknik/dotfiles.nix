@@ -1,6 +1,11 @@
 { pkgs, ... }:
 
 {
+  imports = [
+    ./packages.nix # Installation of a few system packages & browsers
+    ./gnome.nix # Addition of some kde tools, removal of bloat, etc.
+  ];
+
   xdg.portal = {
     #enable = true; # redundant due to gnome.core-os-services
     extraPortals = with pkgs; [ xdg-desktop-portal-kde ]; # No specific reason to enable this
@@ -29,8 +34,17 @@
     ## PipeWire (1/2)
     pipewire = {
       enable = true;
+      audio.enable = true;
       alsa.enable = true;
       pulse.enable = true;
+
+      # Source: https://wiki.archlinux.org/title/PipeWire/Examples#Echo_cancellation
+      # this sadly is unusable in my setup condition...
+      extraConfig = {
+        client."10-resample-quality"."stream.properties"."resample.quality" = 14;
+        pipewire."10-resample-quality"."stream.properties"."resample.quality" = 14;
+        pipewire-pulse."10-resample-quality"."stream.properties"."resample.quality" = 14;
+      };
     };
 
     dictd.enable = true; # really should remember this one
