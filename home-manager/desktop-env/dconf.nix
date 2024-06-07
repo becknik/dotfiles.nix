@@ -316,9 +316,12 @@ with lib.gvariant; {
     };
     "org/gnome/shell/extensions/blur-my-shell/panel" = {
       blur = true;
-      static-blur = true;
+      static-blur = false;
       unblur-dynamically = false;
       unblur-in-overview = false;
+      override-background = true;
+      static-blue = false;
+      style-panel = 2; # = dark
     };
     "org/gnome/shell/extensions/blur-my-shell/screenshot".blur = true;
     "org/gnome/shell/extensions/blur-my-shell/window-list".blur = false;
