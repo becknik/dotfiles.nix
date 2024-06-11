@@ -67,6 +67,7 @@
       asciinema
       tailspin # log file highlighter
       fastgron # make JSON greppable!
+      tokei # loc counter
 
       ### Hardware
       cpufetch
