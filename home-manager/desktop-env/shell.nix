@@ -55,12 +55,7 @@
         show_symlink = true;
       };
     };
-    zellij = {
-      enable = true;
-      #settings = {};
-    };
 
-    bash.enable = true;
     zsh = {
       enable = true;
       #enableVteIntegration = true; # implied by gnome
@@ -118,14 +113,12 @@
         plugins = [
           ## Shell
           "alias-finder"
-          "common-aliases"
           "copyfile"
           "copypath"
-          "direnv"
           "dirhistory" # move with alt+up/down/etc
           "singlechar"
           # "wd" # zoxide is superior to this
-          "zsh-interactive-cd" # shadowed by fzf built-in zsh integration
+          # "zsh-interactive-cd" # shadowed by fzf built-in zsh integration
           "extract"
 
           ## Development
@@ -138,13 +131,14 @@
           "mvn"
           "gradle"
 
+          "httpie"
           "encode64" # e64 "..."
           "jsontools"
           "urltools"
           "vscode"
         ];
         #"rust" "pyenv" "python" "aws" "nmap" "npm" "ruby" "scala"
-        #"httpie" "rsync" "fancy-ctrl-z" "ripgrep" "fzf"
+        # "rsync" "fancy-ctrl-z" "ripgrep" "fzf" "zsh-interactive-cd"
         # "history-substring-search" already handled by home-manager
         # "fzf" does what is already implicitly handled by `Programs.fzf.enable = true;`
 
@@ -211,6 +205,12 @@
           fu = "sudo";
           sduo = "sudo";
           nivm = "nvim";
+
+          ## Some copy-pastes from ohmyzsh common-aliases which aren't shadowed by eza
+          rm = "rm -i";
+          mv = "mv -i";
+          zshrc = "\${EDITOR} ~/.zshrc";
+          zshenv = "\${EDITOR} ~/.zshenv";
 
           # Git
           gai = "git add --interactive";
