@@ -71,23 +71,14 @@
     # LLM (ChatGPT)
     shell-gpt
 
-    ## Build Tools
-    gradle
-    maven
-    gnumake
-
     ## Testing
-    newman
-    postman
     httpie
-    jq
 
     ## OCI Containers
     dive # https://github.com/wagoodman/dive
     trivy
 
     ## CI / CD
-    #awscli2
     kubectl
     act
   ]

@@ -8,9 +8,6 @@ let
     #element-desktop # works, but launches the application without the `--hidden` flag...
     #telegram-desktop
     signal-desktop
-    #whatsapp-for-linux
-    discord
-    #teams-for-linux
     #planify
   ];
 in
@@ -48,21 +45,6 @@ in
         Name=Element
         Comment=Forcing element-desktop to start properly
         Exec=element-desktop --hidden
-        StartupNotify=false
-        Terminal=false
-      '';
-    };
-
-    "whatsapp-for-linux-autostart" = {
-      enable = true;
-      target = ".config/autostart/whatsapp-for-linux.desktop";
-      text = ''
-        [Desktop Entry]
-        Type=Application
-        Version=1.0
-        Name=Whatsapp
-        Comment=Fixing the autostart toggle of whatsapp-for-linux doing nothing at all
-        Exec=whatsapp-for-linux
         StartupNotify=false
         Terminal=false
       '';

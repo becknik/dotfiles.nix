@@ -1,6 +1,7 @@
-{ inputs, isDarwinSystem, lib, config, pkgs, ... }:
+{ isDarwinSystem, lib, config, pkgs, ... }:
 
 {
+  # some pl packages are handy for quickly trying something out etc.
   home.packages =
     let
       clangPackages = with pkgs; lib.optionals (!isDarwinSystem) [ clang_17 clang-tools_17 ];
@@ -8,50 +9,21 @@
     in
     with pkgs; texlive ++ [
       # JS / TypeScript
-      typescript
       nodejs_latest
-      deno
 
       # Nix
-      # https://github.com/nix-community/nixd
-      nixd # TODO Figure out how to set up nixd - Seems like this isn't possible at all so far... https://github.com/nix-community/vscode-nix-ide/issues/363
-      nil
-
-      ## Linting
-      nixpkgs-fmt
+      unstable.nixd
+      unstable.nixpkgs-fmt
       nixpkgs-lint
 
       # Python
-      python3
+      unstable.python3
+
       unstable.amber-lang
+    ];
 
-      # Haskell
-      unstable.ghc
-      unstable.haskell-language-server
-      unstable.cabal-install
-
-
-      # Java / JVM
-      kotlin
-      dotty # = scala3
-
-      ## Linting
-      google-java-format
-
-      # Rust
-      rustup #cargo rustc
-      lldb
-
-      # C++
-      cmake
-    ] ++ clangPackages;
-
-  # JDK Setup
-  programs.java = {
-    enable = true;
-    # Source: https://whichjdk.com/
-    package = pkgs.temurin-bin-21;
-  };
+  # JDK Setup (https://whichjdk.com/)
+  programs.java = { enable = true; package = pkgs.unstable.temurin-bin-21; };
 
   home.sessionPath = [ "${config.home.homeDirectory}/.jdks" ];
   # Kudos to @TLATER https://discourse.nixos.org/t/nix-language-question-linking-a-list-of-packages-to-home-files/38520
@@ -60,5 +32,5 @@
       name = ".jdks/jdk-${jdk.version}";
       value = { source = jdk; };
     })
-    [ pkgs.temurin-bin-17 pkgs.temurin-bin-21 ]));
+    (with pkgs.unstable; [ temurin-bin-17 temurin-bin-21 ])));
 }

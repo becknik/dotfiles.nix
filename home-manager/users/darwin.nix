@@ -51,8 +51,6 @@
   programs.gpg.enable = true;
 
   home.packages = with pkgs; [
-    iterm2
-
     # media.nix leftovers
     ## Natural language
     hunspell
@@ -64,8 +62,5 @@
     ## Privacy
     keepassxc
     gpa
-
-    # Build Tools
-    kubernetes-helm
   ];
 }

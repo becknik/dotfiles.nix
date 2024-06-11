@@ -24,19 +24,12 @@
     };
     broot = {
       enable = true;
-      settings = {
-        modal = true; # vim mode
-      };
+      settings.modal = true; # vim mode
     };
-    ripgrep = {
-      enable = true;
-    };
+    ripgrep.enable = true;
 
     ## Nix specific
-    nix-index = {
-      enable = true;
-      # TODO the nix-index-database conflict for package derivations that differ from cache.nixos.org
-    };
+    nix-index.enable = true;
   };
 
   # Manual Installations
@@ -79,16 +72,11 @@
       ## Nix(OS)
       nh
       nix-output-monitor
-
-      nvd
-      nix-diff
       nix-tree
 
       nix-update
       nixpkgs-review
-
       comma
-      # devenv.packages."${pkgs.system}".devenv # commented out due to https://github.com/cachix/devenv/issues/1200
 
       ### Secrets Management (1)
       sops
@@ -97,42 +85,21 @@
       (makeWhenNotDarwin yubikey-manager-qt)
       (makeWhenNotDarwin yubikey-personalization-gui)
 
-      ## Penetration Testing
-      nmap
-
       ## Benchmarking
       speedtest-cli
-      stress-ng
-      (makeWhenNotDarwin valgrind)
-      (makeWhenNotDarwin sysstat)
 
       ## Uni & TeX
       (makeWhenNotDarwin pandoc)
       (makeWhenNotDarwin gnuplot)
       (makeWhenNotDarwin qtikz)
       marp-cli
-      plantuml
 
       ## Trash
       neofetch
-      cmatrix
-      fortune
-      sl
+      # cmatrix
+      # fortune
       cbonsai
-      (makeWhenNotDarwin oneko)
-      uwuify
-      #uwufetch # TODO uwufetch seems to be broken
+      # (makeWhenNotDarwin oneko)
+      # uwuify
     ];
-
-  # Missing packages in nixpkgs:
-  # - qtqr (replaced)
-  # - gogh-git (workaround with dconf)
-  # - zsh-lovers
-  # - laptop-mode-tools
-  # - modprobed-db
-  # - plymouth-themes
-  # - deezer: TODO https://github.com/Shawn8901/nix-configuration/blob/main/packages/deezer/default.nix
-
-  # Packages I found unnecessary with nix shell:
-  # [ mypy perf postgresql ]
 }

@@ -118,7 +118,6 @@
     ## Privacy
     keepassxc
     tor-browser
-    # floorp
     gpa
     veracrypt # TODO derivation with set WXSUPPRESS_SIZER_FLAGS_CHECK env var
 
@@ -126,10 +125,7 @@
     element-desktop
     telegram-desktop
     signal-desktop
-    whatsapp-for-linux
-    discord-modified
     threema-desktop
-    #teams-for-linux
 
     ## Media
     kooha
@@ -151,7 +147,6 @@
     pdfslicer
     ocrmypdf
     qpdf
-    pdfpc
-    paper-clip
+    paper-clip # for editing PDF metadata
   ];
 }

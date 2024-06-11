@@ -85,7 +85,6 @@
           "steam-original"
           "steam-run"
 
-          "postman"
           "jetbrains-toolbox"
           "idea-ultimate"
           "clion"

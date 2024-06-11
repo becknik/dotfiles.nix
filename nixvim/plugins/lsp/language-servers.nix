@@ -15,8 +15,8 @@
     dockerls.enable = true;
     docker-compose-language-service.enable = true;
 
-    # nixd.enable = true;
-    nil_ls.enable = true;
+    nixd.enable = true;
+    # nil_ls.enable = true;
     sqls.enable = true;
     texlab.enable = true;
 
