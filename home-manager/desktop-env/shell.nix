@@ -8,7 +8,7 @@
       settings = {
         window = {
           dimensions = { columns = 132; lines = 43; };
-          decorations = "Transparent"; # default; "Transparent" "Buttonless" "None" "Full"
+          decorations = "Full"; # "Transparent" "Buttonless" "None" "Full"
           decorations_theme_variant = "Dark"; # "Light" "None"
           opacity = 0.9;
           blur = true;

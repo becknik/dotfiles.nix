@@ -227,6 +227,10 @@
   };
 
 
+  # Documentation
+  documentation.man.generateCaches = true; # for `apropos` & `man -k` utilities
+
+
   # User Setup
   users.mutableUsers = false;
   users.users.${userName} = {
