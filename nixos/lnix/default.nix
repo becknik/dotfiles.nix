@@ -59,4 +59,24 @@
 
   ## Logind
   # TODO Logind config might be interesting for laptops https://man7.org/linux/man-pages/man5/logind.conf.5.html
+
+  services.keyd = {
+    enable = true;
+    keyboards."laptop-keyboard" = {
+      ids = [ "k:04F3:31B9" "0001:0001" ]; # 0001:0001 AT Translated Set 2 keyboard (/dev/input/event0)
+      # I'm guessing that the 0001:0001 id is necessary due to fcitx5?
+      settings = {
+        main = {
+          capslock = "overload(nav, esc)";
+          leftshift = "overload(shift, capslock)";
+        };
+        nav = {
+          h = "left";
+          j = "down";
+          k = "up";
+          l = "right";
+        };
+      };
+    };
+  };
 }
