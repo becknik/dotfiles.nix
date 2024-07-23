@@ -9,13 +9,13 @@
     folding = true;
     nixvimInjections = true;
 
-    incrementalSelection = {
+    settings.incremental_selection = {
       enable = true;
       keymaps = {
-        initSelection = "gni"; # g(s)elect node increase
-        nodeIncremental = "gni";
-        nodeDecremental = "gnd";
-        scopeIncremental = "gsi";
+        init_selection = "gni"; # g(s)elect node increase
+        node_incremental = "gni";
+        node_decremental = "gnd";
+        scope_incremental = "gsi";
       };
     };
   };

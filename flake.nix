@@ -50,8 +50,6 @@
       url = "github:ohmyzsh/ohmyzsh";
       flake = false;
     };
-    # I'm really interested in this project 😄
-    amber.url = "github:Ph0enixKM/Amber";
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, nixos-hardware, ... }@inputs:

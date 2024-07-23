@@ -128,6 +128,7 @@
     signal-desktop
     whatsapp-for-linux
     discord-modified
+    threema-desktop
     #teams-for-linux
 
     ## Media
