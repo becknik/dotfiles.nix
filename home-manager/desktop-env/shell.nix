@@ -68,9 +68,12 @@
 
       envExtra = builtins.readFile ./files/.zshenv.extraEnv.zsh;
 
+      # https://zsh.sourceforge.io/Doc/Release/Options.html
       history = {
         extended = true; # Write timestamps ":start:elapsed;command"
         ignoreAllDups = true; # Delete old recorded entry if new entry is a duplicate
+        size = 12000; # must be larger for `ignoreAllDups` to work
+        save = 10000;
         ignoreDups = true; # Don't record an entry that was just recorded again
         # "gcsm *" "gcmsg *" "ls *" "la *"
         ignorePatterns = [
@@ -98,7 +101,7 @@
         let
           # at least syntax-highlighting must be placed after compinit, I think
           pluginSource = with pkgs; ''
-            source ${zsh-fast-syntax-highlighting}/share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh
+            # source ${zsh-fast-syntax-highlighting}/share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh
             source ${zsh-you-should-use}/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
             source ${fzf-git-sh-patched}/share/fzf-git-sh/fzf-git.sh
             source ${zsh-forgit-patched}/share/zsh/zsh-forgit/forgit.plugin.zsh
@@ -121,21 +124,21 @@
           "direnv"
           "dirhistory" # move with alt+up/down/etc
           "singlechar"
-          "wd"
-          "zsh-interactive-cd"
+          # "wd" # zoxide is superior to this
+          "zsh-interactive-cd" # shadowed by fzf built-in zsh integration
           "extract"
 
           ## Development
           "git"
           "git-auto-fetch"
-          "gitignore"
+          "gitignore" # gi <nix haskell ...>
 
           "kubectl"
 
           "mvn"
           "gradle"
 
-          "encode64"
+          "encode64" # e64 "..."
           "jsontools"
           "urltools"
           "vscode"
@@ -163,7 +166,10 @@
       #historySubstringSearch.enable = true; # TODO is this shadowed by fzf?
       enableAutosuggestions = true;
       autocd = true; # Automatically cds into a path entered; = setopt autocd
-      syntaxHighlighting.enable = false;
+      syntaxHighlighting = {
+        enable = true;
+        highlighters = [ "main" "brackets" ];
+      };
 
       # Aliases
 

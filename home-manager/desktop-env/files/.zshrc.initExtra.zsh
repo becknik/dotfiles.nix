@@ -11,10 +11,15 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 # Enable Bash-like Feature I can't explain...
 unsetopt flow_control
 bindkey '^q' push-line
-# Auto-Complete with Ctrl + Space
-bindkey '^ ' autosuggest-accept
+# Auto-Complete a word with Ctrl + Space
+bindkey '^ ' forward-word
+# bindkey '^ ' autosuggest-accept
+# Partial history matches using arrow keys
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 # you-should-use
 YSU_MESSAGE_POSITION="after"
+YSU_HARDCORE=1 # refuses to execute the command aliases exist of
 
 # Pure Prompt
 autoload -U promptinit; promptinit
