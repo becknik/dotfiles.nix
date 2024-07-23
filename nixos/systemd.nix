@@ -40,6 +40,7 @@
           };
         onFailure = [ "nixos-upgrade-notify-send-failure.service" ];
         onSuccess = [ "nixos-upgrade-notify-send-success.service" ];
+        postStop = ''chown -R ${userName}:users ${(mkFlakeDir userName config)}'';
       };
 
       nixos-upgrade-notify-send-success = (nixosUpgradeNotifySend {
@@ -61,11 +62,12 @@
         };
       };
 
-      nixos-fetch-flake-changes = {
+      nixos-upgrade-fetch-flake = {
         description = "Runs `nixos-rebuild` when flake upstream is ahead of local";
         wantedBy = [ "multi-user.target" ];
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
+        postStop = ''chown -R ${userName}:users ${(mkFlakeDir userName config)}'';
 
         serviceConfig = {
           Type = "oneshot";
