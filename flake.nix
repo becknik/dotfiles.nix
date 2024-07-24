@@ -6,6 +6,10 @@
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    lix-module = {
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.90.0.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -166,6 +170,7 @@
 
           modules = with nixos-hardware.nixosModules; [ common-cpu-intel common-pc common-pc-ssd ] ++ [
             inputs.disko.nixosModules.disko
+            inputs.lix-module.nixosModules.default
 
             ./nixos
             ./nixos/dnix
@@ -259,6 +264,7 @@
               };
             })
             inputs.disko.nixosModules.disko
+            inputs.lix-module.nixosModules.default
             ./nixos
             ./nixos/lnix
             home-manager.nixosModules.home-manager
