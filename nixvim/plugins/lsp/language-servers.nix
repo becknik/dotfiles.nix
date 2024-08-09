@@ -22,10 +22,7 @@
 
     lua-ls.enable = true;
     bashls.enable = true;
-    pyright = {
-      enable = true;
-      package = pkgs.basedpyright;
-    };
+    pyright.enable = true; # sadly, pkgs.basedpyright; doesn't work properly
 
     eslint.enable = true;
     tsserver.enable = true;
