@@ -158,7 +158,7 @@
       # Plugins
 
       #historySubstringSearch.enable = true; # TODO is this shadowed by fzf?
-      enableAutosuggestions = true;
+      autosuggestion.enable = true;
       autocd = true; # Automatically cds into a path entered; = setopt autocd
       syntaxHighlighting = {
         enable = true;
