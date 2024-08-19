@@ -217,6 +217,7 @@
           grsst = "git restore --staged"; # = grst
           grhp = "git reset -p"; # useful for unstaging staged hunks
           gclb = "git clone --recurse-submodules --bare";
+          "gsw!" = "git switch --force";
 
           ## Frankensteins
           "gaucn!" = "gau && gcn!";
