@@ -146,7 +146,6 @@
 
     ### PDF
     pdfslicer
-    ocrmypdf
     qpdf
     paper-clip # for editing PDF metadata
   ];
