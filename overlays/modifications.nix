@@ -19,21 +19,20 @@ final: prev: {
     src = prev.fetchFromGitHub {
       owner = "junegunn";
       repo = "fzf-git.sh";
-      rev = "2b93e957684f7daca8b28cb74c9a7e7fc606e81e";
-      sha256 = "1mpm4v3393dr5720ik9x6wr87md1ch2sq1dd43bs26dh3v1p38fh";
+      rev = "6df84d71fe8b532b6e1d7c4a754ea6c7c032f553";
+      sha256 = "13kravicdhcq30n810cw3lv890q0hba44ic804zl8dmzjd73wvql";
     };
-    version = "unstable-2024-02-17";
-    patches = [ ./modifications/fzf-git-sh-feat-vim-keybindings.patch ];
+    version = "unstable-2024-07-05";
   });
 
   zsh-forgit-patched = prev.zsh-forgit.overrideAttrs (oldAttrs: {
     src = prev.fetchFromGitHub {
       owner = "wfxr";
       repo = "forgit";
-      rev = "2436fc4e11dd39dd0c795edb8304b8694a9ba96d";
-      sha256 = "015v72dqzjn3gbhyzq2qic9rmyc5g8q32r4d232m3f3pdhfr0w8f";
+      rev = "8b60a899f49839992cb11a34a0dc7e562a71a0d4";
+      sha256 = "0wlv3m79kskc4zz8iv5yv07gxraga34xm3qpxabpf11mxq92f27i";
     };
-    version = "unstable-2024-03-14";
+    version = "unstable-2024-08-15";
     postPatch = ''
       sed -i "/# determine installation path/,/fi/d" forgit.plugin.zsh
       substituteInPlace forgit.plugin.zsh \
