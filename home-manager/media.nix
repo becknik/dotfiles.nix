@@ -126,6 +126,7 @@
     telegram-desktop
     signal-desktop
     threema-desktop
+    teams-for-linux
 
     ## Media
     kooha
