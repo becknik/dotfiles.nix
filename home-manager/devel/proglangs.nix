@@ -9,7 +9,7 @@
     in
     with pkgs; texlive ++ [
       # JS / TypeScript
-      nodejs_latest
+      unstable.nodejs_latest
 
       # Nix
       unstable.nixd

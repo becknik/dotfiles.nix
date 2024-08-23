@@ -1,4 +1,4 @@
-{ withDefaultKeymapOptions, ... }:
+{ withDefaultKeymapOptions, pkgs, ... }:
 
 {
   imports = [ ./textobjects.nix ];
@@ -7,7 +7,9 @@
     enable = true;
     indent = true;
     folding = true;
+
     nixvimInjections = true;
+    nodejsPackage = pkgs.nodejs_latest;
 
     settings.incremental_selection = {
       enable = true;
