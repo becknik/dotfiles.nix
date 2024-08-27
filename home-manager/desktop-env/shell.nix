@@ -124,7 +124,8 @@
           ## Development
           "git"
           "git-auto-fetch"
-          "gitignore" # gi <nix haskell ...>
+          # "gitignore" # gi <nix haskell ...>
+          # also provided by zsh-forit plugin with fzf search
 
           "kubectl"
 

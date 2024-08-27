@@ -43,12 +43,11 @@ prompt_pure_preprompt_render() {
 # fzf-git.sh
 bindkey -r "^G" # unbinds `bindkey -r "^G"` to make place for fzf-git
 _fzf_git_fzf() {
-  fzf-tmux -p80%,60% -- \
-    --multi --cycle --reverse --height=80% --min-height=20 --border \
-    --border-label-pos=2 \
+  # fzf-tmux -p80%,60% -- \
+  fzf --multi --cycle --reverse --height='80%' --border --border-label-pos=2 \
     --color='header:italic,label:blue' \
-    --preview-window='right,40%,border-left' \
-    --bind='ctrl-/:change-preview-window(down,50%,border-top|hidden|)' "$@"
+    --preview-window='right,50%' \
+    --bind='ctrl-/:change-preview-window(down,60%,border-top|hidden|)' "$@"
 }
 
 # yazi Shortcut
