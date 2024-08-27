@@ -1,6 +1,16 @@
 bgnotify_bell=false;
 bgnotify_threshold=120;
 
+function nixos-upgrade-monitor {
+  if [ $# -eq 0 ]; then
+    echo "No arguments provided. Please provide a log file path."
+    return 1
+  fi
+
+  local log_file_path="$1"
+  tail -n +1 -f "$log_file_path" |& nom
+}
+
 # ohmyzsh Git Plugin Extension Function
 function gwipmsg() {
   git add -A

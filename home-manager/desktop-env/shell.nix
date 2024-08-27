@@ -200,6 +200,8 @@
           ngckeep = "sudo nix-collect-garbage --delete-older-than";
           ngcd = "sudo nix-collect-garbage -d";
           ngcdu = "nix-collect-garbage -d";
+          # escapes necessary for nix string processing
+          nrepl = ''nix repl --expr "builtins.getFlake \"${(mkFlakeDir userName config)}"\"'';
 
           # General
           fu = "sudo";
