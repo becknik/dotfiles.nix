@@ -19,11 +19,7 @@
     randomizedDelaySec = "20m";
   };
   # https://git.lix.systems/lix-project/lix/issues/400
-  systemd.services.nixos-upgrade.preStart = ''
-    nix flake update --flake ${mkFlakeDir userName config} --commit-lock-file ${ builtins.foldl' (a: b: "${a} ${b}") ""
-      (lib.filter (name: name != "self") (lib.attrsets.mapAttrsToList (name: _: name) inputs))
-      }
-  '';
+  systemd.services.nixos-upgrade.preStart = "nix flake update --flake ${mkFlakeDir userName config} --commit-lock-file";
 
   networking.hostName = "dnix";
   environment.variables."FLAKE_NIXOS_HOST" = config.networking.hostName;
