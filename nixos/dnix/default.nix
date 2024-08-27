@@ -11,17 +11,19 @@
     enable = true;
     operation = "boot";
     flake = (mkFlakeDir userName config);
-    flags = (builtins.map
-      (flakeInput: "--update-input ${flakeInput}")
-      (lib.filter (name: name != "self") (lib.attrsets.mapAttrsToList (name: _: name) inputs))
-    ) ++ [
-      "-L" # print build logs (interesting in combination with nix-output-monitor)
+    flags = [
+      "-L" # print build logs - interesting in combination with nix-output-monitor || hacks from ../systemd.nix
       # `tail -n +1 -f .log |& nom`
-      "--commit-lock-file"
     ];
     dates = "Sat *-*-* 8:00";
     randomizedDelaySec = "20m";
   };
+  # https://git.lix.systems/lix-project/lix/issues/400
+  systemd.services.nixos-upgrade.preStart = ''
+    nix flake update --flake ${mkFlakeDir userName config} --commit-lock-file ${ builtins.foldl' (a: b: "${a} ${b}") ""
+      (lib.filter (name: name != "self") (lib.attrsets.mapAttrsToList (name: _: name) inputs))
+      }
+  '';
 
   networking.hostName = "dnix";
   environment.variables."FLAKE_NIXOS_HOST" = config.networking.hostName;
