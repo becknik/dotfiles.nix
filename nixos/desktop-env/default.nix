@@ -46,8 +46,6 @@
         pipewire-pulse."10-resample-quality"."stream.properties"."resample.quality" = 14;
       };
     };
-
-    dictd.enable = true; # really should remember this one
   };
   environment.wordlist.enable = true;
 
