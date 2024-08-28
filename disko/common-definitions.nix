@@ -11,6 +11,9 @@
     };
   };
 
+  # This might have been a bad idea.
+  # Frequently running out of space on this partition - multiple increases in size were necessary
+  # 128GB seem to be the lower boarder for this on lnix
   nix = size: {
     name = "nix";
     priority = 2;
