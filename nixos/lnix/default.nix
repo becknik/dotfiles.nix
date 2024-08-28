@@ -68,7 +68,8 @@
       settings = {
         main = {
           capslock = "overload(nav, esc)";
-          leftshift = "overload(shift, capslock)";
+          # TODO not optimal due to accidental long press https://manpages.opensuse.org/Tumbleweed/keyd/keyd.1.en.html
+          # rightshift = "overload(shift, capslock)";
         };
         nav = {
           h = "left";
@@ -77,6 +78,22 @@
           l = "right";
         };
       };
+    };
+  };
+
+  # https://gitlab.gnome.org/jrahmatzadeh/just-perfection/-/issues/248
+  systemd.user.services.gnome-shell-re-enable-blur-my-shell = {
+    description = "Disable and enable Blur My Shell GNOME extension";
+    wantedBy = [ "default.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart =
+        let
+          extensionCommand = "${pkgs.gnome.gnome-shell}/bin/gnome-extensions";
+          # sleep: make sure that gnome shell is already initialized
+        in
+        ''${pkgs.bash}/bin/sh -c "sleep 20; ${extensionCommand} disable blur-my-shell@aunetx; ${extensionCommand} enable blur-my-shell@aunetx"'';
     };
   };
 }
