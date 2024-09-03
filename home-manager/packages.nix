@@ -61,6 +61,7 @@
       tailspin # log file highlighter
       fastgron # make JSON greppable!
       tokei # loc counter
+      mmv
 
       ### Hardware
       cpufetch
