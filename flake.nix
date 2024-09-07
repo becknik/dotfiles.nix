@@ -70,6 +70,7 @@
 
       # Default nixpkgs config
       config = {
+        permittedInsecurePackages = [ "electron-27.3.11" ];
         allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [
           "brgenml1lpr"
           "brscan5"
