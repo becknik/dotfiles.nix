@@ -35,6 +35,11 @@
           user = "git";
           identityFile = "~/.ssh/github-personal";
         };
+        gitlab_personal = {
+          host = "gitlab.com";
+          user = "git";
+          identityFile = "~/.ssh/github-personal";
+        };
         gitlab_sopra = {
           host = "gila24.informatik.uni-stuttgart.de";
           user = "git";

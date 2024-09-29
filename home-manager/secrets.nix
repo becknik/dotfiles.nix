@@ -55,15 +55,15 @@ in
         path = "${config.home.homeDirectory}/.ssh/github-personal";
       };
 
-      "gitlab-est.pub" = {
+      "gitlab-personal.pub" = {
         sopsFile = ./secrets/git.yaml;
-        key = "gitlab/est/ed25519.pub";
-        path = "${config.home.homeDirectory}/.ssh/gitlab-est.pub";
+        key = "gitlab/personal/ed25519.pub";
+        path = "${config.home.homeDirectory}/.ssh/gitlab-personal.pub";
       };
-      "gitlab-est" = {
+      "gitlab-personal" = {
         sopsFile = ./secrets/git.yaml;
-        key = "gitlab/est/ed25519";
-        path = "${config.home.homeDirectory}/.ssh/gitlab-est";
+        key = "gitlab/personal/ed25519";
+        path = "${config.home.homeDirectory}/.ssh/gitlab-personal";
       };
 
       # Creation of secrets from binaries: `sops -e ./desktop-env/secrets/keepass.key > ./desktop-env/secrets/keepassxc.yaml`
