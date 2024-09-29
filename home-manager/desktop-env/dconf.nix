@@ -260,7 +260,6 @@ with lib.gvariant; {
       "io.github.alainm23.planify.desktop:3"
       "element-desktop.desktop:4"
       "org.telegram.desktop.desktop:4"
-      "com.github.eneshecan.WhatsAppForLinux.desktop:4"
       "discord.desktop:4"
       "signal-desktop.desktop:4"
     ];

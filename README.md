@@ -60,7 +60,7 @@ $ tree -a -I '\.git|\.vscode|\.direnv' . # slightly modified for better context/
   > The CPU-tailored builds not only take way to long - even tho my build machine features a raptorlake i7 -, but they also waste a lot of energy, emit much heat and also kind of revert the beauty of the NixOS system.
   > I mean in theory, it should be possible to boot my flake from any other machine, or propagate changes from the config into the running system in no time.
   > For instance, I saw myself waiting around one hour for the steam NixOS module to compile, so that I could simply join some friends on a game they were playing.
-  > I think this should've gone faster on any other OS, perhaps even on a Gentoo system and is in the end just my own perfectinism and maybe a few percent of performance improvements for some packages making my life harder...
+  > I think this should've gone faster on any other OS, perhaps even on a Gentoo system and is in the end just my own perfectionism and maybe a few percent of performance improvements for some packages making my life harder...
   >
   > Hence due to all these concerns/ issues and the problems with 24.05 & (perhaps) `fastStdenv`, I decided to just let the architecture-optimization be and based my `dnix` system closure back to the default, stable & non-optimized `stdenv` enabling the caching for most packages :^)
   > See [here](https://github.com/becknik/dotfiles.nix/releases/tag/cpu-optimization) for working state of optimized build
@@ -122,7 +122,7 @@ Let's hope this projects break the hours down to minutes (assumed native buildin
 - [ ] Firefox
 - [ ] Nextcloud, (Dropbox <- broken?)
 - [ ] JetBrains (IDEA, CLion, ...)
-- [ ] Whatsapp, Telegram, Signal
+- [ ] Telegram, Signal, Threema
 - [ ] Discord, Element
 - [ ] Obsidian
 - [ ] Anki
@@ -133,4 +133,3 @@ Let's hope this projects break the hours down to minutes (assumed native buildin
 - [ ] telegram-desktop
 - [ ] planify
 - [x] element-desktop (manually created in `autostart.nix`)
-- [x] whatsapp-for-linux ( " )
