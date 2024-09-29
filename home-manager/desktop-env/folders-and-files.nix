@@ -39,10 +39,5 @@
         target = ".cargo/config";
         source = ./files/cargo.toml;
       };
-
-      "config-keepassxc" = {
-        target = ".config/keepassxc/keepassxc.ini";
-        source = ./files/keepassxc.ini;
-      };
     };
 }
