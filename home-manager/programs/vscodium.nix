@@ -71,8 +71,9 @@
       ms-python.vscode-pylance #ms-pyright.pyright is included in pylance
 
       #### JS/TS
-      esbenp.prettier-vscode
       dbaeumer.vscode-eslint
+      esbenp.prettier-vscode
+      bradlc.vscode-tailwindcss
 
       #### Shell
       mads-hartmann.bash-ide-vscode
@@ -131,6 +132,12 @@
           version = "2.3.1";
           sha256 = "sha256-LxgftSpGk7+SIUdZcNpL7UZoAx8IMIcwPYIGqSfVuDc=";
         }
+        {
+          name = "vscode-expo-tools";
+          publisher = "expo";
+          version = "1.5.0";
+          sha256 = "sha256-bjVebozUfwEsoclEjDpGYJ108bLJJaQhoBDpFcZ/bI8=";
+        }
 
         {
           name = "vscode-monokai-night";
@@ -147,7 +154,10 @@
       ]
     );
 
-    languageSnippets = { };
+    languageSnippets = {
+      javascriptreact = builtins.fromJSON (builtins.readFile ./vscodium/snippets-react.json);
+      typescriptreact = builtins.fromJSON (builtins.readFile ./vscodium/snippets-react.json);
+    };
 
     keybindings = [ ];
 
@@ -615,6 +625,7 @@
         file.autoSave = "afterDelay";
         editor.wordBasedSuggestions = "off";
       };
+      "[yaml]".editor.defaultFormatter = "redhat.vscode-yaml";
       "[markdown]" = {
         editor.defaultFormatter = "DavidAnson.vscode-markdownlint";
         editor.quickSuggestions = {
@@ -632,6 +643,8 @@
       "[dockercompose]".editor.defaultFormatter = "ms-azuretools.vscode-docker";
       "[java]".editor.defaultFormatter = "redhat.java";
       "[rust]".editor.defaultFormatter = "rust-lang.rust-analyzer";
+
+      "[typescriptreact][typescript][javascriptreact][javascript][jsonc]".editor.defaultFormatter = "esbenp.prettier-vscode";
     };
   };
 }

@@ -86,6 +86,7 @@
           "steam-original"
           "steam-run"
 
+          "android-studio-stable"
           "jetbrains-toolbox"
           "idea-ultimate"
           "clion"

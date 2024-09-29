@@ -129,14 +129,17 @@
 
           "kubectl"
 
-          "mvn"
-          "gradle"
-
           "httpie"
           "encode64" # e64 "..."
           "jsontools"
           "urltools"
           "vscode"
+
+          ### Programming
+          "mvn"
+          "gradle"
+          "node"
+
         ];
         #"rust" "pyenv" "python" "aws" "nmap" "npm" "ruby" "scala"
         # "rsync" "fancy-ctrl-z" "ripgrep" "fzf" "zsh-interactive-cd"
