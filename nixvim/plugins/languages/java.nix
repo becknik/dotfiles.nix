@@ -4,7 +4,9 @@
   # TODO jdtls dap integration...
   # https://sookocheff.com/post/vim/neovim-java-ide/#language-server--eclipsejdtls
   plugins.nvim-jdtls = {
-    enable = true;
+    enable = false;
+    # TODO Failed assertions:
+    # - You have to either set the `plugins.nvim-jdtls.data` or the `plugins.nvim-jdtls.cmd` option.
 
     extraOptions = {
       # https://github.com/mfussenegger/nvim-jdtls?tab=readme-ov-file#configuration-verbose

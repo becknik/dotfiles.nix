@@ -4,14 +4,14 @@
   globals.zoxide_use_select = true;
 
   extraPlugins = with pkgs.vimPlugins; [
-    nvim-neoclip-lua
+    # nvim-neoclip-lua
     sqlite-lua
 
     telescope-zoxide
   ];
-  extraConfigLuaPre = builtins.readFile ./neoclip.lua;
+  # extraConfigLuaPre = builtins.readFile ./neoclip.lua;
   keymaps = withDefaultKeymapOptions [
-    { key = "<leader>fy"; action = "<cmd>Telescope neoclip<cr>"; }
+    # { key = "<leader>fy"; action = "<cmd>Telescope neoclip<cr>"; }
     { key = "<leader>cd"; action = "require('telescope').extensions.zoxide.list"; lua = true; }
   ];
 
