@@ -196,7 +196,7 @@ with lib.gvariant; {
       center-new-windows = true;
       dynamic-workspaces = false;
       edge-tiling = true;
-      experimental-features = [ "scale-monitor-framebuffer" "rt-scheduler" "autoclose-xwayland" ];
+      experimental-features = [ "scale-monitor-framebuffer" "rt-scheduler" ];
       workspaces-only-on-primary = laptopMode;
     };
 
