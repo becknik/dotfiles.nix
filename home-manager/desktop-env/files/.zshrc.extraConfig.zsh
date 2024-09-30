@@ -11,10 +11,18 @@ function nixos-upgrade-monitor {
   tail -n +1 -f "$log_file_path" |& nom
 }
 
-# ohmyzsh Git Plugin Extension Function
-function gwipmsg() {
+# ohmyzsh Git Plugin Function Overrides/ Extension
+function gwip() {
   git add -A
   git rm $(git ls-files --deleted) 2> /dev/null
+  local message="--wip-- [skip ci]"
+  if [ -n "$1" ]; then
+    message="$message "$1""
+  fi
+  git commit --no-verify --no-gpg-sign -m "$message"
+}
+# only staged changes are committed
+function gwips() {
   local message="--wip-- [skip ci]"
   if [ -n "$1" ]; then
     message="$message "$1""
