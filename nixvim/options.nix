@@ -26,7 +26,7 @@
 
       ## Symbol Formatting
       list = true;
-      listchars = "tab:»\ ,extends:›,precedes:‹,trail:·,nbsp:·";
+      listchars = "tab:»\ ,extends:›,precedes:‹,trail:·"; # ,nbsp:·
 
       # Cursor Movement
       matchpairs = "(:),{:},[:]" # default, because += doesn't exist?
