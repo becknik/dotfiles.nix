@@ -56,9 +56,8 @@
     };
 
     # Navigation & Editing
-    # TODO replace old tpope's surround with nvim one: https://github.com/nix-community/nixvim/issues/1346
     # https://github.com/kylechui/nvim-surround
-    surround.enable = true;
+    nvim-surround.enable = true;
     vim-matchup.enable = true;
     nvim-autopairs = {
       enable = true;
@@ -85,13 +84,6 @@
       enable = true;
       texlivePackage = null;
       # settings.view_method = "okular";
-    };
-
-    ## Application-specific
-    obsidian = {
-      enable = false; # plugin's useless in my obsidian workflow...
-
-      settings.dir = "~/obsidian";
     };
   };
 }
