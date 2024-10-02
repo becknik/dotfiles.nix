@@ -21,20 +21,20 @@
       colorcolumn = [ 80 120 ];
       cursorline = true;
       wrap = true;
-      scrolloff = 8; # always keep 8 lines above/below cursor unless at start/end of file
+      scrolloff = 4; # always keep 8 lines above/below cursor unless at start/end of file
       cmdheight = 0; # more space in the neovim command line for displaying messages
 
       ## Symbol Formatting
       list = true;
-      listchars = "tab:»\ ,extends:›,precedes:‹,trail:·"; # ,nbsp:·
+      listchars = "tab:»\ ,extends:›,precedes:‹,trail:·,nbsp:·";
 
       # Cursor Movement
-      matchpairs = "(:),{:},[:]" # default, because += doesn't exist?
+      matchpairs = "(:),{:},[:]" # default
         + ",<:>";
       mouse = "a"; # Enable mouse mode for modes: normal, visual, insert, command-line
 
       # Tab stops
-      tabstop = 4;
+      tabstop = 4; # number of spaces a <Tab> character represents
       softtabstop = 0; # default
       expandtab = true;
 
