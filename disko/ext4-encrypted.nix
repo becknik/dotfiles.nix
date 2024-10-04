@@ -14,7 +14,6 @@ in
 
           partitions = {
             esp = cd.esp;
-            nix = (cd.nix "128G");
 
             root = {
               name = "nixos";
