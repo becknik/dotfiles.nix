@@ -224,6 +224,7 @@
           grhp = "git reset -p"; # useful for unstaging staged hunks
           gclb = "git clone --recurse-submodules --bare";
           "gsw!" = "git switch --force";
+          gla = "git pull --autostash";
 
           ## Frankensteins
           "gaucn!" = "gau && gcn!";
