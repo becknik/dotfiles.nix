@@ -17,6 +17,7 @@ export forgit_add=fga
 export forgit_blame=fgbl
 export forgit_branch_delete=fgbd #gcb
 export forgit_checkout_branch=fgcob
+alias -- 'fgsw'='fgcob'
 export forgit_checkout_commit=fgco #gcf
 export forgit_checkout_file=fgcof #gct
 export forgit_checkout_tag=fgcot
