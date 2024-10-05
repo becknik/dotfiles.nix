@@ -64,7 +64,7 @@ with lib.gvariant; {
       enable-animations = false;
       enable-hot-corners = true; # Can be useful when no keyboard is available
       show-battery-percentage = laptopMode;
-      text-scaling-factor = 0.97;
+      text-scaling-factor = (if laptopMode then 1.25 else 0.97);
     };
 
     "org/gnome/desktop/peripherals/keyboard" = {

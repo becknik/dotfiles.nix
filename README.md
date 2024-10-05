@@ -103,29 +103,33 @@ sudo nix run github:nix-community/disko \
 # If the command succeeds, the partitions are automatically mounted under /mnt
 ```
 
-2. `sudo nixos-install --flake </home/nixos/>dotfiles.nix#<host>`
-3. `sudo cp /home/nixos/dotfiles.nix /mnt/home/<username>/devel/own`
+2. `sudo nixos-install --flake </home/nixos/>dotfiles.nix#<host> -j 4 --cores 2`
+3. reboot
 
 ## Todo List for Post-Installation
 
 Sometimes its nice to have a good starting point, when one spent hours on bringing a system to run :)
-Let's hope this projects break the hours down to minutes (assumed native building is disabled ofc)
+Let's hope this projects break the hours down to minutes
 
+- [ ] Copy the nix-sops secret to the new system
 - [ ] Enable the installed GNOME-extensions
   - [ ] Setup `gsconnect`
-- [ ] Copy the nix-sops secret to the new system
 - [ ] (Configure the CPU-scheduler and profile in `cpupower-gui`)
+- [ ] Fix `dconf` settings for shortcuts being ignored (?) by gnome settings:
+  - [ ] "Open the quick settings menu" => `<Shift><Super>s`
+  - [ ] "Show the overview" => `<Super>s`
 
 ### Logins
 
-- [ ] Thunderbird with Mail Accounts (because home-managed ones won't work :( )
-- [ ] Firefox
 - [ ] Nextcloud, (Dropbox <- broken?)
+- [ ] Enter Thunderbird mail account passwords (are mounted, but impossible to automatically pass to Thunderbird)
+- [ ] Firefox Account
 - [ ] JetBrains (IDEA, CLion, ...)
-- [ ] Telegram, Signal, Threema
-- [ ] Discord, Element
 - [ ] Obsidian
+- [ ] Telegram, Signal, Threema; Element
+- [ ] planify
 - [ ] Anki
+- [ ] cider
 
 ### Autostart must be manually Enable
 

@@ -5,7 +5,7 @@
 
   # TODO systemd-boot seems to not correctly apply this, standard password containing umlauts fails in systemd-boot only
   # However, password containing '@' is correctly mapped to german keyboard...
-  console.keyMap = "de"; # Using the german keyboard layout only for the luks password prompt
+  console.keyMap = "us";
 
   swapDevices = [
     {
