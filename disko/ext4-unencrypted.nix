@@ -1,4 +1,4 @@
-{ disks ? [ "/dev/sda" ], ... }:
+{ disks /* ? [ "/dev/sda" ] */, ... }:
 
 let
   cd = import ./common-definitions.nix;

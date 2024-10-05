@@ -1,4 +1,4 @@
-{ disks ? [ "/dev/nvme0n1" ], ... }:
+{ disks /* ? [ "/dev/nvme0n1" ] */, ... }:
 
 let
   cd = import ./common-definitions.nix;
