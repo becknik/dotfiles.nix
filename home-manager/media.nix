@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -24,6 +24,8 @@
       path = "${config.home.homeDirectory}/dropbox";
     };*/
   };
+  # ad-hoc disabling systemd service to avoid core-dumping
+  systemd.user.services.nextcloud-client.Service.ExecStart = (lib.mkForce "");
 
   # Browsers
 
