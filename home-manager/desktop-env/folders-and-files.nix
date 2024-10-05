@@ -21,6 +21,7 @@
       "nextcloud/uni"
       "nextcloud/archive"
       "nextcloud/transfer"
+      "pics/wallpapers"
 
       "scripts"
       "vm"
