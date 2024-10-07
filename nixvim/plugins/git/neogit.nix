@@ -5,15 +5,36 @@
   plugins.neogit = {
     enable = true;
 
-    settings = {
-      disable_line_numbers = false;
-      disable_signs = true;
-      fetch_after_checkout = true;
-      # git_services =
-      graph_style = "unicode";
-      kind = "replace"; # “split”, “vsplit”, “split_above”, “tab”, “floating”, “replace”, “auto”
-      use_default_keymaps = true; # default
-    };
+
+    settings =
+      let
+        submit_abort = {
+          "<c-c><c-c>" = null;
+          "<c-c><c-k>" = null;
+          ZZ = "Submit";
+          ZQ = "Abort";
+        };
+      in
+      {
+        console_timeout = 1000; # threshold to open the console on command execution
+
+        disable_line_numbers = false;
+        disable_signs = true;
+        fetch_after_checkout = true;
+        graph_style = "unicode";
+        kind = "replace";
+        remember_settings = false; # across sessions
+
+        integrations = {
+          diffview = true;
+          telescope = true;
+        };
+
+        commit_editor = submit_abort;
+        commit_editor_i = submit_abort;
+        rebase_editor = submit_abort;
+        rebase_editor_i = submit_abort;
+      };
   };
 
   # TODO explore neogit - this plugin is way too extensive
