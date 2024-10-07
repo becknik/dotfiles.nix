@@ -37,10 +37,8 @@
       };
   };
 
-  # TODO explore neogit - this plugin is way too extensive
   keymaps = withDefaultKeymapOptions [
     { key = "<leader>G"; action = "<cmd>Neogit<cr>"; }
-    # { key = "<leader>Gf"; action = "<cmd>Neogit kind=floating<cr>"; }
-    # { key = "<leader>Gs"; action = "<cmd>Neogit kind=split<cr>"; }
+    { key = "<leader>gf"; action = "<cmd>Neogit kind=floating<cr>"; }
   ];
 }

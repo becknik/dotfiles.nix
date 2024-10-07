@@ -1,5 +1,7 @@
 # Nixvim Setup Quick Reference
 
+Descriptions for custom Keybindings should be written as `[Action verb] [what] [where/when (optional)]`
+
 ## cmp-git
 
 | Git     | Trigger |
@@ -32,4 +34,13 @@
 - `<c-q>`: abort cmp
 - `<c-u>`: scroll the docs ups by 4 lines
 - `<c-d>`: scroll the docs down by 4 lines
+
+### Git
+
+#### Worktrees
+- `<leader>twc`: create git worktree in telescope
+- `<leader>tws`: switch git worktree in telescope
+  - `<Enter`>: switches
+  - `<c-d>`: deletes
+  - `<c-f>`: toggles forcing of the next deletion
 
