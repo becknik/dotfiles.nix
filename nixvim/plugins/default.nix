@@ -26,7 +26,13 @@
     ./todo-comments.nix
   ];
 
-  opts.foldenable = false; # disable tree-sitter to fold the code on startup
+  # disable tree-sitter to fold the code on startup
+  opts.foldenable = false;
+
+  # global variable definitions
+  extraConfigLuaPre = ''
+    local telescope = require('telescope')
+  '';
 
   plugins = {
     # UI
@@ -44,7 +50,7 @@
     };
 
     # statuscol-nvim
-    # which-key.enable = true; # personally finding this annoying
+    which-key.enable = true; # personally finding this annoying
     # transparent.enable = false; # TODO first need terminal support for this
 
     tmux-navigator = {
