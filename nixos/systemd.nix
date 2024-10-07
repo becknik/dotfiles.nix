@@ -40,6 +40,7 @@
           };
         onFailure = [ "nixos-upgrade-notify-send-failure.service" ];
         onSuccess = [ "nixos-upgrade-notify-send-success.service" ];
+        preStart = ''chown -R ${userName}:users ${(mkFlakeDir userName config)}'';
         postStop = ''chown -R ${userName}:users ${(mkFlakeDir userName config)}'';
       };
 
@@ -67,6 +68,7 @@
         wantedBy = [ "multi-user.target" ];
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
+        preStart = ''chown -R ${userName}:users ${(mkFlakeDir userName config)}'';
         postStop = ''chown -R ${userName}:users ${(mkFlakeDir userName config)}'';
 
         serviceConfig = {
