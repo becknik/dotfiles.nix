@@ -23,10 +23,6 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    mac-app-util = {
-      url = "github:hraban/mac-app-util";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     home-manager = {
       url = "github:nix-community/home-manager/release-24.05";
@@ -58,7 +54,7 @@
 
   outputs = { self, nixpkgs, nixpkgs-unstable, darwin, home-manager, nixos-hardware, ... }@inputs:
     let
-      systems = [ "x86_64-darwin" "x86_64-linux" ];
+      systems = [ "aarch64-darwin" "x86_64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
 
       stateVersion = "24.05";
@@ -131,8 +127,7 @@
               sops-nix.homeManagerModules.sops
               nix-index-database.hmModules.nix-index
               catppuccin.homeManagerModules.catppuccin
-            ]
-            ++ nixpkgs.lib.optional isDarwinSystem mac-app-util.homeManagerModules.default;
+            ];
 
             # home-manager on darwin doesn't support all options
             users.${userName} = nixpkgs.lib.concatStringsSep "/" [
@@ -279,8 +274,8 @@
 
       darwinConfigurations.wnix =
         let
-          system = "x86_64-darwin";
-          userName = "jbecker";
+          system = "aarch64-darwin";
+          userName = "jnnk";
         in
         darwin.lib.darwinSystem {
           inherit system;
@@ -306,7 +301,6 @@
                 ];
               };
             })
-            inputs.mac-app-util.darwinModules.default
             ./darwin
 
             home-manager.darwinModules.home-manager

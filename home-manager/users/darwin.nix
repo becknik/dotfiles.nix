@@ -39,15 +39,6 @@
   # Packaging Leftovers
   xdg.enable = true;
 
-  ## Add Java Packages
-  home.file = with pkgs; (builtins.listToAttrs (builtins.map
-    (jdk: {
-      name = ".jdks/jdk-${jdk.version}";
-      value = { source = jdk; };
-    })
-    [ temurin-bin-8 temurin-bin-11 ]));
-
-
   programs.gpg.enable = true;
 
   home.packages = with pkgs; [

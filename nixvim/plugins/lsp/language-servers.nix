@@ -6,7 +6,7 @@
 
     html.enable = true;
     #templ.enable = true; # HTML
-    lemminx.enable = true;
+    # lemminx.enable = true; # TODO fails to build on aarch64-darwin
     jsonls.enable = true;
     marksman.enable = true;
     taplo.enable = true; # TOML

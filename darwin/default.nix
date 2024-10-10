@@ -1,6 +1,8 @@
 { ... }:
 
 {
+  system.stateVersion = 5;
+
   environment.variables."FLAKE_NIXOS_HOST" = "wnix";
   nix = {
     useDaemon = true;
