@@ -7,6 +7,7 @@ final: prev: {
   };
 
   oh-my-zsh-git = prev.pkgs.oh-my-zsh.overrideAttrs (with inputs; oldAttrs: {
+    name = "oh-my-zsh-git";
     version = ohmyzsh.rev;
     src = ohmyzsh;
   });

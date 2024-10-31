@@ -33,7 +33,70 @@
         keyboard.bindings = [
           { mods = "Control|Shift"; key = "N"; action = "CreateNewWindow"; }
         ];
+        env = { TERM = "xterm-256color"; };
       };
+    };
+
+    tmux = {
+      enable = true;
+
+      # keyMode = "vi";
+      mouse = true; # scroll through terminal buffer
+      baseIndex = 1;
+      clock24 = true;
+
+      prefix = "C-q"; # "C-a" already used in VIM to increment number
+      escapeTime = 0;
+
+      extraConfig = (builtins.foldl'
+        (x: y: ''${x}
+        ${y}'') "" [
+        "bind '|' split-window -h -c \"#{pane_current_path}\""
+        "bind - split-window -v -c \"#{pane_current_path}\""
+        "bind -r r move-window -r" # reorder windows to fill in "gap indices"
+
+        # without prefix key provided by vim-navigator plugin
+        # "bind h select-pane -L"
+        # "bind j select-pane -D"
+        # "bind k select-pane -U"
+        # "bind l select-pane -R"
+
+        # "bind -n M-h resize-pane -L 5"
+        # "bind -n M-l resize-pane -D 5"
+        # "bind -n M-k resize-pane -U 5"
+        # "bind -n M-j resize-pane -R 5"
+        "bind -r H resize-pane -L 5"
+        "bind -r J resize-pane -D 5"
+        "bind -r K resize-pane -U 5"
+        "bind -r L resize-pane -R 5"
+
+        "set -g status-justify centre"
+        "setw -g monitor-activity on" # highlights the window name in status line on activity
+        # "set -g visual-activity on" # show message in status line as well - I find this to be annoying
+
+        "set -g default-terminal \"$TERM\""
+        "set -ag terminal-overrides \",$TERM:Tc\""
+
+        # set vi-mode
+        "set-window-option -g mode-keys vi"
+        # keybindings
+        "bind-key -T copy-mode-vi v send-keys -X begin-selection" # use v instead of c-v space
+        "bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle" # toggle between line & rectangle select mode
+        "bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel"
+      ])
+      ;
+      plugins = with pkgs.tmuxPlugins; [
+        yank
+        {
+          plugin = continuum;
+          extraConfig = ''
+            set -g @continuum-restore 'on'
+            set -g @continuum-save-interval '10' # minutes
+          '';
+        }
+        vim-tmux-navigator
+        prefix-highlight
+      ];
     };
 
     # zsh & bash integration are enabled by default
@@ -120,6 +183,7 @@
           # "wd" # zoxide is superior to this
           # "zsh-interactive-cd" # shadowed by fzf built-in zsh integration
           "extract"
+          "tmux"
 
           ## Development
           "git"

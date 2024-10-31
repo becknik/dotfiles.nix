@@ -10,7 +10,7 @@ bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 # Enable Bash-like Feature I can't explain...
 unsetopt flow_control
-bindkey '^q' push-line
+bindkey '^e' push-line
 # Auto-Complete a word with Ctrl + Space
 bindkey '^ ' forward-word
 # bindkey '^ ' autosuggest-accept

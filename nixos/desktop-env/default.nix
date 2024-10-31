@@ -22,10 +22,7 @@
     psd.enable = true;
 
     ## CUPS & Printing
-    printing = {
-      enable = true;
-      drivers = with pkgs; [ brgenml1lpr ]; # This works out of the box ftw
-    };
+    printing.enable = true;
     avahi = {
       enable = true;
       nssmdns = true;
