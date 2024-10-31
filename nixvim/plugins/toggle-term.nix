@@ -3,7 +3,7 @@
 {
   # https://github.com/akinsho/toggleterm.nvim
   plugins. toggleterm = {
-    enable = true;
+    enable = false;
     settings.size = ''
       function(term)
         if term.direction == "horizontal" then

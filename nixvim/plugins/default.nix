@@ -48,9 +48,18 @@
       # TODO https://github.com/NixOS/nixpkgs/issues/307501
       extraOptions.execution_message.enabled = false;
     };
+
     # statuscol-nvim
     which-key.enable = true; # personally finding this annoying
     # transparent.enable = false; # TODO first need terminal support for this
+
+    tmux-navigator = {
+      enable = true;
+      settings = {
+        disable_when_zoomed = 1;
+        save_on_switch = 1;
+      };
+    };
 
     # Navigation & Editing
     # https://github.com/kylechui/nvim-surround
