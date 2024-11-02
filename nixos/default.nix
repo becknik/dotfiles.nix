@@ -109,6 +109,8 @@
     # ICMP Stuff
     "net.ipv4.icmp_echo_ignore_broadcasts" = 1;
     "net.ipv4.icmp_ignore_bogus_error_responses" = 1;
+    # there seems to be interference with my keyboard when playing audio via a USB switch triggering sysrq commands
+    "kernel.sysrq" = 0;
   };
 
   environment.memoryAllocator.provider = "libc"; # "mimalloc" leads to various applications crashing
