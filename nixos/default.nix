@@ -61,12 +61,7 @@
   hardware.enableRedistributableFirmware = true;
   services.fstrim.interval = "weekly"; # enabled by nixos-hardware
   #services.hardware.bolt.enable = true; # implied by gnome.core-os-services
-  hardware.sane = {
-    enable = true;
-    dsseries.enable = true;
-    brscan5 .enable = true;
-    #extraBackends = [ pkgs.sane-backends ];
-  };
+  hardware.sane.enable = true;
 
 
   # Boot Process
@@ -109,8 +104,6 @@
     # ICMP Stuff
     "net.ipv4.icmp_echo_ignore_broadcasts" = 1;
     "net.ipv4.icmp_ignore_bogus_error_responses" = 1;
-    # there seems to be interference with my keyboard when playing audio via a USB switch triggering sysrq commands
-    "kernel.sysrq" = 0;
   };
 
   environment.memoryAllocator.provider = "libc"; # "mimalloc" leads to various applications crashing
