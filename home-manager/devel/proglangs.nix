@@ -10,6 +10,9 @@
     with pkgs; texlive ++ [
       # JS / TypeScript
       unstable.nodejs_latest
+      unstable.pnpm
+      unstable.eslint_d
+      unstable.prettierd
 
       # Nix
       unstable.nixd
