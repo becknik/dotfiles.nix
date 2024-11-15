@@ -477,12 +477,6 @@
       ## Live Share
       liveshare.allowGuestDebugControl = true;
 
-      ## Docker
-      docker = lib.attrsets.optionalAttrs (!isDarwinSystem) {
-        composeCommand = "podman compose";
-        dockerPath = "podman";
-      };
-
       ##########################################################################
       # Language Plugin Settings
       ##########################################################################

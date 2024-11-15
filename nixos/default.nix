@@ -232,9 +232,7 @@
     isNormalUser = true;
     description = "jannik";
     hashedPassword = "$y$j9T$v2v24yeaoZcmnJRJqKVIb/$9/ERYx13TXXpCXA12dNvvrr1BOKx1/tgpO9M9fRlio4";
-    extraGroups = [ "wheel" "networkmanager" "libvirtd" /* "docker" */ "vboxusers" "video" ]
-      # replaced docker with podman, docker wouldn't work rootless
-      # printing & scanning:
+    extraGroups = [ "wheel" "networkmanager" "libvirtd" "docker" "vboxusers" "video" ]
       ++ [ "lp" "scanner" ];
     useDefaultShell = true;
   };

@@ -22,7 +22,6 @@
       oh-my-zsh.plugins = lib.mkAfter [
         "ssh-agent"
         "macos" # `showfiles` & `hidefiles` (in finder), `cdf` (cd to current finder directory)
-        "docker"
       ];
       initExtra = "ssh-add --apple-load-keychain"; # load keys from previous sessions
     };

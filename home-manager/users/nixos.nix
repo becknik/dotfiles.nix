@@ -24,7 +24,7 @@
 
   config = {
     home.homeDirectory = "/home/${userName}";
-    programs.zsh.oh-my-zsh.plugins = lib.mkAfter [ "podman" "bgnotify" "systemd" ];
+    programs.zsh.oh-my-zsh.plugins = lib.mkAfter [ "bgnotify" "systemd" ];
 
     # Nicely reload system units when changing configs
     systemd.user.startServices = "sd-switch";
