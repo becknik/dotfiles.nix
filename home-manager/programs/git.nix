@@ -37,6 +37,7 @@
     ];
 
     extraConfig = {
+      remote.pushDefault = "origin";
       init.defaultBranch = "main";
       core = {
         filemode = false; # ignores file permission changes
