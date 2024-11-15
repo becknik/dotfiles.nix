@@ -191,6 +191,8 @@
           # "gitignore" # gi <nix haskell ...>
           # also provided by zsh-forit plugin with fzf search
 
+          "docker"
+          "docker-compose"
           "kubectl"
 
           "httpie"
