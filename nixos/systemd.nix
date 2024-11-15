@@ -75,7 +75,9 @@
           Type = "oneshot";
           # User = userName; # TODO error: cannot run ssh: No such file or directory  fatal: unable to fork
           # Group = "users";
+          RemainAfterExit = true;
         };
+        restartIfChanged = false;
         onFailure = [ "nixos-upgrade-notify-send-failure.service" ];
 
         path = with pkgs; [ git nixos-rebuild ];
