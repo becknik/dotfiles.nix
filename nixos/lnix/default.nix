@@ -24,13 +24,19 @@
   networking = {
     hostName = "lnix";
 
-    networkmanager.wifi = {
-      powersave = true;
-      scanRandMacAddress = true;
+    networkmanager = {
+      wifi = {
+        powersave = false;
+        scanRandMacAddress = false;
 
-      macAddress = config.networking.networkmanager.ethernet.macAddress; # = "stable"
+        macAddress = config.networking.networkmanager.ethernet.macAddress; # = "stable"
+      };
+      settings = {
+        device."wifi.scan-interval" = 120;
+      };
     };
   };
+  boot.extraModprobeConfig = "options mt7921e power_save=0";
 
   systemd.network.wait-online.anyInterface = false; # whether to consider the network online when any interface is online
   # Lets the nixos-fetch-flake.service fail
