@@ -85,6 +85,7 @@
       #age-plugin-yubikey # This isn't working with sops-nix atm due to sops... https://github.com/Mic92/sops-nix/issues/377
       (makeWhenNotDarwin yubikey-manager-qt)
       (makeWhenNotDarwin yubikey-personalization-gui)
+      tig
 
       ## Benchmarking
       speedtest-cli
