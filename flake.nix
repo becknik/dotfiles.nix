@@ -95,6 +95,7 @@
           "vscode-extension-ms-vsliveshare-vsliveshare"
           "vscode-extension-github-copilot"
           "vscode-extension-github-copilot-chat"
+          "vscode-extension-mhutchie-git-graph"
         ];
         joypixels.acceptLicense = true;
       };
