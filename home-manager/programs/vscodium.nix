@@ -29,6 +29,7 @@
     in
     [
       ## Management
+      ms-vsliveshare.vsliveshare
       alefragnani.project-manager
       alefragnani.bookmarks
       gruntfuggly.todo-tree
@@ -71,9 +72,11 @@
       ms-python.vscode-pylance #ms-pyright.pyright is included in pylance
 
       #### JS/TS
+      denoland.vscode-deno
       dbaeumer.vscode-eslint
       esbenp.prettier-vscode
       bradlc.vscode-tailwindcss
+      wix.vscode-import-cost
 
       #### Shell
       mads-hartmann.bash-ide-vscode
@@ -89,15 +92,6 @@
       justusadam.language-haskell # Syntax highlighting
       haskell.haskell # Linting etc.
 
-      ### JVM
-      scalameta.metals
-      redhat.java
-      vscjava.vscode-java-debug
-      vscjava.vscode-java-test
-      vscjava.vscode-maven
-      vscjava.vscode-java-dependency
-      vscjava.vscode-gradle
-
       ### Rust
       rust-lang.rust-analyzer
 
@@ -106,12 +100,11 @@
       #twxs.cmake #?
     ] ++ cppTools ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (
       [
-        # nix-packaged extensions doesn't work
         {
-          name = "vsliveshare";
-          publisher = "MS-vsliveshare";
-          version = "1.0.5905";
-          sha256 = "sha256-y1MMO6fd/4a9PhdBpereEBPRk50CDgdiRc8Vwqn0PXY=";
+          name = "vscode-expo-tools";
+          publisher = "expo";
+          version = "1.5.0";
+          sha256 = "sha256-bjVebozUfwEsoclEjDpGYJ108bLJJaQhoBDpFcZ/bI8=";
         }
         {
           name = "toggle-case";
@@ -119,37 +112,25 @@
           version = "1.0.2";
           sha256 = "sha256-tvgLHSKmX3FBLwi4JikJR4PUieK6iKGzBMj+Zz58SFI=";
         }
-        {
-          # Mapping keymaps 1:1 between IntelliJ and VSCode sadly isn't possible, e.g. <C>+K, <C>+O not working any more
-          name = "intellij-idea-keybindings";
-          publisher = "k--kato";
-          version = "1.6.0";
-          sha256 = "sha256-doBsMa4SvdFzLdKgjc4qxLOwMB2KFG73zn9a24N6CWs=";
-        }
+
         {
           name = "code-spell-checker-german";
           publisher = "streetsidesoftware";
-          version = "2.3.1";
-          sha256 = "sha256-LxgftSpGk7+SIUdZcNpL7UZoAx8IMIcwPYIGqSfVuDc=";
-        }
-        {
-          name = "vscode-expo-tools";
-          publisher = "expo";
-          version = "1.5.0";
-          sha256 = "sha256-bjVebozUfwEsoclEjDpGYJ108bLJJaQhoBDpFcZ/bI8=";
+          version = "2.3.2";
+          sha256 = "sha256-40Oc6ycNog9cxG4G5gCps2ADrM/wLuKWFrD4lnd91Z4=";
         }
 
         {
           name = "vscode-monokai-night";
           publisher = "fabiospampinato";
-          version = "1.7.0";
-          sha256 = "sha256-7Vm/Z46j2GG2c2XZkAlmJ9ZCZ9og+v3tboD2Tf23gGA=";
+          version = "1.7.1";
+          sha256 = "sha256-GDLnZ/pL8XQjg1oYNHvAB2xgS3vSq4JA4DvmuXcVuPA=";
         }
         {
           name = "theme-monokai-pro-vscode";
           publisher = "monokai";
-          version = "1.2.2";
-          sha256 = "sha256-xeLzzNgj/GmNnSmrwSfJW6i93++HO3MPAj8RwZzwzR4=";
+          version = "2.0.5";
+          sha256 = "sha256-H79KlUwhgAHBnGucKq8TJ1olDl0dRrq+ullGgRV27pc=";
         }
       ]
     );
@@ -541,42 +522,6 @@
 
       ## Haskell
 
-      ## Java
-      redhat.telemetry.enabled = false;
-      java = {
-        autobuild.enabled = false;
-        codeGeneration = {
-          generateComments = true;
-          hashCodeEquals.useInstanceof = true;
-          useBlocks = true;
-        };
-        project = {
-          encoding = "setDefault";
-          importOnFirstTimeStartup = "automatic";
-        };
-        jdt.ls.androidSupport.enabled = "off";
-        sharedIndexes = {
-          enabled = "on";
-          locations = "~/.cache/.jdt/index";
-        };
-        configuration.runtimes =
-          with lib; let
-            # jdks from `programs.java` and ~/.jdks folder
-            jdks = unique ([ config.programs.java.package ] ++ (attrsets.mapAttrsToList (_name: value: value.source)
-              (attrsets.filterAttrs (name: _value: strings.hasInfix ".jdks/jdk-" name) config.home.file)));
-
-            jdkToRuntime = jdks: builtins.map
-              (jdk: {
-                path = jdk;
-                majVersion = builtins.head (builtins.splitVersion jdk.version);
-                default = builtins.head (builtins.splitVersion jdk.version) == "17"; # Java language server can't handle 21 yet?
-                version = "JavaSE-${builtins.head (builtins.splitVersion jdk.version)}";
-              })
-              jdks;
-          in
-          builtins.map (jdk: { inherit (jdk) path default version; }) (jdkToRuntime jdks);
-      };
-
       ## Rust
       rust-analyzer.restartServerOnConfigChange = true;
 
@@ -607,7 +552,7 @@
       # Language-specific Formatting section
       #########################################################################
 
-      # VSCodium applies this format from version 1.85 on autoamtically when opening projects
+      # VSCodium applies this format from version 1.85 on automatically when opening projects
       "[latex][markdown]" = {
         file.autoSave = "afterDelay";
         editor.wordBasedSuggestions = "off";
@@ -624,12 +569,9 @@
         cSpell.advanced.feature.useReferenceProviderWithRename = true;
         cSpell.advanced.feature.useReferenceProviderRemove = "/^#+\\s/"; # TODO What's this for??
       };
-      "[latex]" = {
-        editor.defaultFormatter = "James-Yu.latex-workshop";
-      };
+
+      "[latex]".editor.defaultFormatter = "James-Yu.latex-workshop";
       "[dockercompose]".editor.defaultFormatter = "ms-azuretools.vscode-docker";
-      "[java]".editor.defaultFormatter = "redhat.java";
-      "[rust]".editor.defaultFormatter = "rust-lang.rust-analyzer";
 
       "[typescriptreact][typescript][javascriptreact][javascript][jsonc]".editor.defaultFormatter = "esbenp.prettier-vscode";
     };
