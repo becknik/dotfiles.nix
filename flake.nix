@@ -2,7 +2,8 @@
   description = "flake for nixos, nix-darwin & more I've running on my desktop & laptops";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -21,11 +22,11 @@
 
     darwin = {
       url = "github:lnl7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
@@ -62,7 +63,7 @@
       systems = [ "aarch64-darwin" "x86_64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
 
-      stateVersion = "24.05";
+      stateVersion = "24.11";
 
       # Necessary e.g. for NixOS `config.system.autoUpgrade.flake` with `--commit-lockfile`
       mkFlakeDir = userName: config: (if builtins.hasAttr "users" config then
@@ -84,6 +85,7 @@
           "discord"
 
           "steam"
+          "steam-unwrapped"
           "steam-original"
           "steam-run"
 

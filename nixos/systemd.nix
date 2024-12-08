@@ -2,6 +2,7 @@
 
 {
   # Auto Upgrade Systemd Service
+  systemd.enableStrictShellChecks = false; # TODO
 
   ## Post Auto Upgrade Systemd Services
   systemd.services =

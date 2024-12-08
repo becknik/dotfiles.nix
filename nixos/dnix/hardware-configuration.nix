@@ -31,7 +31,7 @@
   #powerManagement.cpuFreqGovernor = lib.mkDefault "performance"; # Managed by cpupower kernel module & gui
 
   # Hardware Acceleration
-  hardware.opengl.extraPackages = with pkgs; [
+  hardware.graphics.extraPackages = with pkgs; [
     intel-compute-runtime
     intel-media-driver
   ];

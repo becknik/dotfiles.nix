@@ -136,7 +136,7 @@
     helvum
     vlc
     system-config-printer # graphical ui for CUPS
-    transmission-gtk
+    transmission_4-gtk
     trash-cli
     yt-dlp
     media-downloader # for yt-dlp
