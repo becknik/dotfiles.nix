@@ -26,12 +26,6 @@
   # Manual Installation
   environment.systemPackages = with pkgs; [
     libnotify # For the noixos-upgrade systemd notifier units
-
-    ## Utils
-    nixvim
-    efibootmgr
-    usbutils
-    cryptsetup
   ];
 
   # "Bloat" Removal

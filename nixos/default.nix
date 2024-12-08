@@ -1,8 +1,9 @@
-{ inputs, mkFlakeDir, stateVersion, userName, config, lib, pkgs, ... }:
+{ inputs, stateVersion, userName, config, lib, pkgs, ... }:
 
 {
   imports = [
     ./desktop-env # Setup of services for desktop-experience like sound, input, printing, ...
+    ./programs.nix # Programs not fitting into desktop-env category
 
     ./systemd.nix # Systemd services (related to NixOS auto upgrade)
     ./virtualisation.nix
@@ -11,17 +12,6 @@
 
   # System Settings
   system = { inherit stateVersion; };
-  programs.git = {
-    enable = true;
-    config = {
-      # Necessary for managing the flake in systemd & dnix scheduled `system.autoUpgrade` with `--commit-lock-file`
-      safe.directory = (mkFlakeDir userName config);
-      user = {
-        name = "Nix Auto Upgrade";
-        email = "jannikb@posteo.de";
-      };
-    };
-  };
 
   # Bootloader
   boot.loader = {
@@ -240,12 +230,12 @@
 
 
   # Shell Setup
+  users.defaultUserShell = pkgs.zsh;
   programs.zsh = {
     enable = true;
-    #syntaxHighlighting.enable = true; # Configured in home-manager
-    #autosuggestions.enable = true; # "
+    syntaxHighlighting.enable = true;
+    autosuggestions.enable = true;
   };
-  users.defaultUserShell = pkgs.zsh;
   services.envfs.enable = false; # https://github.com/Mic92/envfs#envfs ( TODO `nil` not in path after this?!)
 
 
@@ -294,13 +284,9 @@
   environment.shellInit = "ulimit -n ${builtins.toString (pkgs.lib.custom.pow 2 16)}";
 
   environment.systemPackages = with pkgs; [
-    openvpn
-    #opensnitch-ui
     #firejail # if not included explicitly, `/etc/apparmor.d` wouldn't get symlinked...
     #apparmor-parser # aa-enable firejail-default isn't working
   ];
-
-  services.v4l2-relayd.instances = { }; # TODO proper camera setup
 
   catppuccin = {
     enable = true;
