@@ -291,6 +291,7 @@
           gclb = "git clone --recurse-submodules --bare";
           "gsw!" = "git switch --force";
           gla = "git pull --autostash";
+          gstaS = "git stash push -S";
 
           ## Submodules
           gsub = "git submodule";

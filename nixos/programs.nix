@@ -13,12 +13,6 @@
     };
   };
 
-  services.pgadmin = {
-    enable = true;
-    initialEmail = "jannikb@posteo.de";
-    initialPasswordFile = ./pgadmin-pw;
-  };
-
   environment.systemPackages = with pkgs; [
     nixvim
     efibootmgr
