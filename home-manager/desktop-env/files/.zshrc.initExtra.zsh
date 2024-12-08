@@ -20,7 +20,7 @@ bindkey '^[[B' history-substring-search-down
 # you-should-use
 YSU_MESSAGE_POSITION="after"
 # too annoying
-YSU_HARDCORE=0 # refuses to execute the command aliases exist of
+#YSU_HARDCORE=1 # refuses to execute the command aliases exist of
 
 # Pure Prompt
 autoload -U promptinit; promptinit

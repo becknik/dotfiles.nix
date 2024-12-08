@@ -79,6 +79,7 @@
 
     ## Testing
     httpie
+    pgadmin4
 
     ## OCI Containers
     dive # https://github.com/wagoodman/dive
