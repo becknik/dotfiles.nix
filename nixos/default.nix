@@ -58,12 +58,12 @@
   boot = {
     ## Shared Kernel Config
     extraModulePackages = with config.boot.kernelPackages; [
-      system76-scheduler
       perf
       turbostat
       #opensnitch-ebpf # TODO this might cause kernel warning? - tool not really necessary
       #virtualbox # broken, see `virtualization.nix`
-    ];
+
+    ] ++ [ pkgs.system76-scheduler ];
 
     kernelParams = [
       "nowatchdog"

@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 
 let
-  gnomeAdditionalTools = with pkgs.gnome; [
+  gnomeAdditionalTools = with pkgs; [
     dconf-editor
     ghex
     gnome-sound-recorder
@@ -9,12 +9,11 @@ let
     gnome-themes-extra
     pomodoro
     gnome-power-manager
-  ] ++ (with pkgs; [
     gedit
     gnome-decoder
     gnome-extension-manager
     networkmanagerapplet # redundant (see desktop-env), but necessary for home-manager to link the .desktop file
-  ]);
+  ];
 
   gnomeExtensions = with pkgs.gnomeExtensions; [
     alphabetical-app-grid
@@ -56,8 +55,7 @@ in
       enable = true;
 
       ## X11
-      layout = "eu";
-      xkbVariant = "";
+      xkb.layout = "eu";
 
       ## GDM
       displayManager.gdm.enable = true;
@@ -74,9 +72,8 @@ in
       ### Override the implications of gnome.core-os-services
       #evolution-data-server.enable = lib.mkDefault false; # might be the cause for gnome shell crashes
       gnome-online-accounts.enable = lib.mkForce false;
-      gnome-online-miners.enable = lib.mkForce false;
-      tracker-miners.enable = lib.mkForce false;
-      tracker.enable = lib.mkForce false;
+      localsearch.enable = lib.mkForce false;
+      tinysparql.enable = lib.mkForce false;
 
       ### " gnome.core-shell
       gnome-remote-desktop.enable = lib.mkForce false;
@@ -100,7 +97,7 @@ in
 
 
   # Remove Bloat & Tools replaced by KDE ones
-  environment.gnome.excludePackages = (with pkgs.gnome; [
+  environment.gnome.excludePackages = with pkgs; [
     epiphany
     evince
     eog
@@ -112,7 +109,6 @@ in
     sushi
     totem
     yelp
-  ]) ++ (with pkgs; [
     gnome-console
     gnome-connections
     gnome-tour
@@ -121,7 +117,7 @@ in
     orca
     gnome-text-editor
     gnome-user-docs
-  ]);
+  ];
 
   environment.variables = {
     QT_WAYLAND_DECORATION = "adwaita";

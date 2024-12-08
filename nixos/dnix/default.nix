@@ -54,10 +54,7 @@
 
   programs.steam = {
     enable = true;
-    remotePlay.openFirewall = true;
+    remotePlay.openFirewall = false;
     dedicatedServer.openFirewall = true;
-
-    # sadly, this still compiles some i686 dependencies...
-    package = (pkgs.steam.override { withGameSpecificLibraries = false; });
   };
 }

@@ -69,8 +69,7 @@
     # not using unstable.jetbrains-toolbox because it depends on too much & I'm not using it that often
   in
   jetbrainsTools ++ [
-    # devenv
-    devenv.packages."${pkgs.system}".devenv
+    devenv
     git-crypt
     meld
     wiggle

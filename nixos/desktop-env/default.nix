@@ -16,7 +16,7 @@
   services = {
     fwupd.enable = true;
     dbus = {
-      packages = [ pkgs.gnome.seahorse ];
+      packages = [ pkgs.seahorse ];
     };
 
     psd.enable = true;
@@ -25,14 +25,15 @@
     printing.enable = true;
     avahi = {
       enable = true;
-      nssmdns = true;
+      nssmdns4 = true;
     };
 
-    ## PipeWire (1/2)
+    ## PipeWire
     pipewire = {
       enable = true;
-      audio.enable = true;
       alsa.enable = true;
+      alsa.support32Bit = true;
+      audio.enable = true;
       pulse.enable = true;
 
       # Source: https://wiki.archlinux.org/title/PipeWire/Examples#Echo_cancellation
@@ -44,19 +45,17 @@
       };
     };
   };
-  environment.wordlist.enable = true;
-
-  ## PipeWire (2/2)
-  sound.enable = true;
-  hardware.pulseaudio.enable = false;
   security.rtkit.enable = true; # Pipewire and Pulse seem to acquire realtime scheduling with this one
   # Declared in pulseaudio.nix and optionally in pipewire.nix
+
+  environment.wordlist.enable = true;
 
   # Input
 
   ## Fcitx5
   i18n.inputMethod = {
-    enabled = "fcitx5";
+    type = "fcitx5";
+    enable = true;
     fcitx5 = {
       addons = with pkgs; [
         fcitx5-mozc
