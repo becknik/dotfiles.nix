@@ -76,7 +76,6 @@
       dbaeumer.vscode-eslint
       esbenp.prettier-vscode
       bradlc.vscode-tailwindcss
-      wix.vscode-import-cost
 
       #### Shell
       mads-hartmann.bash-ide-vscode
@@ -219,11 +218,12 @@
         definitionLinkOpensInPeek = true;
 
         linkedEditing = true;
-        formatOnSave = false;
+        formatOnSave = true;
         formatOnPaste = true;
-        formatOnSaveMode = "modifications"; # modificationsIfAvailable
+        formatOnSaveMode = "modificationsIfAvailable";
         codeActionsOnSave = {
-          source.organizeImports = true;
+          "source.organizeImports" = true;
+          "source.fixAll.eslint" = true;
         };
 
         accessibilitySupport = "off";
@@ -369,13 +369,7 @@
       };
 
       errorLens = {
-        delay = 500;
-        delayMode = "debounce";
-        excludeBySource = [
-          "cSpell"
-        ];
-        messageMaxChars = 60;
-        onSave = true;
+        excludeBySource = [ "cSpell" ];
         scrollbarHackEnabled = true;
         statusBarIconsEnabled = true;
       };
@@ -462,7 +456,8 @@
       # Language Plugin Settings
       ##########################################################################
 
-      ## Linting
+      ## ESLint
+      eslint.format.enable = true;
 
       ### Prettier
       prettier = {
