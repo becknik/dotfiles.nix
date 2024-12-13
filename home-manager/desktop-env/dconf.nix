@@ -94,6 +94,12 @@ with lib.gvariant; {
       cycle-group-backward = [ "<Shift><Alt>Escape" "<Shift><Alt>grave" ];
       cycle-windows = [ "<Alt>Tab" ];
       cycle-windows-backward = [ "<Shift><Alt>Tab" ];
+      switch-group = [ "<Super>Escape" "<Super>grave" ];
+      switch-group-backward = [ "<Shift><Super>Escape" "<Shift><Super>grave" ];
+      switch-windows = [ ];
+      switch-windows-backward = [ ];
+      switch-applications = [ "<Super>Tab" ];
+      switch-applications-backward = [ "<Shift><Super>Tab" ];
 
       maximize-horizontally = [ "<Super>i" ];
       maximize-vertically = [ "<Super>o" ];
@@ -120,8 +126,6 @@ with lib.gvariant; {
       move-to-workspace-1 = [ "<Shift><Super>1" ];
       move-to-workspace-2 = [ "<Shift><Super>2" ];
       move-to-workspace-3 = [ "<Shift><Super>3" ];
-      move-to-workspace-4 = [ "<Shift><Super>4" ];
-      #move-to-workspace-5 = [ "<Shift><Super>5" ];
 
       move-to-workspace-down = [ "<Shift><Super>j" ];
       move-to-workspace-last = [ "<Shift><Super>g" ];
@@ -136,34 +140,29 @@ with lib.gvariant; {
       #switch-group=['<Super>grave']
       #switch-group-backward=['<Shift><Super>grave']
 
-      switch-to-workspace-1 = [ "<Control><Super>1" ];
-      switch-to-workspace-2 = [ "<Control><Super>2" ];
-      switch-to-workspace-3 = [ "<Control><Super>3" ];
-      switch-to-workspace-4 = [ "<Control><Super>4" ];
-      switch-to-workspace-5 = [ "<Control><Super>5" ];
-
       switch-to-workspace-down = [ "<Control><Super>j" ];
       switch-to-workspace-last = [ "<Control><Super>e" ];
       switch-to-workspace-left = [ "<Control><Super>h" ];
       switch-to-workspace-right = [ "<Control><Super>l" ];
       switch-to-workspace-up = [ "<Control><Super>k" ];
 
-      switch-windows = [ "<Super>Tab" ];
-      switch-windows-backward = [ "<Shift><Super>Tab" ];
-      toggle-fullscreen = [ "<Super>m" ];
       toggle-maximized = [ "<Super>k" ];
+      toggle-fullscreen = [ "<Shift><Super>k" ];
       unmaximize = [ "<Super>j" ];
 
       toggle-overview = [ "<Super>s" ]; # must be set automatically
       toggle-quick-settings = [ "<Shift><Super>s" ]; # ""
       switch-input-source = [ "" ]; # fixed collision with search & fcitx5
+
+      always-on-top = [ "<Super>z" ];
     };
 
     "org/gnome/desktop/wm/preferences" = {
+      num-workspaces = 3;
       action-middle-click-titlebar = "minimize";
       button-layout = "appmenu:close";
       disable-workarounds = true;
-      workspace-names = [ "main0" "main1" "mailing" "messaging" ];
+      workspace-names = [ "main" "messaging" "scnd" ];
       resize-with-right-button = false;
       visual-bell = true;
     };
@@ -255,13 +254,12 @@ with lib.gvariant; {
     };
 
     "org/gnome/shell/extensions/auto-move-windows".application-list = [
-      "teams-for-linux.desktop:3"
-      "thunderbird.desktop:3"
-      "io.github.alainm23.planify.desktop:3"
-      "element-desktop.desktop:4"
-      "org.telegram.desktop.desktop:4"
-      "discord.desktop:4"
-      "signal-desktop.desktop:4"
+      "teams-for-linux.desktop:2"
+      "thunderbird.desktop:2"
+      "io.github.alainm23.planify.desktop:2"
+      "element-desktop.desktop:2"
+      "org.telegram.desktop.desktop:2"
+      "signal-desktop.desktop:2"
     ];
 
     "org/gnome/shell/extensions/blur-my-shell".color-and-noise = false;
