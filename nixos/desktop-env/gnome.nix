@@ -105,7 +105,6 @@ in
     gnome-calendar
     gnome-contacts
     gnome-music
-    nautilus
     sushi
     totem
     yelp
