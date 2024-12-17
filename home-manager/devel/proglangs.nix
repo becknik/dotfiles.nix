@@ -2,28 +2,26 @@
 
 {
   # some pl packages are handy for quickly trying something out etc.
-  home.packages =
-    let
-      clangPackages = with pkgs; lib.optionals (!isDarwinSystem) [ clang_17 clang-tools_17 ];
-      texlive = with pkgs; lib.optional (!isDarwinSystem) texliveFull;
-    in
-    with pkgs; texlive ++ [
-      # JS / TypeScript
-      unstable.nodejs_latest
-      unstable.pnpm
-      unstable.eslint_d
-      unstable.prettierd
+  home.packages = with pkgs; (lib.optional (!isDarwinSystem) texliveFull) ++ [
+    unstable.amber-lang
 
-      # Nix
-      unstable.nixd
-      unstable.nixpkgs-fmt
-      nixpkgs-lint
+    # JS / TypeScript
+    unstable.nodejs_latest
+    unstable.pnpm
+    unstable.eslint_d
+    unstable.prettierd
 
-      # Python
-      unstable.python3
+    # Nix
+    unstable.nixd
+    unstable.nixpkgs-fmt
+    nixpkgs-lint
 
-      unstable.amber-lang
-    ];
+    # Python
+    unstable.python3
+
+    unstable.clang_17
+    unstable.clang-tools_17
+  ];
 
   # JDK Setup (https://whichjdk.com/)
   programs.java = { enable = true; package = pkgs.unstable.temurin-bin-21; };
