@@ -1,4 +1,4 @@
-{ isDarwinSystem, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -20,14 +20,7 @@
     mutableExtensionsDir = false; # Setting this to true disabled the java extensions to properly install
 
     # Plugins
-    extensions = with pkgs.unstable.vscode-extensions; let
-      cppTools = with pkgs; lib.optionals (!isDarwinSystem) [
-        llvm-vs-code-extensions.vscode-clangd
-        vadimcn.vscode-lldb
-        ms-vscode.cmake-tools
-      ];
-    in
-    [
+    extensions = with pkgs.unstable.vscode-extensions; [
       ## Management
       ms-vsliveshare.vsliveshare
       alefragnani.project-manager
@@ -95,9 +88,12 @@
       rust-lang.rust-analyzer
 
       ### Cpp
+      llvm-vs-code-extensions.vscode-clangd
+      vadimcn.vscode-lldb
+      ms-vscode.cmake-tools
       #ms-vscode.cpptools
       #twxs.cmake #?
-    ] ++ cppTools ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (
+    ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (
       [
         {
           name = "vscode-expo-tools";

@@ -48,6 +48,8 @@
 
     ## Daily Software
     obsidian
+    logseq
+    # browser manged with brew
 
     ## Privacy
     keepassxc

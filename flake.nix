@@ -34,13 +34,19 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = ""; # https://github.com/Mic92/sops-nix/issues/353
     };
+    mac-app-util = {
+      url = "github:hraban/mac-app-util";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    nix-index-database.url = "github:nix-community/nix-index-database";
-    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     catppuccin.url = "github:catppuccin/nix";
 
     # Libraries
@@ -82,7 +88,6 @@
 
           "veracrypt"
           "obsidian"
-          "discord"
 
           "steam"
           "steam-unwrapped"
@@ -131,11 +136,12 @@
             useGlobalPkgs = true;
             useUserPackages = true;
 
+            # enabled for all users, not just one:
             sharedModules = with inputs; [
               sops-nix.homeManagerModules.sops
               nix-index-database.hmModules.nix-index
               catppuccin.homeManagerModules.catppuccin
-            ];
+            ] ++ nixpkgs.lib.optional isDarwinSystem mac-app-util.homeManagerModules.default;
 
             # home-manager on darwin doesn't support all options
             users.${userName} = nixpkgs.lib.concatStringsSep "/" [
@@ -290,6 +296,9 @@
           specialArgs = (args userName);
 
           modules = [
+            inputs.mac-app-util.darwinModules.default
+            home-manager.darwinModules.home-manager
+
             ({ lib, pkgs, ... }@module-inputs: {
               nixpkgs = {
                 inherit system config;
