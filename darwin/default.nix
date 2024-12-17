@@ -1,4 +1,4 @@
-{ ... }:
+{ userName, ... }:
 
 {
   system.stateVersion = 5;
@@ -18,6 +18,7 @@
     settings = {
       max-jobs = 2;
       cores = 4;
+      trusted-users = [ "root" userName ];
     };
   };
 
