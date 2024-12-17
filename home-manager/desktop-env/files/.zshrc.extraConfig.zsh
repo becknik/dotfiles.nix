@@ -32,3 +32,7 @@ function gwips() {
 
 # Fix for `cp: cannot create regular file '/home/jnnk/.cache/oh-my-zsh/completions/_docker': Permission denied`
 chmod u+w $HOME/.cache/oh-my-zsh/completions/_docker
+
+if [ -f ~/.zshrc.local ]; then
+    source ~/.zshrc.local
+fi
