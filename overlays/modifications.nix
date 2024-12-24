@@ -45,12 +45,6 @@ final: prev: {
 
   # Fixes
 
-  auto-cpufreq = with prev; auto-cpufreq.overrideAttrs (oldAttrs: {
-    # https://github.com/AdnanHodzic/auto-cpufreq/issues/661
-    patches = oldAttrs.patches ++ [ ./modifications/auto-cpufreq_pipe-log-spam.patch ];
-  });
-
-
   # Own Packages
 
   ## Linux Kernel

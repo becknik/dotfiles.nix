@@ -37,7 +37,6 @@
     amdvlk
     rocmPackages.clr.icd
   ];
-  hardware.opengl.driSupport = true; # This is already enabled by default
   services.xserver.videoDrivers = [ "amdgpu" ];
 
   environment.variables.LIBVA_DRIVER_NAME = "radeonsi"; # Might be redundant
@@ -50,8 +49,7 @@
   # Further Hardware Settings
   hardware.bluetooth.enable = true;
   hardware.acpilight.enable = true; # backlight
-  services.fprintd.enable = true;
-  sound.extraConfig = "options snd-hda-intel model=asus-zenboook power_save=1";
+  # sound.extraConfig = "options snd-hda-intel model=asus-zenboook power_save=1";
 
   # options snd-hda-intel model=alc294-lenovo-mic
   # asus-zenbook-ux31a position_fix=*
