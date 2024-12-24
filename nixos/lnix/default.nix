@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -31,9 +31,6 @@
 
         macAddress = config.networking.networkmanager.ethernet.macAddress; # = "stable"
       };
-      settings = {
-        device."wifi.scan-interval" = 120;
-      };
     };
   };
   boot.extraModprobeConfig = "options mt7921e power_save=0";
@@ -62,6 +59,8 @@
       };
     };
   };
+  # conflicting with auto-cpufreq
+  services.power-profiles-daemon.enable = lib.mkForce false;
 
   ## Logind
   # TODO Logind config might be interesting for laptops https://man7.org/linux/man-pages/man5/logind.conf.5.html
