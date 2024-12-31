@@ -32,7 +32,6 @@
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows = ""; # https://github.com/Mic92/sops-nix/issues/353
     };
     mac-app-util = {
       url = "github:hraban/mac-app-util";
