@@ -73,6 +73,7 @@
     git-crypt
     meld
     wiggle
+    watchman # necessary for some npm scripts
 
     # LLM (ChatGPT)
     shell-gpt
