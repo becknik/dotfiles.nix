@@ -64,7 +64,7 @@ with lib.gvariant; {
       enable-animations = false;
       enable-hot-corners = true; # Can be useful when no keyboard is available
       show-battery-percentage = laptopMode;
-      text-scaling-factor = (if laptopMode then 1.25 else 0.97);
+      text-scaling-factor = (if laptopMode then 0.9 else 0.97);
     };
 
     "org/gnome/desktop/peripherals/keyboard" = {
@@ -195,7 +195,7 @@ with lib.gvariant; {
       center-new-windows = true;
       dynamic-workspaces = false;
       edge-tiling = true;
-      experimental-features = [ "scale-monitor-framebuffer" "rt-scheduler" ];
+      experimental-features = [ "scale-monitor-framebuffer" "xwayland-native-scaling" ];
       workspaces-only-on-primary = laptopMode;
     };
 
