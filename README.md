@@ -92,7 +92,16 @@ $ tree -a -I '\.git|\.vscode|\.direnv' . # slightly modified for better context/
 - `nixos-fetch-flake-changes.service` - Checks for upstream changes of flake and executes `nixos-rebuild switch` if so
 - rebuild shell alias: See bottom of [shell.nix](./home-manager/desktop-env/shell.nix)
 
-## Getting Started/ Deployment
+## Getting Started
+
+- Enter the `nix repl`
+
+```nix
+# aliased as nrepl
+nix repl --expr "builtins.getFlake \"$HOME/devel/own/dotfiles.nix\""
+```
+
+## Deployment
 
 1. Partition disks with [disko](https://github.com/nix-community/disko):
 
@@ -131,7 +140,7 @@ Let's hope this projects break the hours down to minutes
 - [ ] Anki
 - [ ] cider
 
-### Autostart must be manually Enable
+### Autostart must be manually Enabled
 
 - [ ] keepassxc
 - [ ] telegram-desktop

@@ -71,7 +71,10 @@
       bradlc.vscode-tailwindcss
 
       #### Shell
-      mads-hartmann.bash-ide-vscode
+      # has shellfmt & shellcheck support, but can't access binaries
+      (mads-hartmann.bash-ide-vscode.overrideAttrs (_oldAttrs: {
+        buildInputs = [ pkgs.shellcheck pkgs.shfmt ];
+      }))
 
       ### Nix
       jnoortheen.nix-ide
@@ -106,6 +109,12 @@
           publisher = "ryanlaws";
           version = "1.0.2";
           sha256 = "sha256-tvgLHSKmX3FBLwi4JikJR4PUieK6iKGzBMj+Zz58SFI=";
+        }
+        {
+          name = "git-worktrees";
+          publisher = "GitWorktrees";
+          version = "2.2.0";
+          sha256 = "sha256-bk0poO9REcm7r3D0i9Z2DDsWjDlHXfI/kKvvwOwAgbg=";
         }
 
         {
@@ -217,10 +226,10 @@
         formatOnSave = true;
         formatOnPaste = true;
         formatOnSaveMode = "modificationsIfAvailable";
-        codeActionsOnSave = {
-          "source.organizeImports" = true;
-          "source.fixAll.eslint" = true;
-        };
+        codeActionsOnSave = [
+          "source.organizeImports"
+          "source.fixAll.eslint"
+        ];
 
         accessibilitySupport = "off";
         unfoldOnClickAfterEndOfLine = true;
@@ -304,6 +313,11 @@
         integrated.scrollback = 5000;
         enablePersistentSessions = false;
       };
+
+      # Debugging
+
+      # https://code.visualstudio.com/docs/nodejs/nodejs-debugging#_auto-attach
+      debug.javascript.autoAttachFilter = "onlyWithFlag"; # triggered with `--inspect-brk` or `--inspect` cli flags
 
 
       #########################################################################
@@ -501,9 +515,9 @@
       # Source: https://github.com/nix-community/vscode-nix-ide
       nix = {
         enableLanguageServer = true;
-        serverPath = pkgs.unstable.nixd;
+        serverPath = "${pkgs.unstable.nixd}/bin/nixd";
         serverSettings.nixd = {
-          formatting.command = [ "${pkgs.unstable.nixpkgs-fmt}" ];
+          formatting.command = [ "${pkgs.unstable.nixpkgs-fmt}/bin/nixpkgs-fmt" ];
         };
       };
 

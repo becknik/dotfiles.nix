@@ -72,3 +72,5 @@ rerun-previous-command-if-empty() {
   fi
 }
 zle -N accept-line rerun-previous-command-if-empty
+
+unalias gwip
