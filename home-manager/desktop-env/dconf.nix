@@ -254,9 +254,7 @@ with lib.gvariant; {
     };
 
     "org/gnome/shell/extensions/auto-move-windows".application-list = [
-      "teams-for-linux.desktop:2"
       "thunderbird.desktop:2"
-      "io.github.alainm23.planify.desktop:2"
       "element-desktop.desktop:2"
       "org.telegram.desktop.desktop:2"
       "signal-desktop.desktop:2"

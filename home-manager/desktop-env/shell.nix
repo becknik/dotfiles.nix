@@ -292,6 +292,7 @@
           "gsw!" = "git switch --force";
           gla = "git pull --autostash";
           gstaS = "git stash push -S";
+          grbis = "git rebase --interactive --autosquash";
 
           ## Submodules
           gsub = "git submodule";
@@ -300,6 +301,7 @@
           gsubfe = "git submodule foreach";
 
           ## Frankensteins
+          "gauc!" = "gau && gc!";
           "gaucn!" = "gau && gcn!";
           gcnpf = "gcn! && gpf";
           gaucnpf = "gau && gcn! && gpf";
