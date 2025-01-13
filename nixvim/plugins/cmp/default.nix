@@ -7,17 +7,26 @@
 
   extraConfigLuaPre = (builtins.readFile ./cmp.lua); # sets neovim kinds to (nerdfont) symbols
 
-  extraPlugins = [{
-    plugin = with pkgs; (vimUtils.buildVimPlugin {
-      name = "cmp-dotenv";
-      src = fetchFromGitHub {
-        owner = "SergioRibera";
-        repo = "cmp-dotenv";
-        rev = "7af67e7ed4fd9e5b20127a624d22452fbd505ccd";
-        hash = "sha256-/aQlOE92LPSSv+X968MDw8Mb1Yy4SeqS5xVb4PTBbcw=";
-      };
-    });
-  }];
+  # https://github.com/petertriho/cmp-git?tab=readme-ov-file#config
+
+  # TODO doesn't work
+  extraPackages = with pkgs; [
+    curl
+    git
+    gh
+    glab
+    vimPlugins.cmp-git
+
+    # (vimUtils.buildVimPlugin {
+    # name = "cmp-dotenv";
+    # src = fetchFromGitHub {
+    #   owner = "SergioRibera";
+    #   repo = "cmp-dotenv";
+    #   rev = "7af67e7ed4fd9e5b20127a624d22452fbd505ccd";
+    # hash = "sha256-/aQlOE92LPSSv+X968MDw8Mb1Yy4SeqS5xVb4PTBbcw=";
+    # };
+    # })
+  ];
 
   # https://github.com/hrsh7th/nvim-cmp
   plugins = {
@@ -45,7 +54,7 @@
               else
                 vim_item.kind = symbols[vim_item.kind]
                 -- vim_item.kind = string.format('%s %s', symbols[vim_item.kind], vim_item.kind)
-              end 
+              end
               vim_item.menu = ({
                 buffer = "[]",
                 nvim_lsp = "[]",
