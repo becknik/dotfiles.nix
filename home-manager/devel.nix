@@ -80,7 +80,7 @@
 
     ## Testing
     httpie
-    pgadmin4
+    pgadmin4-desktopmode
 
     ## OCI Containers
     dive # https://github.com/wagoodman/dive

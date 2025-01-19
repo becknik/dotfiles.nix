@@ -147,12 +147,15 @@
       kdeConnectPortRange = { from = 1714; to = 1764; };
     in
     {
-      enable = true;
+      # every docker network creates a new interface, so disabling firewall globally
+      enable = false;
       ## Firewall Ports to open
       allowedTCPPorts = [ ];
       allowedTCPPortRanges = [ kdeConnectPortRange ];
       allowedUDPPorts = [ ];
       allowedUDPPortRanges = [ kdeConnectPortRange ];
+
+      trustedInterfaces = [ "docker0" ];
     };
   services.avahi.openFirewall = true;
   services.samba.openFirewall = true;
