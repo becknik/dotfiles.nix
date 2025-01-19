@@ -129,6 +129,10 @@
     signal-desktop
     threema-desktop
     teams-for-linux
+    (vesktop.override {
+      withMiddleClickScroll = true;
+      withSystemVencord = true;
+    })
 
     ## Media
     kooha
