@@ -50,6 +50,13 @@
       ms-azuretools.vscode-docker
       ms-kubernetes-tools.vscode-kubernetes-tools
 
+      ### Interface
+
+      apollographql.vscode-apollo
+      # graphql => graphql-syntax
+      # graphql.vscode-graphql
+      # graphql.vscode-graphql-syntax
+
       ## Languages
 
       ### Markup
@@ -480,6 +487,9 @@
         printWidth = 120;
       };
       #editor.defaultFormatter = "esbenp.prettier-vscode";
+
+      ## YAML
+      redhat.telemetry.enabled = null;
 
       ## Markdown
       markdownlint.run = "onSave";
