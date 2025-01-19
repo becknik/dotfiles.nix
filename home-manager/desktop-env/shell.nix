@@ -293,6 +293,7 @@
           gla = "git pull --autostash";
           gstaS = "git stash push -S";
           grbis = "git rebase --interactive --autosquash";
+          glgf = "git log --stat --pretty=fuller";
 
           ## Submodules
           gsub = "git submodule";
@@ -302,6 +303,7 @@
 
           ## Frankensteins
           "gauc!" = "gau && gc!";
+          "gaucmsg" = "gau && gcmsg";
           "gaucn!" = "gau && gcn!";
           gcnpf = "gcn! && gpf";
           gaucnpf = "gau && gcn! && gpf";

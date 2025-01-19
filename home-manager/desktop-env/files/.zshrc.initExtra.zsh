@@ -12,8 +12,8 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 unsetopt flow_control
 bindkey '^e' push-line
 # Auto-Complete a word with Ctrl + Space
-bindkey '^ ' forward-word
-# bindkey '^ ' autosuggest-accept
+# bindkey '^ ' forward-word
+bindkey '^ ' autosuggest-accept
 # Partial history matches using arrow keys
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
