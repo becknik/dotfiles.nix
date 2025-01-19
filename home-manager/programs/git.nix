@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   programs.git = {
@@ -71,10 +71,10 @@
       # https://andrewlock.net/working-with-stacked-branches-in-git-is-easier-with-update-refs/
       rebase.updateRefs = true;
       merge = {
-        tool = "vscodium";
+        tool = "codium";
         conflictstyle = "zdiff3";
       };
-      mergetool."vscodium".cmd = "vscodium --wait $MERGED";
+      mergetool."codium".cmd = "${pkgs.unstable.vscodium}/bin/codium --wait $MERGED";
 
       url."git@github.com:".insteadOf = "https://github.com/";
 
