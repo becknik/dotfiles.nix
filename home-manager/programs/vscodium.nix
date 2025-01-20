@@ -29,6 +29,7 @@
       mkhl.direnv
       github.copilot
       github.copilot-chat
+      github.vscode-pull-request-github
 
       ## Editor Config, Autocompletion, etc.
       vscodevim.vim
@@ -47,6 +48,7 @@
       mhutchie.git-graph
 
       ## Deployment
+      github.vscode-github-actions
       ms-azuretools.vscode-docker
       ms-kubernetes-tools.vscode-kubernetes-tools
 
