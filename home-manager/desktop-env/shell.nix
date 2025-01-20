@@ -294,6 +294,8 @@
           gstaS = "git stash push -S";
           grbis = "git rebase --interactive --autosquash";
           glgf = "git log --stat --pretty=fuller";
+          glgpf = "git log --stat --patch --pretty=fuller";
+          gdsw = "git diff --word-diff --staged";
 
           ## Submodules
           gsub = "git submodule";
