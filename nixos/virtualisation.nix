@@ -26,7 +26,7 @@
         ipv6 = true;
       };
       autoPrune = {
-        enable = true;
+        enable = false;
         dates = "monthly";
       };
     };
