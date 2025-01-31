@@ -124,8 +124,8 @@ Let's hope this projects break the hours down to minutes
 - [ ] Enable the installed GNOME-extensions
   - [ ] Setup `gsconnect`
 - [ ] (Configure the CPU-scheduler and profile in `cpupower-gui`)
-- [ ] Fix `dconf` settings for shortcuts being ignored (?) by gnome settings:
-  - [ ] "Open the quick settings menu" => `<Shift><Super>s`
+- [ ] Fix `dconf` settings for shortcuts being ignored by home-manager dconf generator (?):
+  - [ ] "Open the quick settings menu" => `Disabled` (\[delete\] key)
   - [ ] "Show the overview" => `<Super>s`
 
 ### Logins

@@ -151,7 +151,6 @@ with lib.gvariant; {
       unmaximize = [ "<Super>j" ];
 
       toggle-overview = [ "<Super>s" ]; # must be set automatically
-      toggle-quick-settings = [ "<Shift><Super>s" ]; # ""
       switch-input-source = [ "" ]; # fixed collision with search & fcitx5
 
       always-on-top = [ "<Super>z" ];
@@ -207,9 +206,11 @@ with lib.gvariant; {
     "org/gnome/settings-daemon/plugins/color".night-light-enabled = true;
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
-      screensaver = [ "<Shift><Super>q" ];
+      screensaver = [ "<Control><Super>q" ];
       search = [ "<Super>slash" "<Super>space" ];
       terminal = [ "<Super>t" ];
+      mic-mute = [ "<Super><Shift>m" ]; # when pressing <Super>m, the notification panel is toggled
+      volume-mute = [ "<Super><Shift>s" ];
     };
 
     "org/gnome/settings-daemon/plugins/power" = {
@@ -363,7 +364,7 @@ with lib.gvariant; {
     "org/gnome/shell/extensions/gtile" = {
       animation = false;
       auto-close-keyboard-shortcut = true;
-      grid-sizes = "5x5";
+      grid-sizes = "8x6,5x5";
       global-presets = false;
       moveresize-enabled = false;
 
