@@ -537,6 +537,9 @@
       bashIde.highlightParsingErrors = true;
       shellcheck.disableVersionCheck = true;
 
+      ## Typescript
+      typescript.updateImportsOnFileMove.enabled = "always";
+
       ## Haskell
 
       ## Rust
