@@ -70,6 +70,7 @@
     type = "fcitx5";
     enable = true;
     fcitx5 = {
+      waylandFrontend = true;
       addons = with pkgs; [
         fcitx5-mozc
         fcitx5-gtk
@@ -119,13 +120,6 @@
     MOZ_ENABLE_WAYLAND = "1"; # Just to make sure
     OBSIDIAN_USE_WAYLAND = "1"; # "
     QT_QPA_PLATFORM = "wayland";
-
-    ## Fcitx5
-    #GTK_IM_MODULE = "fcitx"; # redundant
-    #QT_IM_MODULE = "fcitx"; # "
-    #XMODIFIERS = "@im=fcitx"; # " & causes error
-    #SDL_IM_MODULE=fcitx
-    #GLFW_IM_MODULE=ibus # for kitty
   };
 
   # Etc

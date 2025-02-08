@@ -82,8 +82,12 @@
       enable = true;
       package = pkgs.ungoogled-chromium;
       commandLineArgs = [
+        # https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#Chromium%20/%20Electron
         "--enable-features=UseOzonePlatform"
         "--ozone-platform=wayland"
+        "--enable-wayland-ime"
+        "--wayland-text-input-version=3"
+
         "--password-store=gnome"
         "--enable-zero-copy"
 

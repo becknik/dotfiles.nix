@@ -36,6 +36,9 @@
 
   gtk = {
     enable = true;
+    gtk4.extraConfig = {
+      gtk-im-module = "fcitx";
+    };
     gtk3 = {
       bookmarks = [
         "file:///home/${userName}/nextcloud/uni/current-courses"
@@ -45,6 +48,7 @@
       extraConfig = {
         gtk-recent-files-limit = 0;
         gtk-application-prefer-dark-theme = 1; # Sets "Legacy Applications" to "Adwaita-dark" theme
+        gtk-im-module = "fcitx";
       };
       # Minimizes the gtk-3 header-bar
       extraCss = ''

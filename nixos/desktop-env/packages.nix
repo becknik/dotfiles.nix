@@ -49,13 +49,4 @@
       };
     };
   };
-
-  # Prints all system packages (installed by configuration.nix) into /etc/current-system-packages.txt
-  environment.etc."current-system-packages.txt".text =
-    let
-      packages = builtins.map (p: "${ p.name }") config.environment.systemPackages;
-      sorted-unique = builtins.sort builtins.lessThan (lib.unique packages);
-      formatted = builtins.concatStringsSep "\n" sorted-unique;
-    in
-    formatted;
 }

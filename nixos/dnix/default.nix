@@ -1,4 +1,4 @@
-{ inputs, mkFlakeDir, userName, config, lib, pkgs, ... }:
+{ mkFlakeDir, userName, config, pkgs, ... }:
 
 {
   imports = [
@@ -35,22 +35,7 @@
   nix.settings = {
     max-jobs = 2;
     cores = 4;
-
-    # system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ]
-    # Source: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/config/nix.nix
-    # ++ [ "gccarch-alderlake" ]; # TODO raptorlake needs to be added to architectures.nix for this to work (?)
   };
-
-  # Arch Linux compilation flags setup
-  #CFLAGS="-march=native -O3 -pipe -fno-plt -fexceptions \
-  #        -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security \
-  #        -fstack-clash-protection -fcf-protection"
-  #CXXFLAGS="$CFLAGS -Wp,-D_GLIBCXX_ASSERTIONS"
-  #LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
-  #LTOFLAGS="-flto=auto"
-  #RUSTFLAGS="-C opt-level=3 -C target-cpu=native"
-  #-- Make Flags: change this for DistCC/SMP systems
-  #MAKEFLAGS="-j12"
 
   programs.steam = {
     enable = true;

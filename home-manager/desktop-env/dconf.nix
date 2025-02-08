@@ -219,6 +219,10 @@ with lib.gvariant; {
       idle-dim = laptopMode;
       power-saver-profile-on-low-battery = laptopMode;
     };
+    "org.gnome.settings-daemon.plugins.xsettings" = {
+      overrides = "{'Gtk/IMModule': <'fcitx'>}";
+    };
+
 
     "org/gnome/shell" = {
       favorite-apps = [
