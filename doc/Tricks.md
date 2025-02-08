@@ -1,0 +1,3 @@
+# Tricks
+
+## NixOS
