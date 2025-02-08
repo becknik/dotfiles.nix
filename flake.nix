@@ -42,6 +42,10 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -97,11 +101,6 @@
           "jetbrains-toolbox"
           "idea-ultimate"
           "clion"
-          "vscode-extension-MS-python-vscode-pylance"
-          "vscode-extension-ms-vsliveshare-vsliveshare"
-          "vscode-extension-github-copilot"
-          "vscode-extension-github-copilot-chat"
-          "vscode-extension-mhutchie-git-graph"
         ];
         joypixels.acceptLicense = true;
       };
@@ -112,7 +111,9 @@
         nixpkgs-unstable'
         modifications
         additions # contents of ./pkgs
-      ];
+      ] ++ (with inputs; [
+        nix-vscode-extensions.overlays.default
+      ]);
 
       # Default system specialArgs
       args = userName: {
@@ -314,6 +315,7 @@
                   default
                   modifications
                   additions
+                  inputs.nix-vscode-extensions.overlays.default
                 ];
               };
             })

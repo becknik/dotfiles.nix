@@ -80,6 +80,7 @@ $ tree -a -I '\.git|\.vscode|\.direnv' . # slightly modified for better context/
   - Used in conjunction with flake's `inputs.self.sourceInfo.lastModified` for systemd NixOS automatic rebuild logs :^)
 - [mac-app-util](https://github.com/hraban/mac-app-util): Automatically creating trampoline symlinks for home-managed Mac software
   - I really hate MacOS, but this lib makes me hate using it with nix-darwin a bit less
+- [nix-vscode-extensions](https://github.com/nix-community/nix-vscode-extensions): The few extensions being available in `nixpkgs` (some of which being outdated) replaced by the latest & all available on `open-vsx` & marketplace!
 
 ### Features
 

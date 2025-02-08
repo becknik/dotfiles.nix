@@ -20,28 +20,27 @@
     mutableExtensionsDir = false; # Setting this to true disabled the java extensions to properly install
 
     # Plugins
-    extensions = with pkgs.unstable.vscode-extensions; [
+
+    # Soruces:
+    # https://raw.githubusercontent.com/nix-community/nix-vscode-extensions/refs/heads/master/data/cache/open-vsx-latest.json
+    # https://raw.githubusercontent.com/nix-community/nix-vscode-extensions/refs/heads/master/data/cache/vscode-marketplace-latest.json
+    extensions = with pkgs.open-vsx; [
       ## Management
-      ms-vsliveshare.vsliveshare
       alefragnani.project-manager
       alefragnani.bookmarks
-      gruntfuggly.todo-tree
       mkhl.direnv
-      github.copilot
-      github.copilot-chat
-      github.vscode-pull-request-github
 
       ## Editor Config, Autocompletion, etc.
+      # asvetliakov.vscode-neovim # TODO
       vscodevim.vim
-      #asvetliakov.vscode-neovim
       formulahendry.code-runner
       streetsidesoftware.code-spell-checker
-      christian-kohler.path-intellisense
+      streetsidesoftware.code-spell-checker-german
       usernamehw.errorlens
 
       ## Eye Candy
       adpyke.codesnap
-      johnpapa.vscode-peacock
+      johnpapa.vscode-peacock # TODO why isn't this working?
 
       ### Git
       eamodio.gitlens
@@ -49,41 +48,40 @@
 
       ## Deployment
       github.vscode-github-actions
-      ms-azuretools.vscode-docker
-      ms-kubernetes-tools.vscode-kubernetes-tools
+      # ms-kubernetes-tools.vscode-kubernetes-tools
 
-      ### Interface
+      ## Interface
+      graphql.vscode-graphql # graphql => graphql-syntax necessary
+      graphql.vscode-graphql-syntax
 
-      apollographql.vscode-apollo
-      # graphql => graphql-syntax
-      # graphql.vscode-graphql
-      # graphql.vscode-graphql-syntax
+      ## Frontend Stuff
+      gencer.html-slim-scss-css-class-completion # does this anything?
+      firefox-devtools.vscode-firefox-debug
+      stylelint.vscode-stylelint
 
-      ## Languages
+      ## Languages & Frameworks
+
+      ### Declarative
+      redhat.vscode-yaml
+      tamasfe.even-better-toml
+      mikestead.dotenv
+      redhat.vscode-xml
 
       ### Markup
       yzhang.markdown-all-in-one
       davidanson.vscode-markdownlint
-      redhat.vscode-yaml
-      tamasfe.even-better-toml
-      gencer.html-slim-scss-css-class-completion
-      redhat.vscode-xml
 
       ### Scripting
-      ms-python.python
-      ms-python.vscode-pylance #ms-pyright.pyright is included in pylance
+      mtxr.sqltools
+      mtxr.sqltools-driver-pg
+      mtxr.sqltools-driver-sqlite
 
       #### JS/TS
       denoland.vscode-deno
+      vue.volar
       dbaeumer.vscode-eslint
       esbenp.prettier-vscode
-      bradlc.vscode-tailwindcss
-
-      #### Shell
-      # has shellfmt & shellcheck support, but can't access binaries
-      (mads-hartmann.bash-ide-vscode.overrideAttrs (_oldAttrs: {
-        buildInputs = [ pkgs.shellcheck pkgs.shfmt ];
-      }))
+      # unifiedjs.vscode-mdx
 
       ### Nix
       jnoortheen.nix-ide
@@ -96,64 +94,98 @@
       justusadam.language-haskell # Syntax highlighting
       haskell.haskell # Linting etc.
 
-      ### Rust
-      rust-lang.rust-analyzer
-
       ### Cpp
       llvm-vs-code-extensions.vscode-clangd
       vadimcn.vscode-lldb
-      ms-vscode.cmake-tools
       #ms-vscode.cpptools
       #twxs.cmake #?
-    ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (
-      [
-        {
-          name = "vscode-expo-tools";
-          publisher = "expo";
-          version = "1.5.0";
-          sha256 = "sha256-bjVebozUfwEsoclEjDpGYJ108bLJJaQhoBDpFcZ/bI8=";
-        }
-        {
-          name = "toggle-case";
-          publisher = "ryanlaws";
-          version = "1.0.2";
-          sha256 = "sha256-tvgLHSKmX3FBLwi4JikJR4PUieK6iKGzBMj+Zz58SFI=";
-        }
-        {
-          name = "git-worktrees";
-          publisher = "GitWorktrees";
-          version = "2.2.0";
-          sha256 = "sha256-bk0poO9REcm7r3D0i9Z2DDsWjDlHXfI/kKvvwOwAgbg=";
-        }
 
-        {
-          name = "code-spell-checker-german";
-          publisher = "streetsidesoftware";
-          version = "2.3.2";
-          sha256 = "sha256-40Oc6ycNog9cxG4G5gCps2ADrM/wLuKWFrD4lnd91Z4=";
-        }
+    ] ++ (with pkgs.open-vsx-release; [
+      ### Rust
+      rust-lang.rust-analyzer
+    ]) ++ (with pkgs.vscode-marketplace; [
+      # extensions listed here are either not present on open-vsx, or outdated
 
-        {
-          name = "vscode-monokai-night";
-          publisher = "fabiospampinato";
-          version = "1.7.1";
-          sha256 = "sha256-GDLnZ/pL8XQjg1oYNHvAB2xgS3vSq4JA4DvmuXcVuPA=";
-        }
-        {
-          name = "theme-monokai-pro-vscode";
-          publisher = "monokai";
-          version = "2.0.5";
-          sha256 = "sha256-H79KlUwhgAHBnGucKq8TJ1olDl0dRrq+ullGgRV27pc=";
-        }
-      ]
-    );
+      ## Management
+      gruntfuggly.todo-tree
+      ms-vsliveshare.vsliveshare
+      tobias-z.vscode-harpoon
+
+      ## Editor Config, Autocompletion, etc.
+      ryanlaws.toggle-case
+      christian-kohler.path-intellisense
+      pflannery.vscode-versionlens # just minor version tag behind, but some weeks back now
+
+      ## Themes
+      fabiospampinato.vscode-monokai-night
+      monokai.theme-monokai-pro-vscode
+
+      ## Git
+      gitworktrees.git-worktrees
+
+      ## Interface
+      meta.relay
+
+      ## Languages & Frameworks
+
+      ### Scripting
+      mads-hartmann.bash-ide-vscode
+      ms-python.vscode-pylance #ms-pyright.pyright is included in pylance
+      ms-python.python # seems to lag behind ~1w, but who knows...
+
+      #### JS/ TS
+      expo.vscode-expo-tools
+      bradlc.vscode-tailwindcss
+
+      ### Cpp
+      ms-vscode.cmake-tools
+    ]) ++ (with pkgs.vscode-marketplace-release; [
+      # prevents preview builds to be picket which aren't compatible with the current vscode version
+      ## Git
+      github.vscode-pull-request-github
+
+      ## AI
+      github.copilot
+      github.copilot-chat
+    ]);
 
     languageSnippets = {
       javascriptreact = builtins.fromJSON (builtins.readFile ./vscodium/snippets-react.json);
       typescriptreact = builtins.fromJSON (builtins.readFile ./vscodium/snippets-react.json);
     };
 
-    keybindings = [ ];
+    keybindings = [
+      # Harpoon
+      {
+        key = "ctrl+e";
+        command = "vscode-harpoon.addEditor";
+      }
+      {
+        key = "alt+e";
+        command = "vscode-harpoon.editEditors";
+      }
+      {
+        key = "alt+p";
+        command = "vscode-harpoon.editorQuickPick";
+      }
+
+      {
+        key = "alt+1";
+        command = "vscode-harpoon.gotoEditor1";
+      }
+      {
+        key = "alt+2";
+        command = "vscode-harpoon.gotoEditor2";
+      }
+      {
+        key = "alt+3";
+        command = "vscode-harpoon.gotoEditor3";
+      }
+      {
+        key = "alt+4";
+        command = "vscode-harpoon.gotoEditor4";
+      }
+    ];
 
     userSettings = {
 
@@ -470,6 +502,11 @@
 
       ## Live Share
       liveshare.allowGuestDebugControl = true;
+
+      ## Recommendations from stylelint
+      css.validate = false;
+      less.validate = false;
+      scss.validate = false;
 
       ##########################################################################
       # Language Plugin Settings
