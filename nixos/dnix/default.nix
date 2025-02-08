@@ -34,7 +34,7 @@
 
   nix.settings = {
     max-jobs = 2;
-    cores = 12;
+    cores = 4;
 
     # system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ]
     # Source: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/config/nix.nix

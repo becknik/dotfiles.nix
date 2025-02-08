@@ -278,6 +278,7 @@
 
       channel.enable = false;
       daemonCPUSchedPolicy = "idle"; # "other", "batch"
+      daemonIOSchedClass = "idle"; # "best-effort"
 
       # https://discourse.nixos.org/t/why-does-nix-direnv-recommend-setting-nix-settings-keep-outputs/31081
       extraOptions = ''

@@ -38,6 +38,9 @@
             Restart = "on-abort";
             # User = userName;
             # Group = "users";
+
+            CPUSchedulingPolicy = "idle";
+            IOSchedulingClass = "idle";
           };
         onFailure = [ "nixos-upgrade-notify-send-failure.service" ];
         onSuccess = [ "nixos-upgrade-notify-send-success.service" ];
