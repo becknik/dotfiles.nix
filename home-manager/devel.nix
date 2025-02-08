@@ -5,7 +5,7 @@
     ./devel/proglangs.nix # Installation of some programming languages
 
     ./programs/git.nix
-    ./programs/vscodium.nix
+    ./programs/vscodium
   ];
 
   programs = {

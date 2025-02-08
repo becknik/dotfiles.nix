@@ -101,6 +101,9 @@
           "jetbrains-toolbox"
           "idea-ultimate"
           "clion"
+
+          # Only vscode extension used from official nixpkgs
+          "vscode-extension-github-copilot-chat"
         ];
         joypixels.acceptLicense = true;
       };
