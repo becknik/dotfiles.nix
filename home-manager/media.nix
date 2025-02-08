@@ -145,6 +145,7 @@
     yt-dlp
     media-downloader # for yt-dlp
     unstable.cider
+    localsend
 
     ## Images
     krita
