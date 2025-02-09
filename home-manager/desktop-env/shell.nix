@@ -296,6 +296,7 @@
           glgf = "git log --stat --pretty=fuller";
           glgpf = "git log --stat --patch --pretty=fuller";
           gdsw = "git diff --word-diff --staged";
+          glo1 = "git log @{1}.. --pretty=fuller";
 
           ## Submodules
           gsub = "git submodule";
