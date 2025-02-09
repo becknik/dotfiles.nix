@@ -104,10 +104,11 @@
   ## Journald
   # source: https://man7.org/linux/man-pages/man5/journald.conf.5.html
   services.journald.extraConfig =
-    # Initialized with 10% of the respective file system
-    "SystemMaxUse=2G\n"
+    # Initialized with 10% of the file system
+    "SystemMaxUse=200MB\n" +
+    "MaxRetentionSec=7d\n" +
     # Initalized with 4G
-    + "RuntimeMaxFileSize=128M";
+    "RuntimeMaxFileSize=128M";
 
 
   ## Networking
