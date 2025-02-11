@@ -46,6 +46,11 @@
           identityFile = "~/.ssh/gitlab-est";
           addressFamily = "inet";
         };
+        work = {
+          host = "git.dhl.com";
+          user = "git";
+          identityFile = "~/.ssh/github-digizb";
+        };
       };
     };
   };

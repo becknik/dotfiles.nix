@@ -19,7 +19,7 @@
         };
         "Console Log Debug" = {
           prefix = "cld";
-          body = [ ''console.log(''${1/(.*)/''${1:/"1"}/}, $1)'' ];
+          body = [ "console.log('\${2:$1}', $1)" ];
         };
         "Console Info" = {
           prefix = "ci";

@@ -152,6 +152,8 @@
     ## ESLint
     eslint.format.enable = true;
 
+    stylelint.stylelintPath = "${pkgs.unstable.stylelint}/bin/stylelint";
+
     ### Prettier
     prettier = {
       trailingComma = "es5";

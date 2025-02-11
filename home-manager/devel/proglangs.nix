@@ -9,7 +9,7 @@
     unstable.nodejs_latest
     unstable.pnpm
     unstable.eslint_d
-    unstable.prettierd
+    unstable.nodePackages_latest.prettier
 
     # Nix
     unstable.nixd
