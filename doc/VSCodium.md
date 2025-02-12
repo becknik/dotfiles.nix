@@ -39,7 +39,8 @@ builtins.listToAttrs (
   rjsfc = "React FC";
   rjsfca = "React FC Async";
   rjsfcap = "React FC Async + Props";
-  rjsfcp = "React Function Component with Props";
+  rjsfcp = "React PC + Props";
+  rjsfr = "React Fragment";
   si = "Interval";
   st = "Timeout";
   sty = "React style Prop";
@@ -59,4 +60,5 @@ builtins.listToAttrs (
   ust = "React useState";
   ustn = "React useState nullable";
 }
+
 ```

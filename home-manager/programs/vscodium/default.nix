@@ -23,6 +23,43 @@
     package = pkgs.unstable.vscodium;
 
     keybindings = [
+      # Toggle insert snippet mode to enable wrapper-snippets
+      {
+        key = "ctrl+shift+s";
+        command = "editor.action.insertSnippet";
+        when = "editorTextFocus && !suggestWidgetVisible";
+      }
+
+      {
+        key = "ctrl+p";
+        command = "selectPrevSuggestion";
+        when = "editorTextFocus && suggestWidgetVisible";
+      }
+
+      # reenable Vim-Plugins <C-p> & <C-n> for autosuggestions only
+      {
+        key = "ctrl+p";
+        command = "selectPrevSuggestion";
+        when = "editorTextFocus && suggestWidgetVisible";
+      }
+      {
+        key = "ctrl+n";
+        command = "selectNextSuggestion";
+        when = "editorTextFocus && suggestWidgetVisible";
+      }
+
+      # fix Copilot suggestion overwriting suggestion autostops on tab
+      {
+        key = "tab";
+        command = "jumpToNextSnippetPlaceholder";
+        when = "editorTextFocus && inSnippetMode && !suggestWidgetVisible";
+      }
+      {
+        key = "shift+tab";
+        command = "jumpToPrevSnippetPlaceholder";
+        when = "editorTextFocus && inSnippetMode && !suggestWidgetVisible";
+      }
+
       # Harpoon
       {
         key = "ctrl+e";

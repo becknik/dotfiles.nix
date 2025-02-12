@@ -96,10 +96,12 @@
         "<C-s>" = false; # false = Handled by VSCode
         "<C-z>" = false;
 
-        "<C-p>" = false;
         "<C-t>" = false;
         "<C-w>" = false;
         "<C-k>" = false; # <C-k><C-o>
+        # enabled as VSCode shortcuts
+        "<C-p>" = false;
+        "<C-n>" = false;
       };
     };
 

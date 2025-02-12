@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 
 {
   # TODO draw inspo from
@@ -10,28 +10,91 @@
   # https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax
   programs.vscode.languageSnippets =
     let
+      debugEmojis = {
+        debug = { emoji = "🔍"; log = [ "log" "info" ]; };
+        bug = { emoji = "🐞"; log = [ "log" ]; };
+        worm = { emoji = "🐛"; log = [ "log" ]; };
+        slow = { emoji = "🐢"; log = [ "log" ]; };
+        fast = { emoji = "⚡"; log = [ "log" ]; };
+
+        "oh god" = { emoji = "🤦"; log = [ "log" ]; };
+        "why" = { emoji = "🤷"; log = [ "log" ]; };
+        "stop it" = { emoji = "🙅"; log = [ "log" ]; };
+        alien = { emoji = "👾️"; log = [ "log" ]; };
+        popcorn = { emoji = "🍿"; log = [ "log" ]; };
+        robot = { emoji = "🤖"; log = [ "log" ]; };
+        "brain.exe" = { emoji = "🧠"; log = [ "log" ]; };
+        "monkey debugging" = { emoji = "🐒"; log = [ "log" ]; };
+
+        input = { emoji = "🎛️"; log = [ "log" "info" ]; };
+        init = { emoji = "🚀"; log = [ "log" "info" ]; };
+
+        success = { emoji = "✅"; log = [ "info" ]; };
+        info = { emoji = "ℹ️"; log = [ "info" ]; };
+        config = { emoji = "⚙️"; log = [ "info" ]; };
+
+        warning = { emoji = "⚠️"; log = [ "log" "warn" ]; };
+        caution = { emoji = "🔶"; log = [ "warn" ]; };
+
+        error = { emoji = "❌"; log = [ "error" ]; };
+        explosion = { emoji = "💥"; log = [ "error" "log" ]; };
+        alarm = { emoji = "🚨"; log = [ "error" "log" ]; };
+      };
+      debugEmojiList = lib.attrsets.mapAttrsToList (name: value: { name = name; } // value) debugEmojis;
+      debugEmojiListLog = builtins.foldl'
+        (acc1: emoji: acc1 ++ (
+          builtins.foldl'
+            (acc2: logl: acc2 ++ [{
+              name = logl;
+              value = {
+                name = emoji.name;
+                emoji = emoji.emoji;
+              };
+            }]) [ ]
+            emoji.log
+        )) [ ]
+        debugEmojiList;
+
+      debugEmojiGroupedByLog = builtins.foldl'
+        (
+          acc: e:
+            if (builtins.hasAttr e.name acc) then
+              acc // { "${e.name}" = (builtins.getAttr e.name acc) ++ [ e.value ]; }
+            else acc // { "${e.name}" = [ e.value ]; }
+        )
+        { }
+        debugEmojiListLog;
+
+      debugEmojiStringsByLog = builtins.mapAttrs
+        (name: emojis: (
+          builtins.foldl'
+            (acc: emoji: acc + ",${emoji.emoji} ${emoji.name} ") " "
+            emojis
+        ))
+        debugEmojiGroupedByLog;
+
       jsArrayFunctions = "map,filter,some,every,reduce,forEach,find,findIndex,sort";
       js = {
         # Console
         "Console Log" = {
           prefix = "cl";
-          body = [ "console.log($1)" ];
+          body = [ "console.log('\${2|${debugEmojiStringsByLog.log}|}', $1)" ];
         };
         "Console Log Debug" = {
           prefix = "cld";
-          body = [ "console.log('\${2:$1}', $1)" ];
+          body = [ "console.log('\${2|${debugEmojiStringsByLog.log}|}' + \${1/(.*)/'$1:'/}, $1)" ];
         };
         "Console Info" = {
           prefix = "ci";
-          body = [ "console.info($1)" ];
+          body = [ " console.info('\${2|${debugEmojiStringsByLog.info}|}$0', $1)" ];
         };
         "Console Warn" = {
           prefix = "cw";
-          body = [ "console.warn($1)" ];
+          body = [ "console.warn('\${2|${debugEmojiStringsByLog.warn}|}'$0, $1)" ];
         };
         "Console Error" = {
           prefix = "ce";
-          body = [ "console.error(\"$2\", $1)" ];
+          body = [ "console.error('\${2|${debugEmojiStringsByLog.error}|}$0', $1)" ];
         };
         "Console Count" = {
           prefix = "cc";
@@ -272,7 +335,7 @@
             ''
           ];
         };
-        "React Function Component with Props" = {
+        "React PC + Props" = {
           prefix = "rjsfcp";
           body = [
             ''
@@ -292,6 +355,16 @@
 
       # React Props and Stuff
       reactEtc = {
+        "React Fragment" = {
+          prefix = "rjsfr";
+          body = [
+            ''
+              <>
+                $TM_SELECTED_TEXT
+              </>
+            ''
+          ];
+        };
         "React classname Prop" = {
           prefix = "cn";
           body = [ "className=\"$1\"" ];

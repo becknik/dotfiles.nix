@@ -116,7 +116,6 @@
 
       ## Suggestions & Completion
       tabCompletion = true; # double tab => snippet selected without opening suggestions
-      snippetSuggestions = "top";
       suggestOnTriggerCharacters = true;
 
       suggest = {
