@@ -140,11 +140,6 @@
     ## Live Share
     liveshare.allowGuestDebugControl = true;
 
-    ## Recommendations from stylelint
-    css.validate = false;
-    less.validate = false;
-    scss.validate = false;
-
     ##########################################################################
     # Language Plugin Settings
     ##########################################################################
@@ -152,7 +147,13 @@
     ## ESLint
     eslint.format.enable = true;
 
-    stylelint.stylelintPath = "${pkgs.unstable.stylelint}/bin/stylelint";
+    ## stylelint
+    stylelint.stylelintPath = "${pkgs.unstable.stylelint}/lib/node_modules/stylelint";
+    # Recommendations
+    css.validate = false;
+    less.validate = false;
+    scss.validate = false;
+
 
     ### Prettier
     prettier = {

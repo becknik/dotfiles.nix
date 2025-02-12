@@ -31,7 +31,7 @@ $ tree -a -I '\.git|\.vscode|\.direnv' . # slightly modified for better context/
 │   └── virtualisation.nix                   ├── programs
 ├── nixvim                                   │   ├── git.nix
 │   ├── default.nix                          │   ├── thunderbird.nix
-│   └── ...                                  │   └── vscodium.nix
+│   └── ...                                  │   └── vscodium ── ...
 ├── overlays                                 ├── secrets.nix
 │   ├── ~~build-fixes.nix~~                  ├── secrets
 │   ├── ~~build-skips.nix~~                  │   ├── git.yaml
