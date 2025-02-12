@@ -123,6 +123,27 @@
           body = [ "const [ $2 ] = $1;" ];
         };
 
+        # CSS
+        "CSS Selector" = {
+          prefix = "cs";
+          body = [
+            ''
+              "''\${1:&}''${2| > , , + , ~ |}''${3:div}": {
+                $0
+              },''
+          ];
+        };
+
+        # Object properties
+        "Object Property" = {
+          prefix = "op";
+          body = [ ''$1: "$2",'' ];
+        };
+        "Object Property Complex" = {
+          prefix = "opc";
+          body = [ "$1: { $0 }," ];
+        };
+
         # Functions
         "Arrow Function Lambda" = {
           prefix = "fnl";
