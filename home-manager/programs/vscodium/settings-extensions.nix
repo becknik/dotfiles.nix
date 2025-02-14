@@ -169,6 +169,9 @@
     };
     #editor.defaultFormatter = "esbenp.prettier-vscode";
 
+    ### React Relay
+    relay.autoStartCompiler = true;
+
     ## YAML
     redhat.telemetry.enabled = null;
 
