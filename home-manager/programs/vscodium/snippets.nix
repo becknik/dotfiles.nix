@@ -263,7 +263,8 @@
         };
         "React useRef" = {
           prefix = "ure";
-          body = [ ''const ''${1:ref} = useState<''${2:unknown}>($3);'' ];
+          # TODO add conditional <> to useRef snippet
+          body = [ ''const ''${1:ref} = useRef(''${2:null});'' ];
         };
         "React useEffect" = {
           prefix = "uef";
