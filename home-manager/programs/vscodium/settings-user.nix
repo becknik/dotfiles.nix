@@ -118,6 +118,7 @@
       tabCompletion = true; # double tab => snippet selected without opening suggestions
       suggestOnTriggerCharacters = true;
       acceptSuggestionOnCommitCharacter = false; # prevents `.`,`;` or `(` to trigger autocomplete accept
+      snippetSuggeations = "bottom";
 
       suggest = {
         preview = true;

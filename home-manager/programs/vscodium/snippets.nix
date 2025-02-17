@@ -24,7 +24,7 @@
         popcorn = { emoji = "🍿"; log = [ "log" ]; };
         robot = { emoji = "🤖"; log = [ "log" ]; };
         "brain.exe" = { emoji = "🧠"; log = [ "log" ]; };
-        "monkey debugging" = { emoji = "🐒"; log = [ "log" ]; };
+        monkey = { emoji = "🐒"; log = [ "log" ]; };
 
         input = { emoji = "🎛️"; log = [ "log" "info" ]; };
         init = { emoji = "🚀"; log = [ "log" "info" ]; };
@@ -225,7 +225,7 @@
           ];
         };
         "Type Inline" = {
-          prefix = "tyi";
+          prefix = "ti";
           body = [ "type \$1 = $2;" ];
         };
         "Type" = {
@@ -238,7 +238,7 @@
           ];
         };
         "Type Property" = {
-          prefix = "tp";
+          prefix = "typ";
           body = [
             "\${1:prop}: \${2:type};"
           ];

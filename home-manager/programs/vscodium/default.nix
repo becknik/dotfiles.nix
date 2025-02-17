@@ -23,6 +23,14 @@
     package = pkgs.unstable.vscodium;
 
     keybindings = [
+
+      # TODO
+      # {
+      # key = "right";
+      # command = "github.copilot.acceptSuggestion";
+      # when = "editorTextFocus && github.copilot.inlineSuggestionVisible";
+      # }
+
       # Toggle insert snippet mode to enable wrapper-snippets
       {
         key = "ctrl+shift+s";
@@ -30,10 +38,16 @@
         when = "editorTextFocus && !suggestWidgetVisible";
       }
 
+      # Use Vim-like <C-p>/ <C-n> in file selector etc.
       {
         key = "ctrl+p";
-        command = "selectPrevSuggestion";
-        when = "editorTextFocus && suggestWidgetVisible";
+        command = "workbench.action.quickOpenSelectPrevious";
+        when = "inQuickOpen";
+      }
+      {
+        key = "ctrl+n";
+        command = "workbench.action.quickOpenSelectNext";
+        when = "inQuickOpen";
       }
 
       # reenable Vim-Plugins <C-p> & <C-n> for autosuggestions only
