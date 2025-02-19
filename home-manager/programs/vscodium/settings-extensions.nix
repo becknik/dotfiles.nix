@@ -109,23 +109,20 @@
     todo-tree = {
       general = {
         showActivityBarBadge = true;
-        statusBar = "current file";
-        statusBarClickBehaviour = "cycle";
-        #tags = [ "BUG" "HACK" "FIXME" "TODO" "XXX" "[ ]" ];
+        statusBar = "tags";
         tagGroups = {
-          FIX = [ "FIXME" "FIXIT" ];
-          "TODO" = [ "TODO" ];
+          FIX = [ "FIXME" "FIXIT" "FixMe" "FixIt" "fixme" "fixit" ];
+          TODO = [ "TODO" "ToDo" "todo" ];
         };
       };
       tree = {
-        expanded = false;
+        expanded = true;
         showCountsInTree = true;
-        scanMode = "workspace only";
+        scanMode = "workspace";
         buttons = {
-          reveal = false;
-          scanMode = true;
-          viewStyle = false;
           export = true;
+          reveal = false;
+          viewStyle = false;
         };
       };
       regex.enableMultiLine = true;
