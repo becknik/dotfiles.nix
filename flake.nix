@@ -91,6 +91,7 @@
 
           "veracrypt"
           "obsidian"
+          "google-chrome"
 
           "steam"
           "steam-unwrapped"

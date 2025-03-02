@@ -159,5 +159,7 @@
     pdfslicer
     qpdf
     paper-clip # for editing PDF metadata
+
+    google-chrome
   ];
 }
