@@ -66,6 +66,7 @@
       dbaeumer.vscode-eslint
       esbenp.prettier-vscode
       # unifiedjs.vscode-mdx
+      yoavbls.pretty-ts-errors
 
       ### Nix
       jnoortheen.nix-ide
@@ -120,6 +121,7 @@
       #### JS/ TS
       expo.vscode-expo-tools
       bradlc.vscode-tailwindcss
+      kimuson.ts-type-expand
 
       ### Cpp
       ms-vscode.cmake-tools
