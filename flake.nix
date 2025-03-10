@@ -105,6 +105,10 @@
 
           # Only vscode extension used from official nixpkgs
           "vscode-extension-github-copilot-chat"
+          "vscode-extension-ms-vsliveshare-vsliveshare"
+          "vscode-extension-mhutchie-git-graph"
+          "vscode-extension-ms-python-vscode-pylance"
+          "vscode-extension-github-copilot"
         ];
         joypixels.acceptLicense = true;
       };
