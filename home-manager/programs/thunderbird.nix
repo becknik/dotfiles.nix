@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 
 {
   programs.thunderbird = {
@@ -7,6 +7,15 @@
     profiles."default" = {
       isDefault = true;
       withExternalGnupg = true;
+
+      # TODO how is this intended to be used?
+      # https://github.com/nix-community/home-manager/pull/5613
+
+      # feedAccounts = {
+      #   name1 = {
+      #     name = "name2";
+      #   };
+      # };
     };
 
     settings = {
