@@ -5,8 +5,6 @@
   # https://raw.githubusercontent.com/nix-community/nix-vscode-extensions/refs/heads/master/data/cache/open-vsx-latest.json
   # https://raw.githubusercontent.com/nix-community/nix-vscode-extensions/refs/heads/master/data/cache/vscode-marketplace-latest.json
 
-  programs.vscode.mutableExtensionsDir = false; # Setting this to true disabled the java extensions to properly install
-
   programs.vscode.extensions =
     with pkgs.open-vsx; [
       ## Management
@@ -93,7 +91,6 @@
 
       ## Management
       gruntfuggly.todo-tree
-      ms-vsliveshare.vsliveshare
       tobias-z.vscode-harpoon
 
       ## Editor Config, Autocompletion, etc.
@@ -131,6 +128,9 @@
       github.vscode-pull-request-github # this is way to outdated on nixpkgs; hence having to check every flake update manually?? :(
     ]) ++ (with pkgs.unstable.vscode-extensions; [
       # fallback to nixpkgs, since not working with the upper...
-      github.copilot-chat # seems to be maintained, only a 2 months behind & compatible with the current vscode version
+      ms-vsliveshare.vsliveshare
+    ]) ++ (with pkgs.vscode-extensions; [
+      # fuck the package incompatibility...
+      github.copilot-chat
     ]);
 }
