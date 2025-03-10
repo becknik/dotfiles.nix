@@ -240,8 +240,10 @@
     syntaxHighlighting.enable = true;
     autosuggestions.enable = true;
   };
-  services.envfs.enable = false; # https://github.com/Mic92/envfs#envfs ( TODO `nil` not in path after this?!)
-
+  # Mix92-OS setup for more "pargmatic" NixOS:
+  # https://fzakaria.com/2025/02/26/nix-pragmatism-nix-ld-and-envfs
+  services.envfs.enable = false; # https://github.com/Mic92/envfs#envfs
+  programs.nix-ld.enable = true;
 
   # Nix
 
