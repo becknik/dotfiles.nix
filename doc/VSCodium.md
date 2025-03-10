@@ -24,6 +24,7 @@ builtins.listToAttrs (
   cl = "Console Log";
   cld = "Console Log Debug";
   cn = "React classname Prop";
+  cs = "CSS Selector";
   ct = "Console Time";
   cte = "Console Time End";
   ctl = "Console Time Log";
@@ -32,9 +33,13 @@ builtins.listToAttrs (
   deso = "Destructure Object";
   fn = "Arrow Function";
   fnl = "Arrow Function Lambda";
+  fnt = "Arrow Function Inline to Return";
+  fntv = "Arrow Function Inline to Return with Variable";
   int = "Interface";
   jp = "JSON Parse";
   js = "JSON Stringify";
+  op = "Object Property";
+  opc = "Object Property Complex";
   pr = "Promise";
   rjsfc = "React FC";
   rjsfca = "React FC Async";
@@ -47,10 +52,10 @@ builtins.listToAttrs (
   stym = "React style Prop Multiline";
   sx = "MUI sx Prop";
   sxm = "MUI sx Prop Multiline";
-  tp = "Type Property";
+  ti = "Type Inline";
   tpf = "Type Property Function";
   ty = "Type";
-  tyi = "Type Inline";
+  typ = "Type Property";
   ucb = "React useCallback";
   uct = "React useContext";
   uef = "React useEffect";
@@ -60,5 +65,6 @@ builtins.listToAttrs (
   ust = "React useState";
   ustn = "React useState nullable";
 }
+
 
 ```

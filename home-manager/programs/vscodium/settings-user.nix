@@ -163,6 +163,7 @@
       inputValidationSubjectLength = 72;
       autofetch = true;
       openRepositoryInParentFolders = "always";
+      openDiffOnClick = false; # in source-control tab in the sidebar
     };
 
     # Terminal

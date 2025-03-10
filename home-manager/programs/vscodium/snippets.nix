@@ -158,6 +158,27 @@
               }''
           ];
         };
+        "Arrow Function Inline to Return" = {
+          prefix = "fnt";
+          body = [
+            ''
+              {
+                $TM_SELECTED_TEXT
+                return $0;
+              }''
+          ];
+        };
+        "Arrow Function Inline to Return with Variable" = {
+          prefix = "fntv";
+          body = [
+            ''
+              {
+                const ''${1:tmp} = $1
+                $TM_SELECTED_TEXT
+                return ''${1};
+              }''
+          ];
+        };
         # Function for Arrays
         "Lambda" = {
           prefix = "afnl";
