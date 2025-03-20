@@ -26,6 +26,8 @@
     # Source: https://github.com/nix-community/home-manager/blob/master/modules/programs/ssh.nix
     ssh = {
       enable = true;
+      includes = [ "~/.ssh/config.local" ];
+
       extraConfig = "AddKeysToAgent confirm"; #addKeysToAgent = "confirm"; isn't working?
       forwardAgent = true;
       hashKnownHosts = true;
