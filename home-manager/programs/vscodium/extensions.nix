@@ -19,6 +19,7 @@
       streetsidesoftware.code-spell-checker
       streetsidesoftware.code-spell-checker-german
       usernamehw.errorlens
+      sonarsource.sonarlint-vscode
 
       ## Eye Candy
       adpyke.codesnap
