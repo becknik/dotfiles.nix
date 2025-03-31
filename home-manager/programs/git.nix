@@ -11,8 +11,10 @@
       options = {
         syntax-theme = "Visual Studio Dark+";
         line-numbers = true;
-        navigate = true;
+        side-by-side = true;
+        navigate = true; # use n and N to move between diff sections
         keep-plus-minus-markers = false;
+        true-color = "always";
 
         hyperlinks = true;
         hyperlinks-file-link-format = "vscode://file/{path}:{line}";
