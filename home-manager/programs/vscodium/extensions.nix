@@ -120,6 +120,7 @@
       expo.vscode-expo-tools
       bradlc.vscode-tailwindcss
       kimuson.ts-type-expand
+      orta.vscode-jest # latest version only available here
 
       ### Cpp
       ms-vscode.cmake-tools
