@@ -55,11 +55,6 @@ in
         path = "${config.home.homeDirectory}/.ssh/github-personal";
       };
 
-      "gitlab-personal.pub" = {
-        sopsFile = ./secrets/git.yaml;
-        key = "gitlab/personal/ed25519.pub";
-        path = "${config.home.homeDirectory}/.ssh/gitlab-personal.pub";
-      };
       "gitlab-personal" = {
         sopsFile = ./secrets/git.yaml;
         key = "gitlab/personal/ed25519";
