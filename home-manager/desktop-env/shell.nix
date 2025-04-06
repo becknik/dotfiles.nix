@@ -298,6 +298,9 @@
           gdsw = "git diff --word-diff --staged";
           glo1 = "git log @{1}.. --pretty=fuller";
 
+          ## Redefines
+          gsh = "git show --format=fuller";
+
           ## Submodules
           gsub = "git submodule";
           gsubup = "git submodule update";
