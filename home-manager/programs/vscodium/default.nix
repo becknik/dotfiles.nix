@@ -63,7 +63,8 @@
         when = "editorTextFocus && suggestWidgetVisible";
       }
 
-      # fix Copilot suggestion overwriting suggestion autostops on tab
+
+      # fix Copilot suggestion overwriting suggestion autostopps on tab
       {
         key = "tab";
         command = "jumpToNextSnippetPlaceholder";
@@ -74,12 +75,20 @@
         command = "jumpToPrevSnippetPlaceholder";
         when = "editorTextFocus && inSnippetMode && !suggestWidgetVisible";
       }
+      # re-enable selection of copilot suggestions inside of autostopps
+      {
+        key = "ctrl+enter";
+        command = "editor.action.inlineSuggest.commit";
+        when = "editorTextFocus && inlineSuggestionVisible && inSnippetMode";
+      }
 
       # Harpoon
-      {
-        key = "ctrl+e";
-        command = "vscode-harpoon.addEditor";
-      }
+
+      # fix Vim-Plugin <C-e> not working in normal mode
+      # {
+      #   key = "ctrl+e";
+      #   command = "vscode-harpoon.addEditor";
+      # }
       {
         key = "alt+e";
         command = "vscode-harpoon.editEditors";
