@@ -69,6 +69,9 @@
       currentLine.enabled = false;
     };
 
+    ## Sonarlint
+    sonarlint.pathToNodeExecutable = ''${pkgs.unstable.nodejs_latest}/bin/node'';
+
     ## Neovim
     # Source: https://github.com/vscode-neovim/vscode-neovim
     /*extensions.experimental.affinity = { asvetliakov.vscode-neovim = 1; };
