@@ -41,6 +41,8 @@
       gencer.html-slim-scss-css-class-completion # does this anything?
       firefox-devtools.vscode-firefox-debug
       stylelint.vscode-stylelint
+      naumovs.color-highlight
+      bierner.color-info
 
       ## Languages & Frameworks
 

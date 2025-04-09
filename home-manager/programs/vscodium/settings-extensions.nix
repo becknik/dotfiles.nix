@@ -146,6 +146,15 @@
     # Language Plugin Settings
     ##########################################################################
 
+    ## Color Stuff
+    color-highlight.markerType = "dot-after";
+    colorInfo.languages = builtins.map (fileExtension: { selector = fileExtension; colors = "css"; /* = all formatting types */ }) [
+      "javascript"
+      "typescript"
+      "javascriptreact"
+      "typescriptreact"
+    ];
+
     ## ESLint
     eslint.format.enable = true;
 
