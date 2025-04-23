@@ -117,6 +117,9 @@
       mads-hartmann.bash-ide-vscode
       ms-python.vscode-pylance #ms-pyright.pyright is included in pylance
       ms-python.python # seems to lag behind ~1w, but who knows...
+      ms-toolsai.jupyter-keymap
+      ms-toolsai.vscode-jupyter-slideshow
+      ms-toolsai.vscode-jupyter-cell-tags
 
       #### JS/ TS
       expo.vscode-expo-tools
@@ -130,6 +133,8 @@
       # prevents preview builds to be picket which aren't compatible with the current vscode version
       github.copilot
       github.vscode-pull-request-github # this is way to outdated on nixpkgs; hence having to check every flake update manually?? :(
+
+      ms-toolsai.jupyter
     ]) ++ (with pkgs.unstable.vscode-extensions; [
       # fallback to nixpkgs, since not working with the upper...
       ms-vsliveshare.vsliveshare
