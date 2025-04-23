@@ -173,8 +173,7 @@
           body = [
             ''
               {
-                const ''${1:tmp} = $1
-                $TM_SELECTED_TEXT
+                const ''${1:tmp} = $TM_SELECTED_TEXT
                 return ''${1};
               }''
           ];
@@ -370,7 +369,7 @@
                 $1
               }
 
-              const ''${2:$TM_FILENAME_BASE} = async ({ ${propRemovalRegex} }: Props) => {
+              const ''${2:$TM_FILENAME_BASE} = async ({ ${propRemovalRegex} }: Readonly<Props>) => {
                 return $0;
               };
 
@@ -386,7 +385,7 @@
                 $1
               }
 
-              const ''${2:$TM_FILENAME_BASE} = ({ ${propRemovalRegex} }: Props) => {
+              const ''${2:$TM_FILENAME_BASE} = ({ ${propRemovalRegex} }: Readonly<Props>) => {
                 return $0;
               };
 
@@ -438,7 +437,32 @@
               }}''
           ];
         };
+
+        "Arrow Function Inline React to Return" = {
+          prefix = "fntr";
+          body = [
+            ''
+              {
+                $0
+                return (
+                  $TM_SELECTED_TEXT
+                );
+              }''
+          ];
+        };
+
+        "Arrow Function Inline React Multiline to Return" = {
+          prefix = "fntrm";
+          body = [
+            ''
+              {
+                $0
+                return $TM_SELECTED_TEXT;
+              }''
+          ];
+        };
       };
+
     in
     {
       javascript = js;
