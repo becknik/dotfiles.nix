@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
 {
+  users.extraGroups.vboxusers.members = [ "jnnk" ];
+
   # Libvirtd / QEMU
   programs.virt-manager.enable = true;
   virtualisation = {
@@ -12,11 +14,9 @@
       };
     };
 
+
     # VBox
-    /* virtualbox.host = { # TODO virtualbox build is broken
-      enable = true;
-      enableExtensionPack = true;
-    }; */
+    virtualbox.host.enable = true;
 
     # Containerization
     docker = {

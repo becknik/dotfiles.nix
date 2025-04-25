@@ -70,6 +70,7 @@
       "mitigations=off"
       "cryptomgr.notests"
       "fbcon=nodefer" # removes the manufacturer logo, might be necessary for plymouth
+      "kvm.enable_virt_at_load=0" # required for virtualbox
     ];
 
     ## Etc.

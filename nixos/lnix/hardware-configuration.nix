@@ -25,7 +25,14 @@
       kernelModules = [ ];
     };
 
-    kernelParams = [ "usbcore.autosuspend=-1" ]; # "amd_pstate" managed by nixos-hardware
+    kernelParams = [
+      "kvm.enable_virt_at_load=0" # required for virtualbox
+      "usbcore.autosuspend=-1"
+      "i8042.nomux=1"
+    ]; # "amd_pstate" managed by nixos-hardware
+    #Kernel Boot Parameters: Experiment with parameters such as i8042.nomux=1 or i8042.reset (added to your bootloader configuration) to see if they help stabilize the input devices.
+    #Module Options: Sometimes adding options for the i2c-hid module (or even blacklisting it temporarily to force a fallback) can help—though note that might disable your touchpad entirely.
+
     # sources:
     # https://discourse.nixos.org/t/external-mouse-and-keyboard-sleep-when-they-stay-untouched-for-a-few-seconds/14900/10
   };
