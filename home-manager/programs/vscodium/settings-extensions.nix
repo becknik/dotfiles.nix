@@ -168,12 +168,12 @@
 
     ### Prettier
     prettier = {
+      useEditorConfig = true;
       trailingComma = "es5";
       singleQuote = true;
-      useTabs = true;
-      tabWidth = 4;
-      #useTabs = false
-      #tabWidth = 2
+      # useTabs = true;
+      # tabWidth = 4;
+      tabWidth = 2;
       printWidth = 120;
     };
     #editor.defaultFormatter = "esbenp.prettier-vscode";

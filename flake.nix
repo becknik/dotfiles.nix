@@ -104,11 +104,14 @@
           "clion"
 
           # Only vscode extension used from official nixpkgs
+          "vscode"
           "vscode-extension-github-copilot-chat"
           "vscode-extension-ms-vsliveshare-vsliveshare"
           "vscode-extension-mhutchie-git-graph"
           "vscode-extension-ms-python-vscode-pylance"
           "vscode-extension-github-copilot"
+          "vscode-extension-ms-vscode-remote-remote-ssh"
+          "vscode-extension-ms-vscode-remote-remote-containers"
         ];
         joypixels.acceptLicense = true;
       };

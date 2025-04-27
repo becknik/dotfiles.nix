@@ -21,7 +21,7 @@
   programs.vscode = {
     enable = lib.mkForce true;
     # Only unstable version is compatible with all plugins as it seems...
-    package = pkgs.unstable.vscodium;
+    # package = pkgs.unstable.vscodium;
 
     keybindings = [
 

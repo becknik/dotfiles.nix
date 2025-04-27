@@ -7,6 +7,9 @@
 
   programs.vscode.extensions =
     with pkgs.open-vsx; [
+      ## Remote
+      # jeanp413.open-remote-ssh
+
       ## Management
       alefragnani.project-manager
       alefragnani.bookmarks
@@ -91,6 +94,9 @@
       rust-lang.rust-analyzer
     ]) ++ (with pkgs.vscode-marketplace; [
       # extensions listed here are either not present on open-vsx, or outdated
+      ms-vscode-remote.remote-ssh
+      ms-vscode.remote-server # TODO is this working with Codium?
+      ms-vscode-remote.remote-containers
 
       ## Management
       gruntfuggly.todo-tree

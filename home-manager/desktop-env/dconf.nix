@@ -229,7 +229,7 @@ with lib.gvariant; {
         "Alacritty.desktop" # 1
         "org.kde.dolphin.desktop" # 2
         "librewolf.desktop" # 3
-        "codium.desktop" # 4
+        "code.desktop" # 4
         "obsidian.desktop" # 5
         "org.keepassxc.KeePassXC.desktop" # 6
         "cider.desktop" # 7
