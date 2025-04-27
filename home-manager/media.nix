@@ -25,7 +25,7 @@
     };*/
   };
   # ad-hoc disabling systemd service to avoid core-dumping
-  systemd.user.services.nextcloud-client.Service.ExecStart = (lib.mkForce "");
+  # systemd.user.services.nextcloud-client.Service.ExecStart = (lib.mkForce "");
 
   # Browsers
 
