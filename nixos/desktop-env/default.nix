@@ -64,52 +64,10 @@
   environment.wordlist.enable = true;
 
   # Input
-
-  ## Fcitx5
   i18n.inputMethod = {
-    type = "fcitx5";
+    type = "ibus";
     enable = true;
-    fcitx5 = {
-      waylandFrontend = true;
-      addons = with pkgs; [
-        fcitx5-mozc
-        fcitx5-gtk
-        #fcitx5-material-color
-      ];
-      ignoreUserConfig = true;
-      settings = {
-        # How to determine these? Set `ignoreUserConfig` to false, then configure the setup you'd like & then cat the values of `$HOME/.config/fxcit5/*`
-        globalOptions = {
-          # /etc/xdg/fcitx5/config
-          "Hotkey/TriggerKeys" = {
-            "0" = "Control+Super+space"; # modified this one
-          };
-          Behavior = {
-            DefaultPageSize = 7;
-            OverrideXkbOption = true;
-          };
-        };
-        inputMethod = {
-          # /etc/xdg/fcitx5/profile
-          "Groups/0" = {
-            Name = "Default";
-            "Default Layout" = "eu"; # For EurKEY
-            DefaultIM = "mozc";
-          };
-          "Groups/0/Items/0" = {
-            Name = "keyboard-eu"; # "
-            Layout = "";
-          };
-          "Groups/0/Items/1" = {
-            Name = "mozc";
-            Layout = "";
-          };
-          "GroupOrder" = {
-            "0" = "Default";
-          };
-        };
-      };
-    };
+    ibus.engines = with pkgs.ibus-engines; [ anthy ]; # mozc
   };
 
   # Environment variables
@@ -117,7 +75,6 @@
 
     ## Wayland
     NIXOS_OZONE_WL = "1";
-    MOZ_ENABLE_WAYLAND = "1"; # Just to make sure
     OBSIDIAN_USE_WAYLAND = "1"; # "
     QT_QPA_PLATFORM = "wayland";
   };

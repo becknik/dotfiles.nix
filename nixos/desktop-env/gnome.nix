@@ -24,7 +24,7 @@ let
     gsconnect
     gtile
     just-perfection
-    kimpanel # GTK-ish fcitx5 theming; causing crashes
+    kimpanel # GTK-ish kimpanel theming for fxcit/ ibus; causing crashes
     logo-menu
     quick-settings-tweaker
     vitals

@@ -81,6 +81,7 @@
     chromium = {
       enable = true;
       package = pkgs.ungoogled-chromium;
+      # works for chromium now, but doesn't for electron: https://github.com/electron/electron/issues/33662#issuecomment-2299180561
       commandLineArgs = [
         # https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#Chromium%20/%20Electron
         "--enable-features=UseOzonePlatform"

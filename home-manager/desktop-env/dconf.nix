@@ -151,7 +151,8 @@ with lib.gvariant; {
       unmaximize = [ "<Super>j" ];
 
       toggle-overview = [ "<Super>s" ]; # must be set automatically
-      switch-input-source = [ "" ]; # fixed collision with search & fcitx5
+      switch-input-source = [ "<Control><Super>space" ];
+      switch-input-source-backward = [ "<Shift><Control><Super>space" ];
 
       always-on-top = [ "<Super>z" ];
     };
@@ -219,10 +220,6 @@ with lib.gvariant; {
       idle-dim = laptopMode;
       power-saver-profile-on-low-battery = laptopMode;
     };
-    "org.gnome.settings-daemon.plugins.xsettings" = {
-      overrides = "{'Gtk/IMModule': <'fcitx'>}";
-    };
-
 
     "org/gnome/shell" = {
       favorite-apps = [
@@ -528,7 +525,7 @@ with lib.gvariant; {
     # Set the EurKey keyboard layout as default (source: https://discourse.nixos.org/t/keyboard-layout-with-gnome/21996/9)
     "org/gnome/desktop/input-sources" = {
       show-all-sources = true;
-      sources = [ (mkTuple [ "xkb" "eu" ]) (mkTuple [ "xkb" "us+altgr-intl" ]) ];
+      sources = [ (mkTuple [ "xkb" "eu" ]) (mkTuple [ "ibus" "anthy" ]) ];
       xkb-options = [ "terminate:ctrl_alt_bksp" ];
       input-sources = [ "terminate:ctrl_alt_bksp" "compose:rwin" "lv3:ralt_switch" ];
     };
