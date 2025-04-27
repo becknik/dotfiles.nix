@@ -42,9 +42,9 @@
     fontconfig = {
       subpixel.rgba = "rgb";
       defaultFonts = {
-        serif = [ "DejaVu Serif" "IPAexGothic" ];
-        sansSerif = [ "DejaVu Sans" "IPAexMincho" ];
-        monospace = [ "FiraCode Nerd Font" /* "Source Code Pro" */ ];
+        serif = [ "DejaVu Serif" "IPAexGothic" ]; # this is used as fallback for apps like gedit
+        sansSerif = [ "DejaVu Sans" "IPAexGothic" ];
+        monospace = [ "FiraCode Nerd Font" /* "Source Code Pro" */ "IPAexGothic" ];
         emoji = [ "JoyPixels" ];
       };
     };
