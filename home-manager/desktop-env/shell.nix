@@ -291,7 +291,7 @@
           gclb = "git clone --recurse-submodules --bare";
           "gsw!" = "git switch --force";
           gla = "git pull --autostash";
-          gstaS = "git stash push -S";
+          gstas = "git stash push --staged";
           grbis = "git rebase --interactive --autosquash";
           glgf = "git log --stat --pretty=fuller";
           glgpf = "git log --stat --patch --pretty=fuller";
