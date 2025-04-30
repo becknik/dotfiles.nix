@@ -151,7 +151,7 @@
             sharedModules = with inputs; [
               sops-nix.homeManagerModules.sops
               nix-index-database.hmModules.nix-index
-              catppuccin.homeManagerModules.catppuccin
+              catppuccin.homeModules.catppuccin
             ] ++ nixpkgs.lib.optional isDarwinSystem mac-app-util.homeManagerModules.default;
 
             # home-manager on darwin doesn't support all options
