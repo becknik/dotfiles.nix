@@ -11,7 +11,7 @@
       options = {
         syntax-theme = "Visual Studio Dark+";
         line-numbers = true;
-        side-by-side = true;
+        side-by-side = false; # needs too much space
         navigate = true; # use n and N to move between diff sections
         keep-plus-minus-markers = false;
         true-color = "always";
