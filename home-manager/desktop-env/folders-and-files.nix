@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   imports = [
@@ -40,5 +40,13 @@
         target = ".cargo/config";
         source = ./files/cargo.toml;
       };
+
+      # print format
+      ".local/bin" = {
+        source = ./files/scripts;
+        recursive = true;
+      };
     };
+
+  programs.zsh.initExtra = "path+=('${config.home.homeDirectory}/.local/bin')";
 }
