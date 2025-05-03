@@ -1,122 +1,330 @@
-{ withDefaultKeymapOptions, pkgs, ... }:
+{ lib
+, pkgs
+, withDefaultKeymapOptions
+, mapToModeAbbr
+, ...
+}:
 
 {
-  extraPackages = with pkgs; [
-    codespell
-    jq
-    yamllint # FIXME "no config found" - not detected by conform.nvim
-    yamlfmt
-    # FIXME markdownfmt is missing
-    markdownlint-cli # markdownlint-cli2
-    nixpkgs-fmt # FIXME "no config found" - not detected by conform.nvim
-    sqlfluff
-    stylua
-    shellcheck # shellchek-minimal
-    shfmt
-    isort
-    black
-    prettierd
-    google-java-format
-    rustfmt
-  ] ++ (with pkgs.nodePackages_latest; [
-    fixjson
-  ]);
+  userCommands = {
+    ConformFormat = {
+      range = true;
+      # https://github.com/stevearc/conform.nvim/blob/master/doc/recipes.md#format-command
+      command.__raw = # lua
+        ''
+          function(args)
+            local range = nil
+            if args.count ~= -1 then
+              local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
+              range = {
+                start = { args.line1, 0 },
+                ["end"] = { args.line2, end_line:len() },
+              }
+            end
+            require("conform").format({ async = true, lsp_format = "fallback", range = range }, function()
+              vim.notify("Done formatting", "info", { title = "ConformFormat" })
+            end
+            )
+          end
+        '';
+    };
+  };
+
+  keymaps = withDefaultKeymapOptions [
+    {
+      key = "<leader>F";
+      action = "ConformFormat";
+      mode = mapToModeAbbr [
+        "normal"
+        "visual_select"
+      ];
+      options.cmd = true;
+      options.desc = "Format";
+    }
+
+    {
+      key = "<leader>tfg";
+      action.__raw = "function() vim.g.disable_autoformat = true end";
+      options.desc = "Toggle Format Global";
+    }
+    {
+      key = "<leader>tfl";
+      action.__raw = "function() vim.b.disable_autoformat = true end";
+      options.desc = "Toggle Format Local";
+    }
+
+  ];
+
+  plugins.conform-nvim.luaConfig.pre = ''
+    wk.add {
+      { "<leader>F", icon = "󰉢" },
+      { "<leader>t", icon = " " },
+      { "<leader>tf", icon = " 󰉢" },
+    }
+    local CONFORM_AUTOFORMAT_HUNKS_IGNORE = { 'lua' }
+  '';
 
   # https://github.com/stevearc/conform.nvim
   plugins.conform-nvim = {
     enable = true;
 
-    logLevel = "warn";
-    # TODO auto-formatting on git hunks only?
+    settings =
+      let
+        # https://github.com/stevearc/conform.nvim?tab=readme-ov-file#formatters
+        # https://github.com/stevearc/conform.nvim?tab=readme-ov-file#customizing-formatters
+        # most not installed by default (see https://github.com/nix-community/nixvim/issues/1141)
+        formatterSetup = {
+          # TODO do something about the default format configurations
+          # https://github.com/google/yamlfmt/blob/main/docs/config-file.md#configuration-1
+          # https://stylelint.io/user-guide/configure/
+          typos.types = "*";
+          typos.priority = 1;
+          typos.command = lib.getExe pkgs.typos;
+          trim_whitespace.types = "*";
+          trim_newlines.types = "*";
+          squeeze_blanks.types = "*";
+          # commitmsgfmt
 
-    # https://github.com/stevearc/conform.nvim?tab=readme-ov-file#formatters
-    # TODO not installed (see https://github.com/nix-community/nixvim/issues/1141)
-    formattersByFt =
-      let prettier = [ [ "prettierd" /* "prettier" */ ] ];
+          markdownlint.types = "markdown"; # markdown-toc unnecessary
+          markdownlint.command = lib.getExe pkgs.markdownlint-cli;
+
+          # config files
+
+          # relpace with yq?
+          yamlfmt.types = "yaml";
+          yamlfmt.command = lib.getExe pkgs.yamlfmt;
+          taplo.types = "toml";
+
+          ## json
+
+          fixjson.types = [
+            "json"
+            "jsonc"
+          ];
+          fixjson.command = lib.getExe pkgs.nodePackages_latest.fixjson;
+
+          # frontend
+
+          html_beautify.types = "html";
+          # html.command = lib.getExe pkgs.markdownlint-cli;
+          css_beautify.types = "css";
+          css_beautify.priority = 1;
+          css_beautify.command = "${pkgs.nodePackages_latest.js-beautify}/bin/css-beautify";
+          css_beautify.prepend_args = [
+            "--type"
+            "css"
+            "--indent-size"
+            "2"
+          ];
+          stylelint.types = "css";
+          stylelint.command = lib.getExe pkgs.stylelint;
+          #, deno_fmt, docformatter
+
+          # domain-specific languages
+
+          sqlfluff.types = "sql";
+          sqlfluff.command = lib.getExe pkgs.sqlfluff;
+          # pg_format
+
+          bibtex-tidy.types = "bibtex";
+          bibtex-tidy.command = lib.getExe pkgs.bibtex-tidy;
+          tex-fmt.types = "latex";
+          tex-fmt.command = lib.getExe pkgs.tex-fmt;
+
+          nixfmt.types = "nix";
+          nixfmt.command = lib.getExe pkgs.nixfmt-rfc-style;
+
+          shfmt.types = "bash";
+          shfmt.command = lib.getExe pkgs.shfmt;
+          # shellcheck.types = [ "bash"];
+          # shellcheck.command = lib.getExe pkgs.shellcheck; # shellchek-minimal
+          # shellharden.types = [ "bash"];
+          # shellharden.command = lib.getExe pkgs.shellharden;
+
+          # general purpose scripting
+
+          stylua.types = "lua";
+          stylua.command = lib.getExe pkgs.stylua;
+
+          ruff_organize_imports.types = "python";
+          ruff_organize_imports.command = lib.getExe pkgs.ruff;
+          ruff_organize_imports.priority = 2;
+          ruff_format.types = "python";
+          ruff_format.command = lib.getExe pkgs.ruff;
+          ruff_format.priority = 1;
+          ruff_fix.types = "python";
+          ruff_fix.command = lib.getExe pkgs.ruff;
+          # isort.command = lib.getExe pkgs.isort;
+          # black.command = lib.getExe pkgs.black;
+          # hclfmt.command = lib.getExe pkgs.hclfmt;
+          # alternatives: autopep8 darker (no package yet)
+
+          ## js/ts
+
+          prettierd.types = [
+            "javascript"
+            "javascriptreact"
+            "typescript"
+            "typescriptreact"
+            "vue"
+            "graphql"
+          ];
+          prettierd.priority = 1; # take precedence over eslint_d
+          prettierd.command = lib.getExe pkgs.prettierd;
+          eslint_d.types = [
+            "javascript"
+            "javascriptreact"
+            "typescript"
+            "typescriptreact"
+          ];
+
+          # "heavy" programming languages
+
+          goimports.types = "go";
+          goimports.command = lib.getExe' pkgs.gotools "goimports";
+          goimports.priority = 1;
+          gofumpt.types = "go";
+          gofumpt.command = lib.getExe pkgs.gofumpt;
+
+          stylish-haskell.types = "haskell";
+          stylish-haskell.command = lib.getExe pkgs.stylish-haskell;
+          # ormolu, fourmolu, hindent
+          cabal-fmt.types = "cabal";
+          cabal-fmt.command = lib.getExe pkgs.haskellPackages.cabal-fmt;
+          # hcl (what is this?)
+
+          rustfmt.types = "rust";
+          rustfmt.command = lib.getExe pkgs.rustfmt;
+
+          clang_format.types = "cpp";
+          gersemi.types = "cmake";
+          gersemi.command = lib.getExe pkgs.gersemi;
+        };
+        names = builtins.attrNames formatterSetup;
+
+        entries = builtins.concatLists (
+          builtins.map
+            (
+              name:
+              builtins.map
+                (ft: {
+                  ft = ft;
+                  formatter = name;
+                })
+                (
+                  if builtins.isString formatterSetup.${name}.types then
+                    [ formatterSetup.${name}.types ]
+                  else
+                    formatterSetup.${name}.types
+                )
+
+            )
+            names
+        );
+
+        formatters = builtins.listToAttrs (
+          builtins.map
+            (name: {
+              name = name;
+              value = builtins.removeAttrs formatterSetup.${name} [
+                "types"
+                "priority"
+              ];
+            })
+            names
+        );
+
+        formatters_by_ft = builtins.foldl'
+          (
+            acc: entry:
+              let
+                ft = entry.ft;
+                prev = acc.${ft} or [ ];
+              in
+              acc // { "${ft}" = prev ++ [ entry.formatter ]; }
+          )
+          { }
+          entries;
+
+        formatters_by_ft_ordered = lib.mapAttrs
+          (
+            type: names:
+              builtins.sort
+                (
+                  a: b:
+                    let
+                      pa = formatterSetup.${a}.priority or 0;
+                      pb = formatterSetup.${b}.priority or 0;
+                    in
+                    if pa > pb then
+                      true
+                    else if pa < pb then
+                      false
+                    else
+                      a < b
+                )
+                names
+          )
+          formatters_by_ft;
       in
       {
-        "*" = [ "codespell" ];
-        "_" = [ "trim_whitespace" ];
+        notify_on_error = true;
+        log_level = "warn";
 
-        html = prettier;
-        css = prettier; # stylelint?
-        json = [ "fixjson" "jq" ]; # TODO is this even necessary due to ls?
-        yaml = [ "yamllint" "yamlfmt" ]; # TODO is this even necessary due to ls?
-        markdown = [ "markdownlint" "markdownfmt" ]; # TODO is this even necessary due to ls?
-
-        # bibtex-tidy
-        nix = [ "nixpkgs-fmt" ];
-        sql = [ "sqlfluff" ]; # "sql_formatter" "sqlfmt" # TODO is this even necessary due to ls?
-
-        lua = [ "stylua" ]; # TODO is this even necessary due to ls?
-        bash = [ "shellcheck" "shfmt" ]; # beautysh # TODO is this even necessary due to ls?
-        python = [ "isort" "black" ]; # use darker instead of back? autopep8 # TODO is this even necessary due to ls?
-        javascript = prettier;
-        javascriptreact = prettier;
-        typescript = prettier;
-        typescriptreact = prettier;
-
-        java = [ "google-java-format" ]; # TODO is this even necessary due to ls?
-        rust = [ "rustfmt" ]; # TODO is this even necessary due to ls?
-        # cabal_fmt
-      };
-    # https://github.com/stevearc/conform.nvim?tab=readme-ov-file#customizing-formatters
-    formatters = {
-      # https://github.com/stevearc/conform.nvim/blob/master/doc/formatter_options.md#injected
-      # TODO does injected conform linting work?
-      injected.options = {
-        lang_to_ext = {
-          markdown = "md";
-
-          latex = "tex";
-
-          bash = "sh";
-          python = "py";
-          ruby = "rb";
-          javascript = "js";
-          typescript = "ts";
-
-          rust = "rs";
+        default_format_opts = {
+          lsp_format = "fallback";
+          async = true;
         };
+
+        formatters_by_ft = formatters_by_ft_ordered;
+        formatters = formatters;
+        # https://github.com/stevearc/conform.nvim/blob/master/doc/formatter_options.md#injected
+        # TODO does injected conform linting work?
+
+        format_on_save = # lua
+          ''
+            function(bufnr)
+              if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+                return
+              end
+
+              if vim.tbl_contains(CONFORM_AUTOFORMAT_HUNKS_IGNORE, vim.bo.filetype) then
+                vim.notify("range formatting for " .. vim.bo.filetype .. " not working properly.")
+                return
+              end
+
+              local hunks = require("gitsigns").get_hunks()
+              if hunks == nil then
+                return
+              end
+
+              local function format_range()
+                if next(hunks) == nil then
+                  vim.notify("Done formatting git hunks", "info", { title = "ConformFormat" })
+                  return
+                end
+                local hunk = nil
+                while next(hunks) ~= nil and (hunk == nil or hunk.type == "delete") do
+                  hunk = table.remove(hunks)
+                end
+
+                if hunk ~= nil and hunk.type ~= "delete" then
+                  local start = hunk.added.start
+                  local last = start + hunk.added.count
+                  -- nvim_buf_get_lines uses zero-based indexing -> subtract from last
+                  local last_hunk_line = vim.api.nvim_buf_get_lines(0, last - 2, last - 1, true)[1]
+                  local range = { start = { start, 0 }, ["end"] = { last - 1, last_hunk_line:len() } }
+                  require("conform").format({ range = range, async = true, lsp_fallback = true }, function()
+                    vim.defer_fn(function()
+                      format_range()
+                    end, 1)
+                  end)
+                end
+              end
+
+              format_range()
+            end
+          '';
       };
-      rustfmt.options = {
-        default_edition = "2021";
-      };
-    };
   };
-
-  extraConfigLuaPost = ''
-    -- credits: https://github.com/stevearc/conform.nvim/issues/92#issuecomment-2069915330
-    vim.api.nvim_create_user_command('FormatHunks', function()
-      local hunks = require("gitsigns").get_hunks()
-      local format = require("conform").format
-      for i = #hunks, 1, -1 do
-        local hunk = hunks[i]
-        if hunk ~= nil and hunk.type ~= "delete" then
-          local start = hunk.added.start
-          local last = start + hunk.added.count
-          -- nvim_buf_get_lines uses zero-based indexing -> subtract from last
-          local last_hunk_line = vim.api.nvim_buf_get_lines(0, last - 2, last - 1, true)[1]
-          local range = { start = { start, 0 }, ["end"] = { last - 1, last_hunk_line:len() } }
-          format({ range = range, async = true, lsp_fallback = true, })
-        end
-      end
-    end, {})
-
-    vim.api.nvim_create_user_command("ConformFormat", function(args)
-      local range = nil
-      if args.count ~= -1 then
-        local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
-        range = {
-          start = { args.line1, 0 },
-          ["end"] = { args.line2, end_line:len() },
-        }
-      end
-      require("conform").format({ lsp_fallback = true, range = range })
-    end, { range = true })
-  '';
-
-  keymaps = withDefaultKeymapOptions [
-    { key = "<leader>H"; action = "<cmd>FormatHunks<cr>"; }
-  ];
 }

@@ -1,6 +1,17 @@
 # Nixvim Setup Quick Reference
 
-Descriptions for custom Keybindings should be written as `[Action verb] [what] [where/when (optional)]`
+## Getting rid of Missing Spell File
+
+> [source](https://github.com/neovim/neovim/issues/2102#issuecomment-1477098707)
+
+```shell
+nvim -u NORC
+:set spellang=de spell
+```
+
+## Plugin TODOs
+
+- <https://github.com/lewis6991/gitsigns.nvim> selection stage doesn't work
 
 ## cmp-git
 
@@ -38,9 +49,9 @@ Descriptions for custom Keybindings should be written as `[Action verb] [what] [
 ### Git
 
 #### Worktrees
+
 - `<leader>twc`: create git worktree in telescope
 - `<leader>tws`: switch git worktree in telescope
   - `<Enter`>: switches
   - `<c-d>`: deletes
   - `<c-f>`: toggles forcing of the next deletion
-

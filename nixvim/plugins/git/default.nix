@@ -4,6 +4,7 @@
   imports = [
     ./gitsigns
     ./neogit.nix
-    ./git-worktree.nix
+    ./diffview.nix
+    # ./git-worktree.nix this plugin seems to be broken...
   ];
 }

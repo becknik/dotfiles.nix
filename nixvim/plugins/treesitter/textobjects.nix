@@ -4,7 +4,13 @@
   extraConfigLua = builtins.readFile ./textobjects.lua;
 
   # https://github.com/nvim-treesitter/nvim-treesitter-textobjects
-  # tets 
+
+  plugins.lsp.luaConfig.post = ''
+    wk.add {
+      { "<leader>n", icon = "󰆾 ", desc = "Textobject Movement"  },
+    }
+  '';
+
   plugins.treesitter-textobjects = {
     enable = true;
     lspInterop = {

@@ -42,35 +42,39 @@
 
       settings = {
         experimental.ghost_text = true;
-        performance.max_view_entries = 200;
 
         formatting = {
-          fields = [ "menu" "kind" "abbr" ];
+          fields = [
+            "menu"
+            "kind"
+            "abbr"
+          ];
           # makes use of contents in ./cmp.lua
-          format = ''
-            function(entry, vim_item)
-              if symbols[vim_item.kind] == nill then
-                vim_item.kind = vim_item.kind
-              else
-                vim_item.kind = symbols[vim_item.kind]
-                -- vim_item.kind = string.format('%s %s', symbols[vim_item.kind], vim_item.kind)
+          format = # lua
+            ''
+              function(entry, vim_item)
+                if symbols[vim_item.kind] == nill then
+                  vim_item.kind = vim_item.kind
+                else
+                  vim_item.kind = symbols[vim_item.kind]
+                  -- vim_item.kind = string.format('%s %s', symbols[vim_item.kind], vim_item.kind)
+                end
+                vim_item.menu = ({
+                  buffer = "[ ]", -- also change in bufferline.nix 
+                  nvim_lsp = "[ ]",
+                  luasnip = "[󰌒 ]",
+                  nvim_lua = " [ ]",
+                  look = "[ ]", -- 
+                  dotenv = " [e]",
+                  spell = "[󰓆 ]",
+                  async_path = " [ ]",
+                  git = "[ ]",
+                  calc = "[󱖦 ]",
+                  emoji = "[󰞅 ]",
+                })[entry.source.name]
+                return vim_item
               end
-              vim_item.menu = ({
-                buffer = "[]",
-                nvim_lsp = "[]",
-                luasnip = "[󰌒]",
-                nvim_lua = "[]",
-                look = "[]",
-                dotenv = "[e]",
-                spell = "[󰓆]",
-                async_path = "[]",
-                git = "[]",
-                calc = "[󱖦]",
-                emoji = "[󰞅]",
-              })[entry.source.name]
-              return vim_item
-            end
-          '';
+            '';
         };
 
         view.entries = {
@@ -79,45 +83,94 @@
         };
 
         sorting = {
+          # https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/config/compare.lua
           comparators = [
             "require('cmp.config.compare').offset"
             "require('cmp.config.compare').exact"
             "require('cmp.config.compare').score"
-            "require('cmp.config.compare').locality"
             "require('cmp.config.compare').recently_used"
-            "require('cmp.config.compare').kind"
+            "require('cmp.config.compare').locality"
           ];
         };
 
-        # performance = { fetchingTimeout = 200; maxViewEntries = 50; };
+        # https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/config/default.lua#L18
+        performance = {
+          debounce = 50; # ms wait after typing before recomputing - default: 60
+          throttle = 50; # at most every - default: 30
+          max_view_entries = 200;
+        };
 
         snippet.expand = ''function(args) require('luasnip').lsp_expand(args.body) end'';
 
         # https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources
         # https://github.com/nix-community/nixvim/blob/ad6a08b69528fdaf7e12c90da06f9a34f32d7ea6/plugins/completion/cmp/cmp-helpers.nix#L23-L67
         sources = [
-          { name = "nvim_lua"; priority = 1000; } # neovim's lua api; only loaded in .lua files
-          { name = "nvim_lsp"; priority = 950; }
-          { name = "luasnip"; priority = 900; }
-          # { name = "nvim_lsp_signature_help"; priority = 1000; }
-          { name = "buffer"; priority = 800; }
+          # 900 = semantic sources
+          # 800 = "local"
+          # 700 = filesystem/ trivial
+          {
+            # neovim's lua api; only loaded in .lua files
+            name = "nvim_lua";
+            priority = 900;
+          }
+          {
+            name = "nvim_lsp";
+            priority = 900;
+          }
+          {
+            name = "luasnip";
+            priority = 900;
+          }
 
-          { name = "spell"; priority = 700; options = { keep_all_entries = true; }; }
+          {
+            name = "buffer";
+            max_item_count = 50;
+            priority = 800;
+          }
+          {
+            name = "spell";
+            priority = 700;
+            options = {
+              keep_all_entries = true;
+            };
+          }
           {
             name = "look";
-            priority = 600;
+            max_item_count = 10;
+            priority = 700;
             keyword_length = 3;
-            options = { convert_case = true; loud = true; dict = "${pkgs.scowl}/share/dict/words.txt"; };
+            options = {
+              convert_case = true;
+              loud = true;
+              dict = "${pkgs.scowl}/share/dict/words.txt";
+            };
           }
+
           # https://github.com/SergioRibera/cmp-dotenv
-          { name = "dotenv"; priority = 500; }
+          {
+            name = "dotenv";
+            priority = 700;
+          }
           # spell is rather useful as code-action than recommendation
 
           # triggered by prefixes
-          { name = "async_path"; }
-          { name = "calc"; }
-          { name = "emoji"; priority = 1000; } # show emoji before git commits on : suffix
-          { name = "git"; priority = 975; } # higher prio than lsp
+          {
+            name = "async_path";
+            priority = 700;
+          }
+          {
+            name = "calc";
+            priority = 700;
+          }
+
+          {
+            name = "emoji";
+            priority = 701;
+          }
+          {
+            name = "git";
+            priority = 701;
+          }
 
           # TODO https://github.com/zbirenbaum/copilot-cmp
           # { name = "copilot"; group_index = 2; priority = 1000; } # TODO disable suggestion, panel module, as it can interfere with completions
@@ -141,8 +194,12 @@
 
       # copy-pasta from here: https://github.com/hrsh7th/nvim-cmp/?tab=readme-ov-file#recommended-configuration
       cmdline =
-        let mapping = { __raw = "cmp.mapping.preset.cmdline()"; };
-        in {
+        let
+          mapping = {
+            __raw = "cmp.mapping.preset.cmdline()";
+          };
+        in
+        {
           "/" = {
             inherit mapping;
             sources = [
@@ -158,7 +215,12 @@
               { name = "async_path"; }
               {
                 name = "cmdline";
-                option = { ignore_cmds = [ "Man" "!" ]; };
+                option = {
+                  ignore_cmds = [
+                    "Man"
+                    "!"
+                  ];
+                };
               }
               { name = "cmp-cmdline-history"; }
             ];

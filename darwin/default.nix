@@ -35,6 +35,9 @@
   };
 
   programs.zsh.enable = true;
+  # paste selection to clipboard (feature might be a pain?)
+  programs.kitty.settings.copy_on_select = "clipboard";
+  # programs.kitty.settings.hide_window_decorations = "titlebar-and-corners";
 
   # not working in user-mode
   /* system.defaults = {

@@ -37,6 +37,36 @@
       };
     };
 
+    kitty = {
+      enable = true;
+      font = {
+        name = "FiraCode Nerd Front Regular";
+        size = 13;
+      };
+
+      settings = {
+        scrollback_lines = 5000;
+        # accessible when using a separate page for scrollback
+        # toggle with kitty_mod + h
+        scrollback_pager_history_size = 20; # ~ 10.000 lines per Mb
+        wheel_scroll_min_lines = 1;
+        touch_scroll_multiplier = 1.0;
+
+        mouse_hide_wait = 1.0; # seconds
+        strip_trailing_spaces = "smart";
+
+        # performance
+        repaint_delay = 7; # ms - yields ~144Hz
+        input_delay = 1; # ms
+
+        remember_window_size = false;
+        initial_window_width = "140c";
+        initial_window_height = "48c";
+
+        update_check_interval = 0;
+      };
+    };
+
     tmux = {
       enable = true;
 
@@ -83,6 +113,8 @@
         "bind-key -T copy-mode-vi v send-keys -X begin-selection" # use v instead of c-v space
         "bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle" # toggle between line & rectangle select mode
         "bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel"
+
+        "set -g repeat-time 200" # ms to recognize repeated key presses
       ])
       ;
       plugins = with pkgs.tmuxPlugins; [

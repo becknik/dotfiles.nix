@@ -7,27 +7,36 @@
     ./plugins
   ];
 
+  config.globals.mapleader = " "; # "," "\"
+
   config = {
     viAlias = true;
     vimAlias = true;
 
     clipboard.providers.wl-copy.enable = true;
 
-    colorschemes.catppuccin.enable = true;
-    # colorschemes.oxocarbon.enable = true;
-    # colorschemes.onedark.enable = true;
-    # colorschemes.tokyonight.enable = true;
+    # colorschemes.kanagawa.enable = true;
+    colorschemes.rose-pine.enable = true;
 
-    globals.mapleader = " "; # "," "\"
+    env = { };
+    files = { };
+    impureRtp = false; # "keep .config/nvim & .config/nvim/after in runtime path"
 
+    withPython3 = false;
+    withRuby = false;
+
+    # experimental lua loader
+    luaLoader.enable = true;
     performance = {
       byteCompileLua = {
         enable = true;
-        nvimRuntime = false; # default
-        plugins = true; # some issues with some plugins like neoclip and sqlite
+        # :Telescope keymaps doesn't work anymore when setting either to true
+        initLua = false;
+        plugins = false;
       };
     };
 
-    # plugins.lazy.enable = true;
+    editorconfig.enable = true;
+    plugins.lz-n.enable = true;
   };
 }

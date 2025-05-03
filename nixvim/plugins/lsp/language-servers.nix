@@ -2,7 +2,9 @@
 
 {
   plugins.lsp.servers = {
-    typos-lsp.enable = true; # Source code spell checker for Visual Studio Code
+    typos_lsp.enable = true; # Source code spell checker for Visual Studio Code
+
+    # I programmed in HTML stuff
 
     html.enable = true;
     #templ.enable = true; # HTML
@@ -12,32 +14,44 @@
     taplo.enable = true; # TOML
     yamlls.enable = true;
 
+    # Templating Stuff
+
     dockerls.enable = true;
-    docker-compose-language-service.enable = true;
+    docker_compose_language_service.enable = true;
+
+    # Domain-specific Scripting Stuff
 
     nixd.enable = true;
-    # nil_ls.enable = true;
     sqls.enable = true;
     texlab.enable = true;
-
-    lua-ls.enable = true;
     bashls.enable = true;
-    pyright.enable = true; # sadly, pkgs.basedpyright; doesn't work properly
+
+    # General Scripting Stuff
+
+    lua_ls.enable = true;
+    pyright.enable = true;
+    pyright.package = pkgs.basedpyright;
+
+    # Frontend Stuff
 
     eslint.enable = true;
-    tsserver.enable = true;
+    stylelint_lsp.enable = true;
+    tailwindcss.enable = true;
+    ## Frameworks
+    relay_lsp.enable = true;
+    relay_lsp.package = null;
+    volar.enable = true;
+
+    # Backend Stuff
 
     clangd.enable = true;
-    rust-analyzer = {
+    rust_analyzer = {
       enable = true;
       installCargo = false; # TODO is working with rustup?
       installRustc = false;
     };
     hls.enable = true;
+    hls.installGhc = true;
     # zls.enable = true;
-
-    # java-language-server.enable = true; # handled better by nvim-jdtls
-    kotlin-language-server.enable = true;
-    # metals.enable = true;
   };
 }

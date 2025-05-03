@@ -4,10 +4,14 @@
   plugins.luasnip = {
     enable = true;
 
+    lazyLoad.enable = true;
+    lazyLoad.settings.event = "InsertEnter";
+
     settings = {
       enable_autosnippets = true;
       # store_selection_keys = "<Tab>";
     };
+
     fromLua =
       let
         luasnips-repo = fetchFromGitHub {
@@ -21,8 +25,17 @@
         { paths = "${luasnips-repo}"; }
       ];
     fromVscode = [
-      # exclude = []; include = [];
-      { lazyLoad = true; paths = "${pkgs.vimPlugins.friendly-snippets}"; } # TODO causes possible infinite recursion
+      {
+        lazyLoad = true;
+        paths = "${pkgs.vimPlugins.friendly-snippets}";
+        # exclude = []; include = [];
+      }
+      # TODO this isn't working...
+      {
+        lazyLoad = true;
+        paths = [{ __raw = "vim.fn.expand('~/.config/VSCodium/User')"; }];
+
+      }
     ];
   };
   # keymaps = {};

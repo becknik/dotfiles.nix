@@ -5,7 +5,6 @@
   plugins.neogit = {
     enable = true;
 
-
     settings =
       let
         submit_abort = {
@@ -37,8 +36,47 @@
       };
   };
 
+  plugins.neogit.luaConfig.post = ''
+    wk.add {
+      { "<leader>G", icon = "" },
+      { "<leader>gc", icon = "󰜞" },
+      { "<leader>gl", icon = "󰜘" },
+      { "<leader>gp", icon = "" },
+      { "<leader>gP", icon = "" },
+    }
+  '';
+
   keymaps = withDefaultKeymapOptions [
-    { key = "<leader>G"; action = "<cmd>Neogit<cr>"; }
-    { key = "<leader>gf"; action = "<cmd>Neogit kind=floating<cr>"; }
+    {
+      key = "<leader>G";
+      action = "Neogit kind=floating"; # status & index can't be that messy to not have in displayed in a modal
+      options.cmd = true;
+      options.desc = "Neogit";
+    }
+
+    {
+      key = "<leader>gc";
+      action = "Neogit commit";
+      options.cmd = true;
+      options.desc = "Neogit commit";
+    }
+    {
+      key = "<leader>gl";
+      action = "Neogit log";
+      options.cmd = true;
+      options.desc = "Neogit Log";
+    }
+    {
+      key = "<leader>gp";
+      action = "Neogit pull";
+      options.cmd = true;
+      options.desc = "Neogit Pull";
+    }
+    {
+      key = "<leader>gP";
+      action = "Neogit pull";
+      options.cmd = true;
+      options.desc = "Neogit Push";
+    }
   ];
 }

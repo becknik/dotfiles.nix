@@ -1,0 +1,48 @@
+{ withDefaultKeymapOptions, ... }:
+
+{
+  imports = [
+    ./advanced-git-search.nix
+    ./file-browser.nix
+    ./zoxide.nix
+  ];
+
+  plugins.telescope = {
+    # https://youtu.be/u_OORAL_xSM?feature=shared&t=442
+    extensions = {
+      fzf-native.enable = true;
+      frecency.enable = true;
+      live-grep-args.enable = true;
+      ui-select.enable = true; # replaces the vim.ui.select with telescope
+      undo.enable = true;
+    };
+  };
+
+  plugins.telescope.luaConfig.post = ''
+    wk.add {
+      { "<leader>fG", icon = " " },
+      { "<leader>fe", icon = " 󰋚 " },
+    }
+  '';
+
+  keymaps = withDefaultKeymapOptions [
+    {
+      key = "<leader>fe";
+      action = "Telescope frecency workspace=CWD initial_mode=normal";
+      options.cmd = true;
+      options.desc = "Find in Frecency";
+    }
+    {
+      key = "<leader>fG";
+      action = "Telescope live_grep_args live_grep_args";
+      options.cmd = true;
+      options.desc = "Search in live Grep (with args)";
+    }
+    {
+      key = "<leader>u";
+      action = "Telescope undo";
+      options.cmd = true;
+      options.desc = "Find in Undo tree";
+    }
+  ];
+}

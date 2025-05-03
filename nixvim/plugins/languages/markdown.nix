@@ -1,29 +1,32 @@
-{ pkgs, withDefaultKeymapOptions, ... }:
+{ withDefaultKeymapOptions, ... }:
 
 {
+  # https://github.com/iamcco/markdown-preview.nvim/
+  # such a cool plugin
   plugins.markdown-preview = {
     enable = true;
     settings = {
-      auto_close = false;
+      auto_close = 0;
       # browser = "firefox";
-      open_to_the_world = false; # default
-      combine_preview = false; # default
-      theme = "dark";
+      open_to_the_world = 0; # default
+      combine_preview = 0; # default
+      echo_preview_url = 1;
+      theme = "dark"; # default
       preview_options = {
-        content_editable = true;
-        hide_yaml_meta = true; # default
+        content_editable = 1;
+        hide_yaml_meta = 1; # default
       };
     };
   };
 
-  # TODO not loaded into neovim
-  extraPackages = with pkgs.vimPlugins; [ vim-markdown-toc ];
+  extraConfigLua = ''wk.add {{ "<leader>lm", icon = "" }}'';
 
   keymaps = withDefaultKeymapOptions [
-    { key = "<leader>mdps"; action = "<cmd>MarkdownPreview<cr>"; }
-    { key = "<leader>mdpp"; action = "<cmd>MarkdownPreviewStop<cr>"; }
-    { key = "<leader>mdpt"; action = "<cmd>MarkdownPreviewToggle<cr>"; }
-    { key = "<leader>mdg"; action = "<cmd>GenTocGFM<cr>"; }
-    # : :GenTocRedcarpet :GenTocGitLab :GenTocMarked
+    {
+      key = "<leader>lm";
+      action = "MarkdownPreviewToggle";
+      options.cmd = true;
+      options.desc = "Toggle Markdown Preview";
+    }
   ];
 }
