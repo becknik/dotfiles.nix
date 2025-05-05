@@ -28,7 +28,7 @@
   keymaps = withDefaultKeymapOptions [
     {
       key = "<leader>fe";
-      action = "Telescope frecency workspace=CWD initial_mode=normal";
+      action = "Telescope frecency workspace=CWD";
       options.cmd = true;
       options.desc = "Find in Frecency";
     }
