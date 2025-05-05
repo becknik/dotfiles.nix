@@ -129,7 +129,7 @@
 
       {
         key = "<leader>dl";
-        action = "Lspsaga show_line_diagnostic";
+        action = "Lspsaga show_line_diagnostics";
         options.cmd = true;
         options.desc = "Line Diagnostic";
       }
