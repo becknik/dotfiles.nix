@@ -31,13 +31,8 @@
     };
     # nix packages sadly not working with x86_64-darwin
     # brew tap homebrew/cask-fonts
-    casks = [ "eloston-chromium" "firefox" "font-fira-code-nerd-font" "font-fira-code-nerd-font" ];
+    casks = [ "eloston-chromium" "firefox" "font-fira-code-nerd-font" "font-fira-code" ];
   };
-
-  programs.zsh.enable = true;
-  # paste selection to clipboard (feature might be a pain?)
-  programs.kitty.settings.copy_on_select = "clipboard";
-  # programs.kitty.settings.hide_window_decorations = "titlebar-and-corners";
 
   # not working in user-mode
   /* system.defaults = {

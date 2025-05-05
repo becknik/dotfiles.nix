@@ -38,6 +38,7 @@
       monoid
       joypixels
       (nerdfonts.override { fonts = [ "FiraCode" "Hack" "SourceCodePro" ]; })
+      fira-code # paTchINg DesTRoYs fONtS
     ];
     fontconfig = {
       subpixel.rgba = "rgb";

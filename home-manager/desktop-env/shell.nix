@@ -40,7 +40,9 @@
     kitty = {
       enable = true;
       font = {
-        name = "FiraCode Nerd Front Regular";
+        # macos doesn't detect Nerd font as monospaced (and is actually right)
+        # also, kitty doc recommends non-patched font
+        name = "Fira Code";
         size = 13;
       };
 
