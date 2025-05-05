@@ -22,9 +22,15 @@
     enable = true;
 
     settings = {
-      columns = [ "icon" "size" "permissions" ];
-      constrain_cursor = "name";
       default_file_explorer = true;
+      columns = [
+        "icon"
+        "size"
+        "permissions"
+        "mtime"
+      ];
+      # constrain_cursor = "name";
+      watch_for_changes = true;
       delete_to_trash = true;
       skip_confirm_for_simple_edits = true; # Selecting a new/moved/renamed file or directory will prompt you to save changes
 
@@ -39,7 +45,14 @@
   };
 
   keymaps = withDefaultKeymapOptions [
-    { key = "-"; action = "<cmd>Oil<cr>"; }
-    { key = "gx"; action = "<cmd>Browse<cr>"; } # gx-nvim
+    {
+      key = "-";
+      action = "<cmd>Oil<cr>";
+    }
+    {
+      key = "gx"; # gx-nvim
+      action = "<cmd>Browse<cr>";
+      options.unique = false; # maybe because it overrides the netrw thing?
+    }
   ];
 }
