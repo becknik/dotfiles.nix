@@ -4,10 +4,8 @@
   nixvim =
     let
       defaultKeymapOptions = {
-        nowait = true; # Equivalent to adding <nowait> to a mapping
-        silent = true; # no command line echo (might be dangerous??)
-        unique = false; # check for accidental duplicate mappings
-        # TODO unique leads to errors on mappings like `<leader>wl`, `<leader>f`, K (which doesn't make any sense to me)
+        nowait = false; # Equivalent to adding <nowait> to a mapping
+        unique = true; # check for accidental duplicate mappings
       };
       withDefaultKeymapOptions = keymaps: map
         (keymap:
