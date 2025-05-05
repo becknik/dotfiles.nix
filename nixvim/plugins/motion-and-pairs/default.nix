@@ -1,6 +1,10 @@
 { ... }:
 
 {
+  imports = [
+    ./guess-indent.nix
+  ];
+
   plugins = {
     ## Motion
 

@@ -9,12 +9,19 @@
       termguicolors = true; # 24-bit terminal coloring support
 
       spell = true;
-      spelllang = [ "en_us" "en_gb" "de_20" ];
+      spelllang = [
+        "en_us"
+        "en_gb"
+        "de_20"
+      ];
 
       # UI
       number = true;
       relativenumber = true;
-      colorcolumn = [ 80 120 ];
+      colorcolumn = [
+        80
+        120
+      ];
       cursorline = true;
       wrap = true;
       scrolloff = 4; # always keep 8 lines above/below cursor unless at start/end of file
@@ -25,13 +32,15 @@
       # listchars = "tab:»\ ,extends:›,precedes:‹,trail:·,nbsp:·";
 
       # Cursor Movement
-      matchpairs = "(:),{:},[:]" # default
+      matchpairs =
+        "(:),{:},[:]" # default
         + ",<:>";
       mouse = "a"; # Enable mouse mode for modes: normal, visual, insert, command-line
 
-      # Tab stops
-      tabstop = 4; # number of spaces a <Tab> character represents
-      softtabstop = 0; # default
+      # Indentation
+      tabstop = 2;
+      smartindent = true;
+      shiftwidth = 2;
       expandtab = true;
 
       # Indentation
@@ -45,7 +54,7 @@
       hlsearch = true; # default
       incsearch = true; # default; show matchings as you type
       ignorecase = true;
-      smartcase = true; #	Don't ignore case when with capitals
+      smartcase = true; # Don't ignore case when with capitals
       # grepprg = "rg --vimgrep";
       # grepformat = "%f:%l:%c:%m";
 
@@ -55,7 +64,11 @@
 
       # Completion
       updatetime = 400; # faster completion (4000ms default)
-      completeopt = [ "fuzzy" "menuone" "noinsert" ]; # completion window; "preview" "popup"
+      completeopt = [
+        "fuzzy"
+        "menuone"
+        "noinsert"
+      ]; # completion window; "preview" "popup"
     };
   };
 }
