@@ -38,11 +38,11 @@
 
   plugins.neogit.luaConfig.post = ''
     wk.add {
-      { "<leader>G", icon = "" },
+      { "<leader>G", icon = " " },
       { "<leader>gc", icon = "󰜞" },
       { "<leader>gl", icon = "󰜘" },
-      { "<leader>gp", icon = "" },
-      { "<leader>gP", icon = "" },
+      { "<leader>gp", icon = " " },
+      { "<leader>gP", icon = " " },
     }
   '';
 
@@ -74,7 +74,7 @@
     }
     {
       key = "<leader>gP";
-      action = "Neogit pull";
+      action = "Neogit push";
       options.cmd = true;
       options.desc = "Neogit Push";
     }
