@@ -11,7 +11,7 @@
   plugins.telescope.luaConfig.post = ''
     wk.add {
       { "<leader>gg", icon = "", desc = "Git Grep" },
-      { "<leader>gr", icon = " " },
+      { "<leader>gR", icon = " " },
     }
   '';
 
@@ -29,7 +29,7 @@
       options.desc = "Git Grep in History current file";
     }
     {
-      key = "<leader>gr";
+      key = "<leader>gR";
       action = "AdvancedGitSearch checkout_reflog";
       options.cmd = true;
       options.desc = "Git Reflog";

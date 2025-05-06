@@ -7,7 +7,7 @@
       { "<leader>g", desc = "Git" },
       { "<leader>gb", icon = "  " },
       { "<leader>gs", icon = " 󱖫 " },
-      { "<leader>gZ", icon = "  " },
+      { "<leader>gz", icon = "  " },
       { "<leader>g$", icon = "  " },
       { "<leader>gh", icon = "  " },
 
@@ -134,7 +134,7 @@
       action = "git_status";
       options.desc = "find in Git Status";
     };
-    "<leader>gZ" = {
+    "<leader>gz" = {
       action = "git_stash";
       options.desc = "find Git Stash";
     };

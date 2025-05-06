@@ -43,6 +43,8 @@
       { "<leader>gl", icon = "󰜘" },
       { "<leader>gp", icon = " " },
       { "<leader>gP", icon = " " },
+      { "<leader>gr", icon = " " },
+      { "<leader>gZ", icon = " " },
     }
   '';
 
@@ -77,6 +79,19 @@
       action = "Neogit push";
       options.cmd = true;
       options.desc = "Neogit Push";
+    }
+
+    {
+      key = "<leader>gr";
+      action = "Neogit rebase";
+      options.cmd = true;
+      options.desc = "Neogit Rebase";
+    }
+    {
+      key = "<leader>gZ";
+      action = "Neogit stash";
+      options.cmd = true;
+      options.desc = "Neogit Stash";
     }
   ];
 }
