@@ -40,6 +40,7 @@
 
   programs.zsh.enable = true;
   # overwriting the sensible-default plugin 
+  programs.kitty.font.size = lib.mkForce 15;
   programs.tmux.extraConfig = ''
     set-option -g default-command ${lib.getExe config.programs.zsh.package}
     set-option -g default-shell ${lib.getExe config.programs.zsh.package}
