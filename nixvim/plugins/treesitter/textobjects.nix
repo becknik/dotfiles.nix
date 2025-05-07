@@ -100,39 +100,38 @@
             "i${suffix}" = "@${textObjName}.inner";
           };
         in
-        builtins.foldl' (acc: x: acc // x) { }
-          [
-            (generatePairs "/" "comment")
-            {
-              "in" = "@number.inner";
-              "n" = "@number.inner";
-            }
-            (generatePairs "R" "regex")
+        builtins.foldl' (acc: x: acc // x) { } [
+          (generatePairs "/" "comment")
+          {
+            "in" = "@number.inner";
+            "n" = "@number.inner";
+          }
+          (generatePairs "R" "regex")
 
-            (generatePairs "=" "assignment")
-            {
-              "l=" = "@assignment.lhs";
-              "r=" = "@assignment.rhs";
-            }
-            (generatePairs "." "call")
-            { "i(" = "@call.inner"; } # consistency: using this for movement
+          (generatePairs "=" "assignment")
+          {
+            "l=" = "@assignment.lhs";
+            "r=" = "@assignment.rhs";
+          }
+          (generatePairs "." "call")
+          { "i(" = "@call.inner"; } # consistency: using this for movement
 
-            (generatePairs "r" "return")
-            { "ist" = "@statement.outer"; }
+          (generatePairs "r" "return")
+          { "ist" = "@statement.outer"; }
 
-            (generatePairs "P" "parameter")
-            (generatePairs "a" "attribute") # html/jsx attributes?
+          (generatePairs "P" "parameter")
+          (generatePairs "a" "attribute") # html/jsx attributes?
 
-            { "isc" = "@scopename.inner"; } # TODO what is this?
-            (generatePairs "c" "conditional")
-            (generatePairs "l" "loop")
+          { "isc" = "@scopename.inner"; } # TODO what is this?
+          (generatePairs "c" "conditional")
+          (generatePairs "l" "loop")
 
-            (generatePairs "f" "function")
-            (generatePairs "C" "class")
+          (generatePairs "f" "function")
+          (generatePairs "C" "class")
 
-            (generatePairs "B" "block")
-            (generatePairs "F" "frame")
-          ];
+          # (generatePairs "B" "block")
+          (generatePairs "F" "frame")
+        ];
     };
 
     swap = {

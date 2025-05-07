@@ -34,7 +34,13 @@
   plugins = {
     # https://github.com/okuuva/auto-save.nvim/
     auto-save.enable = true;
-    auto-save.settings.debounce_delay = 1500;
+    auto-save.settings.debounce_delay = 10000;
+    auto-save.settings.trigger_events.immediate_save = [
+      "BufLeave"
+      "WinLeave"
+      "FocusLost"
+    ];
+    auto-save.settings.trigger_events.defer_save = [ ];
     auto-save.settings.condition = # lua
       ''
         function(buf)

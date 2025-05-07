@@ -10,7 +10,7 @@
       always_trigger = false; # ??
       # latency
       timer_interval = 100;
-      toggle_key = "<C-k>";
+      toggle_key = "<C-o>";
       # cycle signatures
       select_signature_key = "<C-c>";
       # move cursor into signature help

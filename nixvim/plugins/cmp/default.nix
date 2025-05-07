@@ -9,33 +9,8 @@
 
   # https://github.com/petertriho/cmp-git?tab=readme-ov-file#config
 
-  # TODO doesn't work
-  extraPackages = with pkgs; [
-    curl
-    git
-    gh
-    glab
-    vimPlugins.cmp-git
-
-    # (vimUtils.buildVimPlugin {
-    # name = "cmp-dotenv";
-    # src = fetchFromGitHub {
-    #   owner = "SergioRibera";
-    #   repo = "cmp-dotenv";
-    #   rev = "7af67e7ed4fd9e5b20127a624d22452fbd505ccd";
-    # hash = "sha256-/aQlOE92LPSSv+X968MDw8Mb1Yy4SeqS5xVb4PTBbcw=";
-    # };
-    # })
-  ];
-
   # https://github.com/hrsh7th/nvim-cmp
   plugins = {
-    cmp-git = {
-      settings.filetypes = [ "*" ];
-      enable = true;
-    };
-    # cmp-conventionalcommits.enable = true;
-
     cmp = {
       enable = true;
       autoEnableSources = true;
@@ -68,7 +43,6 @@
                   dotenv = " [e]",
                   spell = "[󰓆 ]",
                   async_path = " [ ]",
-                  git = "[ ]",
                   calc = "[󱖦 ]",
                   emoji = "[󰞅 ]",
                 })[entry.source.name]
@@ -167,12 +141,7 @@
             name = "emoji";
             priority = 701;
           }
-          {
-            name = "git";
-            priority = 701;
-          }
 
-          # TODO https://github.com/zbirenbaum/copilot-cmp
           # { name = "copilot"; group_index = 2; priority = 1000; } # TODO disable suggestion, panel module, as it can interfere with completions
 
           # { name = "rg"; group_index = 2; priority = 750; }
@@ -192,7 +161,7 @@
         };
       };
 
-      # copy-pasta from here: https://github.com/hrsh7th/nvim-cmp/?tab=readme-ov-file#recommended-configuration
+      # https://github.com/hrsh7th/nvim-cmp/?tab=readme-ov-file#recommended-configuration
       cmdline =
         let
           mapping = {
@@ -230,20 +199,12 @@
       filetype =
         let
           dap = [{ name = "dap"; }];
-          gitSources = [
-            { name = "git"; }
-            # { name = "conventionalcommits"; } # requires https://commitlint.js.org/#/
-            # isn't working so far...
-          ];
         in
         {
           # this might not be enough to enable the dap-cmp: https://github.com/rcarriga/cmp-dap
           dap-repl.sources = dap;
           dapui_watches.sources = dap;
           dapui_hover.sources = dap;
-
-          gitcommit.sources = gitSources;
-          NeogitCommitMessage.sources = gitSources;
         };
     };
   };

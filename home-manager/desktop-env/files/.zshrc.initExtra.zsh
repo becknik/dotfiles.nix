@@ -1,5 +1,6 @@
 bindkey -v
 # Enables Ctrl + Del to delete a full word
+# binds on ASCII BS
 bindkey '^H' backward-kill-word
 
 # VI-style Navigation in Menu Completion

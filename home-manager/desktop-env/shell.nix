@@ -117,6 +117,7 @@
         "bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel"
 
         "set -g repeat-time 200" # ms to recognize repeated key presses
+        "set -g focus-events on" # send focus-lost event to neovim when alt-tabbing away
       ])
       ;
       plugins = with pkgs.tmuxPlugins; [

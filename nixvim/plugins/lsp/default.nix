@@ -1,4 +1,4 @@
-{ ... }:
+{ withDefaultKeymapOptions, ... }:
 
 {
   # https://www.reddit.com/r/neovim/comments/15oue2o/finally_a_robust_autoformatting_solution/
@@ -30,6 +30,20 @@
     # add pictrograms to lsp
     # configured manually in cmp.lua
     lspkind.enable = false;
+
+    lsp-lines.enable = true;
   };
 
+  plugins.lsp-lines.luaConfig.post = ''
+    wk.add {
+      { "<leader>dt", icon = " 󰊠 " },
+      }
+  '';
+  keymaps = withDefaultKeymapOptions [
+    {
+      key = "<leader>dt";
+      action.__raw = "function() require('lsp_lines').toggle() end";
+      options.desc = "Toggle lsp_lines";
+    }
+  ];
 }
