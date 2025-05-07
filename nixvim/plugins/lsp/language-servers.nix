@@ -35,6 +35,7 @@
     # Frontend Stuff
 
     eslint.enable = true;
+    eslint.settings.run = "onSave";
     stylelint_lsp.enable = true;
     tailwindcss.enable = true;
     ## Frameworks
