@@ -20,7 +20,6 @@
       { "gH", icon = "󰧮 " },
 
       { "<leader>o", icon = " " }, -- 󱉯
-      { "<leader>O", icon = " " },
 
       { "<leader>d", icon = " ", desc = "Diagnostic"  },
       { "<leader>dl", icon = " 󰘤 " },
@@ -110,14 +109,8 @@
 
       {
         key = "<leader>o";
-        action.__raw = "function() require'lspsaga.symbol'.outline { layout = 'normal' } end";
-        options.desc = "Outline float";
-      }
-      {
-        key = "<leader>O";
-        # TODO outline in float mode doesn't work... - experiment with detail = false?
         action.__raw = "function() require'lspsaga.symbol'.outline { layout = 'float' } end";
-        options.desc = "Outline fixed";
+        options.desc = "Outline (float)";
       }
 
       {
