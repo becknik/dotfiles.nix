@@ -94,6 +94,7 @@
     "<leader>fr" = {
       action = "registers";
       options.desc = "Find in vim Registers";
+      mode = mapToModeAbbr [ "normal" "visual_select" ];
     };
     # "<leader>fR" = {
     #   action = "reloader";
