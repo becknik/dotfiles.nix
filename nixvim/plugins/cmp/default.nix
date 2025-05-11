@@ -39,7 +39,6 @@
                   nvim_lsp = "[ ]",
                   luasnip = "[󰌒 ]",
                   nvim_lua = " [ ]",
-                  look = "[ ]", -- 
                   dotenv = " [e]",
                   spell = "[󰓆 ]",
                   async_path = " [ ]",
@@ -106,17 +105,6 @@
             priority = 700;
             options = {
               keep_all_entries = true;
-            };
-          }
-          {
-            name = "look";
-            max_item_count = 10;
-            priority = 700;
-            keyword_length = 3;
-            options = {
-              convert_case = true;
-              loud = true;
-              dict = "${pkgs.scowl}/share/dict/words.txt";
             };
           }
 
