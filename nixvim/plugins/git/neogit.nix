@@ -51,7 +51,7 @@
   keymaps = withDefaultKeymapOptions [
     {
       key = "<leader>G";
-      action = "Neogit kind=floating"; # status & index can't be that messy to not have in displayed in a modal
+      action = "Neogit"; # status & index can't be that messy to not have in displayed in a modal
       options.cmd = true;
       options.desc = "Neogit";
     }
