@@ -1,4 +1,10 @@
-{ config, mkFlakeDir, userName, pkgs, ... }:
+{ lib
+, config
+, mkFlakeDir
+, userName
+, pkgs
+, ...
+}:
 
 {
   programs = {
@@ -118,19 +124,50 @@
 
         "set -g repeat-time 200" # ms to recognize repeated key presses
         "set -g focus-events on" # send focus-lost event to neovim when alt-tabbing away
-      ])
-      ;
+
+        # https://github.com/joshmedeski/sesh?tab=readme-ov-file#tmux--fzf
+        ''
+          bind-key t run-shell "${lib.getExe pkgs.sesh} connect \"$(
+            ${lib.getExe pkgs.sesh} list --icons | ${pkgs.fzf}/bin/fzf-tmux -p 80%,70% \
+              --no-sort --ansi --border-label ' sesh ' --prompt '⚡  ' \
+              --header '  ^a all ^t tmux ^g configs ^x zoxide ^d tmux kill ^f find' \
+              --bind 'tab:down,btab:up' \
+              --bind 'ctrl-a:change-prompt(⚡  )+reload(${lib.getExe pkgs.sesh} list --icons)' \
+              --bind 'ctrl-t:change-prompt(🪟  )+reload(${lib.getExe pkgs.sesh} list -t --icons)' \
+              --bind 'ctrl-g:change-prompt(⚙️  )+reload(${lib.getExe pkgs.sesh} list -c --icons)' \
+              --bind 'ctrl-x:change-prompt(📁  )+reload(${lib.getExe pkgs.sesh} list -z --icons)' \
+              --bind 'ctrl-f:change-prompt(🔎  )+reload(fd -H -d 2 -t d -E .Trash . ~)' \
+              --bind 'ctrl-d:execute(tmux kill-session -t {2..})+change-prompt(⚡  )+reload(${lib.getExe pkgs.sesh} list --icons)' \
+              --preview-window 'right:55%' \
+              --preview '${lib.getExe pkgs.sesh} preview {}'
+          )\""
+
+          # https://github.com/joshmedeski/sesh?tab=readme-ov-file#recommended-tmux-settings
+          bind-key x kill-pane # skip "kill-pane 1? (y/n)" prompt
+          set -g detach-on-destroy off  # don't exit from tmux when closing a session
+
+          bind -N "last-session (via sesh) " L run-shell "${lib.getExe pkgs.sesh} last"
+        ''
+      ]
+      );
       plugins = with pkgs.tmuxPlugins; [
         yank
+        vim-tmux-navigator
+        prefix-highlight
+        tmux-fzf
+        {
+          plugin = resurrect;
+          extraConfig = "set -g @resurrect-strategy-nvim 'session'";
+        }
         {
           plugin = continuum;
           extraConfig = ''
             set -g @continuum-restore 'on'
+            set -g @continuum-boot 'on'
+            set -g @continuum-boot-options 'kitty'
             set -g @continuum-save-interval '10' # minutes
           '';
         }
-        vim-tmux-navigator
-        prefix-highlight
       ];
     };
 
@@ -200,7 +237,29 @@
             source ${zsh-forgit-patched}/share/zsh/zsh-forgit/forgit.plugin.zsh
           '';
         in
-        pluginSource + builtins.readFile ./files/.zshrc.initExtra.zsh;
+        pluginSource
+        + (builtins.readFile ./files/.zshrc.initExtra.zsh)
+        +
+        # bash
+        ''
+          # https://github.com/joshmedeski/sesh?tab=readme-ov-file#zsh-keybind
+          function sesh-sessions() {
+            {
+              exec </dev/tty
+              exec <&1
+              local session
+              session=$(${lib.getExe pkgs.sesh} list -t -c | fzf --height 40% --reverse --border-label ' sesh ' --border --prompt '⚡  ')
+              zle reset-prompt > /dev/null 2>&1 || true
+              [[ -z "$session" ]] && return
+              ${lib.getExe pkgs.sesh} connect $session
+            }
+          }
+
+          zle     -N             sesh-sessions
+          bindkey -M emacs '\es' sesh-sessions
+          bindkey -M vicmd '\es' sesh-sessions
+          bindkey -M viins '\es' sesh-sessions
+        '';
 
       oh-my-zsh = {
         enable = true;
@@ -363,5 +422,6 @@
 
     pure-prompt-patched
     zsh-forgit-patched
+    sesh
   ];
 }
