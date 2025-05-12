@@ -32,27 +32,6 @@
   ];
 
   plugins = {
-    # https://github.com/okuuva/auto-save.nvim/
-    auto-save.enable = true;
-    auto-save.settings.debounce_delay = 10000;
-    auto-save.settings.trigger_events.immediate_save = [
-      "BufLeave"
-      "WinLeave"
-      "FocusLost"
-    ];
-    auto-save.settings.trigger_events.defer_save = [ ];
-    auto-save.settings.condition = # lua
-      ''
-        function(buf)
-          local fn = vim.fn
-          local utils = require("auto-save.utils.data")
-
-          return fn.getbufvar(buf, "&modifiable") == 1
-            and utils.not_in(fn.getbufvar(buf, "&filetype"), {
-              "oil"
-            })
-        end
-      '';
 
     tmux-navigator = {
       enable = true;

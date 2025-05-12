@@ -2,14 +2,14 @@
 
 {
   # https://www.reddit.com/r/neovim/comments/15oue2o/finally_a_robust_autoformatting_solution/
-  # https://www.reddit.com/r/neovim/comments/16hpxwu/conformnvim_another_plugin_to_replace_nullls/
   imports = [
+    ./format-and-fix
+
     ./language-servers.nix
     ./keymaps.nix
 
     ./lspsaga.nix
     ./lsp-signature.nix
-    ./conform.nix
     ./trouble.nix
   ];
 
