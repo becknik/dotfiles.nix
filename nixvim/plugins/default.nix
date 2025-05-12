@@ -19,6 +19,7 @@
     ./luasnip.nix
 
     ./oil.nix
+    ./toggle-term.nix
 
     ./refactoring.nix
     ./todo-comments.nix
