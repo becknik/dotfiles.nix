@@ -368,6 +368,7 @@
           fu = "sudo";
           sduo = "sudo";
           nivm = "nvim";
+          seshc = ''${lib.getExe pkgs.sesh} connect "$(${lib.getExe pkgs.sesh} list -i | ${lib.getExe pkgs.fzf} --ansi)"'';
 
           ## Some copy-pastes from ohmyzsh common-aliases which aren't shadowed by eza
           rm = "rm -i";
