@@ -86,12 +86,14 @@
       prefix = "C-q"; # "C-a" already used in VIM to increment number
       escapeTime = 0;
 
-      extraConfig = (builtins.foldl'
-        (x: y: ''${x}
-        ${y}'') "" [
+      extraConfig = builtins.concatStringsSep "\n" [
         "bind '|' split-window -h -c \"#{pane_current_path}\""
         "bind - split-window -v -c \"#{pane_current_path}\""
         "bind -r r move-window -r" # reorder windows to fill in "gap indices"
+
+        # already used for opening some kind of pop-up with command explanations
+        "bind-key < swap-window -t -1\; select-window -t -1"
+        "bind-key > swap-window -t +1\; select-window -t +1"
 
         # without prefix key provided by vim-navigator plugin
         # "bind h select-pane -L"
@@ -99,10 +101,6 @@
         # "bind k select-pane -U"
         # "bind l select-pane -R"
 
-        # "bind -n M-h resize-pane -L 5"
-        # "bind -n M-l resize-pane -D 5"
-        # "bind -n M-k resize-pane -U 5"
-        # "bind -n M-j resize-pane -R 5"
         "bind -r H resize-pane -L 5"
         "bind -r J resize-pane -D 5"
         "bind -r K resize-pane -U 5"
@@ -148,8 +146,7 @@
 
           bind -N "last-session (via sesh) " L run-shell "${lib.getExe pkgs.sesh} last"
         ''
-      ]
-      );
+      ];
       plugins = with pkgs.tmuxPlugins; [
         yank
         vim-tmux-navigator
