@@ -41,6 +41,10 @@
     ## Frameworks
     relay_lsp.enable = true;
     relay_lsp.package = null;
+    relay_lsp.rootMarkers = [
+      "relay.config.json"
+      "relay.config"
+    ];
     volar.enable = true;
 
     # Backend Stuff
