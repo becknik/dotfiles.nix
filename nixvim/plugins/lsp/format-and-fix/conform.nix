@@ -1,9 +1,9 @@
-{
-  lib,
-  pkgs,
-  withDefaultKeymapOptions,
-  mapToModeAbbr,
-  ...
+{ config
+, lib
+, pkgs
+, withDefaultKeymapOptions
+, mapToModeAbbr
+, ...
 }:
 
 {
@@ -23,14 +23,119 @@
                 ["end"] = { args.line2, end_line:len() },
               }
             end
-            require("conform").format({ async = true, lsp_format = "fallback", range = range }, function()
-              vim.notify("Done formatting", "info", { title = "ConformFormat" })
-            end
+            require("conform").format({
+              async = true,
+              lsp_format = "fallback",
+              range = range
+            }, function(err, did_edit)
+                if (err) then
+                  vim.notify("Failed formatting: " .. err, "error", { title = "Conform" })
+                elseif (did_edit) then
+                  vim.notify("Done formatting", "info", { title = "Conform", render = "compact" })
+                  vim.cmd("silent noautocmd write")
+                  vim.cmd('silent GuessIndent')
+                else
+                  vim.notify("Nothing to format", "info", { title = "Conform", render = "compact" })
+                end
+              end
             )
           end
         '';
     };
+    ConformFormatHunks = {
+      command.__raw = ''
+        function(args)
+          local bufnr = args.buf or vim.api.nvim_get_current_buf()
+          local shouldSave = (${config.plugins.auto-save.settings.condition.__raw})(bufnr)
+
+          local bt = vim.api.nvim_buf_get_option(bufnr, "buftype")
+          if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat or not shouldSave or bt ~= "" then
+            return
+          end
+
+          local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
+          if vim.tbl_contains(CONFORM_AUTOFORMAT_HUNKS_IGNORE, ft) then
+            vim.notify("range formatting for " .. vim.bo.filetype .. " not working properly.", "info", { title = "Conform", render = "compact" })
+            return
+          end
+
+          local hunks = require("gitsigns").get_hunks(bufnr)
+          if not hunks then return end
+
+          local executed_writes = 0
+          local function format_range()
+            if next(hunks) == nil then
+              if executed_writes > 0 then
+                vim.notify("Done formatting " .. executed_writes .." git hunks", "info", { title = "Conform Auto Format", render = "compact" })
+              end
+
+              vim.schedule(function()
+                -- make sure the currently selected buffer is used
+                vim.api.nvim_buf_call(bufnr, function()
+                  local bt_deferred = vim.api.nvim_buf_get_option(bufnr, "buftype")
+                  if bt_deferred == "" then
+                    vim.cmd("silent noautocmd write")
+                  end
+                end)
+              end)
+              return
+            end
+
+            local hunk = nil
+            while next(hunks) and (not hunk or hunk.type == "delete") do
+                hunk = table.remove(hunks)
+            end
+
+            if hunk and hunk.type ~= "delete" then
+              -- TODO hypothesis: some formatters (like prettier) need at least 1 non-blank context line
+              local start = hunk.added.start
+              local last = start + hunk.added.count
+              -- nvim_buf_get_lines uses zero-based indexing -> subtract from last
+              local last_hunk_line = vim.api.nvim_buf_get_lines(bufnr, last - 2, last - 1, true)[1]
+              local range = { start = { start, 0 }, ["end"] = { last - 1, last_hunk_line:len() } }
+
+              require("conform").format({
+                bufnr = bufnr,
+                range = range,
+                async = true,
+                -- quiet   = true,
+              }, function(err, did_edit)
+                if err then
+                  -- continue on the “discarding changes” error only
+                  if err:match("^Async formatter discarding changes") then
+                    vim.notify(err, "error", { title = "Conform Auto Format", render = "compact" })
+                    vim.defer_fn(process_hunk, 1)
+                    return
+                  end
+
+                  vim.notify("Failed formatting: " .. err, "error", { title = "Conform Auto Format" })
+                  return;
+                end
+                if did_edit then
+                  -- not thread-save, but who cares =)
+                  executed_writes = executed_writes + 1
+                end
+
+                vim.defer_fn(function()
+                  format_range()
+                end, 1)
+              end)
+            end
+          end
+
+          format_range()
+        end
+      '';
+    };
   };
+
+  autoCmd = [
+    {
+      # event = [ "BufWritePost" ] ++ config.plugins.auto-save.settings.trigger_events.immediate_save;
+      event = [ "BufWritePost" ];
+      callback = config.userCommands.ConformFormatHunks.command;
+    }
+  ];
 
   keymaps = withDefaultKeymapOptions [
     {
@@ -109,8 +214,12 @@
 
           html_beautify.types = "html";
           # html.command = lib.getExe pkgs.markdownlint-cli;
+
+          stylelint.types = "css";
+          stylelint.priority = -1;
+          stylelint.command = lib.getExe pkgs.stylelint;
           css_beautify.types = "css";
-          css_beautify.priority = 1;
+          css_beautify.priority = -2;
           css_beautify.command = "${pkgs.nodePackages_latest.js-beautify}/bin/css-beautify";
           css_beautify.prepend_args = [
             "--type"
@@ -118,8 +227,6 @@
             "--indent-size"
             "2"
           ];
-          stylelint.types = "css";
-          stylelint.command = lib.getExe pkgs.stylelint;
           #, deno_fmt, docformatter
 
           # domain-specific languages
@@ -177,8 +284,10 @@
             "typescriptreact"
             "vue"
             "graphql"
+            "css"
           ];
           prettierd.command = lib.getExe pkgs.prettierd;
+          prettierd.priority = 0;
 
           # "heavy" programming languages
 
@@ -205,58 +314,69 @@
         names = builtins.attrNames formatterSetup;
 
         entries = builtins.concatLists (
-          builtins.map (
-            name:
-            builtins.map
-              (ft: {
-                ft = ft;
-                formatter = name;
-              })
-              (
-                if builtins.isString formatterSetup.${name}.types then
-                  [ formatterSetup.${name}.types ]
-                else
-                  formatterSetup.${name}.types
-              )
+          builtins.map
+            (
+              name:
+              builtins.map
+                (ft: {
+                  ft = ft;
+                  formatter = name;
+                })
+                (
+                  if builtins.isString formatterSetup.${name}.types then
+                    [ formatterSetup.${name}.types ]
+                  else
+                    formatterSetup.${name}.types
+                )
 
-          ) names
+            )
+            names
         );
 
         formatters = builtins.listToAttrs (
-          builtins.map (name: {
-            name = name;
-            value = builtins.removeAttrs formatterSetup.${name} [
-              "types"
-              "priority"
-            ];
-          }) names
+          builtins.map
+            (name: {
+              name = name;
+              value = builtins.removeAttrs formatterSetup.${name} [
+                "types"
+                "priority"
+              ];
+            })
+            names
         );
 
-        formatters_by_ft = builtins.foldl' (
-          acc: entry:
-          let
-            ft = entry.ft;
-            prev = acc.${ft} or [ ];
-          in
-          acc // { "${ft}" = prev ++ [ entry.formatter ]; }
-        ) { } entries;
+        formatters_by_ft = builtins.foldl'
+          (
+            acc: entry:
+              let
+                ft = entry.ft;
+                prev = acc.${ft} or [ ];
+              in
+              acc // { "${ft}" = prev ++ [ entry.formatter ]; }
+          )
+          { }
+          entries;
 
-        formatters_by_ft_ordered = lib.mapAttrs (
-          type: names:
-          builtins.sort (
-            a: b:
-            let
-              pa = formatterSetup.${a}.priority or 0;
-              pb = formatterSetup.${b}.priority or 0;
-            in
-            if pa > pb then
-              true
-            else if pa < pb then
-              false
-            else
-              a < b
-          ) names
-        ) formatters_by_ft;
+        formatters_by_ft_ordered = lib.mapAttrs
+          (
+            type: names:
+              builtins.sort
+                (
+                  a: b:
+                    let
+                      pa = formatterSetup.${a}.priority or 0;
+                      pb = formatterSetup.${b}.priority or 0;
+                    in
+                    if pa > pb then
+                      true
+                    else if pa < pb then
+                      false
+                    else
+                      a < b
+                )
+                names
+          )
+          formatters_by_ft;
       in
       {
         notify_on_error = true;
@@ -271,51 +391,6 @@
         formatters = formatters;
         # https://github.com/stevearc/conform.nvim/blob/master/doc/formatter_options.md#injected
         # TODO does injected conform linting work?
-
-        format_on_save = # lua
-          ''
-            function(bufnr)
-              if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-                return
-              end
-
-              if vim.tbl_contains(CONFORM_AUTOFORMAT_HUNKS_IGNORE, vim.bo.filetype) then
-                vim.notify("range formatting for " .. vim.bo.filetype .. " not working properly.")
-                return
-              end
-
-              local hunks = require("gitsigns").get_hunks()
-              if hunks == nil then
-                return
-              end
-
-              local function format_range()
-                if next(hunks) == nil then
-                  vim.notify("Done formatting git hunks", "info", { title = "ConformFormat" })
-                  return
-                end
-                local hunk = nil
-                while next(hunks) ~= nil and (hunk == nil or hunk.type == "delete") do
-                  hunk = table.remove(hunks)
-                end
-
-                if hunk ~= nil and hunk.type ~= "delete" then
-                  local start = hunk.added.start
-                  local last = start + hunk.added.count
-                  -- nvim_buf_get_lines uses zero-based indexing -> subtract from last
-                  local last_hunk_line = vim.api.nvim_buf_get_lines(0, last - 2, last - 1, true)[1]
-                  local range = { start = { start, 0 }, ["end"] = { last - 1, last_hunk_line:len() } }
-                  require("conform").format({ range = range, async = true, lsp_fallback = true }, function()
-                    vim.defer_fn(function()
-                      format_range()
-                    end, 1)
-                  end)
-                end
-              end
-
-              format_range()
-            end
-          '';
       };
   };
 }

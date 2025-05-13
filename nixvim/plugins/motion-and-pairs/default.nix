@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ./guess-indent.nix
   ];
 
   plugins = {
