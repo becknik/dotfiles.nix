@@ -12,7 +12,7 @@
   keymaps = withDefaultKeymapOptions [
     {
       key = "<leader>O";
-      action = "<cmd>Octo";
+      action = ":Octo ";
       options.desc = "Octo";
     }
   ];
