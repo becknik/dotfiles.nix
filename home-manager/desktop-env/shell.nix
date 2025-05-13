@@ -71,6 +71,8 @@
         initial_window_width = "140c";
         initial_window_height = "48c";
 
+        enable_audio_bell = false;
+
         update_check_interval = 0;
       };
     };
