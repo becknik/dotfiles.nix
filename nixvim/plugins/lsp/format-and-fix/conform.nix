@@ -48,8 +48,7 @@
           local bufnr = args.buf or vim.api.nvim_get_current_buf()
           local shouldSave = (${config.plugins.auto-save.settings.condition.__raw})(bufnr)
 
-          local bt = vim.api.nvim_buf_get_option(bufnr, "buftype")
-          if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat or not shouldSave or bt ~= "" then
+          if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat or not shouldSave then
             return
           end
 
@@ -66,14 +65,14 @@
           local function format_range()
             if next(hunks) == nil then
               if executed_writes > 0 then
-                vim.notify("Done formatting " .. executed_writes .." git hunks", "info", { title = "Conform Auto Format", render = "compact" })
+                vim.notify("Formatted " .. executed_writes .." git hunks", "info", { title = "Conform Auto Format", render = "compact" })
               end
 
               vim.schedule(function()
                 -- make sure the currently selected buffer is used
                 vim.api.nvim_buf_call(bufnr, function()
-                  local bt_deferred = vim.api.nvim_buf_get_option(bufnr, "buftype")
-                  if bt_deferred == "" then
+                  local shouldSave = (${config.plugins.auto-save.settings.condition.__raw})(bufnr)
+                  if shouldSave then
                     vim.cmd("silent noautocmd write")
                   end
                 end)
@@ -131,8 +130,8 @@
 
   autoCmd = [
     {
-      # event = [ "BufWritePost" ] ++ config.plugins.auto-save.settings.trigger_events.immediate_save;
-      event = [ "BufWritePost" ];
+      # event = [ "BufWritePost" ];
+      event = config.plugins.auto-save.settings.trigger_events.immediate_save;
       callback = config.userCommands.ConformFormatHunks.command;
     }
   ];

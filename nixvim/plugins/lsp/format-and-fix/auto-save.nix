@@ -6,12 +6,11 @@
     enable = true;
     settings.debounce_delay = 5000;
     settings.trigger_events.immediate_save = [
-      "BufWritePre"
-    ];
-    settings.trigger_events.defer_save = [
       "BufLeave"
       "WinLeave"
       "FocusLost"
+    ];
+    settings.trigger_events.defer_save = [
     ];
     settings.condition = # lua
       ''
