@@ -130,8 +130,7 @@
 
   autoCmd = [
     {
-      # event = [ "BufWritePost" ];
-      event = config.plugins.auto-save.settings.trigger_events.immediate_save;
+      event = [ "BufWritePost" ] ++ config.plugins.auto-save.settings.trigger_events.immediate_save;
       callback = config.userCommands.ConformFormatHunks.command;
     }
   ];
