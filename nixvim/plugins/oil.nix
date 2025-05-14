@@ -34,6 +34,7 @@
       delete_to_trash = true;
       skip_confirm_for_simple_edits = true; # Selecting a new/moved/renamed file or directory will prompt you to save changes
 
+      lsp_file_method.autosave_changes = true;
       view_options = {
         show_hidden = true;
       };
