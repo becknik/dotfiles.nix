@@ -10,9 +10,6 @@
   config.globals.mapleader = " "; # "," "\"
 
   config = {
-    viAlias = true;
-    vimAlias = true;
-
     clipboard.providers.wl-copy.enable = true;
 
     # colorschemes.kanagawa.enable = true;
