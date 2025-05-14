@@ -1,4 +1,4 @@
-{ withDefaultKeymapOptions, ... }:
+{ withDefaultKeymapOptions, mapToModeAbbr, ... }:
 
 {
   plugins.bufferline.luaConfig.post = ''
@@ -123,8 +123,12 @@
     }
 
     {
-      key = "<c-s>";
+      key = "<C-s>";
       action = ":write";
+      mode = mapToModeAbbr [
+        "normal"
+        "insert"
+      ];
       options.cmd = true;
       options.desc = "Write Buffer";
     }
