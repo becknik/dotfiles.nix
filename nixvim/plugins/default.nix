@@ -13,6 +13,7 @@
     ./telescope
     ./motion-and-pairs
 
+    ./ai
     ./dap.nix
 
     ./which-key.nix

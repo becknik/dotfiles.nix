@@ -25,6 +25,8 @@
       { "<leader>dl", icon = " 󰘤 " },
       { "<leader>dp", icon = "  " },
       { "<leader>dn", icon = "  " },
+
+      { "<leader>c", desc = "Code etc." },
     }
   '';
 
