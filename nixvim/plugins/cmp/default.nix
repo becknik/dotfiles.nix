@@ -104,7 +104,8 @@
             name = "spell";
             priority = 700;
             options = {
-              keep_all_entries = true;
+              keep_all_entries = false;
+              preselect_correct_word = false;
             };
           }
 
