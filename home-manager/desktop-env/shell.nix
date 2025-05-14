@@ -94,8 +94,8 @@
         "bind -r r move-window -r" # reorder windows to fill in "gap indices"
 
         # already used for opening some kind of pop-up with command explanations
-        "bind-key < swap-window -t -1\; select-window -t -1"
-        "bind-key > swap-window -t +1\; select-window -t +1"
+        "bind-key < swap-window -t -1\\; previous-window"
+        "bind-key > swap-window -t +1\\; next-window"
 
         # without prefix key provided by vim-navigator plugin
         # "bind h select-pane -L"
@@ -111,9 +111,6 @@
         "set -g status-justify centre"
         "setw -g monitor-activity on" # highlights the window name in status line on activity
         # "set -g visual-activity on" # show message in status line as well - I find this to be annoying
-
-        "set -g default-terminal \"$TERM\""
-        "set -ag terminal-overrides \",$TERM:Tc\""
 
         # set vi-mode
         "set-window-option -g mode-keys vi"
@@ -156,14 +153,28 @@
         tmux-fzf
         {
           plugin = resurrect;
-          extraConfig = "set -g @resurrect-strategy-nvim 'session'";
+          extraConfig = ''
+            set -g default-shell "${lib.getExe config.programs.zsh.package}"
+            set -g default-command "exec ${lib.getExe config.programs.zsh.package}"
+            set-option -g update-environment "DISPLAY SSH_ASKPASS SSH_AUTH_SOCK SSH_AGENT_PID SSH_TTY PATH"
+
+            resurrect_dir="$HOME/.tmux/resurrect"
+            set -g @resurrect-strategy-nvim 'session'
+            set -g @resurrect-dir $resurrect_dir
+            set -g @resurrect-capture-pane-contents 'on'
+
+            # this is such a mess...
+            # source: https://discourse.nixos.org/t/how-to-get-tmux-resurrect-to-restore-neovim-sessions/30819/11
+            # set -g @resurrect-processes '"~nvim"'
+            # set -g @resurrect-hook-post-save-all "sed -i 's/--cmd lua.*--cmd set packpath/--cmd \"lua/g; s/--cmd set rtp.*\$/\"/' $resurrect_dir/last"
+
+          '';
         }
         {
           plugin = continuum;
           extraConfig = ''
             set -g @continuum-restore 'on'
             set -g @continuum-boot 'on'
-            set -g @continuum-boot-options 'kitty'
             set -g @continuum-save-interval '10' # minutes
           '';
         }
