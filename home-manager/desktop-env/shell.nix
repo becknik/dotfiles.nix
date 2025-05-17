@@ -145,6 +145,7 @@
 
           bind -N "last-session (via sesh) " L run-shell "${lib.getExe pkgs.sesh} last"
         ''
+        "set-option -g default-terminal \"screen-256color\""
       ];
       plugins = with pkgs.tmuxPlugins; [
         yank
