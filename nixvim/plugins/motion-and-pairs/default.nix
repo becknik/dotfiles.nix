@@ -1,7 +1,8 @@
-{ ... }:
+{ withDefaultKeymapOptions, pkgs, ... }:
 
 {
   imports = [
+    ./harpoon.nix
   ];
 
   plugins = {
@@ -31,7 +32,7 @@
     nvim-autopairs = {
       # https://github.com/windwp/nvim-autopairs/?tab=readme-ov-file#default-values
       enable = true;
-      # user treesitter to chech for pairs
+      # user treesitter to check for pairs
       settings.check_ts = true;
     };
 
