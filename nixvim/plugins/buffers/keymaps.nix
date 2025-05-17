@@ -7,6 +7,7 @@
       { "<leader>bf", icon = "  " },
     }
   '';
+
   plugins.telescope.keymaps = {
     "<leader>bf" = {
       action = "buffers";

@@ -4,15 +4,18 @@
   plugins.bufferline.luaConfig.post = ''
     local wk = require('which-key')
     wk.add {
-      { "<leader>b", icon = " ", desc = "Buffers" },
-      { "<leader>bd", icon = " " },
-      { "<leader>bw", icon = " " },
-      { "<leader>bl", icon = " " },
-      { "<leader>bh", icon = " " },
-      { "<leader>bp", icon = "  " },
       { "<C-s>", icon = "", desc = "Save Buffer" },
-      { "H", icon = "", desc = "Focus Left Buffer" },
-      { "L", icon = "", desc = "Focus Right Buffer" },
+      { "H", icon = "  " },
+      { "L", icon = "  " },
+
+      { "<leader>q", icon = " " },
+      { "<leader>Q", icon = " !" },
+
+      { "<leader>b", icon = " ", desc = "Buffers" },
+      { "<leader>bl", icon = "   " },
+      { "<leader>bh", icon = "   " },
+      { "<leader>bo", icon = "  󰤼 " },
+      { "<leader>bp", icon = "  " },
     }
   '';
 
@@ -26,8 +29,6 @@
     ];
 
     settings = {
-      highlights.buffer_selected.underline = true;
-
       options = {
         themable = false;
         show_buffer_close_icons = false;
@@ -38,36 +39,6 @@
 
         # max_prefix_length = 24;
         separatorStyle = "thick";
-
-        groups = {
-          items = [
-            { __raw = "require('bufferline.groups').builtin.ungrouped"; }
-            {
-              name = "Tests";
-              priority = 2;
-              highlight = {
-                italic = true;
-              };
-              icon = " ";
-              matcher.__raw = ''
-                function(buf)
-                  return buf.name:match('test')
-                end
-              '';
-            }
-            {
-              name = "Docs";
-              highlight = {
-                underdashed = true;
-              };
-              matcher.__raw = ''
-                function(buf)
-                  return buf.name:match('%.md')
-                end
-              '';
-            }
-          ];
-        };
       };
     };
   };
@@ -78,25 +49,28 @@
       key = "H";
       action = "BufferLineCyclePrev";
       options.cmd = true;
+      options.desc = "Focus Left Buffer";
     }
     {
       key = "L";
       action = "BufferLineCycleNext";
       options.cmd = true;
+      options.desc = "Focus Right Buffer";
     }
 
     {
-      key = "<leader>bd";
+      key = "<leader>q";
       action = "bdelete";
       options.cmd = true;
       options.desc = "Quit Buffer";
     }
     {
-      key = "<leader>bw";
+      key = "<leader>Q";
       action = "bdelete!";
       options.cmd = true;
       options.desc = "Force Quit Buffer";
     }
+
     {
       key = "<leader>bh";
       action = "BufferLineCloseLeft";
@@ -110,7 +84,7 @@
       options.desc = "Close all Right Buffer";
     }
     {
-      key = "<leader>bw";
+      key = "<leader>bo";
       action = "BufferLineCloseOthers";
       options.cmd = true;
       options.desc = "Close all other Buffers";
