@@ -21,7 +21,6 @@
       };
       prompt_title = "Zoxide Folder List";
     };
-
   };
 
   keymaps = withDefaultKeymapOptions [

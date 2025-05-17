@@ -10,7 +10,6 @@
 
     ./lspsaga.nix
     ./lsp-signature.nix
-    ./trouble.nix
   ];
 
   # https://github.com/neovim/nvim-lspconfig

@@ -17,7 +17,7 @@
 
   plugins.telescope.luaConfig.post = ''
     wk.add {
-      { "<leader>f-", icon = "  " },
+      { "<leader>fb", icon = "  " },
       { "<leader>f/", icon = "  " },
     }
   '';
@@ -30,7 +30,7 @@
       options.desc = "find in File Browser /";
     }
     {
-      key = "<leader>f-";
+      key = "<leader>fb";
       action = "Telescope file_browser path=%:p:h select_buffer=true initial_mode=normal";
       options.cmd = true;
       options.desc = "find in File browser ./";

@@ -9,6 +9,8 @@
     ./languages
     ./git
 
+    ./diagnostics
+    ./buffers
     ./ui
     ./telescope
     ./motion-and-pairs

@@ -89,13 +89,13 @@
       key = "<leader>bd";
       action = "bdelete";
       options.cmd = true;
-      options.desc = "Delete Buffer";
+      options.desc = "Quit Buffer";
     }
     {
       key = "<leader>bw";
       action = "bdelete!";
       options.cmd = true;
-      options.desc = "Force Delete Buffer";
+      options.desc = "Force Quit Buffer";
     }
     {
       key = "<leader>bh";

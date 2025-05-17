@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ./advanced-git-search.nix
     ./file-browser.nix
     ./zoxide.nix
   ];
@@ -21,13 +20,13 @@
   plugins.telescope.luaConfig.post = ''
     wk.add {
       { "<leader>fG", icon = " " },
-      { "<leader>fe", icon = " 󰋚 " },
+      { "<leader>ff", icon = " 󰋚 " },
     }
   '';
 
   keymaps = withDefaultKeymapOptions [
     {
-      key = "<leader>fe";
+      key = "<leader>ff";
       action = "Telescope frecency workspace=CWD";
       options.cmd = true;
       options.desc = "Find in Frecency";
@@ -43,6 +42,13 @@
       action = "Telescope undo";
       options.cmd = true;
       options.desc = "Find in Undo tree";
+    }
+  ];
+
+  autoCmd = [
+    {
+      event = [ "VimEnter" ];
+      command = "FrecencyValidate";
     }
   ];
 }

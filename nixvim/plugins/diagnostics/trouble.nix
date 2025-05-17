@@ -24,6 +24,14 @@
     };
   };
 
+  plugins.trouble.luaConfig.post = ''
+    wk.add {
+      { "<leader>du", icon = " 󱖫 " },
+      { "<leader>dd", icon = " 󱖫 " },
+      { "<leader>dt", icon = " 󱖫 " },
+    }
+  '';
+
   keymaps = withDefaultKeymapOptions [
     {
       key = "<leader>dd";
@@ -32,17 +40,11 @@
       options.desc = "Diagnostic List";
     }
     {
-      key = "<leader>df";
+      key = "<leader>du";
       action = "Trouble quickfix";
       options.cmd = true;
       options.desc = "Quick Fix List";
     }
-    # {
-    #   key = "<leader>dl";
-    #   action = "Trouble loclist";
-    #   options.cmd = true;
-    #   options.desc = "Loclist";
-    # }
     {
       key = "<leader>dt";
       action = "Trouble telescope";

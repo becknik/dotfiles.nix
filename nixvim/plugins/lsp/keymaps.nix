@@ -17,18 +17,28 @@
       { "gr", icon = "" },
 
       { "gh", icon = "󰧮" },
-      { "gH", icon = "󰧮 " },
+      { "gH", icon = "󰧮  " },
 
       { "<leader>o", icon = " " }, -- 󱉯
 
-      { "<leader>d", icon = " ", desc = "Diagnostic"  },
-      { "<leader>dl", icon = " 󰘤 " },
-      { "<leader>dp", icon = "  " },
-      { "<leader>dn", icon = "  " },
-
       { "<leader>c", desc = "Code etc." },
+
+      { "<leader>fy", icon = "  " },
+      { "<leader>fY", icon = "  " },
     }
   '';
+
+  plugins.telescope.keymaps = {
+    # https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#neovim-lsp-pickers
+    "<leader>fy" = {
+      action = "lsp_document_symbols";
+      options.desc = "Find local Symbols";
+    };
+    "<leader>fY" = {
+      action = "lsp_workspace_symbols"; # lsp_dynamic_workspace_symbols
+      options.desc = "Find global Symbols";
+    };
+  };
 
   plugins.lsp.keymaps = {
     lspBuf = {
@@ -120,25 +130,6 @@
         action = "Lspsaga rename";
         options.cmd = true;
         options.desc = "Rename";
-      }
-
-      {
-        key = "<leader>dl";
-        action = "Lspsaga show_line_diagnostics";
-        options.cmd = true;
-        options.desc = "Line Diagnostic";
-      }
-      {
-        key = "<leader>dn";
-        action = "Lspsaga diagnostic_jump_next";
-        options.cmd = true;
-        options.desc = "Next Diagnostic";
-      }
-      {
-        key = "<leader>dp";
-        action = "Lspsaga diagnostic_jump_prev";
-        options.cmd = true;
-        options.desc = "Previous Diagnostic";
       }
     ];
   };

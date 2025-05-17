@@ -11,7 +11,7 @@
   plugins.telescope.luaConfig.post = ''
     wk.add {
       { "<leader>gg", icon = "", desc = "Git Grep" },
-      { "<leader>gR", icon = " " },
+      { "<leader>gR", icon = "  " },
     }
   '';
 
