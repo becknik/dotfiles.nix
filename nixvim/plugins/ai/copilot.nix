@@ -125,6 +125,20 @@
       options.desc = "Copilot Accept";
     }
     {
+      key = "<tab>";
+      action.__raw = ''
+        function()
+          if require'copilot.suggestion'.is_visible() then
+            require'copilot.suggestion'.accept()
+          end
+        end'';
+      mode = mapToModeAbbr [
+        "insert"
+        "normal"
+      ];
+      options.desc = "Copilot Accept";
+    }
+    {
       key = "<C-c>w";
       action.__raw = "function() require'copilot.suggestion'.accept_word() end";
       mode = mapToModeAbbr [
