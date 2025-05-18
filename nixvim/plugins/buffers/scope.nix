@@ -11,8 +11,8 @@
     wk.add {
       { "<leader>bt", icon = " 󰓩 " },
       { "<leader>bm", icon = "󰓩  " },
-      { "<leader>bn", icon = "󰓩  " },
-      { "<leader>bp", icon = "󰓩  " },
+      { "<leader>bl", icon = "󰓩  " },
+      { "<leader>bh", icon = "󰓩  " },
       { "<leader>bc", icon = "󰓩  " },
       { "<leader>bq", icon = "󰓩  " },
     }
@@ -33,13 +33,13 @@
     }
 
     {
-      key = "<leader>bn";
+      key = "<leader>bl";
       action = "tabnext";
       options.cmd = true;
       options.desc = "Next Tab";
     }
     {
-      key = "<leader>bp";
+      key = "<leader>bh";
       action = "tabprevious";
       options.cmd = true;
       options.desc = "Previous Tab";

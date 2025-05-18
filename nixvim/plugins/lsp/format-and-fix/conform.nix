@@ -168,7 +168,6 @@
   plugins.conform-nvim.luaConfig.pre = ''
     wk.add {
       { "<leader>F", icon = "󰉢" },
-      { "<leader>t", icon = " " },
       { "<leader>tf", icon = " 󰉢" },
     }
     local CONFORM_AUTOFORMAT_HUNKS_IGNORE = { 'lua' }

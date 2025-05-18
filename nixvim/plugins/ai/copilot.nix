@@ -43,7 +43,7 @@
       options.desc = "Toggle Copilot Panel";
     }
     {
-      key = "<C-c>pa";
+      key = "<C-c>oa";
       action.__raw = "function() require'copilot.panel'.accept() end";
       mode = mapToModeAbbr [
         "insert"
@@ -52,7 +52,7 @@
       options.desc = "Copilot Panel Accept";
     }
     {
-      key = "<C-c>r";
+      key = "<C-c>or";
       action.__raw = "function() require'copilot.panel'.refresh() end";
       mode = mapToModeAbbr [
         "insert"
@@ -70,7 +70,7 @@
       options.desc = "Copilot Panel Next";
     }
     {
-      key = "<C-c>pp";
+      key = "<C-c>op";
       action.__raw = "function() require'copilot.panel'.jump_prev() end";
       mode = mapToModeAbbr [
         "insert"

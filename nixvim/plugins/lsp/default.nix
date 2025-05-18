@@ -35,12 +35,12 @@
 
   plugins.lsp-lines.luaConfig.post = ''
     wk.add {
-      { "<leader>dt", icon = " 󰊠 " },
+      { "<leader>td", icon = " 󰊠 " },
       }
   '';
   keymaps = withDefaultKeymapOptions [
     {
-      key = "<leader>dt";
+      key = "<leader>td";
       action.__raw = "function() require('lsp_lines').toggle() end";
       options.desc = "Toggle lsp_lines";
     }

@@ -8,8 +8,8 @@
       { "L", icon = "  " },
 
       { "<leader>b", icon = " ", desc = "Buffers" },
-      { "<leader>bl", icon = "   " },
-      { "<leader>bh", icon = "   " },
+      { "<leader>bL", icon = "   " },
+      { "<leader>bH", icon = "   " },
       { "<leader>bo", icon = "  󰤼 " },
       { "<leader>bp", icon = "  " },
     }
@@ -55,13 +55,13 @@
     }
 
     {
-      key = "<leader>bh";
+      key = "<leader>bH";
       action = "BufferLineCloseLeft";
       options.cmd = true;
       options.desc = "Close all Left Buffer";
     }
     {
-      key = "<leader>bl";
+      key = "<leader>bL";
       action = "BufferLineCloseRight";
       options.cmd = true;
       options.desc = "Close all Right Buffer";
