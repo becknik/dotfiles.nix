@@ -8,6 +8,7 @@
       { "<leader>s", icon = " " },
       { "<leader>q", icon = " " },
       { "<leader>Q", icon = " !" },
+      { "<leader>w", icon = " " },
 
       { "<leader>bf", icon = "  " },
     }
@@ -49,6 +50,12 @@
       action = "write";
       options.cmd = true;
       options.desc = "Write Buffer";
+    }
+
+    {
+      key = "<leader>w";
+      action.__raw = "function() vim.api.nvim_win_close(0, false) end";
+      options.desc = "Quit Window";
     }
   ];
 }
