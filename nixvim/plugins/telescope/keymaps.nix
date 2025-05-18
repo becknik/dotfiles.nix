@@ -1,4 +1,4 @@
-{ withDefaultKeymapOptions, mapToModeAbbr, ... }:
+{ mapToModeAbbr, ... }:
 
 {
   extraConfigLua = ''

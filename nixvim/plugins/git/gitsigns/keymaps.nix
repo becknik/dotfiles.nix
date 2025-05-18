@@ -1,18 +1,23 @@
 { withDefaultKeymapOptions, mapToModeAbbr, ... }:
 
 {
-  plugins.telescope.luaConfig.post = ''wk.add {
-    { "<leader>h", desc = "GitSigns", icon = " " },
-    { "<leader>ht", desc = "GitSigns Toggles", icon = " " },
-    { "<leader>hs", icon = "" },
-    { "<leader>hS", icon = "" },
-    { "<leader>hr", icon = "" },
-    { "<leader>hR", icon = "" },
-    { "<leader>hu", icon = "󰕍" },
-    { "<leader>hv", icon = "󰕜" },
-    { "<leader>hd", icon = "" },
-    { "<leader>hD", icon = "" },
-  }
+  extraConfigLua = ''
+    wk.add {
+      { "<leader>h", desc = "GitSigns", icon = " " },
+      { "<leader>hs", icon = "" },
+      { "<leader>hS", icon = "" },
+      { "<leader>hr", icon = "" },
+      { "<leader>hR", icon = "" },
+      { "<leader>hu", icon = "󰕍" },
+      { "<leader>hv", icon = "󰕜" },
+      { "<leader>hd", icon = "" },
+      { "<leader>hD", icon = "" },
+
+      { "<leader>tb", icon = " 󰘤  " },
+      { "<leader>tx", icon = " 󰦨 " },
+      { "<leader>tw", icon = " 󰦨  " },
+      { "<leader>th", icon = " 󰘤  " },
+    }
   '';
 
   keymaps = withDefaultKeymapOptions [
@@ -94,25 +99,25 @@
     }
 
     {
-      key = "<leader>htb";
+      key = "<leader>tb";
       action = "Gitsigns toggle_current_line_blame";
       options.cmd = true;
       options.desc = "Toggle current line blame";
     }
     {
-      key = "<leader>htd";
+      key = "<leader>tx";
       action = "Gitsigns toggle_deleted";
       options.cmd = true;
       options.desc = "Toggle visibility of deleted lines";
     }
     {
-      key = "<leader>htw";
+      key = "<leader>tw";
       action = "Gitsigns toggle_word_diff";
       options.cmd = true;
       options.desc = "Toggle Hunk Word diff";
     }
     {
-      key = "<leader>hth";
+      key = "<leader>th";
       action = "Gitsigns toggle_linehl";
       options.cmd = true;
       options.desc = "Toggle Hunk Highlighting";
