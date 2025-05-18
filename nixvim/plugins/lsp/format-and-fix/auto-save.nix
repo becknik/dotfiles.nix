@@ -15,6 +15,11 @@
     settings.condition = # lua
       ''
         function(buf)
+          if not buf then return false end
+
+          local buf_name = vim.api.nvim_buf_get_name(buf)
+          if buf_name == "" then return false end
+
           local fn = vim.fn
           local utils = require("auto-save.utils.data")
 

@@ -7,6 +7,9 @@
 }:
 
 {
+  # leaving this here for future use
+  extraConfigLuaPre = "local conform_spin_lock = false";
+
   # https://www.reddit.com/r/neovim/comments/16hpxwu/conformnvim_another_plugin_to_replace_nullls/
   userCommands = {
     ConformFormat = {
@@ -42,24 +45,26 @@
           end
         '';
     };
+
     ConformFormatHunks = {
       command.__raw = ''
         function(args)
           local bufnr = args.buf or vim.api.nvim_get_current_buf()
-          local shouldSave = (${config.plugins.auto-save.settings.condition.__raw})(bufnr)
+          local should_save = (${config.plugins.auto-save.settings.condition.__raw})(bufnr)
 
-          if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat or not shouldSave then
+          if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat or not should_save then
             return
           end
 
-          local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
-          if vim.tbl_contains(CONFORM_AUTOFORMAT_HUNKS_IGNORE, ft) then
-            vim.notify("range formatting for " .. vim.bo.filetype .. " not working properly.", "info", { title = "Conform", render = "compact" })
+          if conform_spin_lock then
+            vim.notify("Formatting already in progress", "warn", { title = "Conform", render = "compact" })
             return
           end
 
           local hunks = require("gitsigns").get_hunks(bufnr)
           if not hunks then return end
+
+          conform_spin_lock = true
 
           local executed_writes = 0
           local function format_range()
@@ -71,12 +76,14 @@
               vim.schedule(function()
                 -- make sure the currently selected buffer is used
                 vim.api.nvim_buf_call(bufnr, function()
-                  local shouldSave = (${config.plugins.auto-save.settings.condition.__raw})(bufnr)
-                  if shouldSave then
-                    vim.cmd("silent noautocmd write")
+                  local should_save = (${config.plugins.auto-save.settings.condition.__raw})(bufnr)
+                  if should_save then
+                    vim.api.nvim_command("silent noautocmd write")
+                    conform_spin_lock = false
                   end
                 end)
               end)
+              conform_spin_lock = false
               return
             end
 
@@ -100,14 +107,8 @@
                 -- quiet   = true,
               }, function(err, did_edit)
                 if err then
-                  -- continue on the “discarding changes” error only
-                  if err:match("^Async formatter discarding changes") then
-                    vim.notify(err, "error", { title = "Conform Auto Format", render = "compact" })
-                    vim.defer_fn(process_hunk, 1)
-                    return
-                  end
-
                   vim.notify("Failed formatting: " .. err, "error", { title = "Conform Auto Format" })
+                  conform_spin_lock = false
                   return;
                 end
                 if did_edit then
@@ -119,6 +120,10 @@
                   format_range()
                 end, 1)
               end)
+            else
+              -- avoid deadlock when only formatting deleted lines
+              vim.api.nvim_command("silent noautocmd write")
+              conform_spin_lock = false
             end
           end
 
@@ -130,7 +135,7 @@
 
   autoCmd = [
     {
-      event = [ "BufWritePost" ] ++ config.plugins.auto-save.settings.trigger_events.immediate_save;
+      event = config.plugins.auto-save.settings.trigger_events.immediate_save;
       callback = config.userCommands.ConformFormatHunks.command;
     }
   ];

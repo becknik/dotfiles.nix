@@ -36,11 +36,17 @@
 
     {
       key = "<C-s>";
-      action = "write";
+      action = "ConformFormatHunks";
       mode = mapToModeAbbr [
         "normal"
         "insert"
       ];
+      options.cmd = true;
+      options.desc = "Write Buffer after Formatting Hunks";
+    }
+    {
+      key = "<leader>s";
+      action = "write";
       options.cmd = true;
       options.desc = "Write Buffer";
     }

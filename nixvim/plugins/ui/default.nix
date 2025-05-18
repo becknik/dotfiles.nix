@@ -16,5 +16,4 @@
     rainbow-delimiters.enable = true;
     indent-blankline.enable = true;
   };
-
 }
