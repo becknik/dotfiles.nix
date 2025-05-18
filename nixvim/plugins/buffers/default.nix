@@ -6,4 +6,6 @@
     ./keymaps.nix
     ./scope.nix
   ];
+
+  plugins.bufdelete.enable = true;
 }

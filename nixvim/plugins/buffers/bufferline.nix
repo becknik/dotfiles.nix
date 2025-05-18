@@ -4,12 +4,8 @@
   plugins.bufferline.luaConfig.post = ''
     local wk = require('which-key')
     wk.add {
-      { "<C-s>", icon = "", desc = "Save Buffer" },
       { "H", icon = "  " },
       { "L", icon = "  " },
-
-      { "<leader>q", icon = " " },
-      { "<leader>Q", icon = " !" },
 
       { "<leader>b", icon = " ", desc = "Buffers" },
       { "<leader>bl", icon = "   " },
@@ -59,19 +55,6 @@
     }
 
     {
-      key = "<leader>q";
-      action = "bdelete";
-      options.cmd = true;
-      options.desc = "Quit Buffer";
-    }
-    {
-      key = "<leader>Q";
-      action = "bdelete!";
-      options.cmd = true;
-      options.desc = "Force Quit Buffer";
-    }
-
-    {
       key = "<leader>bh";
       action = "BufferLineCloseLeft";
       options.cmd = true;
@@ -94,17 +77,6 @@
       action = "BufferLineTogglePin";
       options.cmd = true;
       options.desc = "Pin Buffer";
-    }
-
-    {
-      key = "<C-s>";
-      action = ":write";
-      mode = mapToModeAbbr [
-        "normal"
-        "insert"
-      ];
-      options.cmd = true;
-      options.desc = "Write Buffer";
     }
   ];
 }
