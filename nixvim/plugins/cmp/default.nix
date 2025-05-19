@@ -38,10 +38,10 @@
                   buffer = "[ ]", -- also change in bufferline.nix 
                   nvim_lsp = "[ ]",
                   luasnip = "[󰌒 ]",
-                  nvim_lua = " [ ]",
+                  nvim_lua = "[ ]",
                   dotenv = " [e]",
                   spell = "[󰓆 ]",
-                  async_path = " [ ]",
+                  async_path = "[ ]",
                   calc = "[󱖦 ]",
                   emoji = "[󰞅 ]",
                 })[entry.source.name]
@@ -68,8 +68,8 @@
 
         # https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/config/default.lua#L18
         performance = {
-          debounce = 50; # ms wait after typing before recomputing - default: 60
-          throttle = 50; # at most every - default: 30
+          # debounce = 50; # ms wait after typing before recomputing - default: 60
+          # throttle = 50; # at most every - default: 30
           max_view_entries = 200;
         };
 
