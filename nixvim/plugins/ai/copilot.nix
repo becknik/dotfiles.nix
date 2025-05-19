@@ -130,12 +130,13 @@
         function()
           if require'copilot.suggestion'.is_visible() then
             require'copilot.suggestion'.accept()
+            return ""
+          else
+            return vim.api.nvim_replace_termcodes('<Tab>', true, false, true)
           end
         end'';
-      mode = mapToModeAbbr [
-        "insert"
-        "normal"
-      ];
+      options.expr = true;
+      mode = mapToModeAbbr [ "insert" ];
       options.desc = "Copilot Accept";
     }
     {
