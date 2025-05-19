@@ -7,9 +7,6 @@
 }:
 
 {
-  # leaving this here for future use
-  extraConfigLuaPre = "local conform_spin_lock = false";
-
   # https://www.reddit.com/r/neovim/comments/16hpxwu/conformnvim_another_plugin_to_replace_nullls/
   userCommands = {
     ConformFormat = {
@@ -51,24 +48,15 @@
       command.__raw = ''
         function(args)
           local bufnr = args.buf or vim.api.nvim_get_current_buf()
-          local should_save = (${config.plugins.auto-save.settings.condition.__raw})(bufnr)
 
-          if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat or not should_save then
-            return
-          end
-
-          if conform_spin_lock then
-            vim.notify("Formatting already in progress", "warn", { title = "Conform", render = "compact" })
+          if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
             return
           end
 
           local hunks = require("gitsigns").get_hunks(bufnr)
           if not hunks then
-            vim.api.nvim_command("ConformFormat")
             return
           end
-
-          conform_spin_lock = true
 
           local executed_writes = 0
           local function format_range()
@@ -77,21 +65,7 @@
                 vim.notify("Formatted " .. executed_writes .." git hunks", "info", { title = "Conform Auto Format", render = "compact" })
               end
 
-              vim.schedule(function()
-                -- make sure the currently selected buffer is used
-                vim.api.nvim_buf_call(bufnr, function()
-                  local should_save = (${config.plugins.auto-save.settings.condition.__raw})(bufnr)
-                  if should_save then
-                    local ok, err = pcall(vim.api.nvim_command, "silent noautocmd write")
-                    -- E749: empty buffer
-                    if not ok and not err:match("E749") then
-                      error(err)
-                    end
-                    conform_spin_lock = false
-                  end
-                end)
-              end)
-              conform_spin_lock = false
+              vim.schedule(function() vim.api.nvim_command("noautocmd write") end)
               return
             end
 
@@ -116,7 +90,6 @@
               }, function(err, did_edit)
                 if err then
                   vim.notify("Failed formatting: " .. err, "error", { title = "Conform Auto Format" })
-                  conform_spin_lock = false
                   return;
                 end
                 if did_edit then
@@ -128,10 +101,6 @@
                   format_range()
                 end, 1)
               end)
-            else
-              -- avoid deadlock when only formatting deleted lines
-              vim.api.nvim_command("silent noautocmd write")
-              conform_spin_lock = false
             end
           end
 
@@ -140,13 +109,6 @@
       '';
     };
   };
-
-  autoCmd = [
-    {
-      event = config.plugins.auto-save.settings.trigger_events.immediate_save;
-      callback = config.userCommands.ConformFormatHunks.command;
-    }
-  ];
 
   keymaps = withDefaultKeymapOptions [
     {

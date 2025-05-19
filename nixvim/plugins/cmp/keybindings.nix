@@ -35,7 +35,7 @@
     "<esc>" = # lua
       ''
         function(fallback)
-          if cmp.visible() then
+          if cmp.visible() and require("copilot.suggestion").is_visible() then
             cmp.close()
           else
             fallback()

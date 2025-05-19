@@ -21,11 +21,11 @@
   };
 
   keymaps = withDefaultKeymapOptions [
-    # {
-    #   key = "<C-k>";
-    #   action.__raw = "function() vim.lsp.buf.signature_help() end";
-    #   modes = mapToModeAbbr [ "insert" ];
-    #   options.desc = "Toggle Signature Help";
-    # }
+    {
+      key = "<C-k>";
+      action.__raw = "function() vim.lsp.buf.signature_help() end";
+      mode = mapToModeAbbr [ "insert" ];
+      options.desc = "Toggle Signature Help";
+    }
   ];
 }

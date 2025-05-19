@@ -15,7 +15,9 @@
     settings.condition = # lua
       ''
         function(buf)
-          if not buf then return false end
+          if not vim.api.nvim_buf_is_loaded(buf) then
+            return false
+          end
 
           local buf_name = vim.api.nvim_buf_get_name(buf)
           if buf_name == "" then return false end
@@ -27,7 +29,7 @@
           if fn.getbufvar(buf, "&buftype") ~= "" then
             return false
           elseif fn.getbufvar(buf, "&modifiable") ~= 1 then
-            return false;
+            return false
           end
 
           local shouldBeIncluded = utils.not_in(fn.getbufvar(buf, "&filetype"), {
