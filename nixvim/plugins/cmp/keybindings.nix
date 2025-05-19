@@ -32,6 +32,17 @@
 
   plugins.cmp.settings.mapping = {
     "<c-space>" = "cmp.mapping.complete()";
+    "<esc>" = # lua
+      ''
+        function(fallback)
+          if cmp.visible() then
+            cmp.close()
+          else
+            fallback()
+          end
+        end
+      '';
+
     "<cr>" = # lua
       ''
         cmp.mapping(function(fallback)
@@ -52,7 +63,12 @@
           if cmp.visible() then
             cmp.select_next_item()
           elseif require("luasnip").locally_jumpable(1) then
-            require("luasnip").jump(1)
+            -- TODO
+            if require'copilot.suggestion'.is_visible() then
+              require'copilot.suggestion'.accept()
+            else
+              require("luasnip").jump(1)
+            end
           else
             fallback()
           end
