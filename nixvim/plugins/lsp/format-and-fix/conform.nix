@@ -39,6 +39,7 @@
                   vim.cmd('silent GuessIndent')
                 else
                   vim.notify("Nothing to format", "info", { title = "Conform", render = "compact" })
+                  vim.cmd("silent noautocmd write")
                 end
               end
             )
@@ -62,7 +63,10 @@
           end
 
           local hunks = require("gitsigns").get_hunks(bufnr)
-          if not hunks then return end
+          if not hunks then
+            vim.api.nvim_command("ConformFormat")
+            return
+          end
 
           conform_spin_lock = true
 
@@ -78,7 +82,11 @@
                 vim.api.nvim_buf_call(bufnr, function()
                   local should_save = (${config.plugins.auto-save.settings.condition.__raw})(bufnr)
                   if should_save then
-                    vim.api.nvim_command("silent noautocmd write")
+                    local ok, err = pcall(vim.api.nvim_command, "silent noautocmd write")
+                    -- E749: empty buffer
+                    if not ok and not err:match("E749") then
+                      error(err)
+                    end
                     conform_spin_lock = false
                   end
                 end)
