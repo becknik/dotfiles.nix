@@ -5,6 +5,7 @@
     ./options.nix
 
     ./plugins
+    ./scripts
   ];
 
   config.globals.mapleader = " "; # "," "\"
