@@ -11,8 +11,6 @@
     nvim-surround.enable = true;
     # https://github.com/kylechui/nvim-surround
 
-    comment.enable = true;
-
     # extends % to language-specific words and not just single characters
     vim-matchup = {
       # https://github.com/andymass/vim-matchup/
