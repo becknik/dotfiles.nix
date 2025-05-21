@@ -11,6 +11,14 @@
     extensions = {
       fzf-native.enable = true;
       frecency.enable = true;
+      frecency.settings = {
+        db_version = "v2";
+        matcher = "fuzzy";
+        preceding = "opened";
+        hide_current_buffer = true;
+        show_filter_column = false;
+        show_scores = true;
+      };
       live-grep-args.enable = true;
       ui-select.enable = true; # replaces the vim.ui.select with telescope
       undo.enable = true;
