@@ -55,6 +55,7 @@
 
           local hunks = require("gitsigns").get_hunks(bufnr)
           if not hunks then
+            vim.api.nvim_command("ConformFormat")
             return
           end
 
