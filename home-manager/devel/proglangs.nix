@@ -4,6 +4,7 @@
   # some pl packages are handy for quickly trying something out etc.
   home.packages = with pkgs; (lib.optional (!isDarwinSystem) texliveFull) ++ [
     unstable.amber-lang
+    unstable.conda
 
     # JS / TypeScript
     unstable.nodejs_latest

@@ -140,12 +140,12 @@
       github.copilot
       github.vscode-pull-request-github # this is way to outdated on nixpkgs; hence having to check every flake update manually?? :(
 
-      ms-toolsai.jupyter
     ]) ++ (with pkgs.unstable.vscode-extensions; [
       # fallback to nixpkgs, since not working with the upper...
       ms-vsliveshare.vsliveshare
     ]) ++ (with pkgs.vscode-extensions; [
       # fuck the package incompatibility...
       github.copilot-chat
+      ms-toolsai.jupyter
     ]);
 }
