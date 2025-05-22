@@ -18,8 +18,6 @@
       winWidth = 50;
     };
 
-    rename.keys.quit = "q";
-
     # what is this?
     symbolInWinbar.enable = false;
 
@@ -27,4 +25,20 @@
     lightbulb.sign = false;
     lightbulb.debounce = 200;
   };
+
+  autoCmd = [
+    {
+      # quit the lspsaga rename window ONLY when not in insert mode (wtf...)
+      event = [ "FileType" ];
+      pattern = "lspsaga-renamer";
+      callback.__raw = ''
+        function(ctx)
+          vim.keymap.set('n', 'q',
+            function() require('lspsaga.rename'):close_rename_win() end,
+            { buffer = ctx.buf, desc = 'Quit Lspsaga rename' }
+          )
+        end
+      '';
+    }
+  ];
 }
