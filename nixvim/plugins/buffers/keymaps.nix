@@ -57,5 +57,11 @@
       action.__raw = "function() vim.api.nvim_win_close(0, false) end";
       options.desc = "Quit Window";
     }
+    {
+      key = "<leader>r";
+      action = "edit";
+      options.cmd = true;
+      options.desc = "Reload Buffer from  Disk";
+    }
   ];
 }
