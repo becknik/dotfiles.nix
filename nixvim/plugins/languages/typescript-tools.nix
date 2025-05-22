@@ -1,4 +1,4 @@
-{...}: 
+{ ... }:
 
 {
   plugins.typescript-tools = {
@@ -9,8 +9,6 @@
 
       on_attach.__raw = ''
         function(client, bufnr)
-          _M.lspOnAttach(client, bufnr)
-
           vim.keymap.set(
             "n",
             "<leader>ci",
