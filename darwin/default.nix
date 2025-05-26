@@ -4,6 +4,7 @@
   system.stateVersion = 5;
 
   environment.variables."FLAKE_NIXOS_HOST" = "wnix";
+  environment.variables."HOMEBREW_AUTO_UPDATE_SECS" = builtins.toString (16 * 60 * 60);
   nix = {
     useDaemon = true;
     settings = {
