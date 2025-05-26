@@ -1,4 +1,4 @@
-{ ... }:
+{ withDefaultKeymapOptions, mapToModeAbbr, ... }:
 
 {
   # vim.opt
@@ -70,5 +70,53 @@
         "noinsert"
       ]; # completion window; "preview" "popup"
     };
+
+    keymaps = withDefaultKeymapOptions [
+      {
+        key = "<C-w>+";
+        action = "horizontal resize +5";
+        options.cmd = true;
+        options.desc = "vertical resize +5";
+        mode = mapToModeAbbr [
+          "normal"
+          "insert"
+          "operator_pending"
+        ];
+      }
+      {
+        key = "<C-w>-";
+        action = "horizontal resize -5";
+        options.cmd = true;
+        options.desc = "vertical resize -5";
+        mode = mapToModeAbbr [
+          "normal"
+          "insert"
+          "operator_pending"
+        ];
+      }
+
+      {
+        key = "<C-w>>";
+        action = "vertical resize +5";
+        options.cmd = true;
+        options.desc = "horizontal resize +5";
+        mode = mapToModeAbbr [
+          "normal"
+          "insert"
+          "operator_pending"
+        ];
+      }
+      {
+        key = "<C-w><";
+        action = "vertical resize -5";
+        options.cmd = true;
+        options.desc = "horizontal resize -5";
+        mode = mapToModeAbbr [
+          "normal"
+          "insert"
+          "operator_pending"
+        ];
+      }
+    ];
   };
 }
