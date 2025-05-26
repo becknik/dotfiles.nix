@@ -40,7 +40,7 @@
                   luasnip = "[󰌒 ]",
                   nvim_lua = "[ ]",
                   dotenv = " [e]",
-                  spell = "[󰓆 ]",
+                  -- spell = "[󰓆 ]",
                   async_path = "[ ]",
                   calc = "[󱖦 ]",
                   emoji = "[󰞅 ]",
@@ -100,21 +100,21 @@
             max_item_count = 50;
             priority = 800;
           }
-          {
-            name = "spell";
-            priority = 700;
-            options = {
-              keep_all_entries = false;
-              preselect_correct_word = false;
-            };
-          }
+          # spell is rather useful as code-action than recommendation
+          # {
+          #   name = "spell";
+          #   priority = 700;
+          #   options = {
+          #     keep_all_entries = false;
+          #     preselect_correct_word = false;
+          #   };
+          # }
 
           # https://github.com/SergioRibera/cmp-dotenv
           {
             name = "dotenv";
             priority = 700;
           }
-          # spell is rather useful as code-action than recommendation
 
           # triggered by prefixes
           {
