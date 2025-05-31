@@ -1,26 +1,38 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  isLaptop,
+  ...
+}:
 
 let
-  gnomeAdditionalTools = with pkgs; [
-    dconf-editor
-    ghex
-    gnome-sound-recorder
-    gnome-tweaks
-    gnome-themes-extra
-    pomodoro
-    gnome-power-manager
-    gedit
-    gnome-decoder
-    gnome-extension-manager
-    networkmanagerapplet # redundant (see desktop-env), but necessary for home-manager to link the .desktop file
-  ];
+  gnomeAdditionalTools =
+    with pkgs;
+    [
+      dconf-editor
+      ghex
+      gnome-sound-recorder
+      gnome-tweaks
+      gnome-themes-extra
+      gnome-pomodoro
+      gnome-decoder
+      networkmanagerapplet # redundant (see desktop-env), but necessary for home-manager to link the .desktop file
+      baobab
+      gnome-calculator
+      gnome-font-viewer
+      gnome-weather
+      simple-scan
+      snapshot
+      nautilus # necessary for file selection dialog
+    ]
+    ++ lib.lists.optionals isLaptop (with pkgs; [ gnome-power-manager ]);
 
   gnomeExtensions = with pkgs.gnomeExtensions; [
     alphabetical-app-grid
     appindicator # causing crashes
     blur-my-shell
     dash-to-dock
-    espresso
+    caffeine
     gsconnect
     gtile
     just-perfection
@@ -31,13 +43,13 @@ let
   ];
 
   kdeCompat = with pkgs; [
-    colord-kde
+    kdePackages.colord-kde
     qadwaitadecorations
     qadwaitadecorations-qt6
   ];
 
   ## Replacements for GNOME Tools
-  kdeAdditionalTools = (with pkgs.libsForQt5; [
+  kdeAdditionalTools = with pkgs.kdePackages; [
     dolphin
     dolphin-plugins
     kio-extras # Solves spam of "serviceType "ThumbCreator" not found"
@@ -46,7 +58,8 @@ let
     #kf.kio.core: couldn't create worker: "Unknown protocol 'dav'
     gwenview
     okular
-  ]);
+    ark # archive manager
+  ];
 in
 {
   # Basic GNOME Desktop Environment Setup
@@ -59,13 +72,17 @@ in
 
       ## GDM
       displayManager.gdm.enable = true;
-      desktopManager.gnome.enable = true;
+      desktopManager.gnome = {
+        enable = true;
+        sessionPath = [ pkgs.gnome-shell-extensions ];
+      };
     };
-
 
     ## GNOME Services
     # Source: https://github.com/NixOS/nixpkgs/blob/nixos-23.05/nixos/modules/services/x11/desktop-managers/gnome.nix
     gnome = {
+      core-apps.enable = false;
+      games.enable = false;
       ### Redundant stuff
       gnome-keyring.enable = lib.mkDefault true;
 
@@ -74,6 +91,7 @@ in
       gnome-online-accounts.enable = lib.mkForce false;
       localsearch.enable = lib.mkForce false;
       tinysparql.enable = lib.mkForce false;
+      evolution-data-server.enable = lib.mkForce false;
 
       ### " gnome.core-shell
       gnome-remote-desktop.enable = lib.mkForce false;
@@ -90,31 +108,19 @@ in
   # Additional GNOME Programs
   programs.gnome-terminal.enable = false;
   #programs.gpaste.enable = true;
-  environment.systemPackages = gnomeAdditionalTools
-    ++ gnomeExtensions
-    ++ kdeCompat
-    ++ kdeAdditionalTools;
-
+  environment.systemPackages =
+    gnomeAdditionalTools ++ gnomeExtensions ++ kdeCompat ++ kdeAdditionalTools;
 
   # Remove Bloat & Tools replaced by KDE ones
   environment.gnome.excludePackages = with pkgs; [
-    epiphany
     evince
     eog
     geary
-    gnome-calendar
-    gnome-contacts
-    gnome-music
     sushi
-    totem
-    yelp
-    gnome-console
-    gnome-connections
     gnome-tour
     gnome-photos
     evolutionWithPlugins
     orca
-    gnome-text-editor
     gnome-user-docs
   ];
 

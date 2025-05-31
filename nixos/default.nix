@@ -1,4 +1,12 @@
-{ inputs, stateVersion, userName, config, lib, pkgs, ... }:
+{
+  inputs,
+  stateVersion,
+  userName,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -8,7 +16,6 @@
     ./systemd.nix # Systemd services (related to NixOS auto upgrade)
     ./virtualisation.nix
   ];
-
 
   # System Settings
   system = { inherit stateVersion; };
@@ -24,27 +31,30 @@
     efi.canTouchEfiVariables = true;
   };
 
-
   # Time
   time.timeZone = "Europe/Berlin";
   services.timesyncd.enable = true; # should be activated by default unless container
 
   # Locale Setup
-  i18n = {
-    defaultLocale = "en_US.UTF-8";
-    extraLocaleSettings = {
-      LC_ADDRESS = "de_DE.UTF-8";
-      LC_IDENTIFICATION = "de_DE.UTF-8";
-      LC_MEASUREMENT = "de_DE.UTF-8";
-      LC_MONETARY = "de_DE.UTF-8";
-      LC_NAME = "de_DE.UTF-8";
-      LC_NUMERIC = "de_DE.UTF-8";
-      LC_PAPER = "de_DE.UTF-8";
-      LC_TELEPHONE = "de_DE.UTF-8";
-      LC_TIME = "en_US.UTF-8";
+  i18n =
+    let
+      en = "en_US.UTF-8";
+      de = "de_DE.UTF-8";
+    in
+    {
+      defaultLocale = en;
+      extraLocaleSettings = {
+        LC_ADDRESS = de;
+        LC_IDENTIFICATION = de;
+        LC_MEASUREMENT = de;
+        LC_MONETARY = de;
+        LC_NAME = de;
+        LC_NUMERIC = de;
+        LC_PAPER = de;
+        LC_TELEPHONE = de;
+        LC_TIME = en;
+      };
     };
-  };
-
 
   # Common Hardware
   #hardware.enableAllFirmware = true;
@@ -53,17 +63,19 @@
   #services.hardware.bolt.enable = true; # implied by gnome.core-os-services
   hardware.sane.enable = true;
 
-
   # Boot Process
   boot = {
     ## Shared Kernel Config
-    extraModulePackages = with config.boot.kernelPackages; [
-      perf
-      turbostat
-      #opensnitch-ebpf # TODO this might cause kernel warning? - tool not really necessary
-      #virtualbox # broken, see `virtualization.nix`
+    extraModulePackages =
+      with config.boot.kernelPackages;
+      [
+        perf
+        turbostat
+        #opensnitch-ebpf # TODO this might cause kernel warning? - tool not really necessary
+        #virtualbox # broken, see `virtualization.nix`
 
-    ] ++ [ pkgs.system76-scheduler ];
+      ]
+      ++ [ pkgs.system76-scheduler ];
 
     kernelParams = [
       "nowatchdog"
@@ -82,7 +94,6 @@
     plymouth.enable = true;
   };
 
-
   # Sysctl
   boot.kernel.sysctl = {
     # TODO Recherche on interesting sysctl options https://documentation.suse.com/sles/15-SP3/html/SLES-all/cha-tuning-memory.html https://docs.kernel.org/admin-guide/sysctl/vm.html
@@ -99,18 +110,17 @@
 
   environment.memoryAllocator.provider = "libc"; # "mimalloc" leads to various applications crashing
 
-
   # Systemd
 
   ## Journald
   # source: https://man7.org/linux/man-pages/man5/journald.conf.5.html
   services.journald.extraConfig =
     # Initialized with 10% of the file system
-    "SystemMaxUse=200MB\n" +
-    "MaxRetentionSec=7d\n" +
-    # Initalized with 4G
-    "RuntimeMaxFileSize=128M";
-
+    "SystemMaxUse=200MB\n"
+    + "MaxRetentionSec=7d\n"
+    +
+      # Initalized with 4G
+      "RuntimeMaxFileSize=128M";
 
   ## Networking
   networking = {
@@ -123,13 +133,19 @@
     };
   };
 
-  networking.nameservers = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
+  networking.nameservers = [
+    "1.1.1.1#one.one.one.one"
+    "1.0.0.1#one.one.one.one"
+  ];
   services.resolved = {
     enable = true; # systemd-resolved
     #dnssec = "allow-downgrade";
     dnssec = "true";
     domains = [ "~." ];
-    fallbackDns = [ "1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" ];
+    fallbackDns = [
+      "1.1.1.1#one.one.one.one"
+      "1.0.0.1#one.one.one.one"
+    ];
     #dnsovertls = "opportunistic";
     dnsovertls = "true";
   };
@@ -137,16 +153,20 @@
   programs.openvpn3.enable = true;
   # TODO configure openvpn config using sops-nix for passwords and config
   # https://nixos.wiki/wiki/OpenVPN
-  /*services.openvpn.servers = {
-    uniVPNv4Ov6 = { config = " config /root/nixos/openvpn/officeVPN.conf "; };
-  };*/
-
+  /*
+    services.openvpn.servers = {
+      uniVPNv4Ov6 = { config = " config /root/nixos/openvpn/officeVPN.conf "; };
+    };
+  */
 
   # Firewall
   networking.nftables.enable = true; # TODO NFTables might (according to wiki) cause trouble with docker and libvirt, test this out
   networking.firewall =
     let
-      kdeConnectPortRange = { from = 1714; to = 1764; };
+      kdeConnectPortRange = {
+        from = 1714;
+        to = 1764;
+      };
     in
     {
       # every docker network creates a new interface, so disabling firewall globally
@@ -161,7 +181,6 @@
     };
   services.avahi.openFirewall = true;
   services.samba.openFirewall = true;
-
 
   # Security & Secrets
   security = {
@@ -191,7 +210,8 @@
   # Can't find firejail-default in the system path list. ...
   programs.firejail = {
     enable = true;
-    /* wrappedBinaries =
+    /*
+      wrappedBinaries =
       let
         packagesToWrap = [ "librewolf" ]; # TODO "discord"
 
@@ -213,13 +233,12 @@
           #extraArgs = "";
           #desktop = ""; .desktop file to modify. Only necessary if it uses the absolute path to the executable.
         };
-      }; */
+      };
+    */
   };
-
 
   # Documentation
   documentation.man.generateCaches = true; # for `apropos` & `man -k` utilities
-
 
   # User Setup
   users.mutableUsers = false;
@@ -227,12 +246,22 @@
     isNormalUser = true;
     description = "jannik";
     hashedPassword = "$y$j9T$v2v24yeaoZcmnJRJqKVIb/$9/ERYx13TXXpCXA12dNvvrr1BOKx1/tgpO9M9fRlio4";
-    extraGroups = [ "wheel" "networkmanager" "libvirtd" "docker" "vboxusers" "video" ]
-      ++ [ "lp" "scanner" ];
+    extraGroups =
+      [
+        "wheel"
+        "networkmanager"
+        "libvirtd"
+        "docker"
+        "vboxusers"
+        "video"
+      ]
+      ++ [
+        "lp"
+        "scanner"
+      ];
     useDefaultShell = true;
   };
   users.users.root.hashedPassword = "!"; # disable root account
-
 
   # Shell Setup
   users.defaultUserShell = pkgs.zsh;
@@ -264,7 +293,10 @@
         # Workaround for https://github.com/NixOS/nix/issues/9574
         nix-path = config.nix.nixPath;
 
-        trusted-users = [ "root" userName ];
+        trusted-users = [
+          "root"
+          userName
+        ];
       };
       optimise = {
         automatic = true;

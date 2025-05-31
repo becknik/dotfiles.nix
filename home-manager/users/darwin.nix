@@ -1,11 +1,17 @@
-{ userName, config, lib, pkgs, ... }:
+{
+  userName,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
     ../default.nix
 
     ../packages.nix
-    ../desktop-env/shell.nix
+    ../desktop-env/shell
     ../desktop-env/folders-and-files.nix # also want the `$HOME/devel/*` folder structure
     # TODO this also includes the manually created plasma config files...
 
@@ -23,7 +29,7 @@
         "ssh-agent"
         "macos" # `showfiles` & `hidefiles` (in finder), `cdf` (cd to current finder directory)
       ];
-      initExtra = "ssh-add --apple-load-keychain"; # load keys from previous sessions
+      initContent = lib.mkAfter "ssh-add --apple-load-keychain"; # load keys from previous sessions
     };
     # `ssh-add --apple-use-keychain ~/.ssh/<key>`
     ssh.extraConfig = "UseKeychain yes";
@@ -39,7 +45,7 @@
   xdg.enable = true;
 
   programs.zsh.enable = true;
-  # overwriting the sensible-default plugin 
+  # overwriting the sensible-default plugin
   programs.kitty.font.size = lib.mkForce 15;
 
   programs.gpg.enable = true;

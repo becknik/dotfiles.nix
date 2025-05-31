@@ -1,4 +1,10 @@
-{ mkFlakeDir, userName, config, pkgs, ... }:
+{
+  mkFlakeDir,
+  userName,
+  config,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -29,7 +35,7 @@
   # `fatal error: error writing to /build/ccGD5Lsd.s: No space left on device`
   boot = {
     tmp.tmpfsSize = "90%"; # at least: max{linux-2023-11-25: 20G}
-    kernelPackages = pkgs.linux_xanmod_latest_patched_dnix;
+    kernelPackages = pkgs.linux_xanmod_stable_patched_dnix;
   };
 
   nix.settings = {

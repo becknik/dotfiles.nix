@@ -1,8 +1,14 @@
-{ userName, pkgs, config, lib, ... }:
+{
+  userName,
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 {
   imports = [
-    ./desktop-env/shell.nix # zsh, oh-my-zsh and bash config
+    ./desktop-env/shell
 
     ./desktop-env/folders-and-files.nix # Creates my basic folder structure
 

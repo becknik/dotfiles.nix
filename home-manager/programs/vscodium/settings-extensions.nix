@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  programs.vscode.userSettings = {
+  programs.vscode.profiles.default.userSettings = {
     ## Code Runner
     code-runner = {
       clearPreviousOutput = true;
@@ -15,7 +15,12 @@
       openInNewWindowWhenClickingInStatusBar = true;
       showParentFolderInfoOnDuplicates = true;
       sortList = "Recent";
-      git.baseFolders = [ "~/devel/own" "~/devel/foreign" "~/devel/ide" "~/devel/work" ];
+      git.baseFolders = [
+        "~/devel/own"
+        "~/devel/foreign"
+        "~/devel/ide"
+        "~/devel/work"
+      ];
       confirmSwitchOnActiveWindow = "onlyUsingSideBar";
     };
 
@@ -38,11 +43,21 @@
       experimental.enableSettingsViewerV2 = false;
 
       language = "en,de-DE";
-      enableFiletypes = [ "nix" "toml" "dockerfile" "tex" "xml" "shellscript" ];
+      enableFiletypes = [
+        "nix"
+        "toml"
+        "dockerfile"
+        "tex"
+        "xml"
+        "shellscript"
+      ];
       #suggestionsTimeout = 800;
       #diagnosticLevel = "Hint";
 
-      userWords = [ "UTF" "UTF-8" ];
+      userWords = [
+        "UTF"
+        "UTF-8"
+      ];
 
       ignorePaths = [
         "package-lock.json"
@@ -74,12 +89,14 @@
 
     ## Neovim
     # Source: https://github.com/vscode-neovim/vscode-neovim
-    /*extensions.experimental.affinity = { asvetliakov.vscode-neovim = 1; };
+    /*
+      extensions.experimental.affinity = { asvetliakov.vscode-neovim = 1; };
         vscode-neovim = {
         logLevel = "warn";
         mouseSelectionStartVisualMode = false;
         neovimClean = true;
-      };*/
+      };
+    */
 
     ## VIM
     vim = {
@@ -114,8 +131,19 @@
         showActivityBarBadge = true;
         statusBar = "tags";
         tagGroups = {
-          FIX = [ "FIXME" "FIXIT" "FixMe" "FixIt" "fixme" "fixit" ];
-          TODO = [ "TODO" "ToDo" "todo" ];
+          FIX = [
+            "FIXME"
+            "FIXIT"
+            "FixMe"
+            "FixIt"
+            "fixme"
+            "fixit"
+          ];
+          TODO = [
+            "TODO"
+            "ToDo"
+            "todo"
+          ];
         };
       };
       tree = {
@@ -133,10 +161,12 @@
 
     ## Run on Save
     runOnSave.commands = [
-      /*{
+      /*
+        {
           match = "\\.java$";
           command = ''google-java-format --replace ''${file}'';
-        }*/
+        }
+      */
     ];
 
     ## Live Share
@@ -148,12 +178,18 @@
 
     ## Color Stuff
     color-highlight.markerType = "dot-after";
-    colorInfo.languages = builtins.map (fileExtension: { selector = fileExtension; colors = "css"; /* = all formatting types */ }) [
-      "javascript"
-      "typescript"
-      "javascriptreact"
-      "typescriptreact"
-    ];
+    colorInfo.languages =
+      builtins.map
+        (fileExtension: {
+          selector = fileExtension;
+          colors = "css"; # = all formatting types
+        })
+        [
+          "javascript"
+          "typescript"
+          "javascriptreact"
+          "typescriptreact"
+        ];
 
     ## ESLint
     eslint.format.enable = true;
@@ -164,7 +200,6 @@
     css.validate = false;
     less.validate = false;
     scss.validate = false;
-
 
     ### Prettier
     prettier = {
@@ -284,7 +319,8 @@
     "[latex]".editor.defaultFormatter = "James-Yu.latex-workshop";
     "[dockercompose]".editor.defaultFormatter = "ms-azuretools.vscode-docker";
 
-    "[typescriptreact][typescript][javascriptreact][javascript][jsonc]".editor.defaultFormatter = "esbenp.prettier-vscode";
+    "[typescriptreact][typescript][javascriptreact][javascript][jsonc]".editor.defaultFormatter =
+      "esbenp.prettier-vscode";
 
   };
 }

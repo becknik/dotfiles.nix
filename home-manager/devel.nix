@@ -1,4 +1,9 @@
-{ isDarwinSystem, pkgs, devenv, ... }:
+{
+  isDarwinSystem,
+  pkgs,
+  devenv,
+  ...
+}:
 
 {
   imports = [
@@ -28,7 +33,7 @@
       enable = true;
       includes = [ "~/.ssh/config.local" ];
 
-      extraConfig = "AddKeysToAgent confirm"; #addKeysToAgent = "confirm"; isn't working?
+      extraConfig = "AddKeysToAgent confirm"; # addKeysToAgent = "confirm"; isn't working?
       forwardAgent = true;
       hashKnownHosts = true;
       matchBlocks = {
@@ -53,41 +58,50 @@
     enableSshSupport = true;
     enableZshIntegration = true;
     extraConfig = "";
-    pinentryPackage = pkgs.pinentry-gnome3;
+    pinentry.package = pkgs.pinentry-gnome3;
     #sshKeys = {}; # Expose GPG-keys as SSH-keys
   };
   programs.gpg.enable = true;
 
   # Manual Installations
-  home.packages = with pkgs; let
-    jetbrainsTools = (with unstable.jetbrains; lib.lists.optionals (!isDarwinSystem) [ clion idea-ultimate ])
-      ++ lib.lists.optionals (!isDarwinSystem) [ android-studio jetbrains-toolbox ]; # used for experiments
-    # not using unstable.jetbrains-toolbox because it depends on too much & I'm not using it that often
-  in
-  jetbrainsTools ++ [
-    devenv
-    git-crypt
-    meld
-    wiggle
-    watchman # necessary for some npm scripts
+  home.packages =
+    with pkgs;
+    let
+      jetbrainsTools =
+        (
+          with unstable.jetbrains;
+          lib.lists.optionals (!isDarwinSystem) [
+            clion
+            idea-ultimate
+          ]
+        )
+        ++ lib.lists.optionals (!isDarwinSystem) [ jetbrains-toolbox ]; # used for experiments
+      # not using unstable.jetbrains-toolbox because it depends on too much & I'm not using it that often
+    in
+    jetbrainsTools
+    ++ [
+      devenv
+      git-crypt
+      meld
+      wiggle
+      watchman # necessary for some npm scripts
 
-    # LLM (ChatGPT)
-    shell-gpt
+      # LLM (ChatGPT)
+      shell-gpt
 
-    ## Testing
-    httpie
-    pgadmin4-desktopmode
+      ## Testing
+      httpie
+      pgadmin4-desktopmode
 
-    ## OCI Containers
-    dive # https://github.com/wagoodman/dive
-    trivy
+      ## OCI Containers
+      dive # https://github.com/wagoodman/dive
+      trivy
 
-    ## CI / CD
-    kubectl
-    act
-  ]
-  # custom standalone variant of nixvim
-  ++ [ nixvim ];
+      ## CI / CD
+      kubectl
+      act
+    ]
+    ++ [ nixvim ];
 
   home.sessionVariables.EDITOR = "nvim";
 }

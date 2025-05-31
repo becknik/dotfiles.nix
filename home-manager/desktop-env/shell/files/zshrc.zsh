@@ -74,4 +74,62 @@ rerun-previous-command-if-empty() {
 }
 zle -N accept-line rerun-previous-command-if-empty
 
+
+bgnotify_bell=false;
+bgnotify_threshold=120;
+
+function nixos-upgrade-monitor {
+  if [ $# -eq 0 ]; then
+    echo "No arguments provided. Please provide a log file path."
+    return 1
+  fi
+
+  local log_file_path="$1"
+  tail -n +1 -f "$log_file_path" |& nom
+}
+
+# ohmyzsh Git Plugin Function Overrides/ Extension
+
 unalias gwip
+function gwip() {
+  git add -A
+  git rm $(git ls-files --deleted) 2> /dev/null
+  local message="--wip-- [skip ci]"
+  if [ -n "$1" ]; then
+    message="$message "$1""
+  fi
+  git commit --no-verify --no-gpg-sign -m "$message"
+}
+# only staged changes are committed
+function gwips() {
+  local message="--wip-- [skip ci]"
+  if [ -n "$1" ]; then
+    message="$message "$1""
+  fi
+  git commit --no-verify --no-gpg-sign -m "$message"
+}
+
+# Fix for `cp: cannot create regular file '/home/jnnk/.cache/oh-my-zsh/completions/_docker': Permission denied`
+chmod u+w $HOME/.cache/oh-my-zsh/completions/_docker
+
+if [ -f ~/.zshrc.local ]; then
+    source ~/.zshrc.local
+fi
+
+# https://github.com/joshmedeski/sesh?tab=readme-ov-file#zsh-keybind
+function sesh-sessions() {
+  {
+    exec </dev/tty
+    exec <&1
+    local session
+    session=$(${lib.getExe pkgs.sesh} list -t -c | fzf --height 40% --reverse --border-label ' sesh ' --border --prompt '⚡  ')
+    zle reset-prompt > /dev/null 2>&1 || true
+    [[ -z "$session" ]] && return
+    ${lib.getExe pkgs.sesh} connect $session
+  }
+}
+
+zle     -N             sesh-sessions
+bindkey -M emacs '\es' sesh-sessions
+bindkey -M vicmd '\es' sesh-sessions
+bindkey -M viins '\es' sesh-sessions

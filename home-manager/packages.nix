@@ -1,4 +1,9 @@
-{ devenv, isDarwinSystem, pkgs, ... }:
+{
+  devenv,
+  isDarwinSystem,
+  pkgs,
+  ...
+}:
 
 {
   programs = {
@@ -34,29 +39,28 @@
 
   # Manual Installations
   home.packages =
-    let makeWhenNotDarwin = pkg: (if isDarwinSystem then pkgs.hello else pkg);
-    in with pkgs; [
+    let
+      mkWhenNotDarwin = pkg: (if isDarwinSystem then builtins.emptyDerivation else pkg);
+    in
+    with pkgs;
+    [
 
       ## Utils
       curl
       unzip
       zip
       tree
-      (makeWhenNotDarwin wl-clipboard)
+      (mkWhenNotDarwin wl-clipboard)
 
       # https://github.com/ibraheemdev/modern-unix
       # including tools from some open issues, repo's unmaintained
-      fd # finde for humans
-      sd # sed for humans
+      fd # find for humans
+      sd # set for humans
       silver-searcher # `ag`: fast code searching tool to replace ack
       choose # unifies cut with some aspects of awk
       cheat
       tealdeer # tldr in rust
       hyperfine # benchmarking
-      gping # ping with plots
-      procs
-      dogdns # dig alternative
-      grex # regex generator
       asciinema
       tailspin # log file highlighter
       fastgron # make JSON greppable!
@@ -65,10 +69,10 @@
 
       ### Hardware
       cpufetch
-      (makeWhenNotDarwin gparted)
-      (makeWhenNotDarwin ventoy-full)
-      (makeWhenNotDarwin powertop)
-      (makeWhenNotDarwin vial)
+      (mkWhenNotDarwin gparted)
+      (mkWhenNotDarwin ventoy-full-gtk)
+      (mkWhenNotDarwin powertop)
+      (mkWhenNotDarwin vial)
 
       ## Nix(OS)
       nh
@@ -83,24 +87,21 @@
       sops
       age
       #age-plugin-yubikey # This isn't working with sops-nix atm due to sops... https://github.com/Mic92/sops-nix/issues/377
-      (makeWhenNotDarwin yubikey-manager-qt)
-      (makeWhenNotDarwin yubikey-personalization-gui)
+      (mkWhenNotDarwin yubikey-manager-qt)
+      (mkWhenNotDarwin yubikey-personalization-gui)
       tig
 
       ## Benchmarking
       speedtest-cli
 
       ## Uni & TeX
-      (makeWhenNotDarwin pandoc)
-      (makeWhenNotDarwin gnuplot)
-      (makeWhenNotDarwin qtikz)
-      marp-cli
+      (mkWhenNotDarwin pandoc)
+      (mkWhenNotDarwin qtikz)
 
       ## Trash
-      neofetch
+      cbonsai
       # cmatrix
       # fortune
-      cbonsai
       # (makeWhenNotDarwin oneko)
       # uwuify
     ];

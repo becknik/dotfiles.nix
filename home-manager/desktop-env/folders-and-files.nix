@@ -8,7 +8,12 @@
   # Folder Setup
   home.file =
     let
-      mkKeepDirectory = path: { "${path}" = { target = path + "/.keep"; text = ""; }; };
+      mkKeepDirectory = path: {
+        "${path}" = {
+          target = path + "/.keep";
+          text = "";
+        };
+      };
     in
     (builtins.foldl' (acc: x: acc // mkKeepDirectory x) { } [
       "devel/foreign"
@@ -28,12 +33,12 @@
       "vpn"
       # sops .config folder where the keys.txt should live in to decrypt the secrets of sops-nix
       ".config/sops/age"
-    ]) //
-    {
+    ])
+    // {
       "ghci" = {
         target = ".ghci";
         # prompt styling source: https://stackoverflow.com/a/53109980
-        source = ./files/.ghci;
+        source = ./files/ghci;
       };
 
       "config-cargo" = {
@@ -48,5 +53,5 @@
       };
     };
 
-  programs.zsh.initExtra = "path+=('${config.home.homeDirectory}/.local/bin')";
+  programs.zsh.initContent = "path+=('${config.home.homeDirectory}/.local/bin')";
 }

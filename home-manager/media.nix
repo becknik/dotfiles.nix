@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   imports = [
@@ -9,23 +14,21 @@
   ];
 
   # Multimedia
-  #services.easyeffects.enable = true;
   programs.mpv.enable = true;
 
   services = {
     # Sync
     nextcloud-client = {
       enable = true;
-      #startInBackground = true; # Keeps `Process 3436 (.nextcloud-wrap) of user 1000 dumped core.`-ing... - even after disabling, wtf?
-      # However, after setting up nextcloud, the autostart .desktop-files is created automatically
+      startInBackground = true;
     };
-    /*dropbox = { # TODO Dropbox module not working & corresponding home-manager issue is on stall: https://github.com/nix-community/home-manager/issues/4226
-      enable = true;
-      path = "${config.home.homeDirectory}/dropbox";
-    };*/
+    /*
+      dropbox = { # TODO Dropbox module not working & corresponding home-manager issue is on stall: https://github.com/nix-community/home-manager/issues/4226
+        enable = true;
+        path = "${config.home.homeDirectory}/dropbox";
+      };
+    */
   };
-  # ad-hoc disabling systemd service to avoid core-dumping
-  # systemd.user.services.nextcloud-client.Service.ExecStart = (lib.mkForce "");
 
   # Browsers
 
@@ -44,8 +47,14 @@
   programs = {
     librewolf = {
       enable = true;
-      package = pkgs.librewolf-wayland.overrideAttrs (oldAttrs: {
-        extraNativeMessagingHosts = (with pkgs; [ gnomeExtensions.gsconnect keepassxc ]);
+      package = pkgs.unstable.librewolf-wayland.overrideAttrs (oldAttrs: {
+        extraNativeMessagingHosts = (
+          with pkgs;
+          [
+            gnomeExtensions.gsconnect
+            keepassxc
+          ]
+        );
       });
       # necessary file for keepassxc integration is created in `folders-and-files.nix`
 
@@ -67,7 +76,7 @@
         "identity.fxaccounts.enabled" = true;
 
         ## Privacy
-        "webgl.disabled" = false; # Actually anti-privacy...
+        "webgl.disabled" = true;
         "privacy.resistFingerprinting.letterboxing" = true;
         # This override allows you to control when a cross-origin refer will be sent, allowing it exclusively when the host matches.
         "network.http.referer.XOriginPolicy" = 2;
@@ -80,7 +89,7 @@
 
     chromium = {
       enable = true;
-      package = pkgs.ungoogled-chromium;
+      package = pkgs.unstable.ungoogled-chromium;
       # works for chromium now, but doesn't for electron: https://github.com/electron/electron/issues/33662#issuecomment-2299180561
       commandLineArgs = [
         # https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#Chromium%20/%20Electron
@@ -103,7 +112,6 @@
     };
   };
 
-
   # Package Leftover
   home.packages = with pkgs; [
     ## Natural language
@@ -119,7 +127,8 @@
     logseq
     anki
     #birdtray # Actually not needing this
-    planify
+    # FIXME https://gitlab.gnome.org/GNOME/glib/-/issues/3690
+    # planify # FIXME remove the overlay
     nextcloud-client # Basically redundant, but still necessary for .desktop file in NIX_PATH...
 
     ## Privacy
@@ -141,25 +150,21 @@
 
     ## Media
     kooha
-    pavucontrol
     helvum
     vlc
     system-config-printer # graphical ui for CUPS
     transmission_4-gtk
-    trash-cli
     yt-dlp
     media-downloader # for yt-dlp
-    unstable.cider
+    cider
     localsend
 
     ## Images
     krita
-    imagemagickBig
 
     ### PDF
     pdfslicer
     qpdf
-    paper-clip # for editing PDF metadata
 
     google-chrome
   ];

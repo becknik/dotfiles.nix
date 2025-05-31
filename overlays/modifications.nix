@@ -1,11 +1,14 @@
 { inputs, ... }:
 
 final: prev: {
-  oh-my-zsh-git = prev.pkgs.oh-my-zsh.overrideAttrs (with inputs; oldAttrs: {
-    name = "oh-my-zsh-git";
-    version = ohmyzsh.rev;
-    src = ohmyzsh;
-  });
+  oh-my-zsh-git = prev.pkgs.oh-my-zsh.overrideAttrs (
+    with inputs;
+    oldAttrs: {
+      name = "oh-my-zsh-git";
+      version = ohmyzsh.rev;
+      src = ohmyzsh;
+    }
+  );
 
   pure-prompt-patched = prev.pure-prompt.overrideAttrs (oldAttrs: {
     patches = [ ./modifications/pure-prompt.patch ];
@@ -34,49 +37,64 @@ final: prev: {
       substituteInPlace forgit.plugin.zsh \
         --replace "\$FORGIT_INSTALL_DIR/bin/git-forgit" "$out/bin/git-forgit"
     '';
-    installPhase = (builtins.replaceStrings [ "install -D completions/git-forgit.zsh $out/share/zsh/zsh-forgit/git-forgit.zsh\n" ] [ "" ] oldAttrs.installPhase);
+    installPhase = (
+      builtins.replaceStrings
+        [ "install -D completions/git-forgit.zsh $out/share/zsh/zsh-forgit/git-forgit.zsh\n" ]
+        [ "" ]
+        oldAttrs.installPhase
+    );
   });
 
 
   # Fixes
 
+  # FIXME remove when tests are working again
+  gxml = prev.gxml.overrideAttrs (oldAttrs: {
+    doCheck = false;
+  });
+
+
   # Own Packages
 
   ## Linux Kernel
 
-  linux_xanmod_latest_patched_dnix = prev.pkgs.linuxPackagesFor (
-    prev.pkgs.linux_xanmod_latest.override (old: with prev.lib; {
+  linux_xanmod_stable_patched_dnix = prev.pkgs.linuxPackagesFor (
+    prev.pkgs.linux_xanmod_stable.override (
+      old: with prev.lib; {
 
-      # TODO https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=linux-clear
-      kernelPatches = [ ];
+        # TODO https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=linux-clear
+        kernelPatches = [ ];
 
-      # Maybe interesting: https://discourse.nixos.org/t/overriding-nativebuildinputs-on-buildlinux/24934
-      structuredExtraConfig = with kernel; {
-        # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/kernel/xanmod-kernels.nix
-        # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/kernel/common-config.nix
-        DEBUG_KERNEL = mkDefault no;
-        NUMA = mkDefault no;
-        WINESYNC = no;
+        # Maybe interesting: https://discourse.nixos.org/t/overriding-nativebuildinputs-on-buildlinux/24934
+        structuredExtraConfig = with kernel; {
+          # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/kernel/xanmod-kernels.nix
+          # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/kernel/common-config.nix
+          DEBUG_KERNEL = mkDefault no;
+          NUMA = mkDefault no;
+          WINESYNC = no;
 
-        MRAPTORLAKE = yes;
-      };
-      # Disable errors in console compilation log
-      ignoreConfigErrors = true;
-    })
+          MRAPTORLAKE = yes;
+        };
+        # Disable errors in console compilation log
+        ignoreConfigErrors = true;
+      }
+    )
   );
 
   # https://wiki.archlinux.org/title/ASUS_Zenbook_UM3402YA
-  linux_xanmod_latest_patched_lnix = prev.pkgs.linuxPackagesFor (
-    prev.pkgs.linux_xanmod_latest.override (old: with prev.lib; {
-      kernelPatches = [ ];
-      structuredExtraConfig = with kernel; {
-        DEBUG_KERNEL = mkDefault no;
-        NUMA = mkDefault no;
-        WINESYNC = no;
+  linux_xanmod_stable_patched_lnix = prev.pkgs.linuxPackagesFor (
+    prev.pkgs.linux_xanmod_stable.override (
+      old: with prev.lib; {
+        kernelPatches = [ ];
+        structuredExtraConfig = with kernel; {
+          DEBUG_KERNEL = mkDefault no;
+          NUMA = mkDefault no;
+          WINESYNC = no;
 
-        MZEN3 = yes;
-      };
-      ignoreConfigErrors = true;
-    })
+          MZEN3 = yes;
+        };
+        ignoreConfigErrors = true;
+      }
+    )
   );
 }

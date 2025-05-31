@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  programs.vscode.userSettings = {
+  programs.vscode.profiles.default.userSettings = {
     locale = "en";
 
     # Main Settings
@@ -61,7 +61,10 @@
 
     editor = {
       wordWrap = "on";
-      rulers = [{ column = 80; } { column = 120; }];
+      rulers = [
+        { column = 80; }
+        { column = 120; }
+      ];
       autoClosingDelete = "always"; # delete adjacent braces or "
       stickyTabStops = true;
       tabSize = 2;

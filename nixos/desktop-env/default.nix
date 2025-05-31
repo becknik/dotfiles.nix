@@ -8,7 +8,7 @@
 
   xdg.portal = {
     #enable = true; # redundant due to gnome.core-os-services
-    extraPortals = with pkgs; [ xdg-desktop-portal-kde ]; # No specific reason to enable this
+    extraPortals = with pkgs; [ kdePackages.xdg-desktop-portal-kde ]; # No specific reason to enable this
     # ++ [ xdg-desktop-portal-gtk ] conflicts with xdg-desktop-portal-gtk of same version already being present on the system
   };
 

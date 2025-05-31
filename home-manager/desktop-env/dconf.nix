@@ -1,4 +1,10 @@
-{ userName, laptopMode, config, lib, ... }:
+{
+  userName,
+  isLaptop,
+  config,
+  lib,
+  ...
+}:
 
 let
   default-sidebar-width = 156;
@@ -16,7 +22,8 @@ let
     startup-mode = "cwd";
   };
 in
-with lib.gvariant; {
+with lib.gvariant;
+{
 
   dconf.settings = {
     "apps/seahorse/listing".keyrings-selected = [ "openssh:///home/${userName}/.ssh" ];
@@ -49,7 +56,8 @@ with lib.gvariant; {
       audio-profile = "flac";
     };
 
-    "org/gnome/Weather".locations = "[<(uint32 2, <('Stuttgart', 'EDDS', true, [(0.84968445169480855, 0.16086118520990819)], [(0.85113890437366546, 0.16027939715704839)])>)>]";
+    "org/gnome/Weather".locations =
+      "[<(uint32 2, <('Stuttgart', 'EDDS', true, [(0.84968445169480855, 0.16086118520990819)], [(0.85113890437366546, 0.16027939715704839)])>)>]";
 
     "org/gnome/desktop/a11y/applications" = {
       screen-keyboard-enabled = false;
@@ -63,8 +71,8 @@ with lib.gvariant; {
       clock-show-weekday = true;
       enable-animations = false;
       enable-hot-corners = true; # Can be useful when no keyboard is available
-      show-battery-percentage = laptopMode;
-      text-scaling-factor = (if laptopMode then 0.9 else 0.97);
+      show-battery-percentage = isLaptop;
+      text-scaling-factor = (if isLaptop then 0.9 else 0.97);
     };
 
     "org/gnome/desktop/peripherals/keyboard" = {
@@ -88,14 +96,29 @@ with lib.gvariant; {
     "org/gnome/desktop/screensaver".lock-delay = 30;
 
     "org/gnome/desktop/wm/keybindings" = {
-      close = [ "<Super>q" "<Alt>F4" ];
+      close = [
+        "<Super>q"
+        "<Alt>F4"
+      ];
 
-      cycle-group = [ "<Alt>Escape" "<Alt>grave" ];
-      cycle-group-backward = [ "<Shift><Alt>Escape" "<Shift><Alt>grave" ];
+      cycle-group = [
+        "<Alt>Escape"
+        "<Alt>grave"
+      ];
+      cycle-group-backward = [
+        "<Shift><Alt>Escape"
+        "<Shift><Alt>grave"
+      ];
       cycle-windows = [ "<Alt>Tab" ];
       cycle-windows-backward = [ "<Shift><Alt>Tab" ];
-      switch-group = [ "<Super>Escape" "<Super>grave" ];
-      switch-group-backward = [ "<Shift><Super>Escape" "<Shift><Super>grave" ];
+      switch-group = [
+        "<Super>Escape"
+        "<Super>grave"
+      ];
+      switch-group-backward = [
+        "<Shift><Super>Escape"
+        "<Shift><Super>grave"
+      ];
       switch-windows = [ ];
       switch-windows-backward = [ ];
       switch-applications = [ "<Super>Tab" ];
@@ -162,7 +185,11 @@ with lib.gvariant; {
       action-middle-click-titlebar = "minimize";
       button-layout = "appmenu:close";
       disable-workarounds = true;
-      workspace-names = [ "main" "messaging" "scnd" ];
+      workspace-names = [
+        "main"
+        "messaging"
+        "scnd"
+      ];
       resize-with-right-button = false;
       visual-bell = true;
     };
@@ -195,8 +222,11 @@ with lib.gvariant; {
       center-new-windows = true;
       dynamic-workspaces = false;
       edge-tiling = true;
-      experimental-features = [ "scale-monitor-framebuffer" "xwayland-native-scaling" ];
-      workspaces-only-on-primary = laptopMode;
+      experimental-features = [
+        "scale-monitor-framebuffer"
+        "xwayland-native-scaling"
+      ];
+      workspaces-only-on-primary = isLaptop;
     };
 
     "org/gnome/mutter/keybindings" = {
@@ -208,7 +238,10 @@ with lib.gvariant; {
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
       screensaver = [ "<Control><Super>q" ];
-      search = [ "<Super>slash" "<Super>space" ];
+      search = [
+        "<Super>slash"
+        "<Super>space"
+      ];
       terminal = [ "<Super>t" ];
       mic-mute = [ "<Super><Shift>m" ]; # when pressing <Super>m, the notification panel is toggled
       volume-mute = [ "<Super><Shift>s" ];
@@ -216,9 +249,9 @@ with lib.gvariant; {
 
     "org/gnome/settings-daemon/plugins/power" = {
       # Ambient light sensor
-      ambient-enabled = laptopMode;
-      idle-dim = laptopMode;
-      power-saver-profile-on-low-battery = laptopMode;
+      ambient-enabled = isLaptop;
+      idle-dim = isLaptop;
+      power-saver-profile-on-low-battery = isLaptop;
     };
 
     "org/gnome/shell" = {
@@ -413,7 +446,7 @@ with lib.gvariant; {
       notification-banner-position = 2;
       osd = true;
       osd-position = 0;
-      panel = !laptopMode;
+      panel = !isLaptop;
       panel-arrow = false;
       panel-button-padding-size = 0;
       panel-corner-size = 1;
@@ -525,9 +558,22 @@ with lib.gvariant; {
     # Set the EurKey keyboard layout as default (source: https://discourse.nixos.org/t/keyboard-layout-with-gnome/21996/9)
     "org/gnome/desktop/input-sources" = {
       show-all-sources = true;
-      sources = [ (mkTuple [ "xkb" "eu" ]) (mkTuple [ "ibus" "anthy" ]) ];
+      sources = [
+        (mkTuple [
+          "xkb"
+          "eu"
+        ])
+        (mkTuple [
+          "ibus"
+          "anthy"
+        ])
+      ];
       xkb-options = [ "terminate:ctrl_alt_bksp" ];
-      input-sources = [ "terminate:ctrl_alt_bksp" "compose:rwin" "lv3:ralt_switch" ];
+      input-sources = [
+        "terminate:ctrl_alt_bksp"
+        "compose:rwin"
+        "lv3:ralt_switch"
+      ];
     };
   };
 }

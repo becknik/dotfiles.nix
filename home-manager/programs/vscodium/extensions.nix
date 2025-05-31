@@ -1,12 +1,13 @@
 { pkgs, ... }:
 
 {
-  # Soruces:
+  # Sources:
   # https://raw.githubusercontent.com/nix-community/nix-vscode-extensions/refs/heads/master/data/cache/open-vsx-latest.json
   # https://raw.githubusercontent.com/nix-community/nix-vscode-extensions/refs/heads/master/data/cache/vscode-marketplace-latest.json
 
-  programs.vscode.extensions =
-    with pkgs.open-vsx; [
+  programs.vscode.profiles.default.extensions =
+    with pkgs.open-vsx;
+    [
       ## Remote
       # jeanp413.open-remote-ssh
 
@@ -85,14 +86,16 @@
 
       ### Cpp
       llvm-vs-code-extensions.vscode-clangd
-      vadimcn.vscode-lldb
+      # vadimcn.vscode-lldb # FIXME broke on update to 25.05
       #ms-vscode.cpptools
       #twxs.cmake #?
 
-    ] ++ (with pkgs.open-vsx-release; [
+    ]
+    ++ (with pkgs.open-vsx-release; [
       ### Rust
       rust-lang.rust-analyzer
-    ]) ++ (with pkgs.vscode-marketplace; [
+    ])
+    ++ (with pkgs.vscode-marketplace; [
       # extensions listed here are either not present on open-vsx, or outdated
       ms-vscode-remote.remote-ssh
       ms-vscode.remote-server # TODO is this working with Codium?
@@ -121,7 +124,7 @@
 
       ### Scripting
       mads-hartmann.bash-ide-vscode
-      ms-python.vscode-pylance #ms-pyright.pyright is included in pylance
+      ms-python.vscode-pylance # ms-pyright.pyright is included in pylance
       ms-python.python # seems to lag behind ~1w, but who knows...
       ms-toolsai.jupyter-keymap
       ms-toolsai.vscode-jupyter-slideshow
@@ -135,15 +138,18 @@
 
       ### Cpp
       ms-vscode.cmake-tools
-    ]) ++ (with pkgs.vscode-marketplace-release; [
+    ])
+    ++ (with pkgs.vscode-marketplace-release; [
       # prevents preview builds to be picket which aren't compatible with the current vscode version
       github.copilot
       github.vscode-pull-request-github # this is way to outdated on nixpkgs; hence having to check every flake update manually?? :(
 
-    ]) ++ (with pkgs.unstable.vscode-extensions; [
+    ])
+    ++ (with pkgs.unstable.vscode-extensions; [
       # fallback to nixpkgs, since not working with the upper...
       ms-vsliveshare.vsliveshare
-    ]) ++ (with pkgs.vscode-extensions; [
+    ])
+    ++ (with pkgs.vscode-extensions; [
       # fuck the package incompatibility...
       github.copilot-chat
       ms-toolsai.jupyter

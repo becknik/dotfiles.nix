@@ -61,7 +61,7 @@
 
       pull.rebase = true;
       push = {
-        dafault = "current";
+        default = "current";
         autoSetupRemote = true;
         followtags = true; # push tags with commits
       };

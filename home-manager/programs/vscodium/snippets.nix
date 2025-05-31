@@ -8,70 +8,155 @@
 
   # Reference:
   # https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax
-  programs.vscode.languageSnippets =
+  programs.vscode.profiles.default.languageSnippets =
     let
       debugEmojis = {
-        debug = { emoji = "🔍"; log = [ "log" "info" ]; };
-        bug = { emoji = "🐞"; log = [ "log" ]; };
-        worm = { emoji = "🐛"; log = [ "log" ]; };
-        slow = { emoji = "🐢"; log = [ "log" ]; };
-        fast = { emoji = "⚡"; log = [ "log" ]; };
+        debug = {
+          emoji = "🔍";
+          log = [
+            "log"
+            "info"
+          ];
+        };
+        bug = {
+          emoji = "🐞";
+          log = [ "log" ];
+        };
+        worm = {
+          emoji = "🐛";
+          log = [ "log" ];
+        };
+        slow = {
+          emoji = "🐢";
+          log = [ "log" ];
+        };
+        fast = {
+          emoji = "⚡";
+          log = [ "log" ];
+        };
 
-        "oh god" = { emoji = "🤦"; log = [ "log" ]; };
-        "why" = { emoji = "🤷"; log = [ "log" ]; };
-        "stop it" = { emoji = "🙅"; log = [ "log" ]; };
-        alien = { emoji = "👾️"; log = [ "log" ]; };
-        popcorn = { emoji = "🍿"; log = [ "log" ]; };
-        robot = { emoji = "🤖"; log = [ "log" ]; };
-        "brain.exe" = { emoji = "🧠"; log = [ "log" ]; };
-        monkey = { emoji = "🐒"; log = [ "log" ]; };
+        "oh god" = {
+          emoji = "🤦";
+          log = [ "log" ];
+        };
+        "why" = {
+          emoji = "🤷";
+          log = [ "log" ];
+        };
+        "stop it" = {
+          emoji = "🙅";
+          log = [ "log" ];
+        };
+        alien = {
+          emoji = "👾️";
+          log = [ "log" ];
+        };
+        popcorn = {
+          emoji = "🍿";
+          log = [ "log" ];
+        };
+        robot = {
+          emoji = "🤖";
+          log = [ "log" ];
+        };
+        "brain.exe" = {
+          emoji = "🧠";
+          log = [ "log" ];
+        };
+        monkey = {
+          emoji = "🐒";
+          log = [ "log" ];
+        };
 
-        input = { emoji = "🎛️"; log = [ "log" "info" ]; };
-        init = { emoji = "🚀"; log = [ "log" "info" ]; };
+        input = {
+          emoji = "🎛️";
+          log = [
+            "log"
+            "info"
+          ];
+        };
+        init = {
+          emoji = "🚀";
+          log = [
+            "log"
+            "info"
+          ];
+        };
 
-        success = { emoji = "✅"; log = [ "info" ]; };
-        info = { emoji = "ℹ️"; log = [ "info" ]; };
-        config = { emoji = "⚙️"; log = [ "info" ]; };
+        success = {
+          emoji = "✅";
+          log = [ "info" ];
+        };
+        info = {
+          emoji = "ℹ️";
+          log = [ "info" ];
+        };
+        config = {
+          emoji = "⚙️";
+          log = [ "info" ];
+        };
 
-        warning = { emoji = "⚠️"; log = [ "log" "warn" ]; };
-        caution = { emoji = "🔶"; log = [ "warn" ]; };
+        warning = {
+          emoji = "⚠️";
+          log = [
+            "log"
+            "warn"
+          ];
+        };
+        caution = {
+          emoji = "🔶";
+          log = [ "warn" ];
+        };
 
-        error = { emoji = "❌"; log = [ "error" ]; };
-        explosion = { emoji = "💥"; log = [ "error" "log" ]; };
-        alarm = { emoji = "🚨"; log = [ "error" "log" ]; };
+        error = {
+          emoji = "❌";
+          log = [ "error" ];
+        };
+        explosion = {
+          emoji = "💥";
+          log = [
+            "error"
+            "log"
+          ];
+        };
+        alarm = {
+          emoji = "🚨";
+          log = [
+            "error"
+            "log"
+          ];
+        };
       };
       debugEmojiList = lib.attrsets.mapAttrsToList (name: value: { name = name; } // value) debugEmojis;
-      debugEmojiListLog = builtins.foldl'
-        (acc1: emoji: acc1 ++ (
-          builtins.foldl'
-            (acc2: logl: acc2 ++ [{
+      debugEmojiListLog = builtins.foldl' (
+        acc1: emoji:
+        acc1
+        ++ (builtins.foldl' (
+          acc2: logl:
+          acc2
+          ++ [
+            {
               name = logl;
               value = {
                 name = emoji.name;
                 emoji = emoji.emoji;
               };
-            }]) [ ]
-            emoji.log
-        )) [ ]
-        debugEmojiList;
+            }
+          ]
+        ) [ ] emoji.log)
+      ) [ ] debugEmojiList;
 
-      debugEmojiGroupedByLog = builtins.foldl'
-        (
-          acc: e:
-            if (builtins.hasAttr e.name acc) then
-              acc // { "${e.name}" = (builtins.getAttr e.name acc) ++ [ e.value ]; }
-            else acc // { "${e.name}" = [ e.value ]; }
-        )
-        { }
-        debugEmojiListLog;
+      debugEmojiGroupedByLog = builtins.foldl' (
+        acc: e:
+        if (builtins.hasAttr e.name acc) then
+          acc // { "${e.name}" = (builtins.getAttr e.name acc) ++ [ e.value ]; }
+        else
+          acc // { "${e.name}" = [ e.value ]; }
+      ) { } debugEmojiListLog;
 
-      debugEmojiStringsByLog = builtins.mapAttrs
-        (name: emojis: (
-          builtins.foldl'
-            (acc: emoji: acc + ",${emoji.emoji} ${emoji.name} ") " "
-            emojis
-        ))
-        debugEmojiGroupedByLog;
+      debugEmojiStringsByLog = builtins.mapAttrs (
+        name: emojis: (builtins.foldl' (acc: emoji: acc + ",${emoji.emoji} ${emoji.name} ") " " emojis)
+      ) debugEmojiGroupedByLog;
 
       jsArrayFunctions = "map,filter,some,every,reduce,forEach,find,findIndex,sort";
       js = {
@@ -279,7 +364,9 @@
         };
         "React useState nullable" = {
           prefix = "ustn";
-          body = [ "const [$1, set\${1/(.*)/\${1:/capitalize}/}] = useState<\${2:unknown} | null>(\${3:null});" ];
+          body = [
+            "const [$1, set\${1/(.*)/\${1:/capitalize}/}] = useState<\${2:unknown} | null>(\${3:null});"
+          ];
         };
         "React useRef" = {
           prefix = "ure";

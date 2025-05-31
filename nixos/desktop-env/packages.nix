@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   # Chromium (configuration policies only)
@@ -16,36 +21,41 @@
       "BuiltInDnsClientEnabled" = false;
       "MetricsReportingEnabled" = true;
       "SpellcheckEnabled" = true;
-      "SpellcheckLanguage" = [ "de" "en-US" ];
+      "SpellcheckLanguage" = [
+        "de"
+        "en-US"
+      ];
       "CloudPrintSubmitEnabled" = false;
     };
   };
 
-  environment.variables.EDITOR = "nvim";
-
-  # Manual Installation
-  environment.systemPackages = with pkgs; [
-    libnotify # For the noixos-upgrade systemd notifier units
-  ];
-
-  # "Bloat" Removal
-  services.xserver.excludePackages = with pkgs; [ xterm ]; # I hate multiple terminals on the system...
+  # Remove Bloat
+  services.xserver.excludePackages = with pkgs; [ xterm ];
 
   # Fonts
   fonts = {
     packages = with pkgs; [
       ipaexfont
-      monoid
       joypixels
-      (nerdfonts.override { fonts = [ "FiraCode" "Hack" "SourceCodePro" ]; })
+      nerd-fonts.fira-code
+      nerd-fonts.sauce-code-pro
       fira-code # paTchINg DesTRoYs fONtS
     ];
     fontconfig = {
       subpixel.rgba = "rgb";
       defaultFonts = {
-        serif = [ "DejaVu Serif" "IPAexGothic" ]; # this is used as fallback for apps like gedit
-        sansSerif = [ "DejaVu Sans" "IPAexGothic" ];
-        monospace = [ "FiraCode Nerd Font" /* "Source Code Pro" */ "IPAexGothic" ];
+        serif = [
+          "DejaVu Serif"
+          "IPAexGothic"
+        ]; # this is used as fallback for apps like gedit
+        sansSerif = [
+          "DejaVu Sans"
+          "IPAexGothic"
+        ];
+        monospace = [
+          "FiraCode Nerd Font" # "Source Code Pro"
+          "IPAexGothic"
+        ];
         emoji = [ "JoyPixels" ];
       };
     };

@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   imports = [
@@ -16,10 +21,9 @@
 
   boot = {
     tmp.tmpfsSize = "80%";
-    # kernelPackages = pkgs.linux_xanmod_latest_patched_lnix;
+    # kernelPackages = pkgs.linux_xanmod_stable_patched_lnix;
     kernelPackages = pkgs.linuxPackages_zen;
   };
-
 
   networking = {
     hostName = "lnix";
@@ -37,7 +41,6 @@
 
   systemd.network.wait-online.anyInterface = false; # whether to consider the network online when any interface is online
   # Lets the nixos-fetch-flake.service fail
-
 
   # Power Management
   powerManagement = {
@@ -68,7 +71,10 @@
   services.keyd = {
     enable = true;
     keyboards."laptop-keyboard" = {
-      ids = [ "k:04F3:31B9" "0001:0001" ]; # 0001:0001 AT Translated Set 2 keyboard (/dev/input/event0)
+      ids = [
+        "k:04F3:31B9"
+        "0001:0001"
+      ]; # 0001:0001 AT Translated Set 2 keyboard (/dev/input/event0)
       # I'm guessing that the 0001:0001 id is necessary due to fcitx5?
       settings = {
         main = {

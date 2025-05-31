@@ -7,7 +7,7 @@ TypeScript/ React (subsets for TypeScript without React/ JS):
 
 ```nix
 let
-  snippets = outputs.nixosConfigurations.dnix.config.home-manager.users.jnnk.programs.vscode.languageSnippets.typescriptreact;
+  snippets = outputs.nixosConfigurations.dnix.config.home-manager.users.jnnk.programs.vscode.profiles.default.languageSnippets.typescriptreact;
 in
 builtins.listToAttrs (
   map (snippetName: {

@@ -1,4 +1,10 @@
-{ pkgs, mkFlakeDir, userName, config, ... }:
+{
+  pkgs,
+  mkFlakeDir,
+  userName,
+  config,
+  ...
+}:
 
 {
   programs.git = {
@@ -14,10 +20,10 @@
   };
 
   environment.systemPackages = with pkgs; [
-    nixvim
     efibootmgr
-    usbutils
     cryptsetup
     openvpn
+    nixvim
   ];
+  environment.variables.EDITOR = "nvim";
 }
