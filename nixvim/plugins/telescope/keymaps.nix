@@ -46,6 +46,10 @@
     };
     "<leader>fl" = {
       action = "current_buffer_fuzzy_find";
+      mode = mapToModeAbbr [
+        "normal"
+        "visual_select"
+      ];
       options.desc = "Search Locally";
     };
     "<leader>f." = {
