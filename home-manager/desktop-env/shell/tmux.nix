@@ -78,7 +78,12 @@
 
         bind -N "last-session (via sesh) " L run-shell "${lib.getExe pkgs.sesh} last"
       ''
-      "set-option -g default-terminal \"screen-256color\""
+      "set-option -g default-terminal \"tmux-256color\""
+      # Undercurl & undercurl color support
+      ''
+        set -as terminal-overrides ',*:Smulx=\E[4::%p1%dm' # undercurl support
+        set -as terminal-overrides ',*:Setulc=\E[58::2::%p1%{65536}%/%d::%p1%{256}%/%{255}%&%d::%p1%{255}%&%d%;m' # underscore colours - needs tmux-3.0
+      ''
     ];
     plugins = with pkgs.tmuxPlugins; [
       yank
