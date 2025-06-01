@@ -32,7 +32,12 @@
           opts.completion_provider = "cmp";
 
           keymaps = { };
-          slash_commands.__raw = ''{["buffer"] = { keymaps = { modes = { i = "<C-b>" } } } }'';
+          slash_commands.__raw = ''
+            {
+              ["buffer"] = { keymaps = { modes = { i = "<C-b>" } } },
+              ["file"] = { keymaps = { modes = { i = "<C-f>" } } }
+            }
+          '';
         };
 
         inline.adapter = {
@@ -59,7 +64,7 @@
 
   keymaps = withDefaultKeymapOptions [
     {
-      key = "<C-a>";
+      key = "<C-g>";
       action = "CodeCompanionActions";
       mode = mapToModeAbbr [
         "normal"
