@@ -12,7 +12,7 @@ vim.fn.sign_define("DiagSummaryTop", { text = "▲", texthl = "DiagnosticSignHin
 
 local function update_diag_summary()
 	local bufnr = vim.api.nvim_get_current_buf()
-	if vim.api.nvim_buf_get_option(bufnr, "buftype") ~= "" or vim.fn.bufname(bufnr) == "" then
+	if vim.bo.buftype ~= "" or vim.fn.bufname(bufnr) == "" then
 		vim.fn.sign_unplace("DiagSummaryGroup", { buffer = bufnr })
 		return
 	end
