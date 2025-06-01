@@ -1,4 +1,4 @@
-{ helpers, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -8,6 +8,9 @@
 
   plugins.telescope = {
     enable = true;
+    package = pkgs.vimPlugins.telescope-nvim.overrideAttrs (oldAttrs: {
+      patches = [ ./telescope-fname.patch ];
+    });
 
     settings = {
       defaults = {

@@ -1,0 +1,19 @@
+diff --git a/lua/telescope/actions/utils.lua b/lua/telescope/actions/utils.lua
+index 81bd870..af102a6 100644
+--- a/lua/telescope/actions/utils.lua
++++ b/lua/telescope/actions/utils.lua
+@@ -121,10 +121,14 @@ function utils._get_anon_function_name(info)
+       fname = line
+       break
+     end
+   end
+ 
++  if not fname then
++    return "<anonymous>"
++  end
++
+   -- test if assignment or named function, otherwise anon
+   if (fname:match "=" == nil) and (fname:match "function %S+%(" == nil) then
+     return "<anonymous>"
+   else
+     local patterns = {

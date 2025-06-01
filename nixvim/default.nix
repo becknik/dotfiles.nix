@@ -51,8 +51,7 @@
     performance = {
       byteCompileLua = {
         enable = true;
-        # :Telescope keymaps doesn't work anymore when setting either to true
-        initLua = false;
+        initLua = true;
         plugins = false;
       };
     };
