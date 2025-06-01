@@ -71,52 +71,85 @@
       ]; # completion window; "preview" "popup"
     };
 
-    keymaps = withDefaultKeymapOptions [
-      {
-        key = "<C-w>+";
-        action = "horizontal resize +5";
-        options.cmd = true;
-        options.desc = "vertical resize +5";
-        mode = mapToModeAbbr [
-          "normal"
-          "insert"
-          "operator_pending"
-        ];
-      }
-      {
-        key = "<C-w>-";
-        action = "horizontal resize -5";
-        options.cmd = true;
-        options.desc = "vertical resize -5";
-        mode = mapToModeAbbr [
-          "normal"
-          "insert"
-          "operator_pending"
-        ];
-      }
+    keymaps =
+      let
+        defaultMultiplier = 5;
+        m = builtins.toString defaultMultiplier;
+      in
+      withDefaultKeymapOptions [
+        {
+          key = "<C-w>=";
+          action = "horizontal resize +${m}";
+          options.cmd = true;
+          options.desc = "resize horizontal +${m}";
+          mode = mapToModeAbbr [ "insert" ];
+        }
+        {
+          key = "<C-w>-";
+          action = "horizontal resize -${m}";
+          options.cmd = true;
+          options.desc = "resize horizontal -${m}";
+          mode = mapToModeAbbr [ "insert" ];
+        }
+        {
+          key = "<C-w>>";
+          action = "vertical resize +${m}";
+          options.cmd = true;
+          options.desc = "resize vertical +${m}";
+          mode = mapToModeAbbr [ "insert" ];
+        }
+        {
+          key = "<C-w><";
+          action = "vertical resize -${m}";
+          options.cmd = true;
+          options.desc = "resize vertical -${m}";
+          mode = mapToModeAbbr [ "insert" ];
+        }
 
-      {
-        key = "<C-w>>";
-        action = "vertical resize +5";
-        options.cmd = true;
-        options.desc = "horizontal resize +5";
-        mode = mapToModeAbbr [
-          "normal"
-          "insert"
-          "operator_pending"
-        ];
-      }
-      {
-        key = "<C-w><";
-        action = "vertical resize -5";
-        options.cmd = true;
-        options.desc = "horizontal resize -5";
-        mode = mapToModeAbbr [
-          "normal"
-          "insert"
-          "operator_pending"
-        ];
-      }
-    ];
+        {
+          key = "<C-w>=";
+          action.__raw = ''
+            function()
+              local delta = vim.v.count1 * ${m}
+              vim.cmd(("horizontal resize +%d"):format(delta))
+            end
+          '';
+          options.desc = "resize horizontal +${m}";
+          mode = mapToModeAbbr [ "normal" ];
+        }
+        {
+          key = "<C-w>-";
+          action.__raw = ''
+            function()
+              local delta = vim.v.count1 * ${m}
+              vim.cmd(("horizontal resize -%d"):format(delta))
+            end
+          '';
+          options.desc = "resize horizontal -${m}";
+          mode = mapToModeAbbr [ "insert" ];
+        }
+        {
+          key = "<C-w>>";
+          action.__raw = ''
+            function()
+              local delta = vim.v.count1 * ${m}
+              vim.cmd(("vertical resize +%d"):format(delta))
+            end
+          '';
+          options.desc = "resize vertical +${m}";
+          mode = mapToModeAbbr [ "insert" ];
+        }
+        {
+          key = "<C-w><";
+          action.__raw = ''
+            function()
+              local delta = vim.v.count1 * ${m}
+              vim.cmd(("vertical resize -%d"):format(delta))
+            end
+          '';
+          options.desc = "resize vertical -${m}";
+          mode = mapToModeAbbr [ "insert" ];
+        }
+      ];
   };
 }
