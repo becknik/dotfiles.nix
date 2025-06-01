@@ -14,7 +14,11 @@
     clipboard.providers.wl-copy.enable = true;
 
     # colorschemes.kanagawa.enable = true;
-    colorschemes.rose-pine.enable = true;
+    colorschemes.rose-pine.enable = false;
+    colorschemes.oxocarbon.enable = true;
+    colorschemes.github-theme.enable = false;
+    # https://github.com/nyoom-engineering/nyoom.nvim
+    # https://github.com/mcchrish/vim-no-color-collections
 
     env = { };
     files = { };
