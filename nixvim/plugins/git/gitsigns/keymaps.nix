@@ -15,7 +15,6 @@
 
       { "<leader>tb", icon = " 󰘤  " },
       { "<leader>tx", icon = " 󰦨 " },
-      { "<leader>tw", icon = " 󰦨  " },
       { "<leader>th", icon = " 󰘤  " },
     }
   '';
@@ -109,12 +108,6 @@
       action = "Gitsigns toggle_deleted";
       options.cmd = true;
       options.desc = "Toggle visibility of deleted lines";
-    }
-    {
-      key = "<leader>tw";
-      action = "Gitsigns toggle_word_diff";
-      options.cmd = true;
-      options.desc = "Toggle Hunk Word diff";
     }
     {
       key = "<leader>th";
