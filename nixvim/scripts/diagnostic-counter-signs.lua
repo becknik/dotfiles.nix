@@ -24,7 +24,7 @@ local function update_diag_summary()
 	diag_cursor_line_cache[bufnr] = cursor_line_current
 
 	local winid = vim.api.nvim_get_current_win()
-	local context_ranges, _ = treesitter_context_ctx.get(bufnr, winid)
+	local context_ranges, _ = treesitter_context_ctx.get(winid)
 
 	local diags = vim.diagnostic.get(bufnr)
 

@@ -3,6 +3,6 @@
 {
   imports = [
     ./copilot.nix
-    ./avante.nix
+    ./code-companion.nix
   ];
 }
