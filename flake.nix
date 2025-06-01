@@ -427,7 +427,7 @@
                 languages.nix.enable = true;
 
                 pre-commit.hooks = {
-                  nixpkgs-fmt.enable = true;
+                  nixfmt-rfc-style.enable = true;
                 };
 
                 scripts.update-fetchgit.exec = builtins.readFile ./update-fetchgit.sh;

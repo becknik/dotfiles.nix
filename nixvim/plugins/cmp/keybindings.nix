@@ -2,7 +2,6 @@
   plugins.cmp.luaConfig.post = ''
     local handlers = require('nvim-autopairs.completion.handlers')
     local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-    local cmp = require('cmp')
 
     cmp.event:on(
       'confirm_done',
@@ -35,11 +34,32 @@
     "<esc>" = # lua
       ''
         function(fallback)
-          if cmp.visible() and require("copilot.suggestion").is_visible() then
-            cmp.close()
+          if cmp.visible() then
+            cmp.abort() -- doesn't apply current selection
+          elseif require("copilot.suggestion").is_visible() and require("luasnip").locally_jumpable(1) then
+            -- copilot suggestion is more important in most cases?
+            require("luasnip").unlink_current()
+          elseif require("copilot.suggestion").is_visible() then
+            require("copilot.suggestion").dismiss()
+            fallback()
           else
             fallback()
           end
+        end
+      '';
+    "<C-e>" = # lua
+      ''
+        function(fallback)
+          if require("copilot.suggestion").is_visible() and require("luasnip").locally_jumpable(1) then
+            require("copilot.suggestion").dismiss()
+            return
+          end
+
+          if cmp.visible() then
+            cmp.abort()
+          end
+          -- switch to normal mode
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
         end
       '';
 
@@ -61,14 +81,11 @@
       ''
         cmp.mapping(function(fallback)
           if cmp.visible() then
-            cmp.select_next_item()
+            cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
+          elseif require'copilot.suggestion'.is_visible() then
+            require("copilot.suggestion").accept()
           elseif require("luasnip").locally_jumpable(1) then
-            -- TODO
-            if require'copilot.suggestion'.is_visible() then
-              require'copilot.suggestion'.accept()
-            else
-              require("luasnip").jump(1)
-            end
+            require("luasnip").jump(1)
           else
             fallback()
           end
@@ -78,7 +95,7 @@
       ''
         cmp.mapping(function(fallback)
           if cmp.visible() then
-            cmp.select_prev_item()
+            cmp.select_prev_item { behavior = cmp.SelectBehavior.Select }
           elseif require("luasnip").locally_jumpable(-1) then
             require("luasnip").jump(-1)
           else
@@ -111,30 +128,31 @@
           if cmp.visible() then
             local entry = cmp.get_selected_entry()
             local kind  = entry and entry:get_completion_item().kind
+            local is_function_like = kind == cmp.lsp.CompletionItemKind.Function or
+              kind == cmp.lsp.CompletionItemKind.Method or
+              kind == cmp.lsp.CompletionItemKind.Constructor
 
-            cmp.confirm({
-              behavior = cmp.ConfirmBehavior.Insert,
-              select = true,
-              commit_character = false,
-            })
-
-            vim.schedule(function()
-              local action
-              -- https://github.com/prabirshrestha/vim-lsp/blob/master/autoload/lsp/omni.vim#L6
-              if kind == 2 or kind == 3 or kind == 4 then
-                action = "<Right>."
-              else
-                action = "."
-              end
-              vim.api.nvim_feedkeys(
-                vim.api.nvim_replace_termcodes(action, true, false, true),
-                "n",
-                true
-                )
-            end)
-          else
-            fallback()
+            if is_function_like then
+              cmp.confirm({
+                behavior = cmp.ConfirmBehavior.Insert,
+                select = true,
+                commit_character = false,
+              })
+              vim.schedule(function()
+                -- https://github.com/prabirshrestha/vim-lsp/blob/master/autoload/lsp/omni.vim#L6
+                if is_function_like then
+                  local action = "<Right>."
+                  vim.api.nvim_feedkeys(
+                    vim.api.nvim_replace_termcodes(action, true, false, true),
+                    "n",
+                    true
+                  )
+                end
+              end)
+              return
+            end
           end
+          fallback()
         end, { "i", "s" })
       '';
 

@@ -1,13 +1,30 @@
-{ withDefaultKeymapOptions, mapToModeAbbr, ... }:
+{
+  pkgs,
+  withDefaultKeymapOptions,
+  mapToModeAbbr,
+  ...
+}:
 
 {
   plugins.copilot-lua = {
     enable = true;
+    package = pkgs.vimPlugins.copilot-lua.overrideAttrs (oldAttrs: {
+      patches = [ ./copilot-lua.patch ];
+    });
 
-    settings.server_opts_overrides = {
-      settings.advanced = {
-        listCount = 10;
-        inlineSuggestCount = 3;
+    settings = {
+      suggestions = {
+        auto_trigger = true;
+        debounce = 50;
+        hide_during_completion = false; # ignores cmp anyways... TODO render space between before and let cmp have priority
+      };
+      filetypes.gitcommit = true;
+
+      server_opts_overrides = {
+        settings.advanced = {
+          listCount = 10;
+          inlineSuggestCount = 3;
+        };
       };
     };
   };
@@ -17,6 +34,35 @@
       { "<C-c>", desc = "Copilot", mode = { "n", "i" } },
     }
   '';
+
+  autoCmd = [
+    {
+      event = "BufNew";
+      callback.__raw = ''
+        function(args)
+          local buf = args.buf
+          local ft_disabled, ft_disabled_reason = require("copilot.client.filetypes").is_ft_disabled(vim.bo.filetype, require("copilot.config").filetypes)
+
+          if vim.fn.getbufvar(buf, "&filetype") ~= "NeogitStatus" then
+            vim.api.nvim_buf_set_var(buf,
+              "copilot_suggestion_auto_trigger",
+              true
+            )
+            return
+          end
+
+          if vim.fn.getbufvar(buf, "&buftype") ~= "" then return
+          elseif vim.fn.getbufvar(buf, "&modifiable") ~= 1 then return
+          elseif vim.api.nvim_buf_get_name(buf) == "" then return end
+
+          vim.api.nvim_buf_set_var(buf,
+            "copilot_suggestion_auto_trigger",
+            true
+          )
+        end
+      '';
+    }
+  ];
 
   keymaps = withDefaultKeymapOptions [
     {
@@ -122,21 +168,6 @@
         "insert"
         "normal"
       ];
-      options.desc = "Copilot Accept";
-    }
-    {
-      key = "<tab>";
-      action.__raw = ''
-        function()
-          if require'copilot.suggestion'.is_visible() then
-            require'copilot.suggestion'.accept()
-            return ""
-          else
-            return vim.api.nvim_replace_termcodes('<Tab>', true, false, true)
-          end
-        end'';
-      options.expr = true;
-      mode = mapToModeAbbr [ "insert" ];
       options.desc = "Copilot Accept";
     }
     {

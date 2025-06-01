@@ -1,6 +1,30 @@
 { ... }:
 
 {
+  extraConfigLuaPre = ''
+    function should_write(bufnr)
+      -- if not vim.api.nvim_buf_is_loaded(bufnr) then
+      --   return false
+      -- end
+
+      local buf_name = vim.api.nvim_buf_get_name(bufnr)
+      if buf_name == "" then return false end
+
+      -- only save true file-based buffers
+      if vim.fn.getbufvar(bufnr, "&buftype") ~= "" then
+        return false
+      elseif vim.fn.getbufvar(bufnr, "&modifiable") ~= 1 then
+        return false
+      end
+
+      local utils = require("auto-save.utils.data")
+      local shouldBeIncluded = utils.not_in(vim.fn.getbufvar(bufnr, "&filetype"), {
+        "oil"
+      })
+      return shouldBeIncluded
+    end
+  '';
+
   # https://github.com/okuuva/auto-save.nvim/
   plugins.auto-save = {
     enable = true;
@@ -12,32 +36,7 @@
     ];
     settings.trigger_events.defer_save = [
     ];
-    settings.condition = # lua
-      ''
-        function(buf)
-          if not vim.api.nvim_buf_is_loaded(buf) then
-            return false
-          end
-
-          local buf_name = vim.api.nvim_buf_get_name(buf)
-          if buf_name == "" then return false end
-
-          local fn = vim.fn
-          local utils = require("auto-save.utils.data")
-
-          -- only save true file-based buffers
-          if fn.getbufvar(buf, "&buftype") ~= "" then
-            return false
-          elseif fn.getbufvar(buf, "&modifiable") ~= 1 then
-            return false
-          end
-
-          local shouldBeIncluded = utils.not_in(fn.getbufvar(buf, "&filetype"), {
-            "oil"
-          })
-          return shouldBeIncluded
-        end
-      '';
+    settings.condition = ''function(bufnr) return should_write(bufnr) end'';
   };
 
 }
