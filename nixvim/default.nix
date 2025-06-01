@@ -19,6 +19,14 @@
     colorschemes.github-theme.enable = false;
     # https://github.com/nyoom-engineering/nyoom.nvim
     # https://github.com/mcchrish/vim-no-color-collections
+    extraConfigLua = ''
+      for i, kind in ipairs(vim.lsp.protocol.CompletionItemKind) do
+        local group = string.format("CmpItemKind%s", kind)
+        local bg = vim.api.nvim_get_hl(0, { name = group })["bg"]
+        bg = bg and string.format("#%06X", bg) or "NONE"
+        vim.api.nvim_set_hl(0, group, { fg = bg })
+      end
+    '';
 
     env = { };
     files = { };

@@ -1,9 +1,9 @@
--- sources:
---  https://github.com/fenuks/dotfiles/blob/9306cf7c7d7b79c93881da87daf61f314a9d96b4/.config/nvim/lua/init.lua#L256
+-- Sources:
+-- https://github.com/fenuks/dotfiles/blob/9306cf7c7d7b79c93881da87daf61f314a9d96b4/.config/nvim/lua/init.lua#L256
 -- https://github.com/nvimdev/lspsaga.nvim/blob/a4d442896a9ff1f83ee3db965d81b659ebc977d5/lua/lspsaga/lspkind.lua#L29
 -- TODO look at https://github.com/onsails/lspkind.nvim/issues/12 for more symbols
 
-local symbols = {
+local lsp_kind_symbols = {
   Array = '󰅨 ',
   -- Array = '',
   -- Array = '[]',
@@ -106,11 +106,6 @@ local symbols = {
 }
 -- ⊕ † ፨ ᯾ ⁂ ∎ ∹ ☖ ⚐ 🕮 🗈 🗉 🗈 🗉 ⬠  ⬡  ⮺  ⮻ ⯐  ⯒ ⟡ ✐  ✎ ꒾꙳ ꥟ ⤙ ⤚ ⤛ ⤜ 𐄂 𐄔 𐄘  𐄜 𐄝 𐄷 𐄕 𐄗  𐄎 𐅽  𐅼 𐆓 𐊌  𐊾 𐦖 𑁍
 -- 🗩 🗛 🗗  🗁  🗀  🕸 ✗○◐●✓
-
-local kinds = vim.lsp.protocol.CompletionItemKind
-for i, kind in ipairs(kinds) do
-  kinds[i] = symbols[kind] or kind
-end
 
 -- source: https://github.com/neovim/nvim-lspconfig/wiki/UI-customization#completion-kinds
 local signs = { Error = "󰅚 ", Warn = "󰀪 ", Hint = "󰌶 ", Info = " " }

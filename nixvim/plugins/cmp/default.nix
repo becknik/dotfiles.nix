@@ -28,12 +28,7 @@
           format = # lua
             ''
               function(entry, vim_item)
-                if symbols[vim_item.kind] == nill then
-                  vim_item.kind = vim_item.kind
-                else
-                  vim_item.kind = symbols[vim_item.kind]
-                  -- vim_item.kind = string.format('%s %s', symbols[vim_item.kind], vim_item.kind)
-                end
+                vim_item.kind = lsp_kind_symbols[vim_item.kind]
                 vim_item.menu = ({
                   buffer = "[ ]", -- also change in bufferline.nix 
                   nvim_lsp = "[ ]",
@@ -187,7 +182,7 @@
 
       filetype =
         let
-          dap = [{ name = "dap"; }];
+          dap = [ { name = "dap"; } ];
         in
         {
           # this might not be enough to enable the dap-cmp: https://github.com/rcarriga/cmp-dap
