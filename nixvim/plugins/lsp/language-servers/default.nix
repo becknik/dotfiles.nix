@@ -1,6 +1,10 @@
 { pkgs, ... }:
 
 {
+  imports = [
+    ./lua_ls.nix
+  ];
+
   plugins.lsp.servers = {
     typos_lsp.enable = true; # Source code spell checker for Visual Studio Code
 
@@ -28,7 +32,6 @@
 
     # General Scripting Stuff
 
-    lua_ls.enable = true;
     pyright.enable = true;
     pyright.package = pkgs.basedpyright;
 

@@ -5,7 +5,7 @@
   imports = [
     ./format-and-fix
 
-    ./language-servers.nix
+    ./language-servers
     ./keymaps.nix
 
     ./lspsaga.nix
