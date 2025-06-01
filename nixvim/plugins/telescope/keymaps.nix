@@ -26,7 +26,7 @@
       options.desc = "Find All files";
     };
     "<leader>fu" = {
-      action = "grep_string";
+      action = "grep_string theme=ivy";
       options.desc = "Search string Under cursor/ selection";
       mode = mapToModeAbbr [
         "visual_select"
@@ -34,7 +34,7 @@
       ];
     };
     "<leader>fg" = {
-      action = "live_grep";
+      action = "live_grep theme=ivy";
       options.desc = "Search in live Grep";
     };
 
@@ -59,7 +59,7 @@
 
     # Vim Pickers for Settings-like Entities
     "<leader>fh" = {
-      action = "help_tags";
+      action = "help_tags theme=ivy";
       options.desc = "Find Help tags";
     };
     "<leader>fc" = {
@@ -71,9 +71,12 @@
       options.desc = "Find vim Keybindings";
     };
     "<leader>fr" = {
-      action = "registers";
+      action = "registers theme=ivy";
       options.desc = "Find in vim Registers";
-      mode = mapToModeAbbr [ "normal" "visual_select" ];
+      mode = mapToModeAbbr [
+        "normal"
+        "visual_select"
+      ];
     };
     "<leader>fR" = {
       action = "reloader";

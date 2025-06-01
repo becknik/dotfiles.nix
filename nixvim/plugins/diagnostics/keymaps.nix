@@ -55,7 +55,7 @@
 
   plugins.telescope.keymaps = {
     "<leader>df" = {
-      action = "diagnostics";
+      action = "diagnostics theme=ivy";
       options.desc = "Find in local Diagnostics";
     };
   };
