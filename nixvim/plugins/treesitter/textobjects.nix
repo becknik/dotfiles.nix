@@ -5,11 +5,11 @@
 
   # https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 
-  plugins.lsp.luaConfig.post = ''
-    wk.add {
-      { "<leader>n", icon = "󰆾 ", desc = "Textobject Movement"  },
-    }
-  '';
+  # plugins.lsp.luaConfig.post = ''
+  #   wk.add {
+  #     { "<leader>n", icon = "󰆾 ", desc = "Textobject Movement"  },
+  #   }
+  # '';
 
   plugins.treesitter-textobjects = {
     enable = true;
@@ -23,12 +23,10 @@
         width = 16;
       };
       peekDefinitionCode = {
-        # conflicting with diagnostics for line and cursor
-        # "<leader>dl" = "@loop.outer";
-        # "<leader>dc" = "@conditional.outer";
-
-        "<leader>df" = "@function.outer";
-        "<leader>dC" = "@class.outer";
+        # "<leader>pl" = "@loop.outer";
+        # "<leader>pc" = "@conditional.outer";
+        # "<leader>pf" = "@function.outer";
+        # "<leader>pC" = "@class.outer";
       };
     };
 
@@ -43,13 +41,13 @@
         "]R" = "@regex.inner";
 
         "]=" = "@assignment.outer";
-        "]." = "@call.*";
+        "]." = "@call.outer";
         "](" = "@call.inner";
 
         "]r" = "@return.inner";
 
         "]P" = "@parameter.inner";
-        "]a" = "@attribute.*";
+        "]a" = "@attribute.inner";
 
         # "[sc" = "@scopename.outer";
         "]c" = "@conditional.inner";
@@ -66,13 +64,13 @@
         "[R" = "@regex.inner";
 
         "[=" = "@assignment.outer";
-        "[." = "@call.*";
+        "[." = "@call.outer";
         "[(" = "@call.inner";
 
         "[r" = "@return.inner";
 
         "[P" = "@parameter.inner";
-        "[a" = "@attribute.*";
+        "[a" = "@attribute.inner";
 
         # "[sc" = "@scopename.outer";
         "[c" = "@conditional.inner";
@@ -135,7 +133,7 @@
     };
 
     swap = {
-      enable = true;
+      enable = false;
       swapNext = {
         "<leader>n=" = "@assignment.outer";
         "<leader>n(" = "@call.inner"; # can't think of an use case, but making it available for consistency reasons
