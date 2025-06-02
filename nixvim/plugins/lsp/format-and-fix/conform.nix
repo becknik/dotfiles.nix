@@ -1,9 +1,9 @@
-{ config
-, lib
-, pkgs
-, withDefaultKeymapOptions
-, mapToModeAbbr
-, ...
+{
+  lib,
+  pkgs,
+  withDefaultKeymapOptions,
+  mapToModeAbbr,
+  ...
 }:
 
 {
@@ -250,6 +250,7 @@
             "typescriptreact"
           ];
           eslint_d.priority = 1; # take precedence over prettierd
+          eslint_d.command = lib.getExe pkgs.eslint_d;
           prettierd.types = [
             "javascript"
             "javascriptreact"
@@ -287,69 +288,58 @@
         names = builtins.attrNames formatterSetup;
 
         entries = builtins.concatLists (
-          builtins.map
-            (
-              name:
-              builtins.map
-                (ft: {
-                  ft = ft;
-                  formatter = name;
-                })
-                (
-                  if builtins.isString formatterSetup.${name}.types then
-                    [ formatterSetup.${name}.types ]
-                  else
-                    formatterSetup.${name}.types
-                )
+          builtins.map (
+            name:
+            builtins.map
+              (ft: {
+                ft = ft;
+                formatter = name;
+              })
+              (
+                if builtins.isString formatterSetup.${name}.types then
+                  [ formatterSetup.${name}.types ]
+                else
+                  formatterSetup.${name}.types
+              )
 
-            )
-            names
+          ) names
         );
 
         formatters = builtins.listToAttrs (
-          builtins.map
-            (name: {
-              name = name;
-              value = builtins.removeAttrs formatterSetup.${name} [
-                "types"
-                "priority"
-              ];
-            })
-            names
+          builtins.map (name: {
+            name = name;
+            value = builtins.removeAttrs formatterSetup.${name} [
+              "types"
+              "priority"
+            ];
+          }) names
         );
 
-        formatters_by_ft = builtins.foldl'
-          (
-            acc: entry:
-              let
-                ft = entry.ft;
-                prev = acc.${ft} or [ ];
-              in
-              acc // { "${ft}" = prev ++ [ entry.formatter ]; }
-          )
-          { }
-          entries;
+        formatters_by_ft = builtins.foldl' (
+          acc: entry:
+          let
+            ft = entry.ft;
+            prev = acc.${ft} or [ ];
+          in
+          acc // { "${ft}" = prev ++ [ entry.formatter ]; }
+        ) { } entries;
 
-        formatters_by_ft_ordered = lib.mapAttrs
-          (
-            type: names:
-              builtins.sort
-                (
-                  a: b:
-                    let
-                      pa = formatterSetup.${a}.priority or 0;
-                      pb = formatterSetup.${b}.priority or 0;
-                    in
-                    if pa > pb then
-                      true
-                    else if pa < pb then
-                      false
-                    else
-                      a < b
-                )
-                names
-          )
-          formatters_by_ft;
+        formatters_by_ft_ordered = lib.mapAttrs (
+          type: names:
+          builtins.sort (
+            a: b:
+            let
+              pa = formatterSetup.${a}.priority or 0;
+              pb = formatterSetup.${b}.priority or 0;
+            in
+            if pa > pb then
+              true
+            else if pa < pb then
+              false
+            else
+              a < b
+          ) names
+        ) formatters_by_ft;
       in
       {
         notify_on_error = true;
