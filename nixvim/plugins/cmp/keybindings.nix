@@ -29,6 +29,9 @@
     )
   '';
 
+  plugins.cmp.luaConfig.pre = ''
+    local cmp_kinds = require'cmp'.lsp.CompletionItemKind
+  '';
   plugins.cmp.settings.mapping = {
     "<c-space>" = "cmp.mapping.complete()";
     "<esc>" = # lua
@@ -46,7 +49,7 @@
           end
         end
       '';
-    "<C-e>" = # lua
+    "<C-x>" = # lua
       ''
         function(fallback)
           if require("copilot.suggestion").is_visible() and require("luasnip").locally_jumpable(1) then
@@ -128,10 +131,20 @@
             local entry = cmp.get_selected_entry()
             local kind  = entry and entry:get_completion_item().kind
             local is_function_like = kind == cmp.lsp.CompletionItemKind.Function or
-              kind == cmp.lsp.CompletionItemKind.Method or
-              kind == cmp.lsp.CompletionItemKind.Constructor
+              kind == cmp_kinds.Method or
+              kind == cmp_kinds.StaticMethod or
+              kind == cmp_kinds.Constructor
+            local is_variable_like = kind == cmp.lsp.CompletionItemKind.Variable or
+              kind == cmp_kinds.Constant or
+              kind == cmp_kinds.Field or
+              kind == cmp_kinds.Property or
+              kind == cmp_kinds.Struct or
+              kind == cmp_kinds.Object or
+              kind == cmp_kinds.Reference or
+              kind == cmp_kinds.Module
 
-            if is_function_like then
+
+            if is_function_like or is_variable_like then
               cmp.confirm({
                 behavior = cmp.ConfirmBehavior.Insert,
                 select = true,
@@ -139,14 +152,18 @@
               })
               vim.schedule(function()
                 -- https://github.com/prabirshrestha/vim-lsp/blob/master/autoload/lsp/omni.vim#L6
+                local action
                 if is_function_like then
-                  local action = "<Right>."
+                  action  = "<Right>."
+                elseif is_variable_like then
+                  action  = "."
+                end
+
                   vim.api.nvim_feedkeys(
                     vim.api.nvim_replace_termcodes(action, true, false, true),
                     "n",
                     true
                   )
-                end
               end)
               return
             end
