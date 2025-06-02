@@ -16,7 +16,7 @@
 
   plugins.telescope.keymaps = {
     "<leader>bf" = {
-      action = "buffers theme=ivy";
+      action = "buffers theme=ivy sort_lastused=true ignore_current_buffer=true";
       options.desc = "Find Buffer";
     };
   };
