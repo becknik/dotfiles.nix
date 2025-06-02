@@ -24,7 +24,7 @@
       ];
       cursorline = true;
       wrap = true;
-      scrolloff = 4; # always keep 8 lines above/below cursor unless at start/end of file
+      scrolloff = 2; # always keep 8 lines above/below cursor unless at start/end of file
       cmdheight = 0; # more space in the neovim command line for displaying messages
 
       # Symbol Formatting
