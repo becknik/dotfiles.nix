@@ -40,7 +40,7 @@
   # Manual Installations
   home.packages =
     let
-      mkWhenNotDarwin = pkg: (if isDarwinSystem then builtins.emptyDerivation else pkg);
+      mkWhenNotDarwin = pkg: (if isDarwinSystem then pkgs.hello else pkg);
     in
     with pkgs;
     [

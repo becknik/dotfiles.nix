@@ -1,4 +1,5 @@
 {
+  mkFlakeDir,
   userName,
   config,
   lib,
@@ -38,6 +39,9 @@
     git = {
       userName = (lib.mkForce "Jannik Becker");
       userEmail = (lib.mkForce "sprinteins.becker@extaccount.com");
+      extraConfig = {
+        safe.directory = mkFlakeDir userName config;
+      };
     };
   };
 
@@ -62,7 +66,6 @@
     # browser manged with brew
 
     ## Privacy
-    keepassxc
-    gpa
+    # keepassxc
   ];
 }

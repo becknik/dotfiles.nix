@@ -10,10 +10,13 @@
   # some pl packages are handy for quickly trying something out etc.
   home.packages =
     with pkgs;
-    (lib.optional (!isDarwinSystem) texliveFull)
+    (lib.lists.optionals (!isDarwinSystem) [
+      texliveFull
+      conda
+    ])
+
     ++ [
       unstable.amber-lang
-      conda
 
       # JS / TypeScript
       unstable.nodejs_latest

@@ -12,8 +12,12 @@
     let
       mkRebuildCmd =
         isDarwin: argument:
-        "${if isDarwin then "darwin" else "sudo nixos"}-rebuild "
-        + "--flake \"${(mkFlakeDir userName config)}#$FLAKE_NIXOS_HOST\" ${argument}";
+        (if isDarwin then ''osascript -e 'do shell script "'' else "")
+        + (
+          "sudo ${if isDarwin then "darwin" else "nixos"}-rebuild "
+          + ''--flake \"${(mkFlakeDir userName config)}#$FLAKE_NIXOS_HOST\" ${argument}''
+        )
+        + (if isDarwin then ''" with administrator privileges' '' else "");
 
       mkRebuildCmdNh =
         argument: "nh os ${argument} ${(mkFlakeDir userName config)} --hostname $FLAKE_NIXOS_HOST";

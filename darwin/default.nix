@@ -5,8 +5,8 @@
 
   environment.variables."FLAKE_NIXOS_HOST" = "wnix";
   environment.variables."HOMEBREW_AUTO_UPDATE_SECS" = builtins.toString (16 * 60 * 60);
+  system.primaryUser = userName;
   nix = {
-    useDaemon = true;
     settings = {
       experimental-features = [
         "nix-command" # Enables some useful tools like the `nix edit '<nixpkgs>' <some-package-name>`
@@ -19,7 +19,10 @@
     settings = {
       max-jobs = 2;
       cores = 4;
-      trusted-users = [ "root" userName ];
+      trusted-users = [
+        "root"
+        userName
+      ];
     };
   };
 
@@ -32,21 +35,28 @@
     };
     # nix packages sadly not working with x86_64-darwin
     # brew tap homebrew/cask-fonts
-    casks = [ "eloston-chromium" "firefox" "font-fira-code-nerd-font" "font-fira-code" ];
+    casks = [
+      "eloston-chromium"
+      "firefox"
+      "font-fira-code-nerd-font"
+      "font-fira-code"
+    ];
   };
 
   # not working in user-mode
-  /* system.defaults = {
-    universalaccess = {
-      reduceTransparency = true;
-      reduceMotion = true;
-    };
-    NSGlobalDomain = {
-      NSAutomaticWindowAnimationsEnabled = false;
-      NSScrollAnimationEnabled = true;
-    };
-    dock.launchanim = false;
+  /*
+    system.defaults = {
+      universalaccess = {
+        reduceTransparency = true;
+        reduceMotion = true;
+      };
+      NSGlobalDomain = {
+        NSAutomaticWindowAnimationsEnabled = false;
+        NSScrollAnimationEnabled = true;
+      };
+      dock.launchanim = false;
 
-    dock.autohide = true;
-  }; */
+      dock.autohide = true;
+    };
+  */
 }
