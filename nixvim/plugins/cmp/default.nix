@@ -125,6 +125,9 @@
             name = "emoji";
             priority = 701;
           }
+          {
+            name = "render-markdown";
+          }
 
           # { name = "copilot"; group_index = 2; priority = 1000; } # TODO disable suggestion, panel module, as it can interfere with completions
 
