@@ -5,35 +5,46 @@
   plugins.neogit = {
     enable = true;
 
-    settings =
-      let
-        submit_abort = {
-          "<c-c><c-c>" = null;
-          "<c-c><c-k>" = null;
-          ZZ = "Submit";
-          ZQ = "Abort";
-        };
-      in
-      {
-        console_timeout = 1000; # threshold to open the console on command execution
+    settings = {
+      console_timeout = 5000; # ms
 
-        disable_line_numbers = false;
-        disable_signs = true;
-        fetch_after_checkout = true;
-        graph_style = "unicode";
-        kind = "replace";
-        remember_settings = false; # across sessions
+      disable_hint = true;
+      disable_line_numbers = false;
+      disable_signs = true;
+      fetch_after_checkout = true;
+      graph_style = "unicode";
+      kind = "replace";
+      remember_settings = false; # across sessions
+      process_spinner = true;
 
-        integrations = {
-          diffview = true;
-          telescope = true;
-        };
-
-        commit_editor = submit_abort;
-        commit_editor_i = submit_abort;
-        rebase_editor = submit_abort;
-        rebase_editor_i = submit_abort;
+      integrations = {
+        diffview = true;
+        telescope = true;
       };
+
+      mappings =
+        let
+          submit_abort = {
+            "<c-c><c-c>" = false;
+            "<c-c><c-k>" = false;
+            "<C-s>" = "Submit";
+          };
+          submit_abort_I = {
+            ZZ = "Submit";
+            ZQ = "Abort";
+          };
+        in
+        {
+          commit_editor = submit_abort;
+          commit_editor_I = submit_abort // submit_abort_I;
+          rebase_editor = submit_abort;
+          rebase_editor_I = submit_abort // submit_abort_I;
+          status = {
+            "o" = "GoToFile";
+            "O" = "OpenTree";
+          };
+        };
+    };
   };
 
   plugins.neogit.luaConfig.post = ''
