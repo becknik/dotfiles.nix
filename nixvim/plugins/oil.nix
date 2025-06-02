@@ -40,7 +40,15 @@
       };
 
       keymaps = {
-        "<c-q>" = "actions.close";
+        "q" = {
+          __raw = "require'oil.actions'.close";
+          mode = "n";
+        };
+        "<C-c>" = false;
+        "o" = {
+          __raw = "require'oil.actions'.select";
+          mode = "n";
+        };
       };
     };
   };
