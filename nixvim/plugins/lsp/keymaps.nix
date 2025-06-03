@@ -22,7 +22,7 @@
       { "gh", icon = "󰧮" },
       { "gH", icon = "󰧮  " },
 
-      { "go", icon = " " }, -- 󱉯
+      { "go", icon = "󱉯 " },
 
       { "gs", icon = " ", desc = "Telescope" },
       { "gsy", icon = " 󰌆 " },

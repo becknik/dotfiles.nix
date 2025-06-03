@@ -29,20 +29,5 @@
     # add pictrograms to lsp
     # configured manually in cmp.lua
     lspkind.enable = false;
-
-    lsp-lines.enable = true;
   };
-
-  plugins.lsp-lines.luaConfig.post = ''
-    wk.add {
-      { "<leader>td", icon = " 󰊠 " },
-      }
-  '';
-  keymaps = withDefaultKeymapOptions [
-    {
-      key = "<leader>td";
-      action.__raw = "function() require('lsp_lines').toggle() end";
-      options.desc = "Toggle lsp_lines";
-    }
-  ];
 }
