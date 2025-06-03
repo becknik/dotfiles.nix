@@ -6,8 +6,6 @@
   ];
 
   plugins = {
-    web-devicons.enable = true;
-
     notify = {
       enable = true;
       settings.stages = "fade";

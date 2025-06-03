@@ -14,6 +14,7 @@
     ./ui
     ./telescope
     ./motion-and-pairs
+    ./mini
 
     ./ai
     ./dap.nix
