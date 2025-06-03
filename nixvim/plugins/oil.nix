@@ -45,10 +45,6 @@
           mode = "n";
         };
         "<C-c>" = false;
-        "o" = {
-          __raw = "require'oil.actions'.select";
-          mode = "n";
-        };
       };
     };
   };
