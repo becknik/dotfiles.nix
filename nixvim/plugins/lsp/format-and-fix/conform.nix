@@ -59,14 +59,39 @@
             return
           end
 
+          local fidget = require("fidget")
+          fidget.notify(
+            "Starting to format hunks...",
+            2,
+            {
+              key = "conform_format_hunk",
+              annote = "Conform Auto Format",
+              skip_history = true,
+            }
+          )
+
+          local hunks_amount = #hunks
+          local hunks_processed = 0
           local executed_writes = 0
+
           local function format_range()
             if next(hunks) == nil then
               if executed_writes > 0 then
-                vim.notify("Formatted " .. executed_writes .." git hunks", "info", { title = "Conform Auto Format", render = "compact" })
+                fidget.notify(
+                  "Formatted " .. executed_writes .. "/" .. hunks_amount .. " hunks",
+                  2,
+                  {
+                    key = "conform_format_hunk",
+                    annote = "Conform Auto Format",
+                    skip_history = true,
+                    update_only = true,
+                  }
+                )
               end
 
-              vim.schedule(function() vim.api.nvim_command("noautocmd write") end)
+              vim.schedule(function()
+                vim.api.nvim_command("noautocmd write")
+              end)
               return
             end
 
@@ -81,7 +106,10 @@
               local last = start + hunk.added.count
               -- nvim_buf_get_lines uses zero-based indexing -> subtract from last
               local last_hunk_line = vim.api.nvim_buf_get_lines(bufnr, last - 2, last - 1, true)[1]
-              local range = { start = { start, 0 }, ["end"] = { last - 1, last_hunk_line:len() } }
+              local range = {
+                start = { start, 0 },
+                ["end"] = { last - 1, last_hunk_line:len() }
+              }
 
               require("conform").format({
                 bufnr = bufnr,
@@ -97,10 +125,20 @@
                   -- not thread-save, but who cares =)
                   executed_writes = executed_writes + 1
                 end
+                hunks_processed = hunks_processed + 1
 
-                vim.defer_fn(function()
-                  format_range()
-                end, 1)
+                fidget.notify(
+                  "Formatting " .. hunks_processed .. "/" .. hunks_amount .. " (" .. executed_writes .. ") hunks",
+                  2,
+                  {
+                    key = "conform_format_hunk",
+                    annote = "Conform Auto Format",
+                    skip_history = true,
+                    update_only = true,
+                  }
+                )
+
+                vim.defer_fn(function() format_range() end, 1)
               end)
             end
           end
