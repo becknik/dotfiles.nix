@@ -8,7 +8,6 @@
       { "gCi", icon = " " },
       { "gCI", icon = " " },
 
-      { "gp", icon = "  ", desc = "Peek" },
       { "gt", icon = " " },
       { "gd", icon = "" },
       { "gp", icon = "󰹰 ", desc = "Preview" },
