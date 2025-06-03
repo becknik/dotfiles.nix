@@ -73,38 +73,9 @@
 
     keymaps =
       let
-        defaultMultiplier = 5;
-        m = builtins.toString defaultMultiplier;
+        m = builtins.toString 5;
       in
       withDefaultKeymapOptions [
-        {
-          key = "<C-w>=";
-          action = "horizontal resize +${m}";
-          options.cmd = true;
-          options.desc = "resize horizontal +${m}";
-          mode = mapToModeAbbr [ "insert" ];
-        }
-        {
-          key = "<C-w>-";
-          action = "horizontal resize -${m}";
-          options.cmd = true;
-          options.desc = "resize horizontal -${m}";
-          mode = mapToModeAbbr [ "insert" ];
-        }
-        {
-          key = "<C-w>>";
-          action = "vertical resize +${m}";
-          options.cmd = true;
-          options.desc = "resize vertical +${m}";
-          mode = mapToModeAbbr [ "insert" ];
-        }
-        {
-          key = "<C-w><";
-          action = "vertical resize -${m}";
-          options.cmd = true;
-          options.desc = "resize vertical -${m}";
-          mode = mapToModeAbbr [ "insert" ];
-        }
 
         {
           key = "<C-w>=";
@@ -115,7 +86,10 @@
             end
           '';
           options.desc = "resize horizontal +${m}";
-          mode = mapToModeAbbr [ "normal" ];
+          mode = mapToModeAbbr [
+            "insert"
+            "normal"
+          ];
         }
         {
           key = "<C-w>-";
@@ -126,10 +100,13 @@
             end
           '';
           options.desc = "resize horizontal -${m}";
-          mode = mapToModeAbbr [ "insert" ];
+          mode = mapToModeAbbr [
+            "insert"
+            "normal"
+          ];
         }
         {
-          key = "<C-w>>";
+          key = "<C-w>,";
           action.__raw = ''
             function()
               local delta = vim.v.count1 * ${m}
@@ -137,10 +114,13 @@
             end
           '';
           options.desc = "resize vertical +${m}";
-          mode = mapToModeAbbr [ "insert" ];
+          mode = mapToModeAbbr [
+            "insert"
+            "normal"
+          ];
         }
         {
-          key = "<C-w><";
+          key = "<C-w>.";
           action.__raw = ''
             function()
               local delta = vim.v.count1 * ${m}
@@ -148,7 +128,10 @@
             end
           '';
           options.desc = "resize vertical -${m}";
-          mode = mapToModeAbbr [ "insert" ];
+          mode = mapToModeAbbr [
+            "insert"
+            "normal"
+          ];
         }
       ];
   };
