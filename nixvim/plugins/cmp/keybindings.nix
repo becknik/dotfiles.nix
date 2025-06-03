@@ -70,9 +70,11 @@
         cmp.mapping(function(fallback)
           if cmp.visible() then
             local entry = cmp.get_selected_entry()
+            if not entry then
+              cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
+              entry = cmp.get_selected_entry()
+            end
             cmp.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true })
-          elseif require("luasnip").expandable() then
-            require("luasnip").expand()
           else
             fallback()
           end
@@ -128,7 +130,11 @@
       ''
         cmp.mapping(function(fallback)
           if cmp.visible() then
-            local entry = cmp.get_selected_entry()
+            local entry = cmp.get_active_entry()
+            if not kind then
+              fallback()
+              return
+            end
             local kind  = entry and entry:get_completion_item().kind
             local is_function_like = kind == cmp.lsp.CompletionItemKind.Function or
               kind == cmp_kinds.Method or

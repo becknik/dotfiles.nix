@@ -16,7 +16,8 @@
       autoEnableSources = true;
 
       settings = {
-        experimental.ghost_text = true;
+        preselect = "cmp.PreselectMode.None";
+        experimental.ghost_text = false;
 
         formatting = {
           fields = [
