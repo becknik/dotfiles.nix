@@ -69,10 +69,10 @@
       ''
         cmp.mapping(function(fallback)
           if cmp.visible() then
-            local entry = cmp.get_selected_entry()
+            local entry = cmp.get_active_entry()
             if not entry then
               cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
-              entry = cmp.get_selected_entry()
+              entry = cmp.get_active_entry()
             end
             cmp.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true })
           else
@@ -112,7 +112,7 @@
     #   ''
     #     cmp.mapping(function(fallback)
     #       if cmp.visible() then
-    #         local entry = cmp.get_selected_entry()
+    #         local entry = cmp.get_active_entry()
     #         local kind  = entry and entry:get_completion_item().kind
     #         -- https://github.com/prabirshrestha/vim-lsp/blob/master/autoload/lsp/omni.vim#L6
     #         if kind == 2 or kind == 3 or kind == 4 then
@@ -131,7 +131,7 @@
         cmp.mapping(function(fallback)
           if cmp.visible() then
             local entry = cmp.get_active_entry()
-            if not kind then
+            if not entry then
               fallback()
               return
             end
