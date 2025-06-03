@@ -36,7 +36,7 @@
                   luasnip = "[󰌒 ]",
                   nvim_lua = "[ ]",
                   dotenv = " [e]",
-                  -- spell = "[󰓆 ]",
+                  spell = "[󰓆 ]",
                   async_path = "[ ]",
                   calc = "[󱖦 ]",
                   emoji = "[󰞅 ]",
@@ -187,12 +187,17 @@
       filetype =
         let
           dap = [ { name = "dap"; } ];
+          spell = [ { name = "spell"; } ];
         in
         {
           # this might not be enough to enable the dap-cmp: https://github.com/rcarriga/cmp-dap
           dap-repl.sources = dap;
           dapui_watches.sources = dap;
           dapui_hover.sources = dap;
+
+          gitcommit.sources = spell;
+          codecompanion.sources = spell;
+          markdown.sources = spell;
         };
     };
   };
