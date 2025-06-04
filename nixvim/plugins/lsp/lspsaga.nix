@@ -30,7 +30,7 @@
     {
       # quit the lspsaga rename window ONLY when not in insert mode (wtf...)
       event = [ "FileType" ];
-      pattern = "lspsaga-renamer";
+      pattern = "sagarename";
       callback.__raw = ''
         function(ctx)
           vim.keymap.set('n', 'q',
