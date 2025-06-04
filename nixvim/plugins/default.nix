@@ -2,7 +2,8 @@
 
 {
   imports = [
-    ./cmp
+    # ./cmp
+    ./blink
     ./lsp
     ./treesitter
 

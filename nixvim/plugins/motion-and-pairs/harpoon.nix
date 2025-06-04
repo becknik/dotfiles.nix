@@ -94,16 +94,16 @@
     #   options.desc = "Switch Harpoon";
     # }
 
-    {
-      key = "<C-n>";
-      action.__raw = "function() require'harpoon':list():next() end";
-      options.desc = "Next Harpoon";
-    }
-    {
-      key = "<C-p>";
-      action.__raw = "function() require'harpoon':list():prev() end";
-      options.desc = "Previous Harpoon";
-    }
+    # {
+    #   key = "<C-n>";
+    #   action.__raw = "function() require'harpoon':list():next() end";
+    #   options.desc = "Next Harpoon";
+    # }
+    # {
+    #   key = "<C-p>";
+    #   action.__raw = "function() require'harpoon':list():prev() end";
+    #   options.desc = "Previous Harpoon";
+    # }
 
     {
       key = "<leader>1";

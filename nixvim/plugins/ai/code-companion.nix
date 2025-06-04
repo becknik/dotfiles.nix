@@ -29,7 +29,7 @@
             model = "claude-3.7-sonnet";
           };
           roles.user = "becknik";
-          opts.completion_provider = "cmp";
+          opts.completion_provider = "blink";
 
           keymaps = { };
           slash_commands.__raw = ''

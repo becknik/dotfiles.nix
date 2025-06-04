@@ -2,6 +2,27 @@ local treesitter_context_ctx = require("treesitter-context.context")
 local diag_counter_cache = {}
 local diag_cursor_line_cache = {}
 
+vim.fn.sign_define("DiagnosticSignError", {
+  text = "󰅚 ",
+  texthl = "DiagnosticSignError",
+  numhl = "DiagnosticSignError"
+})
+vim.fn.sign_define("DiagnosticSignWarn", {
+  text = "󰀪 ",
+  texthl = "DiagnosticSignWarn",
+  numhl = "DiagnosticSignWarn"
+})
+vim.fn.sign_define("DiagnosticSignHint", {
+  text = "󰌶 ",
+  texthl = "DiagnosticSignHint",
+  numhl = "DiagnosticSignHint"
+})
+vim.fn.sign_define("DiagnosticSignInfo", {
+  text = " ",
+  texthl = "DiagnosticSignInfo",
+  numhl = "DiagnosticSignInfo"
+})
+
 local diag_sign_warn = vim.fn.sign_getdefined("DiagnosticSignWarn")[1].text:gsub("%s+", "")
 local diag_sign_error = vim.fn.sign_getdefined("DiagnosticSignError")[1].text:gsub("%s+", "")
 local diag_sign_info = vim.fn.sign_getdefined("DiagnosticSignInfo")[1].text:gsub("%s+", "")
