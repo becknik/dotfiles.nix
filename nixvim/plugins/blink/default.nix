@@ -12,6 +12,12 @@
     setupLspCapabilities = true;
 
     settings = {
+      enabled.__raw = ''
+        function()
+          return not vim.list_contains({ 'sagarename' }, vim.bo.filetype)
+            and vim.b.completion ~= false
+        end'';
+
       appearance.nerd_font_variant = "normal";
       appearance.use_nvim_cmp_as_default = true;
 
