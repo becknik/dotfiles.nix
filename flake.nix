@@ -328,7 +328,9 @@
         in
         nixpkgs.lib.nixosSystem {
           inherit system;
-          specialArgs = (args userName);
+          specialArgs = (args userName) // {
+            inherit isLaptop;
+          };
 
           modules =
             with nixos-hardware.nixosModules;
