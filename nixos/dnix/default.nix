@@ -39,8 +39,8 @@
   };
 
   nix.settings = {
-    max-jobs = 2;
-    cores = 4;
+    max-jobs = 4;
+    cores = 6;
   };
 
   programs.steam = {
