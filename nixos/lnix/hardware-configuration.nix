@@ -1,4 +1,10 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
@@ -15,13 +21,22 @@
     }
   ];
 
-
   # Kernel Stuff
   boot = {
-    kernelModules = [ "kvm-amd" "amdgpu" ];
+    kernelModules = [
+      "kvm-amd"
+      "amdgpu"
+    ];
     extraModulePackages = with config.boot.kernelPackages; [ zenpower ];
     initrd = {
-      availableKernelModules = [ "nvme" "xhci_pci" "usbhid" "usb_storage" "sd_mod" "sdhci_pci" ];
+      availableKernelModules = [
+        "nvme"
+        "xhci_pci"
+        "usbhid"
+        "usb_storage"
+        "sd_mod"
+        "sdhci_pci"
+      ];
       kernelModules = [ ];
     };
 
@@ -37,10 +52,9 @@
     # https://discourse.nixos.org/t/external-mouse-and-keyboard-sleep-when-they-stay-untouched-for-a-few-seconds/14900/10
   };
 
-
   # Hardware Acceleration
   # Source: https://nixos.wiki/wiki/AMD_GPU
-  hardware.opengl.extraPackages = with pkgs; [
+  hardware.graphics.extraPackages = with pkgs; [
     amdvlk
     rocmPackages.clr.icd
   ];
@@ -48,10 +62,8 @@
 
   environment.variables.LIBVA_DRIVER_NAME = "radeonsi"; # Might be redundant
 
-
   # CPU
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-
 
   # Further Hardware Settings
   hardware.bluetooth.enable = true;
