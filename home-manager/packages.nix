@@ -94,7 +94,7 @@
       ### Secrets Management (1)
       sops
       age
-      #age-plugin-yubikey # This isn't working with sops-nix atm due to sops... https://github.com/Mic92/sops-nix/issues/377
+      age-plugin-yubikey
       (mkWhenNotDarwin yubikey-manager-qt)
       (mkWhenNotDarwin yubikey-personalization-gui)
       tig
