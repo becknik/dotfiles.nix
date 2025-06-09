@@ -45,6 +45,10 @@ final: prev: {
     );
   });
 
+  vesktop = prev.vesktop.override {
+    withMiddleClickScroll = true;
+    withSystemVencord = true;
+  };
 
   # Fixes
 
@@ -52,7 +56,6 @@ final: prev: {
   gxml = prev.gxml.overrideAttrs (oldAttrs: {
     doCheck = false;
   });
-
 
   # Own Packages
 

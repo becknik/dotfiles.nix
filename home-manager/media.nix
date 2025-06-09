@@ -143,10 +143,11 @@
     signal-desktop
     threema-desktop
     teams-for-linux
-    (vesktop.override {
-      withMiddleClickScroll = true;
-      withSystemVencord = true;
-    })
+    vesktop
+    protonmail-bridge-gui
+    # https://github.com/NixOS/nixpkgs/issues/365156
+    protonmail-desktop
+    protonvpn-gui
 
     chromium-app-t3-chat
 

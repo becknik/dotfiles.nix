@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 # Source: https://github.com/nix-community/home-manager/issues/3447 (TODO seems like this isn't a real solution...)
 let
@@ -7,7 +7,7 @@ let
     #keepassxc
     #element-desktop # works, but launches the application without the `--hidden` flag...
     # telegram-desktop
-    signal-desktop
+    # signal-desktop
     # planify
   ];
 in
@@ -32,26 +32,58 @@ in
             };
       }) autostart-programs
     ))
-    // {
-
-      # Manual File Creation
-
-      ## The element-internal way of generating an `electron.desktop` file is generally wrong and
-      # also incompatible with NixOS due to dangling symlinks...
-      # TODO Patch for element-desktop to be NixOS-friendlier?
-      "element-desktop-autostart" = {
+    # Manual File Creation
+    // (with pkgs; {
+      "${element-desktop.pname}" = {
         enable = true;
-        target = ".config/autostart/element.desktop";
+        target = ".config/autostart/${element-desktop.pname}.desktop";
         text = ''
           [Desktop Entry]
           Type=Application
-          Version=1.0
-          Name=Element
-          Comment=Forcing element-desktop to start properly
-          Exec=element-desktop --hidden
+          Name=${element-desktop.pname}
+          Exec=${lib.getExe element-desktop} --hidden
           StartupNotify=false
           Terminal=false
+          X-GNOME-Autostart-enabled=true
         '';
       };
-    };
+
+      "${protonmail-bridge-gui.pname}" = {
+        enable = true;
+        target = ".config/autostart/${protonmail-bridge-gui.pname}.desktop";
+        text = ''
+          [Desktop Entry]
+          Type=Application
+          Name=${protonmail-bridge-gui.pname}
+          Exec=env QT_PLUGIN_PATH=${kdePackages.qtwayland}/lib/qt-6/plugins QML_IMPORT_PATH=${kdePackages.qtdeclarative}/lib/qt-6/qml:${kdePackages.qtquicktimeline}/lib/qt-6/qml/${kdePackages.qtsvg}:/lib/qt-6/plugins ${protonmail-bridge-gui}/lib/bridge-gui --no-window
+          X-GNOME-Autostart-enabled=true
+        '';
+      };
+
+      "${vesktop.pname}.desktop" = {
+        enable = true;
+        target = ".config/autostart/${vesktop.pname}.desktop";
+        text = ''
+          [Desktop Entry]
+          Type=Application
+          Name=${element-desktop.pname}
+          Exec=${lib.getExe element-desktop} --hidden
+          Exec=${
+            builtins.concatStringsSep " " [
+              (lib.getExe electron)
+              "${vesktop}/opt/Vesktop/resources/app.asar"
+              "--enable-speech-dispatcher"
+              "--enable-blink-features=MiddleClickAutoscroll"
+              "--ozone-platform-hint=auto"
+              "--enable-features=WaylandWindowDecorations"
+              "--enable-wayland-ime"
+              "--start-minimized"
+            ]
+          }
+          StartupNotify=false
+          Terminal=false
+          X-GNOME-Autostart-enabled=true
+        '';
+      };
+    });
 }
