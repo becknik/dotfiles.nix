@@ -148,6 +148,8 @@
       withSystemVencord = true;
     })
 
+    chromium-app-t3-chat
+
     ## Media
     kooha
     helvum

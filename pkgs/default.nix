@@ -1,4 +1,9 @@
-{ pkgs-unstable, nixvim, ... }:
+{
+  pkgs-unstable,
+  nixvim,
+  pkgs,
+  ...
+}:
 
 {
   nixvim =
@@ -7,25 +12,37 @@
         nowait = false; # Equivalent to adding <nowait> to a mapping
         unique = true; # check for accidental duplicate mappings
       };
-      withDefaultKeymapOptions = keymaps: map
-        (keymap:
+      withDefaultKeymapOptions =
+        keymaps:
+        map (
+          keymap:
           let
-            shouldWrapInCmd = (builtins.hasAttr "options" keymap)
+            shouldWrapInCmd =
+              (builtins.hasAttr "options" keymap)
               && (builtins.hasAttr "cmd" keymap.options)
               && keymap.options.cmd != null;
             keymap' =
-              if shouldWrapInCmd then keymap // {
-                action = "<cmd>${keymap.action}<CR>";
-                options = builtins.removeAttrs keymap.options [ "cmd" ];
-              } else keymap;
+              if shouldWrapInCmd then
+                keymap
+                // {
+                  action = "<cmd>${keymap.action}<CR>";
+                  options = builtins.removeAttrs keymap.options [ "cmd" ];
+                }
+              else
+                keymap;
 
             isModeSet = builtins.hasAttr "mode" keymap';
-            keymap'' = if isModeSet then keymap' else keymap' // {
-              mode = [ "n" ];
-            };
+            keymap'' =
+              if isModeSet then
+                keymap'
+              else
+                keymap'
+                // {
+                  mode = [ "n" ];
+                };
           in
-          { options = defaultKeymapOptions; } // keymap'')
-        keymaps;
+          { options = defaultKeymapOptions; } // keymap''
+        ) keymaps;
 
       fetchFromGitHub = pkgs-unstable.fetchFromGitHub;
 
@@ -45,16 +62,15 @@
         insert_all = "ia"; # “ia” ???
         cmdline_all = "ca"; # “ca” ???
       };
-      mapToModeAbbr = modes:
-        builtins.map
-          (m:
-            if builtins.hasAttr m neovimModePrimitives then
-              neovimModePrimitives.${m}
-            else
-              builtins.throw "Unknown mode ‘${m}’"
-          )
-          modes;
-
+      mapToModeAbbr =
+        modes:
+        builtins.map (
+          m:
+          if builtins.hasAttr m neovimModePrimitives then
+            neovimModePrimitives.${m}
+          else
+            builtins.throw "Unknown mode ‘${m}’"
+        ) modes;
     in
     nixvim.makeNixvimWithModule {
       pkgs = pkgs-unstable;
@@ -65,9 +81,10 @@
           defaultKeymapOptions
           withDefaultKeymapOptions
           mapToModeAbbr
-          fetchFromGitHub;
+          fetchFromGitHub
+          ;
       };
     };
 
-  # example = pkgs.callPackage ./example { };
+  chromium-app-t3-chat = pkgs.callPackage ./t3-chat/package.nix { inherit pkgs; };
 }

@@ -54,6 +54,10 @@
 
     # Libraries
     flockenzeit.url = "github:balsoft/Flockenzeit";
+    # fork using ungoogled chromium
+    nix-webapps.url = "github:becknik/nix-webapps";
+    # Setting the browsers to unstable, just like I do in my home-manager derivation
+    nix-webapps.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     # Other stuff
     ohmyzsh = {
@@ -149,6 +153,7 @@
         ]
         ++ (with inputs; [
           nix-vscode-extensions.overlays.default
+          nix-webapps.overlays.lib
         ]);
 
       # Default system specialArgs
@@ -210,8 +215,12 @@
       packages = forAllSystems (
         system:
         let
-          pkgs = nixpkgs.legacyPackages.${system};
-          pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = [ inputs.nix-webapps.overlays.lib ];
+            # overlays = builtins.attrValues inputs.nix-webapps.overlays;
+          };
+          pkgs-unstable = import nixpkgs-unstable { inherit system; };
           nixvim = inputs.nixvim.legacyPackages.${system};
         in
         import ./pkgs { inherit pkgs pkgs-unstable nixvim; }
