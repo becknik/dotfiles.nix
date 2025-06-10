@@ -256,14 +256,17 @@ with lib.gvariant;
 
     "org/gnome/shell" = {
       favorite-apps = [
-        "Alacritty.desktop" # 1
-        "org.kde.dolphin.desktop" # 2
-        "librewolf.desktop" # 3
-        "code.desktop" # 4
-        "obsidian.desktop" # 5
-        "org.keepassxc.KeePassXC.desktop" # 6
-        "cider.desktop" # 7
-        "org.gnome.Pomodoro.desktop" # 8
+        "kitty.desktop"
+        "org.kde.dolphin.desktop"
+        "librewolf.desktop"
+        "t3-chat.desktop"
+        "chromium-browser.desktop"
+        "org.keepassxc.KeePassXC.desktop"
+        "obsidian.desktop"
+        "code.desktop"
+        "org.gnome.Pomodoro.desktop"
+        "Alacritty.desktop"
+        "cider.desktop"
       ];
     };
 

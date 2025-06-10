@@ -47,6 +47,25 @@ in
           X-GNOME-Autostart-enabled=true
         '';
       };
+      "${signal-desktop.pname}" = {
+        enable = true;
+        target = ".config/autostart/${signal-desktop.pname}.desktop";
+        text = ''
+          [Desktop Entry]
+          Type=Application
+          Name=${signal-desktop.pname}
+          Exec=${
+            builtins.concatStringsSep " " [
+              (lib.getExe signal-desktop)
+              "--use-tray-icon"
+              "--start-in-tray"
+              "--no-sandbox"
+              "%U"
+            ]
+          }
+          X-GNOME-Autostart-enabled=true
+        '';
+      };
 
       "${protonmail-bridge-gui.pname}" = {
         enable = true;
@@ -67,7 +86,6 @@ in
           [Desktop Entry]
           Type=Application
           Name=${element-desktop.pname}
-          Exec=${lib.getExe element-desktop} --hidden
           Exec=${
             builtins.concatStringsSep " " [
               (lib.getExe electron)
