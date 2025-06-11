@@ -22,7 +22,7 @@
     escapeTime = 0;
 
     extraConfig = builtins.concatStringsSep "\n" [
-      "bind '|' split-window -h -c \"#{pane_current_path}\""
+      "bind '\\' split-window -h -c \"#{pane_current_path}\""
       "bind - split-window -v -c \"#{pane_current_path}\""
       "bind -r r move-window -r" # reorder windows to fill in "gap indices"
 
