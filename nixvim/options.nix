@@ -133,6 +133,35 @@
             "normal"
           ];
         }
+
+        {
+          key = "<C-w>h";
+          action = "<Esc><C-w>h";
+          mode = mapToModeAbbr [
+            "insert"
+          ];
+        }
+        {
+          key = "<C-w>j";
+          action = "<Esc><C-w>j";
+          mode = mapToModeAbbr [
+            "insert"
+          ];
+        }
+        {
+          key = "<C-w>k";
+          action = "<Esc><C-w>k";
+          mode = mapToModeAbbr [
+            "insert"
+          ];
+        }
+        {
+          key = "<C-w>l;";
+          action = "<Esc><C-w>l";
+          mode = mapToModeAbbr [
+            "insert"
+          ];
+        }
       ];
   };
 }
