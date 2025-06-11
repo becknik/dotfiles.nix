@@ -73,9 +73,9 @@
 
   extraConfigLuaPost = ''
     function _G.set_terminal_keymaps()
-      local opts = { buffer = 0 }
-      vim.keymap.set('t', 'qq', [[<C-\><C-n>]], opts)
-      vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
+      vim.keymap.set('t', '<C-x>', [[<C-\><C-n>]], { buffer = 0 })
+      -- TODO: might need the index of the current terminal when running multiple
+      vim.keymap.set('t', '<C-t>', [[<C-\><C-n><C-w>]], { buffer = 0 })
     end
 
     -- if you only want these mappings for toggle term use term://*toggleterm#* instead
