@@ -1,4 +1,4 @@
-{ withDefaultKeymapOptions, mapToModeAbbr, ... }:
+{ ... }:
 {
 
   plugins.telescope.luaConfig.post = ''
@@ -8,7 +8,6 @@
       { "<leader>gs", icon = " 󱖫 " },
       { "<leader>gz", icon = "  " },
       { "<leader>g$", icon = "  " },
-      { "<leader>gh", icon = "  " },
     }
   '';
 
@@ -35,23 +34,4 @@
       options.desc = "find Git Stash";
     };
   };
-
-  keymaps = withDefaultKeymapOptions [
-    {
-      key = "<leader>gh";
-      action = "Telescope git_bcommits theme=ivy";
-      options.cmd = true;
-      options.desc = "find Git Commit for current buffer";
-
-      mode = mapToModeAbbr [ "normal" ];
-    }
-    {
-      key = "<leader>gh";
-      action = "Telescope git_bcommits_range thmme=ivy";
-      options.cmd = true;
-      options.desc = "find Git Commits for selection";
-
-      mode = mapToModeAbbr [ "visual_select" ];
-    }
-  ];
 }

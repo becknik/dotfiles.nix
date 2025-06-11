@@ -1,4 +1,4 @@
-{ withDefaultKeymapOptions, ... }:
+{ withDefaultKeymapOptions, mapToModeAbbr, ... }:
 
 {
   plugins.diffview = {
@@ -18,6 +18,7 @@
       { "<leader>gq", icon = "" },
       { "<leader>gf", icon = "" },
       { "<leader>gn", icon = " " },
+      { "<leader>gh", icon = "  " },
     }
   '';
 
@@ -35,10 +36,20 @@
       options.desc = "Close Diffview";
     }
     {
-      key = "<leader>gf";
+      key = "<leader>gh";
+      action = "DiffviewFileHistory %";
+      options.cmd = true;
+      mode = mapToModeAbbr [
+        "normal"
+        "visual_select"
+      ];
+      options.desc = "Diffview file History";
+    }
+    {
+      key = "<leader>gH";
       action = "DiffviewFileHistory";
       options.cmd = true;
-      options.desc = "Open Diffview File history";
+      options.desc = "Diffview History (global)";
     }
     {
       key = "<leader>gn";
