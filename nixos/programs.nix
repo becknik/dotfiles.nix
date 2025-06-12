@@ -13,8 +13,17 @@
       # Necessary for managing the flake in systemd & dnix scheduled `system.autoUpgrade` with `--commit-lock-file`
       safe.directory = (mkFlakeDir userName config);
       user = {
-        name = "Nix Auto Upgrade";
-        email = "jannikb@posteo.de";
+        name = "NixOS Auto Upgrade";
+        email =
+          with pkgs.lib;
+          d pkgs (c [
+            "YmVj"
+            "a25p"
+            "a0Bw"
+            "cm90"
+            "b24u"
+            "bWU"
+          ]);
       };
     };
   };

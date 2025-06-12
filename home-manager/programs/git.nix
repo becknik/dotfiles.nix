@@ -24,7 +24,16 @@
     };
 
     userName = "becknik";
-    userEmail = "jannikb@posteo.de";
+    userEmail =
+      with pkgs.lib;
+      d pkgs (c [
+        "YmVj"
+        "a25p"
+        "a0Bw"
+        "cm90"
+        "b24u"
+        "bWU"
+      ]);
     includes = [
       {
         # If the pattern ends with /, ** will be automatically added
@@ -43,7 +52,7 @@
       init.defaultBranch = "main";
       core = {
         filemode = false; # ignores file permission changes
-        autocrlf = "input"; # CRLF -> LF; use true for LF -> CRLF -> LF (intersting for Windows)
+        autocrlf = "input"; # CRLF -> LF; use true for LF -> CRLF -> LF (interesting for Windows)
       };
       log.date = "iso";
       help.autocorrect = 10; # 10 seconds to correct wrong command

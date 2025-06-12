@@ -1,15 +1,6 @@
 { pkgs, ... }:
 
 let
-  d =
-    string:
-    (builtins.readFile (
-      pkgs.runCommandLocal "decoded.txt" {
-        nativeBuildInputs = [ pkgs.coreutils ];
-      } ''echo -n "${string}" | base64 -d > $out''
-    ));
-  a = l: builtins.concatStringsSep "" l;
-
   secretPasswordCommand = provider: "cat $XDG_RUNTIME_DIR/secrets/mail/${provider}/password";
 
   # `provider` should be a lower case string to match the secrets
@@ -39,157 +30,150 @@ let
       thunderbird.enable = true;
       thunderbird.profiles = [ "default" ];
     };
-
-  protonBridgeSettings = {
-    imap = {
-      host = "127.0.0.1";
-      port = 1143;
-      tls.useStartTls = true;
-      # FEi3RamMrrH-2CqeUgeDOQ
-    };
-    smtp = {
-      host = "127.0.0.1";
-      port = 1025;
-      tls.useStartTls = true;
-    };
-  };
-  mkProton = name: mailAddress: furtherSettings: {
-    "proton-${name}" =
-      (mkDefaultMailAccountSettings {
-        provider = "proton-${name}";
-        mailAddress = d mailAddress;
-      })
-      // protonBridgeSettings
-      // furtherSettings;
-  };
 in
 {
-  accounts.email.accounts =
-    (mkProton "main"
-      (a [
-        "YmVj"
-        "a25pa"
-        "0Bwb"
-        "S5tZ"
-        "Q=="
-      ])
-      {
-        primary = true;
-        realName = "becknik";
-        aliases = [
-          (d (a [
+  accounts.email.accounts = {
+    "proton" =
+      (mkDefaultMailAccountSettings {
+        provider = "proton";
+        mailAddress =
+          with pkgs.lib;
+          d pkgs (c [
             "YmVj"
             "a25p"
             "a0Bw"
             "cm90"
             "b24u"
-            "bWU="
+            "bWU"
+          ]);
+      })
+      // {
+        primary = true;
+        realName = "Jannik Becker";
+
+        imap = {
+          host = "127.0.0.1";
+          port = 1143;
+          tls.useStartTls = true;
+        };
+        smtp = {
+          host = "127.0.0.1";
+          port = 1025;
+          tls.useStartTls = true;
+        };
+
+        aliases = with pkgs.lib; [
+          (d pkgs (c [
+            "YmVj"
+            "a25p"
+            "a0Bw"
+            "bS5t"
+            "ZQ"
+          ]))
+          (d pkgs (c [
+            "amFu"
+            "bmlr"
+            "YjMz"
+            "QHBt"
+            "Lm1l"
+          ]))
+          (d pkgs (c [
+            "Zmlu"
+            "bmlr"
+            "NkBw"
+            "cm90"
+            "b24u"
+            "bWU"
+          ]))
+          (d pkgs (c [
+            "c2g1"
+            "a0Bw"
+            "bS5t"
+            "ZQ"
+          ]))
+          (d pkgs (c [
+            "YmVj"
+            "a25pa"
+            "0Bwb"
+            "S5tZ"
+            "Q"
           ]))
         ];
-      }
-    )
-    // (mkProton "official" (a [
-      "amFu"
-      "bmlr"
-      "YjMz"
-      "QHBt"
-      "Lm1l"
-    ]) { })
-    // (mkProton "finances" (a [
-      "Zmlu"
-      "bmlr"
-      "NkBw"
-      "cm90"
-      "b24u"
-      "bWU="
-    ]) { })
-    // (mkProton "shopping" (a [
-      "c2g1"
-      "a0Bw"
-      "bS5t"
-      "ZQ=="
-    ]) { })
-    // (mkProton "services" (a [
-      "c3J2"
-      "azhA"
-      "cG0u"
-      "bWU="
-    ]) { })
-    // {
+      };
 
-      "posteo" =
-        (mkDefaultMailAccountSettings {
-          provider = "posteo";
-          mailAddress = "jannikb@posteo.de";
-        })
-        // {
-          aliases = [
-            "meinctutw@posteo.de"
-            "spaeo@posteo.de"
-          ];
+    "posteo" =
+      (mkDefaultMailAccountSettings {
+        provider = "posteo";
+        mailAddress = "jannikb@posteo.de";
+      })
+      // {
+        aliases = [
+          "meinctutw@posteo.de"
+          "spaeo@posteo.de"
+        ];
 
-          smtp = {
-            host = "posteo.de";
-            port = 465;
-            # tls.enable = true; # default
-          };
-          imap = {
-            host = "posteo.de";
-            port = 993;
-          };
-
-          # TODO get gpg signing & gpg setup working & right
-          /*
-            gpg = {
-              key = "483342532448204D";
-              signByDefault = true;
-            };
-          */
-
-          signature = {
-            #command =
-            #delimiter =
-            #showSignature = "append";
-            #text = "";
-          };
-
-          #thunderbird.perIdentitySettings
-          #thunderbird.settings # account settings
+        smtp = {
+          host = "posteo.de";
+          port = 465;
+          # tls.enable = true; # default
+        };
+        imap = {
+          host = "posteo.de";
+          port = 993;
         };
 
-      "gmx" =
-        (mkDefaultMailAccountSettings {
-          provider = "gmx";
-          mailAddress = "jannikb33@gmx.de";
-        })
-        // {
-          smtp = {
-            host = "mail.gmx.net";
-            port = 587;
-            tls.useStartTls = true;
+        # TODO get gpg signing & gpg setup working & right
+        /*
+          gpg = {
+            key = "483342532448204D";
+            signByDefault = true;
           };
-          imap = {
-            host = "imap.gmx.net";
-            port = 993;
-          };
+        */
+
+        signature = {
+          #command =
+          #delimiter =
+          #showSignature = "append";
+          #text = "";
         };
 
-      "uni" =
-        (mkDefaultMailAccountSettings {
-          provider = "uni";
-          mailAddress = "st177878@stud.uni-stuttgart.de";
-          serverUsername = "st177878";
-        })
-        // {
-          imap = {
-            host = "imap.uni-stuttgart.de";
-            port = 993;
-          };
-          smtp = {
-            host = "smtp.uni-stuttgart.de";
-            port = 587;
-            tls.useStartTls = true;
-          };
+        #thunderbird.perIdentitySettings
+        #thunderbird.settings # account settings
+      };
+
+    "gmx" =
+      (mkDefaultMailAccountSettings {
+        provider = "gmx";
+        mailAddress = "jannikb33@gmx.de";
+      })
+      // {
+        smtp = {
+          host = "mail.gmx.net";
+          port = 587;
+          tls.useStartTls = true;
         };
-    };
+        imap = {
+          host = "imap.gmx.net";
+          port = 993;
+        };
+      };
+
+    "uni" =
+      (mkDefaultMailAccountSettings {
+        provider = "uni";
+        mailAddress = "st177878@stud.uni-stuttgart.de";
+        serverUsername = "st177878";
+      })
+      // {
+        imap = {
+          host = "imap.uni-stuttgart.de";
+          port = 993;
+        };
+        smtp = {
+          host = "smtp.uni-stuttgart.de";
+          port = 587;
+          tls.useStartTls = true;
+        };
+      };
+  };
 }
