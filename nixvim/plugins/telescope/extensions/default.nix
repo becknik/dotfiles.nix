@@ -39,7 +39,7 @@
     }
     {
       key = "<leader>fG";
-      action = "Telescope live_grep_args live_grep_args";
+      action = "Telescope live_grep_args live_grep_args theme=ivy";
       options.cmd = true;
       options.desc = "Search in live Grep (with args)";
     }
