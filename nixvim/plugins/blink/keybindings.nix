@@ -18,13 +18,14 @@
         "fallback"
       ];
       "<esc>" = [
-        "hide"
         {
           __raw = ''
             function(cmp)
+              if cmp.is_active() then
+                cmp.hide()
+              end
               if require'copilot.suggestion'.is_visible() then
                 require'copilot.suggestion'.dismiss()
-                return true
               end
               return false
             end
@@ -76,20 +77,17 @@
         "fallback"
       ];
 
-      "<C-e>" = [
-        "hide"
-        "fallback"
-      ];
       "<C-x>" = [
         {
           __raw = ''
             function(cmp)
-              print("Selected entry:", vim.inspect(entry))
               if cmp.is_active() then
                 cmp.hide()
+                return true
               end
               if require'copilot.suggestion'.is_visible() then
                 require'copilot.suggestion'.dismiss()
+                return true
               end
               -- switch to normal mode
               vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
