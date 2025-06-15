@@ -40,12 +40,12 @@
         github_personal = {
           host = "github.com";
           user = "git";
-          identityFile = "~/.ssh/github-personal";
+          identityFile = "~/.ssh/github-becknik";
         };
         gitlab_personal = {
           host = "gitlab.com";
           user = "git";
-          identityFile = "~/.ssh/github-personal";
+          identityFile = "~/.ssh/gitlab-becknik";
         };
       };
     };

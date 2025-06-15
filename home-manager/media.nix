@@ -136,6 +136,7 @@
     tor-browser
     gpa
     veracrypt # TODO derivation with set WXSUPPRESS_SIZER_FLAGS_CHECK env var
+    magic-wormhole
 
     ## Chat Clients
     element-desktop

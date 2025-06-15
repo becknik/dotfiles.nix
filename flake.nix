@@ -26,7 +26,7 @@
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:becknik/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {

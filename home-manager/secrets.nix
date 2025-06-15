@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   createMailSecret = providerName: {
@@ -33,22 +38,26 @@ in
         # (or element of the defaultSopsFile, if it's set above)
 
         # Source: https://github.com/Mic92/sops-nix/blob/master/modules/home-manager/sops.nix
-        "github-personal.pub" = {
+        "ssh/github/becknik/public" = {
           sopsFile = ./secrets/git.yaml;
-          format = "yaml";
-          key = "github/personal/ed25519.pub";
-          path = "${config.home.homeDirectory}/.ssh/github-personal.pub";
+          key = "github/becknik/public";
+          path = "${config.home.homeDirectory}/.ssh/github-becknik.pub";
         };
-        "github-personal" = {
+        "ssh/github/becknik/private" = {
           sopsFile = ./secrets/git.yaml;
-          key = "github/personal/ed25519";
-          path = "${config.home.homeDirectory}/.ssh/github-personal";
+          key = "github/becknik/private";
+          path = "${config.home.homeDirectory}/.ssh/github-becknik";
         };
 
-        "gitlab-personal" = {
+        "ssh/gitlab/becknik/public" = {
           sopsFile = ./secrets/git.yaml;
-          key = "gitlab/personal/ed25519";
-          path = "${config.home.homeDirectory}/.ssh/gitlab-personal";
+          key = "gitlab/becknik/public";
+          path = "${config.home.homeDirectory}/.ssh/gitlab-becknik.pub";
+        };
+        "ssh/gitlab/becknik/private" = {
+          sopsFile = ./secrets/git.yaml;
+          key = "gitlab/becknik/private";
+          path = "${config.home.homeDirectory}/.ssh/gitlab-becknik";
         };
 
         # Creation of secrets from binaries: `sops -e ./desktop-env/secrets/keepass.key > ./desktop-env/secrets/keepassxc.yaml`
@@ -59,19 +68,78 @@ in
           sopsFile = ./secrets/keepassxc.key;
         };
 
-        "gpg-personal.asc" = {
-          format = "binary";
-          sopsFile = ./secrets/gpg-personal.asc;
-          path = "${config.home.homeDirectory}/.gnupg/private-keys-v1.d/gpg-personal"; # Must be manually imported
+        "gpg/mail/proton-main/public" = {
+          sopsFile = ./secrets/mail.yaml;
+          key = "proton/main/public";
+          path = "${config.home.homeDirectory}/.gpg/mail/main-public";
+        };
+        "gpg/mail/proton-main/private" = {
+          sopsFile = ./secrets/mail.yaml;
+          key = "proton/main/private";
+          path = "${config.home.homeDirectory}/.gpg/mail/main-private";
+        };
+        "gpg/mail/proton-official/public" = {
+          sopsFile = ./secrets/mail.yaml;
+          key = "proton/official/public";
+          path = "${config.home.homeDirectory}/.gpg/mail/official-public";
+        };
+        "gpg/mail/proton-official/private" = {
+          sopsFile = ./secrets/mail.yaml;
+          key = "proton/official/private";
+          path = "${config.home.homeDirectory}/.gpg/mail/official-private";
         };
 
-        # Mail Stuff
+        "gpg/becknik/public" = {
+          sopsFile = ./secrets/git.yaml;
+          key = "becknik/public";
+          path = "${config.home.homeDirectory}/.gpg/becknik/private";
+        };
+        "gpg/becknik/private" = {
+          sopsFile = ./secrets/git.yaml;
+          key = "becknik/private";
+          path = "${config.home.homeDirectory}/.gpg/becknik/public";
+        };
       }
       // mail-secret-posteo
       // mail-secret-gmx
       // mail-secret-uni;
   };
-  systemd.user.services.sops-nix.Service.ExecStartPre = "${pkgs.coreutils}/bin/sleep 10";
+
+  programs.gpg = {
+    enable = true;
+
+    publicKeys =
+      map
+        (source: {
+          inherit source;
+          trust = 5;
+        })
+        [
+          "${config.home.homeDirectory}/.gpg/becknik/public"
+          "${config.home.homeDirectory}/.gpg/becknik/private"
+          "${config.home.homeDirectory}/.gpg/mail/main-public"
+          "${config.home.homeDirectory}/.gpg/mail/main-private"
+          "${config.home.homeDirectory}/.gpg/mail/official-public"
+          "${config.home.homeDirectory}/.gpg/mail/official-private"
+        ];
+
+  };
+
+  systemd.user.services.sops-nix.Service.ExecStartPre =
+    "${pkgs.writeShellScript "sops-nix-start-pre" ''
+      if ${lib.getExe pkgs.yubikey-manager} list &>/dev/null; then
+        ${lib.getExe pkgs.libnotify}/bin/notify-send --urgency=critical --wait 'SOPS-Nix' 'Insert YubiKey to mount secrets...'
+        if ${lib.getExe pkgs.yubikey-manager} list &>/dev/null; then
+          exit 1
+        fi
+      else
+        exit 0
+      fi
+    ''}";
+
+  systemd.user.services.sops-nix.Service.Restart = "on-failure";
+  systemd.user.services.sops-nix.Service.RestartSec = "10s";
+
   systemd.user.services.sops-nix.Unit.Wants = [
     "graphical-session.target"
     "gpg-agent.socket"

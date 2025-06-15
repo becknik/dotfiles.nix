@@ -47,6 +47,9 @@
       "mail.phishing.detection.enabled" = false;
       "mail.purge.ask" = false;
 
+      "mail.openpgp.allow_external_gnupg" = true;
+      "mail.openpgp.fetch_pubkeys_from_gnupg" = true;
+
       "msgcompose.font_face" = "monospace";
       "msgcompose.font_size" = "4";
 

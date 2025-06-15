@@ -30,10 +30,10 @@
         "YmVj"
         "a25p"
         "a0Bw"
-        "cm90"
-        "b24u"
-        "bWU"
+        "bS5t"
+        "ZQ"
       ]);
+    signing.signByDefault = true;
     includes = [
       {
         # If the pattern ends with /, ** will be automatically added

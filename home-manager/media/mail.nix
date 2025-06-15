@@ -50,6 +50,12 @@ in
       // {
         primary = true;
         realName = "Jannik Becker";
+        # TODO: doesn't seem to work with Thunderbird
+        # gpg = {
+        #   key = "43CFD745B4DB70B9";
+        #   signByDefault = true;
+        #   encryptByDefault = false;
+        # };
 
         imap = {
           host = "127.0.0.1";
