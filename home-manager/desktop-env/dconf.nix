@@ -446,7 +446,7 @@ with lib.gvariant;
       keyboard-layout = true;
       looking-glass-height = 0;
       looking-glass-width = 0;
-      notification-banner-position = 2;
+      notification-banner-position = 1;
       osd = true;
       osd-position = 0;
       panel = !isLaptop;
