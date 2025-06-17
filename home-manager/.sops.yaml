@@ -5,11 +5,12 @@ keys:
   # sops age yubikey stuff doesn't seem to work on nix-darwin...
   - &key-work age1nm0nrdwqvrznv2q88qt9tl3zdl7qe89v2u75pa4kwzaw6v5h99nq98vqzq
 creation_rules:
-  - path_regex: secrets/[^/]+\.(yaml|key|asc)$
-    key_groups:
-      - age:
-          - *key-age-yubi
   - path_regex: secrets/(git\.yaml|keepassxc\.key)$
     key_groups:
       - age:
           - *key-work
+          - *key-age-yubi
+  - path_regex: secrets/[^/]+\.(yaml|key|asc)$
+    key_groups:
+      - age:
+          - *key-age-yubi

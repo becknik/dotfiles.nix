@@ -36,13 +36,7 @@
     ssh.extraConfig = "UseKeychain yes";
     librewolf.enable = lib.mkForce false;
 
-    git = {
-      userName = (lib.mkForce "Jannik Becker");
-      userEmail = (lib.mkForce "sprinteins.becker@extaccount.com");
-      extraConfig = {
-        safe.directory = mkFlakeDir userName config;
-      };
-    };
+    git.extraConfig.safe.directory = mkFlakeDir userName config;
   };
 
   # Packaging Leftovers

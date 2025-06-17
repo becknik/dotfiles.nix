@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   programs.git = {
@@ -43,11 +48,16 @@
             name = "Jannik Becker";
             email = "st177878@stud.uni-stuttgart.de";
           };
+          commit.gpgSign = false;
+          tag.gpgSign = false;
         };
       }
     ];
 
     extraConfig = {
+      # setting this for local config
+      include.path = lib.mkAfter "${config.home.homeDirectory}/.gitconfig";
+
       remote.pushDefault = "origin";
       init.defaultBranch = "main";
       core = {
@@ -149,5 +159,16 @@
       "*.kt diff=kotlin"
       "*.sh diff=bash"
     ];
+  };
+
+  home.file."gitconfig-disable-signing" = {
+    target = ".gitconfig-disable-signing";
+    text = ''
+      ; [includeIf "gitdir:~/devel/.../"]
+      [commit]
+        gpgSign = false
+      [tag]
+        gpgSign = false
+    '';
   };
 }
