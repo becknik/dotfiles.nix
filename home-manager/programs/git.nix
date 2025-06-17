@@ -52,6 +52,13 @@
           tag.gpgSign = false;
         };
       }
+      {
+        condition = "gitdir:~/devel/work/";
+        contents = {
+          commit.gpgSign = false;
+          tag.gpgSign = false;
+        };
+      }
     ];
 
     extraConfig = {
