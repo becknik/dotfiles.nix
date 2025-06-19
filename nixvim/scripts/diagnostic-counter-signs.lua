@@ -1,6 +1,7 @@
 local treesitter_context_ctx = require("treesitter-context.context")
 local diag_counter_cache = {}
 local diag_cursor_line_cache = {}
+local diag_last_update = {}
 
 vim.fn.sign_define("DiagnosticSignError", {
   text = "󰅚 ",
@@ -38,11 +39,14 @@ local function update_diag_summary()
 		return
 	end
 
-	local cursor_line_current = vim.api.nvim_win_get_cursor(0)[1]
-	if diag_cursor_line_cache[bufnr] and diag_cursor_line_cache[bufnr] == cursor_line_current then
-		return
-	end
-	diag_cursor_line_cache[bufnr] = cursor_line_current
+  local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
+  local now = vim.loop.hrtime() / 1e9 -- seconds
+  local last = diag_last_update[bufnr] or 0
+
+  if cursor_line == (diag_cursor_line_cache[bufnr] or -1) and (now - last) < 1.0 then return end
+
+	diag_cursor_line_cache[bufnr] = cursor_line
+  diag_last_update[bufnr] = now
 
 	local winid = vim.api.nvim_get_current_win()
 	local context_ranges, _ = treesitter_context_ctx.get(winid)
