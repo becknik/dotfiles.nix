@@ -10,12 +10,13 @@
       { "<leader>Q", icon = " !" },
       { "<leader>w", icon = " " },
 
-      { "<leader>bf", icon = "  " },
+      -- { "<leader>b", icon = " ", desc = "Buffers" },
+      { "<leader>b", icon = "  " },
     }
   '';
 
   plugins.telescope.keymaps = {
-    "<leader>bf" = {
+    "<leader>b" = {
       action = "buffers theme=ivy sort_mru=true ignore_current_buffer=true";
       options.desc = "Find Buffer";
     };
