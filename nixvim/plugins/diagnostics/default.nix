@@ -9,7 +9,7 @@
   diagnostic.settings = {
     virtual_text = true;
   };
-  extraConfigLuaPre = "local diag_virtual_text_enabled = true";
+  extraConfigLuaPre = "local diag_virtual_text_enabled = false";
 
   plugins.lsp-lines.enable = true;
 
@@ -31,7 +31,7 @@
       action.__raw = "function()
         diag_virtual_text_enabled = not diag_virtual_text_enabled
         vim.diagnostic.config({ virtual_text = diag_virtual_text_enabled })
-        vim.notify((diag_virtual_text_enabled and 'Enabled' or 'Disabled') .. 'Diagnostic Virtual Text' , vim.log.levels.INFO, { render = 'compact' })
+        vim.notify((diag_virtual_text_enabled and 'Enabled' or 'Disabled') .. ' Diagnostic Virtual Text' , vim.log.levels.INFO, { render = 'compact' })
       end";
       options.desc = "Toggle Diagnostic Virtual Text";
     }
