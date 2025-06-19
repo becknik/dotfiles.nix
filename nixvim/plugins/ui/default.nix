@@ -8,7 +8,10 @@
   plugins = {
     notify = {
       enable = true;
-      settings.stages = "fade";
+      settings = {
+        background_colour = "#000000"; # removes annoying notification sometimes appearing when exiting commit editor
+        stages = "fade";
+      };
     };
     # https://github.com/HiPhish/rainbow-delimiters.nvim
     rainbow-delimiters.enable = true;
