@@ -1,4 +1,4 @@
-{ mapToModeAbbr, ... }:
+{ mapToModeAbbr, withDefaultKeymapOptions, ... }:
 
 {
   extraConfigLua = ''
@@ -46,14 +46,10 @@
     };
     "<leader>fl" = {
       action = "current_buffer_fuzzy_find";
-      mode = mapToModeAbbr [
-        "normal"
-        "visual_select"
-      ];
       options.desc = "Search Locally";
     };
     "<leader>f." = {
-      action = "resume";
+      action = "resume initial_mode=normal";
       options.desc = "Resume";
     };
 
@@ -83,4 +79,15 @@
       options.desc = "Find modules to Reload";
     };
   };
+
+  keymaps = withDefaultKeymapOptions [
+    {
+      key = "<leader>fl";
+      action = "\"ly:Telescope current_buffer_fuzzy_find default_text=<C-r>l<CR>";
+      mode = mapToModeAbbr [
+        "visual_select"
+      ];
+      options.desc = "Search Locally";
+    }
+  ];
 }

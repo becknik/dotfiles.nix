@@ -21,6 +21,7 @@
         # https://github.com/nvim-telescope/telescope.nvim/tree/master?tab=readme-ov-file#default-mappings
         mappings = {
           n."q" = "close";
+          n."dd" = "delete_buffer";
         };
       };
     };
