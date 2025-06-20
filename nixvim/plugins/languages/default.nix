@@ -3,7 +3,6 @@
 {
   imports = [
     ./markdown.nix
-    ./nix.nix
     ./latex.nix
   ];
 

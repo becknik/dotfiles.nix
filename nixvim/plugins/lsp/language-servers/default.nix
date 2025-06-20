@@ -3,6 +3,7 @@
 {
   imports = [
     ./lua_ls.nix
+    ./nix.nix
   ];
 
   plugins.lsp.servers = {
@@ -25,7 +26,6 @@
 
     # Domain-specific Scripting Stuff
 
-    nixd.enable = true;
     sqls.enable = true;
     texlab.enable = true;
     bashls.enable = true;
