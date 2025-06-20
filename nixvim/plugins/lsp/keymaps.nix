@@ -23,13 +23,19 @@
 
       { "go", icon = "󱉯 " },
 
-      { "gs", icon = " ", desc = "Telescope" },
-      { "gsy", icon = " 󰌆 " },
-      { "gsY", icon = " 󰌆 " },
+      { "gy", icon = "󰌆 " },
+      { "gY", icon = "󰌆 " },
+      { "gs", icon = " ", desc = "Search" },
       { "gsr", icon = " " },
       { "gsd", icon = " " },
       { "gsi", icon = "  " },
       { "gst", icon = " " },
+
+      { "<leader>c", desc = "Code etc.", icon = "󰲒 " }, -- 󰲒 󰢱
+      { "<leader>ci", icon = "󰲒 󰋺 " },
+      { "<leader>cm", icon = "󰲒 󰃹" },
+      { "<leader>cu", icon = "󰲒 󰟼 " },
+      { "<leader>cf", icon = "󰲒 󰁨 " },
     }
   '';
 
@@ -47,30 +53,31 @@
 
   plugins.telescope.keymaps = {
     # https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#neovim-lsp-pickers
-    "gsy" = {
-      action = "lsp_document_symbols";
+    "gy" = {
+      action = "lsp_document_symbols theme=ivy";
       options.desc = "Search in local Symbols";
     };
-    "gsY" = {
-      action = "lsp_workspace_symbols"; # lsp_dynamic_workspace_symbols
+    "gY" = {
+      action = "lsp_workspace_symbols theme=ivy"; # lsp_dynamic_workspace_symbols
       options.desc = "Search in global Symbols";
     };
+
     "gsr" = {
-      action = "lsp_references";
+      action = "lsp_references theme=ivy initial_mode=normal";
       options.desc = "Search in ";
     };
     "gsd" = {
-      action = "lsp_definitions";
+      action = "lsp_definitions theme=ivy initial_mode=normal";
       options.desc = "Search in ";
     };
     "gst" = {
       # is this really helpful?
-      action = "lsp_type_definition";
+      action = "lsp_type_definition theme=ivy initial_mode=normal";
       options.desc = "Search in Variablle Type Definitions";
     };
     "gsi" = {
       # -"-
-      action = "lsp_implementations";
+      action = "lsp_implementations theme=ivy initial_mode=normal";
       options.desc = "Search in Implementations";
     };
   };
@@ -169,6 +176,57 @@
         action = "Lspsaga rename";
         options.cmd = true;
         options.desc = "Rename";
+      }
+
+      # lsp-specific actions
+
+      {
+        key = "<leader>ci";
+        action.__raw = ''
+          function()
+            vim.lsp.buf.code_action {
+              context = { only = { "source.organizeImports" } },
+              apply = true
+            }
+          end
+        '';
+        options.desc = "Organize Imports";
+      }
+      {
+        key = "<leader>cm";
+        action.__raw = ''
+          function()
+            vim.lsp.buf.code_action {
+              context = { only = { "source.addMissingImports" } },
+              apply = true
+            }
+          end
+        '';
+        options.desc = "Add Missing Imports";
+      }
+      {
+        key = "<leader>cf";
+        action.__raw = ''
+          function()
+            vim.lsp.buf.code_action {
+              context = { only = { "source.fixAll" } },
+              apply = true
+            }
+          end
+        '';
+        options.desc = "Fix All";
+      }
+      {
+        key = "<leader>cu";
+        action.__raw = ''
+          function()
+            vim.lsp.buf.code_action {
+              context = { only = { "source.removeUnused" } },
+              apply = true
+            }
+          end
+        '';
+        options.desc = "Remove Unused";
       }
     ];
   };

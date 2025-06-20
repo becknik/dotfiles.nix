@@ -49,6 +49,7 @@
       "relay.config"
     ];
     volar.enable = true;
+    vtsls.enable = true;
 
     # Backend Stuff
 
