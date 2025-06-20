@@ -2,13 +2,15 @@
 
 {
   #  TODO find out where to declare the value of this option...
-  /*options = {
-    customOptions.laptopMode = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Adjust the (dconf) settings for laptop usage";
+  /*
+    options = {
+      customOptions.laptopMode = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Adjust the (dconf) settings for laptop usage";
+      };
     };
-  };*/
+  */
 
   imports = [
     ../default.nix
@@ -24,7 +26,7 @@
 
   config = {
     home.homeDirectory = "/home/${userName}";
-    programs.zsh.oh-my-zsh.plugins = lib.mkAfter [ "bgnotify" "systemd" ];
+    programs.zsh.oh-my-zsh.plugins = lib.mkAfter [ "systemd" ];
 
     # Nicely reload system units when changing configs
     systemd.user.startServices = "sd-switch";

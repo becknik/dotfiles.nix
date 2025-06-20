@@ -75,9 +75,6 @@ rerun-previous-command-if-empty() {
 zle -N accept-line rerun-previous-command-if-empty
 
 
-bgnotify_bell=false;
-bgnotify_threshold=120;
-
 function nixos-upgrade-monitor {
   if [ $# -eq 0 ]; then
     echo "No arguments provided. Please provide a log file path."
