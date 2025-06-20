@@ -6,6 +6,8 @@
     ./nix.nix
   ];
 
+  plugins.schemastore.enable = true;
+
   plugins.lsp.servers = {
     typos_lsp.enable = true; # Source code spell checker for Visual Studio Code
 
@@ -19,10 +21,12 @@
     taplo.enable = true; # TOML
     yamlls.enable = true;
 
-    # Templating Stuff
+    # CI/CD Stuff
 
     dockerls.enable = true;
     docker_compose_language_service.enable = true;
+    gh_actions_ls.enable = true;
+    gh_actions_ls.package = null;
 
     # Domain-specific Scripting Stuff
 
@@ -62,5 +66,6 @@
     hls.enable = true;
     hls.installGhc = true;
     # zls.enable = true;
+    gopls.enable = true;
   };
 }
