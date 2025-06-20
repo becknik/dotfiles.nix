@@ -3,7 +3,7 @@
 {
   plugins.blink-cmp = {
     luaConfig.pre = ''
-      local cmp_kinds = require'blink.cmp.types'.CompletionItemKind
+      -- local cmp_kinds = require'blink.cmp.types'.CompletionItemKind
     '';
 
     settings.keymap = {
@@ -21,7 +21,7 @@
         {
           __raw = ''
             function(cmp)
-              if cmp.is_active() then
+              if cmp.is_visible() then
                 cmp.hide()
               end
               if require'copilot.suggestion'.is_visible() then
@@ -42,33 +42,50 @@
                 return false
               end
 
-              local kind = entry.kind
-              local is_function_like = kind == cmp_kinds.Function or
-              kind == cmp_kinds.Method or
-              kind == cmp_kinds.StaticMethod or
-              kind == cmp_kinds.Constructor
-              local is_variable_like = kind == cmp_kinds.Variable or
-              kind == cmp_kinds.Constant or
-              kind == cmp_kinds.Field or
-              kind == cmp_kinds.Property or
-              kind == cmp_kinds.Struct or
-              kind == cmp_kinds.Object or
-              kind == cmp_kinds.Reference or
-              kind == cmp_kinds.Module or
-              kind == cmp_kinds.Enum
+              cmp.accept()
+              vim.schedule(function()
+                local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+                local line = vim.api.nvim_get_current_line()
 
-              if not is_function_like and not is_variable_like then
+                -- if we are in front of ')' (blink just added "()") → jump over it
+                if line:sub(col + 1, col + 1) == ')' then
+                  vim.api.nvim_win_set_cursor(0, { row, col + 1 })
+                end
+                vim.api.nvim_feedkeys(
+                  vim.api.nvim_replace_termcodes('.', true, false, true),
+                  "n",
+                  true
+                )
+              end)
+              return true
+            end
+          '';
+        }
+        "fallback"
+      ];
+      "(" = [
+        {
+          __raw = ''
+            function(cmp)
+              local entry = cmp.get_selected_item()
+              if not entry then
                 return false
               end
 
               cmp.accept()
               vim.schedule(function()
-                local action = is_function_like and "<Right>." or "."
-                vim.api.nvim_feedkeys(
-                  vim.api.nvim_replace_termcodes(action, true, false, true),
-                  "n",
-                  true
-                )
+                local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+                local line = vim.api.nvim_get_current_line()
+
+                -- only insert '(' when we are NOT already inside "()"
+                if line:sub(col - 1, col - 1) ~= '(' then
+                  vim.api.nvim_feedkeys(
+                    vim.api.nvim_replace_termcodes("(", true, false, true),
+                    "n",
+                    true
+                  )
+                end
+
               end)
               return true
             end
@@ -81,7 +98,7 @@
         {
           __raw = ''
             function(cmp)
-              if cmp.is_active() then
+              if cmp.is_visible() then
                 cmp.hide()
                 return true
               end
@@ -112,7 +129,7 @@
         {
           __raw = ''
             function(cmp)
-              if not cmp.is_active() then
+              if not cmp.is_visible() then
                 cmp.show({ providers = { 'snippets' } })
                 return true
               end
@@ -164,6 +181,20 @@
         "scroll_documentation_down"
         "fallback"
       ];
+      "<C-k>" = [
+        "show_signature"
+      ];
+
+      "<C-1>".__raw = "{ function(cmp) cmp.accept({ index = 1 }) end }";
+      "<C-2>".__raw = "{ function(cmp) cmp.accept({ index = 2 }) end }";
+      "<C-3>".__raw = "{ function(cmp) cmp.accept({ index = 3 }) end }";
+      "<C-4>".__raw = "{ function(cmp) cmp.accept({ index = 4 }) end }";
+      "<C-5>".__raw = "{ function(cmp) cmp.accept({ index = 5 }) end }";
+      "<C-6>".__raw = "{ function(cmp) cmp.accept({ index = 6 }) end }";
+      "<C-7>".__raw = "{ function(cmp) cmp.accept({ index = 7 }) end }";
+      "<C-8>".__raw = "{ function(cmp) cmp.accept({ index = 8 }) end }";
+      "<C-9>".__raw = "{ function(cmp) cmp.accept({ index = 9 }) end }";
+      "<C-0>".__raw = "{ function(cmp) cmp.accept({ index = 10 }) end }";
     };
   };
 }

@@ -1,6 +1,10 @@
 { ... }:
 
 {
+  # https://github.com/fenuks/dotfiles/blob/9306cf7c7d7b79c93881da87daf61f314a9d96b4/.config/nvim/lua/init.lua#L256
+  # https://github.com/nvimdev/lspsaga.nvim/blob/a4d442896a9ff1f83ee3db965d81b659ebc977d5/lua/lspsaga/lspkind.lua#L29
+  # https://github.com/onsails/lspkind.nvim/issues/12
+
   plugins.blink-cmp.settings.appearance.kind_icons = {
     Array = "󰅨 ";
     # Array = "";

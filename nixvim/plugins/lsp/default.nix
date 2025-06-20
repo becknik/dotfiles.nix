@@ -9,7 +9,6 @@
     ./keymaps.nix
 
     ./lspsaga.nix
-    ./lsp-signature.nix
   ];
 
   # https://github.com/neovim/nvim-lspconfig

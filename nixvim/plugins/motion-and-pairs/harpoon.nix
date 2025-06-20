@@ -40,32 +40,32 @@
     }
     {
       key = "<leader>a1";
-      action.__raw = "function() require'harpoon':list():replace(1) end";
+      action.__raw = "function() require'harpoon':list():replace_at(1) end";
       options.desc = "Replace Harpoon Item 1";
     }
     {
       key = "<leader>a2";
-      action.__raw = "function() require'harpoon':list():replace(2) end";
+      action.__raw = "function() require'harpoon':list():replace_at(2) end";
       options.desc = "Replace Harpoon Item 2";
     }
     {
       key = "<leader>a3";
-      action.__raw = "function() require'harpoon':list():replace(3) end";
+      action.__raw = "function() require'harpoon':list():replace_at(3) end";
       options.desc = "Replace Harpoon Item 3";
     }
     {
       key = "<leader>a4";
-      action.__raw = "function() require'harpoon':list():replace(4) end";
+      action.__raw = "function() require'harpoon':list():replace_at(4) end";
       options.desc = "Replace Harpoon Item 4";
     }
     {
       key = "<leader>a5";
-      action.__raw = "function() require'harpoon':list():replace(5) end";
+      action.__raw = "function() require'harpoon':list():replace_at(5) end";
       options.desc = "Replace Harpoon Item 5";
     }
     {
       key = "<leader>a6";
-      action.__raw = "function() require'harpoon':list():replace(6) end";
+      action.__raw = "function() require'harpoon':list():replace_at(6) end";
       options.desc = "Replace Harpoon Item 6";
     }
 
