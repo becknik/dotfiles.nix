@@ -119,7 +119,7 @@
     "SystemMaxUse=200MB\n"
     + "MaxRetentionSec=7d\n"
     +
-      # Initalized with 4G
+      # Initialized with 4G
       "RuntimeMaxFileSize=128M";
 
   ## Networking

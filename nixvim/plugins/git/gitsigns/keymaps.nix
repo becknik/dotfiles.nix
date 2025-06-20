@@ -9,9 +9,9 @@
       { "<leader>hr", icon = "" },
       { "<leader>hR", icon = "" },
       { "<leader>hu", icon = "󰕍" },
-      { "<leader>hv", icon = "󰕜" },
-      { "<leader>hd", icon = "" },
-      { "<leader>hD", icon = "" },
+      { "<leader>hv", icon = "󰕜 " },
+      { "<leader>hd", icon = " " },
+      { "<leader>hD", icon = " " },
 
       { "<leader>tb", icon = " 󰘤  " },
       { "<leader>tx", icon = " 󰦨 " },
