@@ -23,23 +23,33 @@
                 ["end"] = { args.line2, end_line:len() },
               }
             end
+
             require("conform").format({
               async = true,
               lsp_format = "fallback",
               range = range
             }, function(err, did_edit)
                 if (err) then
-                  vim.notify("Failed formatting: " .. err, "error", { title = "Conform" })
+                  vim.notify("Failed formatting: " .. err, "error", { title = "Conform All" })
                 elseif (did_edit) then
-                  vim.notify("Done formatting", "info", { title = "Conform", render = "compact" })
+                  vim.notify("Done formatting", "info", { title = "Conform All", render = "compact" })
                   vim.cmd("silent noautocmd write")
                   vim.cmd('silent GuessIndent')
                 else
-                  vim.notify("Nothing to format", "info", { title = "Conform", render = "compact" })
+                  vim.notify("Nothing to format", "info", { title = "Conform All", render = "compact" })
                   vim.cmd("silent noautocmd write")
                 end
               end
             )
+
+            if not range then
+              -- This blocks the buffer for a annoyingly long time, so disable it for now & waiting for
+              -- https://github.com/neovim/neovim/issues/19624 to eventually resolve
+              -- vim.lsp.buf.code_action {
+              --   context = { only = { "source.organizeImports" } },
+              --   apply = true,
+              -- }
+            end
           end
         '';
     };
@@ -50,12 +60,18 @@
           local bufnr = args.buf or vim.api.nvim_get_current_buf()
 
           if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+            vim.api.nvim_command("noautocmd write")
+            return
+          end
+          local format_start = vim.loop.hrtime() / 1e6 -- ms
+          if vim.b[bufnr].disable_hunk_fmt or vim.g.disable_hunk_fmt then
+            vim.api.nvim_command("ConformFormat")
             return
           end
 
           local hunks = require("gitsigns").get_hunks(bufnr)
           if not hunks then
-            vim.api.nvim_command("ConformFormat")
+            vim.notify("No hunks available", "error", { title = "Conform Hunks" })
             return
           end
 
@@ -65,84 +81,99 @@
             2,
             {
               key = "conform_format_hunk",
-              annote = "Conform Auto Format",
+              annote = "Conform Hunks",
               skip_history = true,
             }
           )
 
           local hunks_amount = #hunks
-          local hunks_processed = 0
+          local hunks_processing = 0
           local executed_writes = 0
+
+          local fidget = require("fidget")
+          local function update_status(processing, amount, writes, completed_time)
+            fidget.notify(
+              (completed_time and math.floor((completed_time / 1e6) - format_start) .. "ms Completed formatting " or  "Formatting ")
+              .. processing .. "/" .. amount .. " (" .. writes .. ") hunks",
+              2,
+              {
+                key = "conform_format_hunk",
+                annote = "Conform Hunks",
+                skip_history = true,
+                update_only = true,
+              }
+            )
+          end
 
           local function format_range()
             if next(hunks) == nil then
-              if executed_writes > 0 then
-                fidget.notify(
-                  "Formatted " .. executed_writes .. "/" .. hunks_amount .. " hunks",
-                  2,
-                  {
-                    key = "conform_format_hunk",
-                    annote = "Conform Auto Format",
-                    skip_history = true,
-                    update_only = true,
-                  }
-                )
-              end
-
+              update_status(hunks_processing, hunks_amount, executed_writes, vim.loop.hrtime())
               vim.schedule(function()
                 vim.api.nvim_command("noautocmd write")
+                -- vim.lsp.buf.code_action {
+                --   context = { only = { "source.organizeImports" } },
+                --   apply = true,
+                -- }
               end)
               return
             end
 
             local hunk = nil
             while next(hunks) and (not hunk or hunk.type == "delete") do
-                hunk = table.remove(hunks)
+              hunk = table.remove(hunks)
+              hunks_processing = hunks_processing + 1
+              update_status(hunks_processing, hunks_amount, executed_writes, false)
             end
 
-            if hunk and hunk.type ~= "delete" then
-              -- TODO hypothesis: some formatters (like prettier) need at least 1 non-blank context line
-              local start = hunk.added.start
-              local last = start + hunk.added.count
-              -- nvim_buf_get_lines uses zero-based indexing -> subtract from last
-              local last_hunk_line = vim.api.nvim_buf_get_lines(bufnr, last - 2, last - 1, true)[1]
-              local range = {
-                start = { start, 0 },
-                ["end"] = { last - 1, last_hunk_line:len() }
-              }
+            if not hunk then
+              return format_range()
+            end
 
-              require("conform").format({
-                bufnr = bufnr,
-                range = range,
-                async = true,
-                -- quiet   = true,
-              }, function(err, did_edit)
-                if err then
-                  vim.notify("Failed formatting: " .. err, "error", { title = "Conform Auto Format" })
-                  return;
-                end
-                if did_edit then
-                  -- not thread-save, but who cares =)
-                  executed_writes = executed_writes + 1
-                end
-                hunks_processed = hunks_processed + 1
+            -- TODO hypothesis: some formatters (like prettier) need at least 1 non-blank context line
+            local start = hunk.added.start
+            local last = start + hunk.added.count
+            -- nvim_buf_get_lines uses zero-based indexing -> subtract from last
+            local last_hunk_line = vim.api.nvim_buf_get_lines(bufnr, last - 2, last - 1, true)[1]
+            local range = {
+              start = { start, 0 },
+              ["end"] = { last - 1, last_hunk_line:len() }
+            }
 
-                fidget.notify(
-                  "Formatting " .. hunks_processed .. "/" .. hunks_amount .. " (" .. executed_writes .. ") hunks",
-                  2,
-                  {
-                    key = "conform_format_hunk",
-                    annote = "Conform Auto Format",
-                    skip_history = true,
-                    update_only = true,
-                  }
+            require("conform").format({
+              bufnr = bufnr,
+              range = range,
+              async = true,
+              -- quiet   = true,
+            }, function(err, did_edit)
+              if err then
+                vim.notify("Failed formatting: " .. err, "error", { title = "Conform Hunks" })
+                return;
+              end
+
+              local now = vim.loop.hrtime() / 1e6 -- ms
+              if now - format_start > 2000 and not vim.b[bufnr].disable_hunk_fmt then
+                vim.b[bufnr].disable_hunk_fmt = true
+                vim.notify("Formatting hunks took too longer than 2s", "warn", { title = "Conform Hunks" })
+                vim.notify(
+                  "Locally hunk-formatting disabled",
+                  "info",
+                  { title = "Conform" }
                 )
+                if #hunks > hunks_processing / 2 then 
+                  -- immediately format the rest if it takes around 3s
+                  vim.api.nvim_command("ConformFormat")
+                  return
+                end
+              end
 
-                vim.defer_fn(function() format_range() end, 1)
-              end)
-            end
+              if did_edit then
+                -- not thread-save, but who cares =)
+                executed_writes = executed_writes + 1
+                update_status(hunks_processing, hunks_amount, executed_writes, false)
+              end
+              format_range()
+            end)
           end
-
           format_range()
         end
       '';
@@ -162,14 +193,66 @@
     }
 
     {
-      key = "<leader>tfg";
-      action.__raw = "function() vim.g.disable_autoformat = true end";
-      options.desc = "Toggle Format Global";
+      key = "<leader>tF";
+      action.__raw = ''
+        function() 
+          local prev = vim.g.disable_autoformat or false
+          vim.g.disable_autoformat = not prev
+          vim.notify(
+            "Global auto-formatting " .. (prev and  "enabled" or "disabled"),
+            "info",
+            { title = "Conform" }
+          )
+        end
+      '';
+      options.desc = "Toggle Auto-Format Global";
     }
     {
-      key = "<leader>tfl";
-      action.__raw = "function() vim.b.disable_autoformat = true end";
-      options.desc = "Toggle Format Local";
+      key = "<leader>tf";
+      action.__raw = ''
+        function()
+          local prev = vim.b.disable_autoformat or false
+          vim.b.disable_autoformat = not prev
+          vim.notify(
+            "Local auto-formatting " .. (prev and  "enabled" or "disabled"),
+            "info",
+            { title = "Conform" }
+          )
+        end
+      '';
+      options.desc = "Toggle Auto-Format Local";
+    }
+    {
+      key = "<leader>tU";
+      action.__raw = ''
+        function()
+          local prev = vim.g.disable_hunk_fmt or false
+          vim.g.disable_hunk_fmt = not prev
+          -- NOTE: keep in sync with unification in ConformFormatHunks
+          vim.notify(
+            "Global hunk-formatting " .. (prev and "enabled" or "disabled" ),
+            "info",
+            { title = "Conform" }
+          )
+        end
+      '';
+      options.desc = "Toggle Auto-Format Global";
+    }
+    {
+      key = "<leader>tu";
+      action.__raw = ''
+        function()
+          local prev = vim.b.disable_hunk_fmt or false
+          vim.b.disable_hunk_fmt = not prev
+          -- NOTE: keep in sync with unification in ConformFormatHunks
+          vim.notify(
+            "Local hunk-formatting " .. (prev and "enabled" or "disabled" ),
+            "info",
+            { title = "Conform" }
+          )
+        end
+      '';
+      options.desc = "Toggle Hunk-Format Local";
     }
 
   ];
@@ -178,6 +261,9 @@
     wk.add {
       { "<leader>F", icon = "󱡄 " },
       { "<leader>tf", icon = " 󱡄 " },
+      { "<leader>tF", icon = " 󱡄 " },
+      { "<leader>tu", icon = "  󱡄 " },
+      { "<leader>tU", icon = "  󱡄 " },
     }
     local CONFORM_AUTOFORMAT_HUNKS_IGNORE = { 'lua' }
   '';
