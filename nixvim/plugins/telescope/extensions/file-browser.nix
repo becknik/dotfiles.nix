@@ -25,7 +25,7 @@
   keymaps = withDefaultKeymapOptions [
     {
       key = "<leader>f/";
-      action = "Telescope file_browser initial_mode=normal";
+      action = "Telescope file_browser";
       options.cmd = true;
       options.desc = "find in File Browser /";
     }
