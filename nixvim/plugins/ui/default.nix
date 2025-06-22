@@ -33,7 +33,7 @@
     }
     {
       key = "<leader>no";
-      action = "Telescope notify";
+      action = "Telescope notify theme=ivy";
       options.cmd = true;
       options.desc = "Search Notifications";
     }

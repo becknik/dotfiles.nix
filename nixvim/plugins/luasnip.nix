@@ -3,8 +3,6 @@
 {
   plugins.luasnip = {
     enable = true;
-
-    lazyLoad.enable = true;
     lazyLoad.settings.event = "InsertEnter";
 
     settings = {
@@ -33,7 +31,7 @@
       # TODO this isn't working...
       {
         lazyLoad = true;
-        paths = [{ __raw = "vim.fn.expand('~/.config/VSCodium/User')"; }];
+        paths = [ { __raw = "vim.fn.expand('~/.config/VSCodium/User')"; } ];
 
       }
     ];

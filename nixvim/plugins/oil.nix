@@ -21,6 +21,8 @@
   plugins.oil = {
     enable = true;
 
+    lazyLoad.settings.event = "VimEnter";
+
     settings = {
       default_file_explorer = true;
       columns = [

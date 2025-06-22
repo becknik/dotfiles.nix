@@ -2,7 +2,6 @@
 
 {
   imports = [
-    # ./cmp
     ./blink
     ./lsp
     ./treesitter
@@ -22,6 +21,7 @@
 
     ./which-key.nix
     ./luasnip.nix
+    ./auto-sessions.nix
 
     ./oil.nix
     ./toggle-term.nix

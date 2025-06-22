@@ -62,8 +62,6 @@
         "toggleterm"
       ];
 
-      sections.__raw = "{}";
-      inactive_sections.__raw = "{}";
       winbar = {
         lualine_a = [ "progress" ];
         lualine_b = [
