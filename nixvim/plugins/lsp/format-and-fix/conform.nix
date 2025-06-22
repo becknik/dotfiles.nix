@@ -63,15 +63,17 @@
             vim.api.nvim_command("noautocmd write")
             return
           end
-          local format_start = vim.loop.hrtime() / 1e6 -- ms
           if vim.b[bufnr].disable_hunk_fmt or vim.g.disable_hunk_fmt then
             vim.api.nvim_command("ConformFormat")
             return
           end
 
+          local format_start = vim.loop.hrtime() / 1e6 -- ms
+
           local hunks = require("gitsigns").get_hunks(bufnr)
           if not hunks then
-            vim.notify("No hunks available", "error", { title = "Conform Hunks" })
+            vim.notify("No hunks available", "info", { title = "Conform Hunks" })
+            vim.api.nvim_command("ConformFormat")
             return
           end
 
