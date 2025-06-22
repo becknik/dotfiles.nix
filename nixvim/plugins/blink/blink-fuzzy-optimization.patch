@@ -1,0 +1,16 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index f395624..cface0b 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -12,5 +12,11 @@ regex = "1.11.1"
+ frizbee = "0.1.0"
+ serde = { version = "1.0.216", features = ["derive"] }
+ heed = "0.21.0"
+ mlua = { version = "0.10.2", features = ["module", "luajit"] }
+ thiserror = "2.0.10"
++
++[profile.release]
++lto = true
++codegen-units = 1
++panic = "abort"
++strip = true
