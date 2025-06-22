@@ -8,6 +8,7 @@
   # https://github.com/disrupted/blink-cmp-conventional-commits
   # https://github.com/alexandre-abrioux/blink-cmp-npm.nvim
   # https://github.com/ssstba/ecolog.nvim
+  # https://github.com/Dynge/gitmoji.nvim
 
   plugins.blink-cmp.luaConfig.pre = ''
     function is_in_string_like_node()
@@ -50,7 +51,11 @@
         gitcommit = {
           inherit_defaults = true,
           "spell",
-        }
+        },
+        lua = {
+          inherit_defaults = true,
+          "lazydev"
+        },
       }
     '';
 
@@ -80,6 +85,11 @@
         module = "blink-cmp-spell";
         name = "dictionary";
         min_keyword_length = 3;
+      };
+      lazydev = {
+        module = "lazydev.integrations.blink";
+        name = "lazydev";
+        score_offset = 100;
       };
     };
   };
