@@ -18,8 +18,8 @@
       { "gi", icon = " " },
       { "g.", icon = "󱡄" },
 
-      { "gh", icon = "󰧮" },
-      { "gH", icon = "󰧮  " },
+      { "K", icon = "󰧮" },
+      { "gh", icon = "󰧮  " },
 
       { "go", icon = "󱉯 " },
 
@@ -153,13 +153,13 @@
       }
 
       {
-        key = "gh";
+        key = "K";
         action = "Lspsaga hover_doc";
         options.cmd = true;
         options.desc = "Hover Documentation";
       }
       {
-        key = "gH";
+        key = "gh";
         action = "Lspsaga hover_doc ++keep";
         options.cmd = true;
         options.desc = "Hover Documentation Keep";
