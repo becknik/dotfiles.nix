@@ -60,6 +60,7 @@
       options.disabled_filetypes.winbar = [
         "codecompanion"
         "toggleterm"
+        "gitcommit"
       ];
 
       winbar = {
