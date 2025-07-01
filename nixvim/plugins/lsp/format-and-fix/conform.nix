@@ -73,6 +73,7 @@
           local hunks = require("gitsigns").get_hunks(bufnr)
           if not hunks then
             vim.notify("No hunks available", "info", { title = "Conform Hunks" })
+            vim.b.disable_hunk_fmt = true
             vim.api.nvim_command("ConformFormat")
             return
           end
