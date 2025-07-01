@@ -183,6 +183,7 @@
       ];
       "<C-k>" = [
         "show_signature"
+        "hide_signature"
       ];
 
       "<C-1>".__raw = "{ function(cmp) cmp.accept({ index = 1 }) end }";
