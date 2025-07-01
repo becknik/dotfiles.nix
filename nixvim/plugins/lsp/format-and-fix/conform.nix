@@ -334,11 +334,6 @@
           sqlfluff.command = lib.getExe pkgs.sqlfluff;
           # pg_format
 
-          bibtex-tidy.types = "bibtex";
-          bibtex-tidy.command = lib.getExe pkgs.bibtex-tidy;
-          tex-fmt.types = "latex";
-          tex-fmt.command = lib.getExe pkgs.tex-fmt;
-
           nixfmt.types = "nix";
           nixfmt.command = lib.getExe pkgs.nixfmt-rfc-style;
 

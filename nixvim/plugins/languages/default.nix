@@ -3,7 +3,7 @@
 {
   imports = [
     ./markdown.nix
-    ./latex.nix
+    ./vimtex.nix
   ];
 
   extraConfigLuaPost = ''

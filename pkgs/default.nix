@@ -71,6 +71,8 @@
           else
             builtins.throw "Unknown mode ‘${m}’"
         ) modes;
+
+      pkgs-stable = pkgs;
     in
     nixvim.makeNixvimWithModule {
       pkgs = pkgs-unstable;
@@ -82,6 +84,7 @@
           withDefaultKeymapOptions
           mapToModeAbbr
           fetchFromGitHub
+          pkgs-stable
           ;
       };
     };

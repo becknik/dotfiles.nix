@@ -11,7 +11,7 @@
   home.packages =
     with pkgs;
     (lib.lists.optionals (!isDarwinSystem) [
-      texliveFull
+      tectonic
       conda
     ])
 

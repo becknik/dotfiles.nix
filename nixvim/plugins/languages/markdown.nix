@@ -33,7 +33,14 @@
     };
   };
 
-  extraConfigLua = ''wk.add {{ "<leader>lm", icon = "" }}'';
+  extraConfigLua = ''
+    wk.add {{ 
+      "<leader>lm",
+      icon = "",
+      cond = function()
+        return vim.bo.filetype == "markdown"
+      end,
+    }}'';
 
   keymaps = withDefaultKeymapOptions [
     {
