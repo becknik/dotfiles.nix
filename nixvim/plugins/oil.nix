@@ -11,6 +11,7 @@
         hash = "sha256-MgRAw3SAYKJ9f0k/kWDBeYIY3eX2KyDmv8mwCLh5A7g=";
       };
     })
+    vimPlugins.oil-nvim
   ];
 
   globals.netrw_nogx = 1;
@@ -18,10 +19,11 @@
     	require('gx').setup({ });
   '';
 
+  # NOTE: keep in sync with ./auto-sessions.nix if I can solve the issue from rmagatti/auto-session#445 in another way in the future
   plugins.oil = {
-    enable = true;
+    enable = false;
 
-    lazyLoad.settings.event = "VimEnter";
+    lazyLoad.settings.event = "UIEnter";
 
     settings = {
       default_file_explorer = true;
@@ -29,7 +31,6 @@
         "icon"
         "size"
         "permissions"
-        "mtime"
       ];
       # constrain_cursor = "name";
       watch_for_changes = true;
@@ -55,11 +56,14 @@
     {
       key = "-";
       action = "<cmd>Oil<cr>";
+      options.cmd = true;
+      options.desc = "Open Oil";
     }
     {
       key = "gx"; # gx-nvim
       action = "<cmd>Browse<cr>";
       options.unique = false; # maybe because it overrides the netrw thing?
+      options.cmd = true;
     }
   ];
 }

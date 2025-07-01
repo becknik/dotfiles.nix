@@ -15,7 +15,7 @@
         { "<leader>6", icon = "󰀱 6", desc = "Harpoon 6" },
 
         { "<leader>j", icon = "󰀱  " },
-        { "<leader>a", icon = "󰀱 ", desc = "Harpoon" },
+        { "<leader>a", icon = "󰀱 ", desc = "Harpoon & Session" },
         { "<leader>aa", icon = "󰀱  " },
         { "<leader>a1", icon = "󰀱 1 " },
         { "<leader>a2", icon = "󰀱 2 " },
