@@ -36,7 +36,7 @@
     # nix packages sadly not working with x86_64-darwin
     # brew tap homebrew/cask-fonts
     casks = [
-      "eloston-chromium"
+      "ungoogled-chromium"
       "firefox"
       "font-fira-code-nerd-font"
       "font-fira-code"
