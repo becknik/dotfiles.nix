@@ -21,8 +21,6 @@
       { "K", icon = "󰧮" },
       { "gh", icon = "󰧮  " },
 
-      { "go", icon = "󱉯 " },
-
       { "gy", icon = "󰌆 " },
       { "gY", icon = "󰌆 " },
       { "gs", icon = " ", desc = "Search" },
@@ -163,12 +161,6 @@
         action = "Lspsaga hover_doc ++keep";
         options.cmd = true;
         options.desc = "Hover Documentation Keep";
-      }
-
-      {
-        key = "go";
-        action.__raw = "function() require'lspsaga.symbol'.outline { layout = 'float' } end";
-        options.desc = "Outline (float)";
       }
 
       {

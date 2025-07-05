@@ -1,17 +1,9 @@
 { withDefaultKeymapOptions, pkgs, ... }:
 
 {
-  extraPlugins = with pkgs; [
-    (vimUtils.buildVimPlugin {
-      name = "my-plugin";
-      src = pkgs.fetchFromGitHub {
-        owner = "chrishrb";
-        repo = "gx.nvim";
-        rev = "ea4cc715326a8bd060a450c24c3c9831cdee2f59";
-        hash = "sha256-MgRAw3SAYKJ9f0k/kWDBeYIY3eX2KyDmv8mwCLh5A7g=";
-      };
-    })
-    vimPlugins.oil-nvim
+  extraPlugins = with pkgs.vimPlugins; [
+    oil-nvim
+    gx-nvim
   ];
 
   globals.netrw_nogx = 1;

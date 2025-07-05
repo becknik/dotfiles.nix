@@ -9,6 +9,7 @@
     ./keymaps.nix
 
     ./lspsaga.nix
+    ./outline.nix
   ];
 
   # https://github.com/neovim/nvim-lspconfig
