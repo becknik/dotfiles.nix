@@ -25,7 +25,7 @@
 
   plugins.telescope.luaConfig.post = ''
     wk.add {
-      { "<leader>fG", icon = " " },
+      { "<leader>fg", icon = " " },
       { "<leader>ff", icon = " 󰋚 " },
     }
   '';
@@ -38,7 +38,7 @@
       options.desc = "Find in Frecency";
     }
     {
-      key = "<leader>fG";
+      key = "<leader>fg";
       action = "Telescope live_grep_args live_grep_args theme=ivy";
       options.cmd = true;
       options.desc = "Search in live Grep (with args)";

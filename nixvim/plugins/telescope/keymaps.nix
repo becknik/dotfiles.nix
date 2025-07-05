@@ -5,7 +5,6 @@
     wk.add {
       { "<leader>f", desc = "Find & Search", icon = "󰭎 " },
       { "<leader>fa", icon = "  " },
-      { "<leader>fg", icon = " " },
       { "<leader>fu", icon = " 󰗧" },
       { "<leader>fo", icon = " 󰋚 " },
       { "<leader>fh", icon = " 󰋖" },
@@ -14,6 +13,8 @@
       { "<leader>fr", icon = " \"" },
       { "<leader>fR", icon = " 󱄋 " },
       { "<leader>fl", icon = " 󰦨" },
+
+      { "F", icon = " " },
     }
   '';
 
@@ -33,7 +34,7 @@
         "normal"
       ];
     };
-    "<leader>fg" = {
+    "F" = {
       action = "live_grep theme=ivy";
       options.desc = "Search in live Grep";
     };
