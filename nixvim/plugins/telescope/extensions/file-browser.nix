@@ -8,6 +8,8 @@
       collapse_dirs = true; # with only one element
       prompt_path = true; # add path to prompt
       follow_symlinks = true;
+      hidden.file_browser = true;
+      grouped = true;
 
       mappings.n = {
         "-" = "require('telescope._extensions.file_browser.actions').goto_parent_dir";
