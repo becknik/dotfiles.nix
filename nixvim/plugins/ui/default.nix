@@ -3,6 +3,7 @@
 {
   imports = [
     ./lualine.nix
+    ./ccc.nix
   ];
 
   plugins = {
