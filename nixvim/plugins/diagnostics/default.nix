@@ -7,11 +7,14 @@
   ];
 
   diagnostic.settings = {
-    virtual_text = true;
-  };
-  extraConfigLuaPre = "local diag_virtual_text_enabled = false";
+    virtual_text = {
+      current_line = true;
+    };
+    virtual_lines = false;
 
-  plugins.lsp-lines.enable = true;
+    update_in_insert = true;
+    severity_sort = true;
+  };
 
   plugins.lsp-lines.luaConfig.post = ''
     wk.add {
@@ -23,17 +26,46 @@
   keymaps = [
     {
       key = "<leader>tD";
-      action.__raw = "function() require('lsp_lines').toggle() end";
-      options.desc = "Toggle lsp_lines";
+      action.__raw = ''
+        function()
+          local diag_config = vim.diagnostic.config()
+          vim.diagnostic.config({
+            virtual_lines = not diag_config.virtual_lines,
+          })
+          vim.notify(
+            "Virtual Lines " .. (diag_config.virtual_lines and  "disabled" or "enabled" ),
+            "info",
+            { title = "Diagnostics" }
+          )
+        end
+      '';
+      options.desc = "Toggle virtual diagnostic lines";
     }
+
     {
       key = "<leader>td";
-      action.__raw = "function()
-        diag_virtual_text_enabled = not diag_virtual_text_enabled
-        vim.diagnostic.config({ virtual_text = diag_virtual_text_enabled })
-        vim.notify((diag_virtual_text_enabled and 'Enabled' or 'Disabled') .. ' Diagnostic Virtual Text' , vim.log.levels.INFO, { render = 'compact' })
-      end";
-      options.desc = "Toggle Diagnostic Virtual Text";
+      action.__raw = ''
+        function()
+          local virtual_text
+          local diag_config = vim.diagnostic.config()
+
+          if diag_config.virtual_text == true then
+            virtual_text = { current_line = true }
+          else 
+            virtual_text = true
+          end
+
+          vim.diagnostic.config({
+            virtual_text = virtual_text,
+          })
+          vim.notify(
+            "Virtual text " .. (virtual_text == true and "enabled" or "disabled" ),
+            "info",
+            { title = "Diagnostics" }
+          )
+        end
+      '';
+      options.desc = "Toggle virtual diagnostic text";
     }
   ];
 }
