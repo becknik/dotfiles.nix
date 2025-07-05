@@ -55,13 +55,13 @@
   keymaps = withDefaultKeymapOptions [
     {
       key = "-";
-      action = "<cmd>Oil<cr>";
+      action = "Oil";
       options.cmd = true;
       options.desc = "Open Oil";
     }
     {
       key = "gx"; # gx-nvim
-      action = "<cmd>Browse<cr>";
+      action = "Browse";
       options.unique = false; # maybe because it overrides the netrw thing?
       options.cmd = true;
     }
