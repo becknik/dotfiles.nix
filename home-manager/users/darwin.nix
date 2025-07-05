@@ -37,6 +37,18 @@
     librewolf.enable = lib.mkForce false;
 
     git.extraConfig.safe.directory = mkFlakeDir userName config;
+    # FIXME: currently having to copy-paste the secrets manually to the home directory; sops isn't working/ setup correctly?
+    gpg.publicKeys = lib.mkForce (
+      map
+        (source: {
+          inherit source;
+          trust = 5;
+        })
+        [
+          "${config.home.homeDirectory}/.gpg/becknik/public"
+          "${config.home.homeDirectory}/.gpg/becknik/private"
+        ]
+    );
   };
 
   # Packaging Leftovers
