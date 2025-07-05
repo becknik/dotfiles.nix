@@ -10,6 +10,7 @@
 
     ./lspsaga.nix
     ./outline.nix
+    ./glance.nix
   ];
 
   # https://github.com/neovim/nvim-lspconfig

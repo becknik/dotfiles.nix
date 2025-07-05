@@ -8,14 +8,11 @@
       { "gCi", icon = " " },
       { "gCI", icon = " " },
 
-      { "gt", icon = " " },
-      { "gd", icon = "" },
+      { "gD", icon = "", desc = "Declaration" },
       { "gp", icon = "󰹰 ", desc = "Preview" },
       { "gpt", icon = "󰹰  " },
       { "gpd", icon = "󰹰 " },
 
-      { "gr", icon = "" },
-      { "gi", icon = " " },
       { "g.", icon = "󱡄" },
 
       { "K", icon = "󰧮" },
@@ -113,41 +110,16 @@
 
       # Type & Definition
       {
-        key = "gt";
-        action = "Lspsaga goto_type_definition";
-        options.cmd = true;
-        options.desc = "Variable Type";
-      }
-      {
         key = "gpt";
         action = "Lspsaga peek_type_definition";
         options.cmd = true;
         options.desc = "Peek variable Type";
       }
       {
-        key = "gd";
-        action = "Lspsaga goto_definition";
-        options.cmd = true;
-        options.desc = "Definition";
-      }
-      {
         key = "gpd";
         action = "Lspsaga peek_definition";
         options.cmd = true;
         options.desc = "Peek Definition";
-      }
-
-      {
-        key = "gr";
-        action = "Lspsaga finder ref";
-        options.cmd = true;
-        options.desc = "References";
-      }
-      {
-        key = "gi";
-        action = "Lspsaga finder imp";
-        options.cmd = true;
-        options.desc = "Implementations";
       }
 
       {
