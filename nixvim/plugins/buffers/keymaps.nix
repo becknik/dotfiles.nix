@@ -10,8 +10,8 @@
       { "<leader>Q", icon = " !" },
       { "<leader>w", icon = " " },
 
-      -- { "<leader>b", icon = " ", desc = "Buffers" },
       { "<leader>b", icon = "  " },
+      { "<leader>B", icon = "  " },
     }
   '';
 
@@ -19,6 +19,10 @@
     "<leader>b" = {
       action = "buffers theme=ivy sort_mru=true ignore_current_buffer=true";
       options.desc = "Find Buffer";
+    };
+    "<leader>B" = {
+      action = "buffers theme=ivy sort_mru=true ignore_current_buffer=false initial_mode=normal";
+      options.desc = "Modify Buffers";
     };
   };
 
