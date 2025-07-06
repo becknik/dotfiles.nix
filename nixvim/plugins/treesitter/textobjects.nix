@@ -5,81 +5,121 @@
 
   # https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 
-  # plugins.lsp.luaConfig.post = ''
-  #   wk.add {
-  #     { "<leader>n", icon = "󰆾 ", desc = "Textobject Movement"  },
-  #   }
-  # '';
+  plugins.lsp.luaConfig.post = ''
+    wk.add {
+      { "<leader>.", icon = "󰆾  ", desc = "Textobject Movement"  },
+      { "<leader>,", icon = "󰆾 󰁍 ", desc = "Textobject Movement"  },
+    }
+  '';
 
   plugins.treesitter-textobjects = {
     enable = true;
-    lspInterop = {
+    # don't find this very useful - maybe I just don't get it tho
+    lspInterop.enable = false;
+
+    swap = {
       enable = true;
-      border = "double"; # “none”, “single”, “double”, “rounded”, “solid”, “shadow”
-      # TODO this isn't working properly:
-      #  shows error message with no parameters; with parameters the popup is empty ...
-      floatingPreviewOpts = {
-        height = 16;
-        width = 16;
+      swapNext = {
+        "<leader>.p" = "@parameter.inner";
+        "<leader>.=" = "@assignment.outer";
+        "<leader>.a" = "@attribute.outer";
+        "<leader>.s" = "@statement.outer";
       };
-      peekDefinitionCode = {
-        # "<leader>pl" = "@loop.outer";
-        # "<leader>pc" = "@conditional.outer";
-        # "<leader>pf" = "@function.outer";
-        # "<leader>pC" = "@class.outer";
+      swapPrevious = {
+        "<leader>,p" = "@parameter.inner";
+        "<leader>,=" = "@assignment.outer";
+        "<leader>,a" = "@attribute.outer";
+        "<leader>,s" = "@statement.outer";
       };
     };
 
     move = {
       enable = true;
-      setJumps = true; # default
-      # using `%` to get moving to gotoPreviousStart and gotoNextEnd
-      # or use `,` and `<opposite bracket><same mnemonic>`
-      gotoNextStart = {
-        "]/" = "@comment.inner";
-        "]n" = "@number.inner";
-        "]R" = "@regex.inner";
+      setJumps = true;
+      # pre-occupied by extension to other plugins from ./textobjects.lua:
+      # ]d, ]D, ]s, ]h
 
-        "]=" = "@assignment.outer";
-        "]." = "@call.outer";
+      gotoNextStart = {
+        "]<" = "@assignment.lhs";
+        "]>" = "@assignment.rhs";
+        "]=" = "@assignment.inner";
+        # "]=" = "@assignment.outer";
+
+        "]a" = "@attribute.inner";
+        "]A" = "@attribute.outer";
+
+        "]k" = "@block.inner";
+        "]K" = "@block.outer";
+
         "](" = "@call.inner";
+        "]." = "@call.outer";
+
+        # "]c" = "@class.inner";
+        "]C" = "@class.outer";
+
+        "]c" = "@comment.inner";
+
+        "]i" = "@conditional.inner";
+        "]I" = "@conditional.outer";
+
+        "]f" = "@function.inner";
+        "]F" = "@function.outer";
+
+        "]l" = "@loop.inner";
+        "]L" = "@loop.outer";
+
+        "]n" = "@number.inner";
+
+        "]p" = "@parameter.inner";
+        "]P" = "@parameter.outer";
+
+        "]x" = "@regex.inner";
 
         "]r" = "@return.inner";
+        "]R" = "@return.outer";
 
-        "]P" = "@parameter.inner";
-        "]a" = "@attribute.inner";
-
-        # "[sc" = "@scopename.outer";
-        "]c" = "@conditional.inner";
-        "]l" = "@loop.inner";
-
-        "]f" = "@function.outer";
-        "]C" = "@class.outer";
-        "]B" = "@block.outer";
-        "]F" = "@frame.outer";
+        "]S" = "@statement.outer";
       };
       gotoPreviousStart = {
-        "[/" = "@comment.inner";
-        "[n" = "@number.inner";
-        "[R" = "@regex.inner";
+        "[<" = "@assignment.lhs";
+        "[>" = "@assignment.rhs";
+        "[=" = "@assignment.inner";
+        #"[=" = "@assignment.outer";
 
-        "[=" = "@assignment.outer";
-        "[." = "@call.outer";
+        "[a" = "@attribute.inner";
+        "[A" = "@attribute.outer";
+
+        "[k" = "@block.inner";
+        "[K" = "@block.outer";
+
         "[(" = "@call.inner";
+        "[." = "@call.outer";
+
+        #"[c" = "@class.inner";
+        "[C" = "@class.outer";
+
+        "[c" = "@comment.inner";
+
+        "[i" = "@conditional.inner";
+        "[I" = "@conditional.outer";
+
+        "[f" = "@function.inner";
+        "[F" = "@function.outer";
+
+        "[l" = "@loop.inner";
+        "[L" = "@loop.outer";
+
+        "[n" = "@number.inner";
+
+        "[p" = "@parameter.inner";
+        "[P" = "@parameter.outer";
+
+        "[x" = "@regex.inner";
 
         "[r" = "@return.inner";
+        "[R" = "@return.outer";
 
-        "[P" = "@parameter.inner";
-        "[a" = "@attribute.inner";
-
-        # "[sc" = "@scopename.outer";
-        "[c" = "@conditional.inner";
-        "[l" = "@loop.inner";
-
-        "[f" = "@function.outer";
-        "[C" = "@class.outer";
-        "[B" = "@block.outer";
-        "[F" = "@frame.outer";
+        "[S" = "@statement.outer";
       };
     };
 
@@ -91,6 +131,7 @@
         "@function.outer" = "V";
         "@class.outer" = "<c-v>";
       };
+
       keymaps =
         let
           generatePairs = suffix: textObjName: {
@@ -99,63 +140,56 @@
           };
         in
         builtins.foldl' (acc: x: acc // x) { } [
-          (generatePairs "/" "comment")
-          {
-            "in" = "@number.inner";
-            "n" = "@number.inner";
-          }
-          (generatePairs "R" "regex")
-
           (generatePairs "=" "assignment")
           {
-            "l=" = "@assignment.lhs";
-            "r=" = "@assignment.rhs";
+            "i<" = "@assignment.rhs";
+            "i>" = "@assignment.lhs";
           }
+
+          (generatePairs "a" "attribute")
+          (generatePairs "k" "block")
+
           (generatePairs "." "call")
-          { "i(" = "@call.inner"; } # consistency: using this for movement
+          (generatePairs "(" "call")
+
+          (generatePairs "C" "class")
+          (generatePairs "c" "comment")
+
+          (generatePairs "i" "conditional")
+          # {
+          #   "ii" = "@conditional.inner";
+          #   "aI" = "@conditional.outer";
+          # }
+          (generatePairs "f" "function")
+          # {
+          #   "if" = "@function.inner";
+          #   "aF" = "@function.outer";
+          # }
+          (generatePairs "l" "loop")
+          # {
+          #   "il" = "@loop.inner";
+          #   "aL" = "@loop.outer";
+          # }
+
+          {
+            "n" = "@number.inner";
+          }
+          (generatePairs "P" "parameter")
+          # {
+          #   "ip" = "@parameter.inner";
+          #   "aP" = "@parameter.outer";
+          # }
+
+          (generatePairs "x" "regex")
 
           (generatePairs "r" "return")
-          { "ist" = "@statement.outer"; }
+          # {
+          #   "ir" = "@return.inner";
+          #   "aR" = "@return.outer";
+          # }
 
-          (generatePairs "P" "parameter")
-          (generatePairs "a" "attribute") # html/jsx attributes?
-
-          { "isc" = "@scopename.inner"; } # TODO what is this?
-          (generatePairs "c" "conditional")
-          (generatePairs "l" "loop")
-
-          (generatePairs "f" "function")
-          (generatePairs "C" "class")
-
-          # (generatePairs "B" "block")
-          (generatePairs "F" "frame")
+          (generatePairs "S" "statement")
         ];
-    };
-
-    swap = {
-      enable = false;
-      swapNext = {
-        "<leader>n=" = "@assignment.outer";
-        "<leader>n(" = "@call.inner"; # can't think of an use case, but making it available for consistency reasons
-        "<leader>n." = "@call.outer";
-        "<leader>np" = "@parameter.inner";
-        "<leader>na" = "@attribute.inner";
-        "<leader>nA" = "@attribute.outer";
-        "<leader>nc" = "@conditional.inner";
-        "<leader>nf" = "@function.outer";
-        "<leader>nC" = "@class.outer";
-      };
-      swapPrevious = {
-        "<leader>p=" = "@assignment.outer";
-        "<leader>p(" = "@call.inner";
-        "<leader>p." = "@call.outer";
-        "<leader>pp" = "@parameter.inner";
-        "<leader>pa" = "@attribute.inner";
-        "<leader>pA" = "@attribute.outer";
-        "<leader>pc" = "@conditional.inner";
-        "<leader>pf" = "@function.outer";
-        "<leader>pC" = "@class.outer";
-      };
     };
   };
 }
