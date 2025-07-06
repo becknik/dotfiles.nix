@@ -125,7 +125,7 @@
       options.desc = "Toggle HACK Comment Above";
     }
     {
-      key = "gcOf";
+      key = "gcOw";
       action.__raw = ''
         function()
           return "OWARN: <esc>" .. require("vim._comment").operator() .. "_A"

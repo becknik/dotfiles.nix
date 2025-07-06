@@ -1,4 +1,4 @@
-{ helpers, ... }:
+{ ... }:
 
 {
   plugins.which-key = {

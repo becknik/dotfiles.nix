@@ -206,6 +206,7 @@
         "hide_signature"
       ];
 
+      # FIXME: doesn't work any more - since v.1.4.1 update?
       "<C-1>".__raw = "{ function(cmp) cmp.accept({ index = 1 }) end }";
       "<C-2>".__raw = "{ function(cmp) cmp.accept({ index = 2 }) end }";
       "<C-3>".__raw = "{ function(cmp) cmp.accept({ index = 3 }) end }";
