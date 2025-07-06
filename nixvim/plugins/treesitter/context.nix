@@ -32,7 +32,7 @@
     {
       # https://github.com/nvim-treesitter/nvim-treesitter-context?tab=readme-ov-file#jumping-to-context-upwards
       # TODO find better key for this
-      key = "<leader>con";
+      key = "<leader>co";
       action.__raw = "function() require'treesitter-context'.go_to_context(vim.v.count1) end";
       options.desc = "jump to next Treesitter Context";
     }

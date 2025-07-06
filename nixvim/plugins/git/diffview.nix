@@ -16,7 +16,6 @@
     wk.add {
       { "<leader>go", icon = "" },
       { "<leader>gq", icon = "" },
-      { "<leader>gf", icon = "" },
       { "<leader>gn", icon = " " },
       { "<leader>gh", icon = "  " },
     }
