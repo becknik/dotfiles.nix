@@ -38,6 +38,7 @@
             end
           '';
         }
+        "BookmarksInitGlobConfig"
       ];
       no_restore_cmds = [
         {
@@ -47,6 +48,7 @@
             end
           '';
         }
+        "BookmarksInitGlobConfig"
       ];
 
       git_use_branch_name = true;

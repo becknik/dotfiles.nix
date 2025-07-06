@@ -28,6 +28,7 @@
 
     ./refactoring.nix
     ./todo-comments.nix
+    ./bookmarks.nix
   ];
 
   # global variable definitions
