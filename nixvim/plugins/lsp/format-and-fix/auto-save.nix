@@ -10,10 +10,7 @@
       local buf_name = vim.api.nvim_buf_get_name(bufnr)
       if buf_name == "" then return false end
 
-      -- only save true file-based buffers
-      if vim.fn.getbufvar(bufnr, "&buftype") ~= "" then
-        return false
-      elseif vim.fn.getbufvar(bufnr, "&modifiable") ~= 1 then
+      if vim.bo.buftype ~= "" or not vim.bo.modifiable then
         return false
       end
 
