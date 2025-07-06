@@ -183,7 +183,6 @@
         {
           home-manager = {
             extraSpecialArgs = (args userName) // {
-              inherit (inputs) devenv;
               inherit system isLaptop isDarwinSystem;
             };
             useGlobalPkgs = true;

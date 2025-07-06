@@ -1,7 +1,6 @@
 {
   isDarwinSystem,
   pkgs,
-  devenv,
   ...
 }:
 
