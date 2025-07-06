@@ -51,8 +51,9 @@
     performance = {
       byteCompileLua = {
         enable = true;
-        initLua = true;
-        plugins = false;
+        luaLib = true;
+        plugins = true;
+        nvimRuntime = false;
       };
     };
 
