@@ -3,7 +3,7 @@
 {
   plugins.blink-cmp = {
     luaConfig.pre = ''
-      -- local cmp_kinds = require'blink.cmp.types'.CompletionItemKind
+      local cmp_kinds = require'blink.cmp.types'.CompletionItemKind
     '';
 
     settings.keymap = {
@@ -38,7 +38,7 @@
           __raw = ''
             function(cmp)
               local entry = cmp.get_selected_item()
-              if not entry then
+              if not entry or entry.kind == cmp_kinds.Text then
                 return false
               end
 
@@ -48,7 +48,7 @@
                 local line = vim.api.nvim_get_current_line()
 
                 -- if we are in front of ')' (blink just added "()") → jump over it
-                if line:sub(col + 1, col + 1) == ')' then
+                if line:sub(col, col) == '(' then
                   vim.api.nvim_win_set_cursor(0, { row, col + 1 })
                 end
                 vim.api.nvim_feedkeys(
@@ -68,7 +68,7 @@
           __raw = ''
             function(cmp)
               local entry = cmp.get_selected_item()
-              if not entry then
+              if not entry or entry.kind == cmp_kinds.Text then
                 return false
               end
 
@@ -113,6 +113,23 @@
           '';
         }
       ];
+
+      "<C-s>" = [
+        {
+          __raw = ''
+            function(cmp)
+              if cmp.is_visible() then
+                cmp.show { providers = { 'snippets' } }
+                cmp.show_documentation()
+                return true
+              end
+              return false
+            end
+          '';
+        }
+        "fallback"
+      ];
+
       "<C-n>" = [
         "select_next"
         {
@@ -130,7 +147,10 @@
           __raw = ''
             function(cmp)
               if not cmp.is_visible() then
-                cmp.show({ providers = { 'snippets' } })
+                cmp.show {
+                  providers = { 'snippets' },
+                  completion = { documentation = { auto_show = true } }
+                }
                 return true
               end
               return false
