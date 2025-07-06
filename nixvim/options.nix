@@ -98,7 +98,7 @@
           options.desc = "resize horizontal -${m}";
         }
         {
-          key = "<C-w>,";
+          key = "<C-w>.";
           action.__raw = ''
             function()
               local delta = vim.v.count1 * ${m}
@@ -108,7 +108,7 @@
           options.desc = "resize vertical +${m}";
         }
         {
-          key = "<C-w>.";
+          key = "<C-w>,";
           action.__raw = ''
             function()
               local delta = vim.v.count1 * ${m}
