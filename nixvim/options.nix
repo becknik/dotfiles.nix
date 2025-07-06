@@ -86,10 +86,6 @@
             end
           '';
           options.desc = "resize horizontal +${m}";
-          mode = mapToModeAbbr [
-            "insert"
-            "normal"
-          ];
         }
         {
           key = "<C-w>-";
@@ -100,10 +96,6 @@
             end
           '';
           options.desc = "resize horizontal -${m}";
-          mode = mapToModeAbbr [
-            "insert"
-            "normal"
-          ];
         }
         {
           key = "<C-w>,";
@@ -114,10 +106,6 @@
             end
           '';
           options.desc = "resize vertical +${m}";
-          mode = mapToModeAbbr [
-            "insert"
-            "normal"
-          ];
         }
         {
           key = "<C-w>.";
@@ -128,10 +116,6 @@
             end
           '';
           options.desc = "resize vertical -${m}";
-          mode = mapToModeAbbr [
-            "insert"
-            "normal"
-          ];
         }
 
         {

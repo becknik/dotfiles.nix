@@ -9,6 +9,12 @@
   # disable tree-sitter to fold the code on startup
   opts.foldenable = false;
 
+  plugins.notify.luaConfig.post = ''
+    wk.add {
+      { "<leader>v", icon = " ", desc = "Treesitter" },
+    }
+  '';
+
   plugins.treesitter = {
     enable = true;
 

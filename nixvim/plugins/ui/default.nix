@@ -21,8 +21,11 @@
 
   plugins.notify.luaConfig.post = ''
     wk.add {
+      { "<leader>n", icon = "󰎟", desc = "Notifications" },
       { "<leader>nd", icon = "󰎟" },
-      { "<leader>no", icon = "󰎟" },
+      { "<leader>nf", icon = " 󰎟" },
+
+      { "<leader>no", icon = " " },
     }
   '';
 
@@ -33,10 +36,16 @@
       options.desc = "Dismiss all Notifications";
     }
     {
-      key = "<leader>no";
+      key = "<leader>nf";
       action = "Telescope notify theme=ivy";
       options.cmd = true;
       options.desc = "Search Notifications";
+    }
+    {
+      key = "<leader>no";
+      action = "nohlsearch";
+      options.cmd = true;
+      options.desc = ":nohlsearch";
     }
   ];
 }

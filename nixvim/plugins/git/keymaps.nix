@@ -6,7 +6,6 @@
       { "<leader>g", desc = "Git" },
       { "<leader>gb", icon = "  " },
       { "<leader>gs", icon = " 󱖫 " },
-      { "<leader>gZ", icon = "  " },
       { "<leader>g$", icon = "  " },
     }
   '';
@@ -28,10 +27,6 @@
     "<leader>gs" = {
       action = "git_status theme=ivy initial_mode=normal";
       options.desc = "find in Git Status";
-    };
-    "<leader>gZ" = {
-      action = "git_stash theme=ivy initial_mode=normal";
-      options.desc = "find Git Stash";
     };
   };
 }
