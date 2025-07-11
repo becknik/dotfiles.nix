@@ -8,6 +8,7 @@
       { "gCi", icon = " " },
       { "gCI", icon = " " },
 
+      { "gd", icon = "" },
       { "gD", icon = "", desc = "Declaration" },
       { "gp", icon = "󰹰 ", desc = "Preview" },
       { "gpt", icon = "󰹰  " },
@@ -80,6 +81,7 @@
   plugins.lsp.keymaps = {
     lspBuf = {
       gD = "declaration";
+      gd = "definition";
     };
 
     extra = withDefaultKeymapOptions [

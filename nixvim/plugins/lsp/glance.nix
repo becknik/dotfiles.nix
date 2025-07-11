@@ -21,19 +21,12 @@
   plugins.glance.luaConfig.post = ''
     wk.add {
       { "gt", icon = " " },
-      { "gd", icon = "" },
       { "gr", icon = "" },
       { "gi", icon = " " },
     }
   '';
 
   keymaps = withDefaultKeymapOptions [
-    {
-      key = "gd";
-      action = "Glance definitions";
-      options.cmd = true;
-      options.desc = "Definitions";
-    }
     {
       key = "gr";
       action = "Glance references";
