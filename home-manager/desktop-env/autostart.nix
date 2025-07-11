@@ -103,5 +103,19 @@ in
           X-GNOME-Autostart-enabled=true
         '';
       };
+
+      "${planify.pname}.desktop" = {
+        enable = true;
+        target = ".config/autostart/${planify.pname}.desktop";
+        text = ''
+          [Desktop Entry]
+          Type=Application
+          Name=Planify
+          Exec=${lib.getExe planify} --background
+          StartupNotify=true
+          Terminal=false
+          X-GNOME-Autostart-enabled=true
+        '';
+      };
     });
 }

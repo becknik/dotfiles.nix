@@ -128,7 +128,7 @@
     anki
     #birdtray # Actually not needing this
     # FIXME https://gitlab.gnome.org/GNOME/glib/-/issues/3690
-    # planify # FIXME remove the overlay
+    planify
     nextcloud-client # Basically redundant, but still necessary for .desktop file in NIX_PATH...
 
     ## Privacy
