@@ -138,26 +138,16 @@
     "1.0.0.1#one.one.one.one"
   ];
   services.resolved = {
-    enable = true; # systemd-resolved
-    #dnssec = "allow-downgrade";
+    enable = true;
     dnssec = "true";
     domains = [ "~." ];
     fallbackDns = [
       "1.1.1.1#one.one.one.one"
       "1.0.0.1#one.one.one.one"
     ];
-    #dnsovertls = "opportunistic";
     dnsovertls = "true";
   };
-  #services.opensnitch.enable = true;
   programs.openvpn3.enable = true;
-  # TODO configure openvpn config using sops-nix for passwords and config
-  # https://nixos.wiki/wiki/OpenVPN
-  /*
-    services.openvpn.servers = {
-      uniVPNv4Ov6 = { config = " config /root/nixos/openvpn/officeVPN.conf "; };
-    };
-  */
 
   # Firewall
   networking.nftables.enable = true; # TODO NFTables might (according to wiki) cause trouble with docker and libvirt, test this out
@@ -169,8 +159,11 @@
       };
     in
     {
-      # every docker network creates a new interface, so disabling firewall globally
-      enable = false;
+      enable = true;
+      # TODO: necessary for proton vpn?
+      # https://github.com/NixOS/nixpkgs/issues/307462#issuecomment-2750133149
+      checkReversePath = "loose";
+
       ## Firewall Ports to open
       allowedTCPPorts = [ ];
       allowedTCPPortRanges = [ kdeConnectPortRange ];
