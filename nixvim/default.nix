@@ -51,6 +51,7 @@
     performance = {
       byteCompileLua = {
         enable = true;
+        initLua = true; # default, but comes in handy when debugging
         luaLib = true;
         plugins = true;
         nvimRuntime = false;
