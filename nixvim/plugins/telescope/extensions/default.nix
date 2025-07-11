@@ -26,13 +26,13 @@
   plugins.telescope.luaConfig.post = ''
     wk.add {
       { "<leader>fg", icon = " " },
-      { "<leader>ff", icon = " 󰋚 " },
+      { "U", icon = " 󰋚 " },
     }
   '';
 
   keymaps = withDefaultKeymapOptions [
     {
-      key = "<leader>ff";
+      key = "U";
       action = "Telescope frecency workspace=CWD";
       options.cmd = true;
       options.desc = "Find in Frecency";

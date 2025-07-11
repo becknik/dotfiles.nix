@@ -14,7 +14,7 @@
       { "<leader>fR", icon = " 󱄋 " },
       { "<leader>fl", icon = " 󰦨" },
 
-      { "F", icon = " " },
+      { "Q", icon = " " },
     }
   '';
 
@@ -34,7 +34,7 @@
         "normal"
       ];
     };
-    "F" = {
+    "Q" = {
       action = "live_grep theme=ivy";
       options.desc = "Search in live Grep";
     };
