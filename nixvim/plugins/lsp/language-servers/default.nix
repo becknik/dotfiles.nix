@@ -52,6 +52,24 @@
 
     # Frontend Stuff
 
+    cssls.enable = true;
+    # newer than the version in vsocde-languageservers-extracted
+    cssls.package = pkgs.buildNpmPackage rec {
+      name = "vscode-css-languageservice";
+      packageName = "vscode-css-languageservice";
+      version = "6.3.7";
+      src = (
+        pkgs.fetchFromGitHub {
+          owner = "microsoft";
+          repo = "vscode-css-languageservice";
+          rev = "v${version}";
+          hash = "sha256-llBkseQgIPtzGkYl92s9IrKPIL9RRq7/V11AlK36UtA=";
+        }
+      );
+      npmDepsHash = "sha256-DICiBn8fRqJl8A5NimAFOHzvQYvP3j4mIvGrji2svOc=";
+      npmBuildScript = "test";
+    };
+
     eslint.enable = true;
     eslint.settings.run = "onSave";
     stylelint_lsp.enable = true;
