@@ -29,7 +29,10 @@
         ".nix"
         "/tmp"
       ];
-      bypass_save_filetypes = [ "oil" ];
+      bypass_save_filetypes = [
+        "oil"
+        "toggleterm"
+      ];
       post_restore_cmds = [
         {
           __raw = ''
