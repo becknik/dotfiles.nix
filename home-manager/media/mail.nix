@@ -51,8 +51,9 @@ in
         primary = true;
         realName = "Jannik Becker";
         # TODO: doesn't seem to work with Thunderbird
+        # https://github.com/nix-community/home-manager/issues/7265
         # gpg = {
-        #   key = "43CFD745B4DB70B9";
+        #   key = "5E743084FCADCECC";
         #   signByDefault = true;
         #   encryptByDefault = false;
         # };
