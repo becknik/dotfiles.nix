@@ -20,7 +20,7 @@
     marksman.enable = true;
     marksman.extraOptions.root_dir.__raw = ''
       function(fname)
-        if vim.bo.buftype ~= "" or not vim.bo.modifiable then
+        if fname == "" or vim.bo.buftype ~= "" or not vim.bo.modifiable then
           return
         end
 
@@ -79,7 +79,7 @@
     relay_lsp.package = null;
     relay_lsp.extraOptions.root_dir.__raw = ''
       function(fname)
-        if vim.bo.buftype ~= "" or not vim.bo.modifiable then
+        if fname == "" or vim.bo.buftype ~= "" or not vim.bo.modifiable then
           return
         end
 
