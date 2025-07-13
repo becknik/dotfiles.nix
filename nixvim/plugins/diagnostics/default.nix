@@ -34,8 +34,8 @@
           })
           vim.notify(
             "Virtual Lines " .. (diag_config.virtual_lines and  "disabled" or "enabled" ),
-            "info",
-            { title = "Diagnostics" }
+            vim.log.levels.INFO,
+            { title = "Diagnostics", render = "compact" }
           )
         end
       '';
@@ -60,8 +60,8 @@
           })
           vim.notify(
             "Virtual text " .. (virtual_text == true and "enabled" or "disabled" ),
-            "info",
-            { title = "Diagnostics" }
+            vim.log.levels.INFO,
+            { title = "Diagnostics", render = "compact" }
           )
         end
       '';

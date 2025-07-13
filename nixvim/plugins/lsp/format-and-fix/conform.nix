@@ -30,13 +30,13 @@
               range = range
             }, function(err, did_edit)
                 if (err) then
-                  vim.notify("Failed formatting: " .. err, "error", { title = "Conform All" })
+                  vim.notify("Failed formatting: " .. err, vim.log.levels.ERROR, { title = "Conform All", timeout = 5000 })
                 elseif (did_edit) then
-                  vim.notify("Done formatting", "info", { title = "Conform All", render = "compact" })
+                  vim.notify("Done formatting", vim.log.levels.INFO, { title = "Conform All", render = "compact" })
                   vim.cmd("silent noautocmd write")
                   vim.cmd('silent GuessIndent')
                 else
-                  vim.notify("Nothing to format", "info", { title = "Conform All", render = "compact" })
+                  vim.notify("Nothing to format", vim.log.levels.INFO, { title = "Conform All", render = "compact" })
                   vim.cmd("silent noautocmd write")
                 end
               end
@@ -72,7 +72,7 @@
 
           local hunks = require("gitsigns").get_hunks(bufnr)
           if not hunks then
-            vim.notify("No hunks available", "info", { title = "Conform Hunks" })
+            vim.notify("No hunks available", vim.log.levels.INFO, { title = "Conform Hunks", render = "compact" })
             vim.b.disable_hunk_fmt = true
             vim.api.nvim_command("ConformFormat")
             return
@@ -149,18 +149,18 @@
               -- quiet   = true,
             }, function(err, did_edit)
               if err then
-                vim.notify("Failed formatting: " .. err, "error", { title = "Conform Hunks" })
+                vim.notify("Failed formatting: " .. err, vim.log.levels.ERROR, { title = "Conform Hunks", timeout = 5000 })
                 return;
               end
 
               local now = vim.loop.hrtime() / 1e6 -- ms
               if now - format_start > 2000 and not vim.b[bufnr].disable_hunk_fmt then
                 vim.b[bufnr].disable_hunk_fmt = true
-                vim.notify("Formatting hunks took too longer than 2s", "warn", { title = "Conform Hunks" })
+                vim.notify("Formatting hunks took too longer than 2s", vim.log.levels.WARN, { title = "Conform Hunks", render = "compact" })
                 vim.notify(
                   "Locally hunk-formatting disabled",
-                  "info",
-                  { title = "Conform" }
+                  vim.log.levels.INFO,
+                  { title = "Conform", render = "compact" }
                 )
                 if #hunks > hunks_processing / 2 then 
                   -- immediately format the rest if it takes around 3s
@@ -203,8 +203,8 @@
           vim.g.disable_autoformat = not prev
           vim.notify(
             "Global auto-formatting " .. (prev and  "enabled" or "disabled"),
-            "info",
-            { title = "Conform" }
+            vim.log.levels.INFO,
+            { title = "Conform", render = "compact" }
           )
         end
       '';
@@ -218,8 +218,8 @@
           vim.b.disable_autoformat = not prev
           vim.notify(
             "Local auto-formatting " .. (prev and  "enabled" or "disabled"),
-            "info",
-            { title = "Conform" }
+            vim.log.levels.INFO,
+            { title = "Conform", render = "compact" }
           )
         end
       '';
@@ -234,8 +234,8 @@
           -- NOTE: keep in sync with unification in ConformFormatHunks
           vim.notify(
             "Global hunk-formatting " .. (prev and "enabled" or "disabled" ),
-            "info",
-            { title = "Conform" }
+            vim.log.levels.INFO,
+            { title = "Conform", render = "compact" }
           )
         end
       '';
@@ -250,8 +250,8 @@
           -- NOTE: keep in sync with unification in ConformFormatHunks
           vim.notify(
             "Local hunk-formatting " .. (prev and "enabled" or "disabled" ),
-            "info",
-            { title = "Conform" }
+            vim.log.levels.INFO,
+            { title = "Conform", render = "compact" }
           )
         end
       '';
