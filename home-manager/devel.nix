@@ -84,6 +84,7 @@
       meld
       wiggle
       watchman # necessary for some npm scripts
+      distrobox
 
       # LLM (ChatGPT)
       shell-gpt
