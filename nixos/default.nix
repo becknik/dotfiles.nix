@@ -157,6 +157,10 @@
         from = 1714;
         to = 1764;
       };
+      localSend = {
+        from = 53317;
+        to = 53317;
+      };
     in
     {
       enable = true;
@@ -166,9 +170,15 @@
 
       ## Firewall Ports to open
       allowedTCPPorts = [ ];
-      allowedTCPPortRanges = [ kdeConnectPortRange ];
+      allowedTCPPortRanges = [
+        kdeConnectPortRange
+        localSend
+      ];
       allowedUDPPorts = [ ];
-      allowedUDPPortRanges = [ kdeConnectPortRange ];
+      allowedUDPPortRanges = [
+        kdeConnectPortRange
+        localSend
+      ];
 
       trustedInterfaces = [ "docker0" ];
     };
@@ -239,19 +249,18 @@
     isNormalUser = true;
     description = "jannik";
     hashedPassword = "$y$j9T$v2v24yeaoZcmnJRJqKVIb/$9/ERYx13TXXpCXA12dNvvrr1BOKx1/tgpO9M9fRlio4";
-    extraGroups =
-      [
-        "wheel"
-        "networkmanager"
-        "libvirtd"
-        "docker"
-        "vboxusers"
-        "video"
-      ]
-      ++ [
-        "lp"
-        "scanner"
-      ];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "libvirtd"
+      "docker"
+      "vboxusers"
+      "video"
+    ]
+    ++ [
+      "lp"
+      "scanner"
+    ];
     useDefaultShell = true;
   };
   users.users.root.hashedPassword = "!"; # disable root account

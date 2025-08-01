@@ -23,6 +23,7 @@
 
     ## CUPS & Printing
     printing.enable = true;
+    printing.openFirewall = true;
     avahi = {
       enable = true;
       nssmdns4 = true;
