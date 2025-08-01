@@ -80,6 +80,13 @@ in
           (d pkgs (c [
             "amFu"
             "bmlr"
+            "YmVA"
+            "cG0u"
+            "bWU="
+          ]))
+          (d pkgs (c [
+            "amFu"
+            "bmlr"
             "YjMz"
             "QHBt"
             "Lm1l"
