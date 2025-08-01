@@ -14,7 +14,7 @@
   plugins.vimtex = {
     enable = true;
     # NOTE: sync with NixOS system texlive
-    texlivePackage = pkgs-stable.texlive.combined.scheme-full;
+    texlivePackage = pkgs-stable.tectonic;
     # texlivePackage = null;
 
     settings = {
