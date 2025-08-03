@@ -258,13 +258,14 @@ with lib.gvariant;
       favorite-apps = [
         "kitty.desktop"
         "org.kde.dolphin.desktop"
-        "librewolf.desktop"
+        "zen-beta.desktop"
         "t3-chat.desktop"
         "chromium-browser.desktop"
         "org.keepassxc.KeePassXC.desktop"
         "obsidian.desktop"
-        "code.desktop"
         "org.gnome.Pomodoro.desktop"
+        "librewolf.desktop"
+        "code.desktop"
         "Alacritty.desktop"
         "cider.desktop"
       ];

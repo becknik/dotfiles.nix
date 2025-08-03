@@ -36,27 +36,94 @@
     "gsconnect-librewolf-message-hosts" = {
       target = ".librewolf/native-messaging-hosts/org.gnome.shell.extensions.gsconnect.json";
       source = "${pkgs.gnomeExtensions.gsconnect}/lib/mozilla/native-messaging-hosts/org.gnome.shell.extensions.gsconnect.json";
-      # Also available under /etc(/opt)?/chrome/native-messaging-hosts/
-    };
-    "keepassxc-proxy-for-librewolf-message-hosts" = {
-      source = "${pkgs.keepassxc}/lib/mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json";
-      target = ".librewolf/native-messaging-hosts/org.keepassxc.keepassxc_browser.json";
     };
   };
 
+  catppuccin.firefox.profiles = { };
+  catppuccin.librewolf.profiles = { };
+
   programs = {
+    zen-browser = {
+      enable = true;
+      nativeMessagingHosts = with pkgs; [
+        gnomeExtensions.gsconnect
+        gnome-browser-connector
+        keepassxc
+      ];
+      policies = {
+        AutofillAddressEnabled = true;
+        AutofillCreditCardEnabled = false;
+        DisableAppUpdate = true;
+        DisableFeedbackCommands = true;
+        DisableFirefoxStudies = true;
+        DisablePocket = true;
+        DisableTelemetry = true;
+        DontCheckDefaultBrowser = true;
+        NoDefaultBookmarks = true;
+        OfferToSaveLogins = false;
+        EnableTrackingProtection = {
+          Value = true;
+          Locked = true;
+          Cryptomining = true;
+          Fingerprinting = true;
+        };
+
+        Preferences =
+          let
+            locked = value: {
+              "Value" = value;
+              "Status" = "locked";
+            };
+          in
+          {
+            "browser.tabs.warnOnClose" = locked false;
+
+            "browser.ctrlTab.sortByRecentlyUsed" = locked true;
+            "browser.engagement.ctrlTab.has-used" = locked true;
+
+            "browser.tabs.loadInBackground" = locked true;
+            "doh-rollout.disable-heuristics" = locked true;
+            "dom.security.https_only_mode" = locked true;
+            "dom.security.https_only_mode_ever_enabled" = locked true;
+
+            "general.autoScroll" = locked true;
+            "general.smoothScroll" = locked true;
+            "intl.accept_languages" = locked "en-us,de,en";
+            "intl.locale.requested" = locked "en-US,de,en-GB";
+            "layout.css.prefers-color-scheme.content-override" = locked 0;
+
+            "network.trr.mode" = locked 3;
+            "network.trr.uri" = locked "https://mozilla.cloudflare-dns.com/dns-query";
+
+            "pref.browser.language.disable_button.up" = locked false;
+            "privacy.clearOnShutdown_v2.formdata" = locked true;
+            "privacy.clearOnShutdown_v2.cache" = locked false;
+            "privacy.clearOnShutdown_v2.cookiesAndStorage" = locked false;
+
+            "privacy.sanitize.sanitizeOnShutdown" = locked true;
+            "privacy.sanitize.pending" =
+              locked "[{\"id\":\"shutdown\",\"itemsToClear\":[\"browsingHistoryAndDownloads\"],\"options\":{}}]";
+
+            "zen.workspaces.continue-where-left-off" = locked true;
+            "zen.view.compact.should-enable-at-startup" = locked true;
+            "zen.view.use-single-toolbar" = locked false;
+            "zen.view.window.scheme" = locked 0;
+          };
+      };
+    };
+
     librewolf = {
       enable = true;
-      package = pkgs.unstable.librewolf-wayland.overrideAttrs (oldAttrs: {
-        extraNativeMessagingHosts = (
-          with pkgs;
-          [
-            gnomeExtensions.gsconnect
-            keepassxc
-          ]
-        );
-      });
-      # necessary file for keepassxc integration is created in `folders-and-files.nix`
+      package = pkgs.unstable.librewolf.override {
+        # https://github.com/NixOS/nixpkgs/issues/374882
+        # https://github.com/NixOS/nixpkgs/issues/414205
+        nativeMessagingHosts = with pkgs; [
+          gnomeExtensions.gsconnect
+          gnome-browser-connector
+          keepassxc
+        ];
+        # hasMozSystemDirPatch = true;
+      };
 
       settings = {
         "media.ffmpeg.vaapi.enabled" = true;

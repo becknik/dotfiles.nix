@@ -42,6 +42,11 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -195,6 +200,7 @@
                 sops-nix.homeManagerModules.sops
                 nix-index-database.hmModules.nix-index
                 catppuccin.homeModules.catppuccin
+                inputs.zen-browser.homeModules.beta
               ]
               ++ nixpkgs.lib.optional isDarwinSystem mac-app-util.homeManagerModules.default;
 
@@ -289,7 +295,8 @@
                     #(pkgs.withCFlags [ "-O3" ] pkgs.fastStdenv);
                     # TODO error: The ‘env’ attribute set cannot contain any attributes passed to derivation.
                     # The following attributes are overlapping: NIX_CFLAGS_COMPILE
-                  } // config;
+                  }
+                  // config;
                   # This for of adding `nixpkgs.config` is necessary due to `replaceStdenv` else shadowing the options
                   # specified in `config`
 
