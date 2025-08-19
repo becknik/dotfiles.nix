@@ -67,11 +67,12 @@
     with pkgs;
     let
       jetbrainsTools =
-        (
+        lib.lists.optionals (!isDarwinSystem) (
           with unstable.jetbrains;
-          lib.lists.optionals (!isDarwinSystem) [
+          [
             clion
             idea-ultimate
+            unstable.android-studio
           ]
         )
         ++ lib.lists.optionals (!isDarwinSystem) [ jetbrains-toolbox ]; # used for experiments

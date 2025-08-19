@@ -130,6 +130,7 @@
             "jetbrains-toolbox"
             "idea-ultimate"
             "clion"
+            "android-studio-stable"
 
             # Only vscode extension used from official nixpkgs
             "vscode"
