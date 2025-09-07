@@ -69,6 +69,8 @@
       npmDepsHash = "sha256-DICiBn8fRqJl8A5NimAFOHzvQYvP3j4mIvGrji2svOc=";
       npmBuildScript = "test";
     };
+    astro.enable = true;
+    svelte.enable = true;
 
     eslint.enable = true;
     eslint.settings.run = "onSave";

@@ -1,5 +1,4 @@
 {
-  pkgs,
   withDefaultKeymapOptions,
   mapToModeAbbr,
   ...
@@ -8,9 +7,6 @@
 {
   plugins.copilot-lua = {
     enable = true;
-    package = pkgs.vimPlugins.copilot-lua.overrideAttrs (oldAttrs: {
-      patches = [ ./copilot-lua.patch ];
-    });
 
     settings = {
       suggestions = {
