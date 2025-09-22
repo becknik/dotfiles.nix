@@ -54,9 +54,6 @@
         "BookmarksInitGlobConfig"
       ];
 
-      git_use_branch_name = true;
-      git_auto_restore_on_branch_change = false;
-
       lazy_support = true;
 
       session_lens.load_on_setup = true;
