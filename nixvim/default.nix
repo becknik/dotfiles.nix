@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -11,7 +11,7 @@
   config.globals.mapleader = " "; # "," "\"
 
   config = {
-    clipboard.providers.wl-copy.enable = true;
+    clipboard.providers.wl-copy.enable = pkgs.stdenv.isLinux;
 
     # colorschemes.kanagawa.enable = true;
     colorschemes.rose-pine.enable = false;
