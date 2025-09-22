@@ -1,5 +1,4 @@
 {
-  isDarwinSystem,
   lib,
   config,
   pkgs,
@@ -10,7 +9,7 @@
   # some pl packages are handy for quickly trying something out etc.
   home.packages =
     with pkgs;
-    (lib.lists.optionals (!isDarwinSystem) [
+    (lib.lists.optionals (!pkgs.stdenv.isDarwin) [
       tectonic
       conda
     ])

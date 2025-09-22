@@ -1,6 +1,4 @@
 {
-  devenv,
-  isDarwinSystem,
   pkgs,
   ...
 }:
@@ -40,7 +38,7 @@
   # Manual Installations
   home.packages =
     let
-      mkWhenNotDarwin = pkg: (if isDarwinSystem then pkgs.hello else pkg);
+      mkWhenNotDarwin = pkg: (if pkgs.stdenv.isDarwin then pkgs.hello else pkg);
     in
     with pkgs;
     [

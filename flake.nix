@@ -183,13 +183,10 @@
           userName,
           ...
         }:
-        let
-          isDarwinSystem = inputs.nixpkgs.lib.strings.hasInfix "darwin" system;
-        in
         {
           home-manager = {
             extraSpecialArgs = (args userName) // {
-              inherit system isLaptop isDarwinSystem;
+              inherit system isLaptop;
             };
             useGlobalPkgs = true;
             useUserPackages = true;
@@ -203,13 +200,13 @@
                 catppuccin.homeModules.catppuccin
                 inputs.zen-browser.homeModules.beta
               ]
-              ++ nixpkgs.lib.optional isDarwinSystem mac-app-util.homeManagerModules.default;
+              ++ nixpkgs.lib.optional (inputs.nixpkgs.lib.strings.hasInfix "darwin" system) mac-app-util.homeManagerModules.default;
 
             # home-manager on darwin doesn't support all options
             users.${userName} = nixpkgs.lib.concatStringsSep "/" [
               ./home-manager
               "users"
-              (if isDarwinSystem then "darwin.nix" else "nixos.nix")
+              (if inputs.nixpkgs.lib.strings.hasInfix "darwin" system then "darwin.nix" else "nixos.nix")
             ];
           };
         };

@@ -1,5 +1,4 @@
 {
-  isDarwinSystem,
   pkgs,
   ...
 }:
@@ -67,7 +66,7 @@
     with pkgs;
     let
       jetbrainsTools =
-        lib.lists.optionals (!isDarwinSystem) (
+        lib.lists.optionals (!pkgs.stdenv.isDarwin) (
           with unstable.jetbrains;
           [
             clion
@@ -75,7 +74,7 @@
             unstable.android-studio
           ]
         )
-        ++ lib.lists.optionals (!isDarwinSystem) [ jetbrains-toolbox ]; # used for experiments
+        ++ lib.lists.optionals (!pkgs.stdenv.isDarwin) [ jetbrains-toolbox ]; # used for experiments
       # not using unstable.jetbrains-toolbox because it depends on too much & I'm not using it that often
     in
     jetbrainsTools
@@ -85,7 +84,7 @@
       meld
       wiggle
       watchman # necessary for some npm scripts
-      distrobox
+      (if !pkgs.stdenv.isDarwin then distrobox else hello)
 
       # LLM (ChatGPT)
       shell-gpt
