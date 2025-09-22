@@ -53,9 +53,25 @@
     # Frontend Stuff
     vtsls.enable = true;
     cssmodules_ls.enable = true;
-    cssmodules_ls.package = null;
+    # https://github.com/antonk52/cssmodules-language-server
+    cssmodules_ls.package = pkgs.buildNpmPackage rec {
+      name = "cssmodules-language-server";
+      packageName = "cssmodules-language-server";
+      version = "1.5.1";
+      src = (
+        pkgs.fetchFromGitHub {
+          owner = "antonk52";
+          repo = "cssmodules-language-server";
+          rev = "v${version}";
+          hash = "sha256-MpUZn+UaelnCoyokPszc+Q566zs0BzKFAytWdRuOJ8U=";
+        }
+      );
+      npmDepsHash = "sha256-qvQtWMGKRU7CcAE/ozv1cr+tlDrdp+PfQrh8ouTmX2A=";
+      # npmBuildScript = "test";
+    };
     cssls.enable = true;
     # newer than the version in vsocde-languageservers-extracted
+    # https://github.com/microsoft/vscode-css-languageservice
     cssls.package = pkgs.buildNpmPackage rec {
       name = "vscode-css-languageservice";
       packageName = "vscode-css-languageservice";
