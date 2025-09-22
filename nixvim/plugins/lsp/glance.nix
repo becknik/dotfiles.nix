@@ -15,6 +15,18 @@
         "<C-q>".__raw = "false";
         "<C-t>".__raw = "require('glance').actions.quickfix";
       };
+
+      hooks = {
+        before_open.__raw = ''
+          function(results, open, jump, method)
+            if (method == "definitions" and #results == 1) then
+              jump(results[1])
+            else
+              open()
+            end
+          end
+        '';
+      };
     };
   };
 
