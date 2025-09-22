@@ -51,7 +51,9 @@
     pyright.package = pkgs.basedpyright;
 
     # Frontend Stuff
-
+    vtsls.enable = true;
+    cssmodules_ls.enable = true;
+    cssmodules_ls.package = null;
     cssls.enable = true;
     # newer than the version in vsocde-languageservers-extracted
     cssls.package = pkgs.buildNpmPackage rec {
@@ -69,14 +71,16 @@
       npmDepsHash = "sha256-DICiBn8fRqJl8A5NimAFOHzvQYvP3j4mIvGrji2svOc=";
       npmBuildScript = "test";
     };
-    astro.enable = true;
-    svelte.enable = true;
+    tailwindcss.enable = true;
 
     eslint.enable = true;
     eslint.settings.run = "onSave";
     stylelint_lsp.enable = true;
-    tailwindcss.enable = true;
+
     ## Frameworks
+    astro.enable = true;
+    svelte.enable = true;
+    volar.enable = true;
     relay_lsp.enable = true;
     relay_lsp.package = null;
     relay_lsp.extraOptions.root_dir.__raw = ''
@@ -89,8 +93,6 @@
         return require'lspconfig.util'.root_pattern('relay.config.*')(fname) -- removed 'package.json'
       end
     '';
-    volar.enable = true;
-    vtsls.enable = true;
 
     # Backend Stuff
 
