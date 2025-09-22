@@ -81,7 +81,6 @@
   plugins.lsp.keymaps = {
     lspBuf = {
       gD = "declaration";
-      gd = "definition";
     };
 
     extra = withDefaultKeymapOptions [

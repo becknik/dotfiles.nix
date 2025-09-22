@@ -28,6 +28,18 @@
 
   keymaps = withDefaultKeymapOptions [
     {
+      key = "g,";
+      action = "Glance resume";
+      options.cmd = true;
+      options.desc = "Resume";
+    }
+    {
+      key = "gd";
+      action = "Glance definitions";
+      options.cmd = true;
+      options.desc = "Definitions";
+    }
+    {
       key = "gr";
       action = "Glance references";
       options.cmd = true;
