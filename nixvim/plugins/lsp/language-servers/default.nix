@@ -97,18 +97,6 @@
     astro.enable = true;
     svelte.enable = true;
     volar.enable = true;
-    relay_lsp.enable = true;
-    relay_lsp.package = null;
-    relay_lsp.extraOptions.root_dir.__raw = ''
-      function(fname)
-        if fname == "" or vim.bo.buftype ~= "" or not vim.bo.modifiable then
-          return
-        end
-
-        -- https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/configs/relay_lsp.lua
-        return require'lspconfig.util'.root_pattern('relay.config.*')(fname) -- removed 'package.json'
-      end
-    '';
 
     # Backend Stuff
 

@@ -24,8 +24,8 @@
       # Python
       python3
 
-      unstable.clang_17
-      unstable.clang-tools_17
+      unstable.clang
+      unstable.clang-tools
     ];
 
   # JDK Setup (https://whichjdk.com/)

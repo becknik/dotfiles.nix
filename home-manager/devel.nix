@@ -74,8 +74,9 @@
             unstable.android-studio
           ]
         )
-        ++ lib.lists.optionals (!pkgs.stdenv.isDarwin) [ jetbrains-toolbox ]; # used for experiments
-      # not using unstable.jetbrains-toolbox because it depends on too much & I'm not using it that often
+        # not using unstable.jetbrains-toolbox because it depends on too much & I'm not using it that often
+        ++ lib.lists.optionals (!pkgs.stdenv.isDarwin) [ jetbrains-toolbox ] # used for experiments
+        ++ lib.lists.optionals (!pkgs.stdenv.isDarwin) [ android-tools ];
     in
     jetbrainsTools
     ++ [

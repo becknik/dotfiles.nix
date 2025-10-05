@@ -55,7 +55,7 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    catppuccin.url = "github:catppuccin/nix";
+    catppuccin.url = "github:catppuccin/nix/release-25.05";
 
     # Libraries
     flockenzeit.url = "github:balsoft/Flockenzeit";
