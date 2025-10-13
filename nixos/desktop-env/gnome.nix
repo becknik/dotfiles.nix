@@ -81,7 +81,7 @@ in
     ## GNOME Services
     # Source: https://github.com/NixOS/nixpkgs/blob/nixos-23.05/nixos/modules/services/x11/desktop-managers/gnome.nix
     gnome = {
-      core-apps.enable = false;
+      # core-apps.enable = false;
       games.enable = false;
       ### Redundant stuff
       gnome-keyring.enable = lib.mkDefault true;
@@ -90,8 +90,8 @@ in
       #evolution-data-server.enable = lib.mkDefault false; # might be the cause for gnome shell crashes
       gnome-online-accounts.enable = lib.mkForce false;
       localsearch.enable = lib.mkForce false;
-      tinysparql.enable = lib.mkForce false;
-      evolution-data-server.enable = lib.mkForce false;
+      # tinysparql.enable = lib.mkForce false;
+      # evolution-data-server.enable = lib.mkForce false;
 
       ### " gnome.core-shell
       gnome-remote-desktop.enable = lib.mkForce false;
@@ -119,9 +119,30 @@ in
     sushi
     gnome-tour
     gnome-photos
-    evolutionWithPlugins
     orca
     gnome-user-docs
+
+    decibels
+    epiphany
+    file-roller
+    gnome-connections
+    gnome-console
+    gnome-contacts
+    gnome-disk-utility
+    gnome-logs
+    gnome-maps
+    gnome-music
+    gnome-software
+    gnome-system-monitor
+    gnome-text-editor
+    libportal
+    libportal-gtk3
+    libshumate
+    loupe
+    totem
+    yelp
+    yelp-xsl
+    # folks gnome-calendar gnome-mimeapps grilo grilo-plugins libdmapsharing gtk-frdp liboauth libspelling
   ];
 
   environment.variables = {
