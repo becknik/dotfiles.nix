@@ -118,7 +118,6 @@
             "joypixels"
             "ventoy-gtk3"
 
-            "veracrypt"
             "obsidian"
             "google-chrome"
 
