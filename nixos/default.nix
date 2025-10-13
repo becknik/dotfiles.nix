@@ -157,10 +157,7 @@
         from = 1714;
         to = 1764;
       };
-      localSend = {
-        from = 53317;
-        to = 53317;
-      };
+      localSend = 53317;
     in
     {
       enable = true;
@@ -169,15 +166,18 @@
       checkReversePath = "loose";
 
       ## Firewall Ports to open
-      allowedTCPPorts = [ ];
-      allowedTCPPortRanges = [
-        kdeConnectPortRange
+      allowedTCPPorts = [
         localSend
       ];
-      allowedUDPPorts = [ ];
+      allowedTCPPortRanges = [
+        kdeConnectPortRange
+      ];
+
+      allowedUDPPorts = [
+        localSend
+      ];
       allowedUDPPortRanges = [
         kdeConnectPortRange
-        localSend
       ];
 
       trustedInterfaces = [ "docker0" ];
