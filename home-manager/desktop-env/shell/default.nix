@@ -72,10 +72,10 @@
           extraRc = builtins.readFile ./files/zshrc.zsh;
 
           # at least syntax-highlighting must be placed after compinit, I think
+          # source ${fzf-git-sh-patched}/share/fzf-git-sh/fzf-git.sh
           pluginSource = with pkgs; ''
             # source ${zsh-fast-syntax-highlighting}/share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh
             source ${zsh-you-should-use}/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
-            source ${fzf-git-sh-patched}/share/fzf-git-sh/fzf-git.sh
             source ${zsh-forgit-patched}/share/zsh/zsh-forgit/forgit.plugin.zsh
           '';
         in

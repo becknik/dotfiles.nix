@@ -14,6 +14,7 @@ final: prev: {
     patches = [ ./modifications/pure-prompt.patch ];
   });
 
+  # FIXME: this is broken & not fixed rn
   fzf-git-sh-patched = prev.unstable.fzf-git-sh.overrideAttrs (oldAttrs: {
     src = prev.fetchFromGitHub {
       owner = "junegunn";
