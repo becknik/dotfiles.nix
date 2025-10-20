@@ -175,6 +175,8 @@
         # https://aur.archlinux.org/packages/ungoogled-chromium 2022-05-06 pinned message
         "--disable-features=UseChromeOSDirectVideoDecoder"
         "--enable-hardware-overlays"
+
+        "--force-prefers-no-reduced-motion"
       ];
     };
   };
@@ -192,7 +194,7 @@
     # Options from laptop to get fcitx5 input working:
     # --enable-features=WaylandWindowsDecorations,UseOzonePlatform --ozone-platform-hint=wayland
     logseq
-    anki
+    unstable.anki
     #birdtray # Actually not needing this
     # FIXME https://gitlab.gnome.org/GNOME/glib/-/issues/3690
     planify
