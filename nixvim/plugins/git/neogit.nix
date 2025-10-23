@@ -13,7 +13,7 @@
       disable_signs = true;
       fetch_after_checkout = true;
       graph_style = "unicode";
-      kind = "replace";
+      kind = "floating";
       remember_settings = false; # across sessions
       process_spinner = true;
 

@@ -26,7 +26,7 @@
         chat = {
           adapter = {
             name = "copilot";
-            model = "claude-3.7-sonnet";
+            model = "claude-sonnet-4.5";
           };
           roles.user = "becknik";
           opts.completion_provider = "blink";
