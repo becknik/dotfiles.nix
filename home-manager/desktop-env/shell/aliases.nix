@@ -86,6 +86,12 @@
       gsubin = "git submodule init";
       gsubfe = "git submodule foreach";
 
+      ## Workmodules
+      # Fixes the issue where `git branch -psetupstream-to` / `gbu` returns:
+      # fatal: the requested upstream branch 'origin/main' does not exist
+      gwtfix = ''git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"'';
+      gbu = "git branch --set-upstream-to";
+
       ## Frankensteins
       "gauc!" = "gau && gc!";
       "gaucmsg" = "gau && gcmsg";
