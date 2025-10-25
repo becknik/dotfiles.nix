@@ -27,19 +27,19 @@
     };
   };
 
-  dependencies.ripgrep.package = pkgs.ripgrep.overrideAttrs (prev: {
-    # cargo-build-hook.sh/nix-support/setup-hook: line 10: export: `CARGO_PROFILE_RELEASE-LTO_STRIP=false': not a valid iden…
-    cargoBuildType = "releaselto";
-    postPatch = ''
-      substituteInPlace Cargo.toml \
-        --replace '[profile.release-lto]' '[profile.releaselto]'
-    '';
-
-    env = (prev.env or { }) // {
-      RUSTFLAGS = pkgs.lib.concatStringsSep " " [
-        "-C"
-        "target-cpu=native"
-      ];
-    };
-  });
+  # dependencies.ripgrep.package = pkgs.ripgrep.overrideAttrs (prev: {
+  #   # cargo-build-hook.sh/nix-support/setup-hook: line 10: export: `CARGO_PROFILE_RELEASE-LTO_STRIP=false': not a valid iden…
+  #   cargoBuildType = "releaselto";
+  #   postPatch = ''
+  #     substituteInPlace Cargo.toml \
+  #       --replace '[profile.release-lto]' '[profile.releaselto]'
+  #   '';
+  #
+  #   env = (prev.env or { }) // {
+  #     RUSTFLAGS = pkgs.lib.concatStringsSep " " [
+  #       "-C"
+  #       "target-cpu=native"
+  #     ];
+  #   };
+  # });
 }
