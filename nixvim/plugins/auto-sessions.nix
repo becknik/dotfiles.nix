@@ -1,7 +1,7 @@
 { withDefaultKeymapOptions, ... }:
 
 {
-  opts.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions";
+  opts.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions"; # terminal,
 
   plugins.auto-session = {
     enable = true;
@@ -28,6 +28,10 @@
         ".cache"
         ".nix"
         "/tmp"
+        "dl"
+        "Downloads"
+        "Documents"
+        "~"
       ];
       bypass_save_filetypes = [
         "oil"
@@ -67,26 +71,26 @@
   keymaps = withDefaultKeymapOptions [
     {
       key = "<leader>af";
-      action = "SessionSearch";
+      action = "Autosession search";
       options.cmd = true;
       options.desc = "Search Sessions";
     }
     {
       key = "<leader>as";
-      action = "SessionSave";
+      action = "Autosession save";
       options.cmd = true;
       options.desc = "Save Session";
     }
     {
       key = "<leader>aD";
-      action = "SessionDelete";
+      action = "Autosession delete";
       options.cmd = true;
       options.desc = "Delete current Session";
     }
 
     {
       key = "<leader>ad";
-      action = "Autosession delete";
+      action = "Autosession deletePicker";
       options.cmd = true;
       options.desc = "Delete Autosession";
     }
