@@ -108,15 +108,13 @@
       # Default nixpkgs config
       config = {
         permittedInsecurePackages = [
-          "ventoy-gtk3-1.1.05"
-          "yubikey-manager-qt-1.2.5"
+          "mbedtls-2.28.10" # openrgb
         ];
         allowUnfreePredicate =
           pkg:
           builtins.elem (nixpkgs.lib.getName pkg) [
             "brgenml1lpr"
             "joypixels"
-            "ventoy-gtk3"
 
             "obsidian"
             "google-chrome"

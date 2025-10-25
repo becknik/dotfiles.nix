@@ -68,7 +68,6 @@
       ### Hardware
       cpufetch
       (mkWhenNotDarwin gparted)
-      (mkWhenNotDarwin ventoy-full-gtk)
       (mkWhenNotDarwin powertop)
       (mkWhenNotDarwin vial)
 
@@ -93,7 +92,7 @@
       sops
       age
       age-plugin-yubikey
-      (mkWhenNotDarwin yubikey-manager-qt)
+      (mkWhenNotDarwin yubioath-flutter)
       (mkWhenNotDarwin yubikey-personalization-gui)
       tig
 
