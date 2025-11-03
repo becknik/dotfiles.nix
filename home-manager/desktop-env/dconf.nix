@@ -579,5 +579,8 @@ with lib.gvariant;
         "lv3:ralt_switch"
       ];
     };
+
+    # Setting the anthy's input mode to "Hiragana" by default
+    "/org/freedesktop/ibus/engine/anthy/common/input-mode" = 0;
   };
 }
