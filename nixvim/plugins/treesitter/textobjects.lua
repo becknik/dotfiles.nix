@@ -33,3 +33,8 @@ local gs = require "gitsigns"
 local hunk_repeat_next, hunk_repeat_prev = ts_repeat_move.make_repeatable_move_pair(gs.next_hunk, gs.prev_hunk)
 vim.keymap.set({ "n", "x", "o" }, "]h", hunk_repeat_next, { desc = "Next Hunk" })
 vim.keymap.set({ "n", "x", "o" }, "[h", hunk_repeat_prev, { desc = "Previous Hunk" })
+
+local todo = require "todo-comments"
+local todo_next, todo_prev = ts_repeat_move.make_repeatable_move_pair(todo.jump_next, todo.jump_prev)
+vim.keymap.set({ "n", "x", "o" }, "]t", todo_next, { desc = "Next TODO Comment" })
+vim.keymap.set({ "n", "x", "o" }, "[t", todo_prev, { desc = "Previous TODO Comment" })

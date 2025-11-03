@@ -43,23 +43,6 @@
 
   keymaps = withDefaultKeymapOptions [
     {
-      key = "]t";
-      action.__raw = ''
-        function()
-          require("todo-comments").jump_next()
-        end'';
-      options.desc = "Next TODO Comment";
-    }
-    {
-      key = "[t";
-      action.__raw = ''
-        function()
-          require("todo-comments").jump_prev()
-        end'';
-      options.desc = "Previous TODO Comment";
-    }
-
-    {
       key = "<leader>dx";
       action = "Trouble todo filter.buf = 0";
       options.cmd = true;
