@@ -71,26 +71,26 @@
   keymaps = withDefaultKeymapOptions [
     {
       key = "<leader>af";
-      action = "Autosession search";
+      action = "AutoSession search";
       options.cmd = true;
       options.desc = "Search Sessions";
     }
     {
       key = "<leader>as";
-      action = "Autosession save";
+      action = "AutoSession save";
       options.cmd = true;
       options.desc = "Save Session";
     }
     {
       key = "<leader>aD";
-      action = "Autosession delete";
+      action = "AutoSession delete";
       options.cmd = true;
       options.desc = "Delete current Session";
     }
 
     {
       key = "<leader>ad";
-      action = "Autosession deletePicker";
+      action = "AutoSession deletePicker";
       options.cmd = true;
       options.desc = "Delete Autosession";
     }
