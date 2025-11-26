@@ -10,38 +10,13 @@
 {
   programs.zsh.shellAliases =
     let
-      mkRebuildCmd =
-        isDarwin: argument:
-        (if isDarwin then ''osascript -e 'do shell script "'' else "")
-        + (
-          "sudo ${if isDarwin then "darwin" else "nixos"}-rebuild "
-          + ''--flake \"${(mkFlakeDir userName config)}#$FLAKE_NIXOS_HOST\" ${argument}''
-        )
-        + (if isDarwin then ''" with administrator privileges' '' else "");
-
       mkRebuildCmdNh =
         argument: "nh os ${argument} ${(mkFlakeDir userName config)} --hostname $FLAKE_NIXOS_HOST";
     in
     {
-      # Flake NixOS configuration equals hostname of machine
-      # TODO this is ugly
-      nrbs = (mkRebuildCmd false "switch");
-      nrbb = (mkRebuildCmd false "boot");
-      nrbt = (mkRebuildCmd false "test");
-
       nhs = (mkRebuildCmdNh "switch");
       nht = (mkRebuildCmdNh "boot");
       nhb = (mkRebuildCmdNh "test");
-
-      # drbs = (mkBetterRebuildCmd true "switch");
-      # drbb = (mkBetterRebuildCmd true "build");
-      # drbc = (mkBetterRebuildCmd true "check");
-      # FIXME git+file:///Users/jbecker/devel/own/dotfiles.nix' does not provide attribute 'packages.x86_64-darwin.nixosConfigurations.wnix.config.system.build.toplevel',
-      # 'legacyPackages.x86_64-darwin.nixosConfigurations.wnix.config.system.build.toplevel' or 'nixosConfigurations.wnix.config.system.build.toplevel'
-
-      drbs = (mkRebuildCmd true "switch");
-      drbb = (mkRebuildCmd true "build");
-      drbc = (mkRebuildCmd true "check");
 
       ngc = "sudo nix-collect-garbage";
       ngckeep = "sudo nix-collect-garbage --delete-older-than";
