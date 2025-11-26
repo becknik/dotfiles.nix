@@ -124,9 +124,9 @@
           "mvn"
           "gradle"
           "node"
-
+          "npm"
         ];
-        #"rust" "pyenv" "python" "aws" "nmap" "npm" "ruby" "scala"
+        #"rust" "pyenv" "python" "aws" "nmap" "ruby" "scala"
         # "rsync" "fancy-ctrl-z" "ripgrep" "fzf" "zsh-interactive-cd"
         # "history-substring-search" already handled by home-manager
         # "fzf" does what is already implicitly handled by `Programs.fzf.enable = true;`
