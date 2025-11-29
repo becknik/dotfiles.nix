@@ -45,6 +45,7 @@
 
   plugins.treesitter-refactor = {
     enable = true;
-    highlightDefinitions.enable = true;
+
+    settings.highlightDefinitions.enable = true;
   };
 }

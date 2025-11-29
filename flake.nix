@@ -193,7 +193,7 @@
               with inputs;
               [
                 sops-nix.homeManagerModules.sops
-                nix-index-database.hmModules.nix-index
+                nix-index-database.homeModules.nix-index
                 catppuccin.homeModules.catppuccin
                 inputs.zen-browser.homeModules.beta
               ]

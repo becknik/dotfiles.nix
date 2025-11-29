@@ -20,7 +20,7 @@
     ./settings-extensions.nix
   ];
 
-  catppuccin.vscode.enable = lib.mkForce false;
+  catppuccin.vscode.profiles.default.enable = lib.mkForce false;
   programs.vscode = {
     enable = lib.mkForce true;
     # Only unstable version is compatible with all plugins as it seems...

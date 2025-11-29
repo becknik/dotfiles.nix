@@ -4,8 +4,10 @@
   plugins.diffview = {
     enable = true;
 
-    enhancedDiffHl = true;
-    view.mergeTool.layout = "diff3_mixed";
+    settings = {
+      enhanced_diff_hl = true;
+      view.merge_tool.layout = "diff3_mixed";
+    };
   };
 
   opts.fillchars.diff = " ";
