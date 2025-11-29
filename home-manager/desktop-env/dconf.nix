@@ -581,6 +581,6 @@ with lib.gvariant;
     };
 
     # Setting the anthy's input mode to "Hiragana" by default
-    "/org/freedesktop/ibus/engine/anthy/common/input-mode" = 0;
+    "org/freedesktop/ibus/engine/anthy/common".input-mode = 0;
   };
 }
