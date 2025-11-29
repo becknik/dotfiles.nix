@@ -44,6 +44,7 @@
     sqls.enable = true;
     texlab.enable = true;
     bashls.enable = true;
+    tinymist.enable = true;
 
     # General Scripting Stuff
 
