@@ -66,7 +66,6 @@
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   # Further Hardware Settings
-  hardware.bluetooth.enable = true;
   hardware.acpilight.enable = true; # backlight
   # sound.extraConfig = "options snd-hda-intel model=asus-zenboook power_save=1";
 

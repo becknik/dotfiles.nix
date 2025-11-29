@@ -1,4 +1,10 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ]; # Don't know what it does, but the system breaks when removing it...
@@ -13,13 +19,18 @@
     }
   ];
 
-
   # Kernel Stuff
   boot = {
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = with config.boot.kernelPackages; [ cpupower ];
     initrd = {
-      availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+      availableKernelModules = [
+        "xhci_pci"
+        "ahci"
+        "usbhid"
+        "usb_storage"
+        "sd_mod"
+      ];
       kernelModules = [ ];
     };
   };
@@ -39,10 +50,6 @@
   environment.variables.LIBVA_DRIVER_NAME = "intel"; # Might be redundant
 
   ## Further
-  hardware.bluetooth = {
-    enable = false;
-    powerOnBoot = false;
-  };
 
   services.hardware.openrgb.enable = true;
   systemd.services.openrgb.enable = false; # disable openrgb starting in server mode on port 6742

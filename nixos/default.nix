@@ -63,6 +63,14 @@
   #services.hardware.bolt.enable = true; # implied by gnome.core-os-services
   hardware.sane.enable = true;
 
+  hardware.bluetooth = {
+    enable = true;
+    # Shows battery charge of connected devices on supported
+    settings.General.Experimental = true;
+  };
+  hardware.logitech.wireless.enable = true;
+  hardware.logitech.wireless.enableGraphical = true;
+
   # Boot Process
   boot = {
     ## Shared Kernel Config
