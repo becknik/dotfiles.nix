@@ -76,7 +76,7 @@
     }
 
     {
-      key = "<leader>cc";
+      key = "<leader>C";
       mode = mapToModeAbbr [
         "normal"
         "visual_select"

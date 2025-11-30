@@ -23,10 +23,6 @@
       convert = [
         [
           "ccc.picker.hex"
-          "ccc.output.css_rgb"
-        ]
-        [
-          "ccc.picker.css_rgb"
           "ccc.output.css_oklch"
         ]
         [
@@ -55,7 +51,7 @@
       options.cmd = true;
     }
     {
-      key = "<leader>cC";
+      key = "<leader>cc";
       action = "CccConvert";
       options.desc = "Color Converter";
       options.cmd = true;
