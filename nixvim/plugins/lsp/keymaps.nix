@@ -40,6 +40,7 @@
       { lhs = 'gra', mode = {'n','x'} },
       { lhs = 'grr', mode = 'n' },
       { lhs = 'grn', mode = 'n' },
+      { lhs = 'grt', mode = 'n' },
       { lhs = '<C-S>', mode = 'i' },
     }) do
       vim.keymap.del(m.mode, m.lhs)
