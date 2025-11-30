@@ -14,6 +14,7 @@
       fetch_after_checkout = true;
       graph_style = "unicode";
       kind = "floating";
+      commit_view.kind = "floating";
       remember_settings = false; # across sessions
       process_spinner = true;
 
