@@ -14,19 +14,4 @@
       telemetry.enable = false;
     };
   };
-
-  plugins.lazydev = {
-    enable = true;
-    lazyLoad.settings.ft = "lua";
-
-    settings = {
-      enabled = true;
-      library = [
-        {
-          path = "\${3rd}/luv/library";
-          words = [ "vim%.uv" ];
-        }
-      ];
-    };
-  };
 }

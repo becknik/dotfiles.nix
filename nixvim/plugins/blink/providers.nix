@@ -52,10 +52,6 @@
           inherit_defaults = true,
           "spell",
         },
-        lua = {
-          inherit_defaults = true,
-          "lazydev"
-        },
       }
     '';
 
@@ -85,11 +81,6 @@
         module = "blink-cmp-spell";
         name = "dictionary";
         min_keyword_length = 3;
-      };
-      lazydev = {
-        module = "lazydev.integrations.blink";
-        name = "lazydev";
-        score_offset = 100;
       };
     };
   };
