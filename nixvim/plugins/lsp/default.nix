@@ -31,4 +31,17 @@
     # configured manually in cmp.lua
     lspkind.enable = false;
   };
+
+  autoCmd = [
+    {
+      event = "TermOpen";
+      callback.__raw = ''
+        function(args)
+          vim.bo[args.buf].buflisted = false
+          vim.b[args.buf].lsp_disabled = true
+        end
+      '';
+    }
+  ];
+
 }
