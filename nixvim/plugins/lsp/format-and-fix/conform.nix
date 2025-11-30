@@ -365,14 +365,6 @@
 
           ## js/ts
 
-          eslint_d.types = [
-            "javascript"
-            "javascriptreact"
-            "typescript"
-            "typescriptreact"
-          ];
-          eslint_d.priority = 1; # take precedence over prettierd
-          eslint_d.command = lib.getExe pkgs.eslint_d;
           prettierd.types = [
             "javascript"
             "javascriptreact"
@@ -383,7 +375,6 @@
             "css"
           ];
           prettierd.command = lib.getExe pkgs.prettierd;
-          prettierd.priority = 0;
 
           # "heavy" programming languages
 
