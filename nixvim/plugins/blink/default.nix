@@ -87,7 +87,7 @@
         '';
 
         fuzzy.prebuilt_binaries.download = false;
-        fuzzy.implementation = "prefer_rust_with_warning";
+        fuzzy.implementation = "rust";
         fuzzy.sorts.__raw = ''
           {
             "exact",

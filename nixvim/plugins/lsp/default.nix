@@ -24,7 +24,7 @@
       settings.logger.level = "info";
 
       # just need it for the conform hunk formatting progress indicator
-      settings.notification.poll_rate = 25; # Hz, default is 10
+      settings.notification.poll_rate = 100; # Hz, default is 10
     };
 
     # add pictrograms to lsp

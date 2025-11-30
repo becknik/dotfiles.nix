@@ -8,7 +8,6 @@
       { "gCi", icon = " " },
       { "gCI", icon = " " },
 
-      { "gd", icon = "" },
       { "gD", icon = "", desc = "Declaration" },
       { "gp", icon = "󰹰 ", desc = "Preview" },
       { "gpt", icon = "󰹰  " },
