@@ -54,7 +54,7 @@
         appearance.use_nvim_cmp_as_default = true;
 
         completion.documentation.auto_show = false;
-        completion.list.max_items = 500;
+        completion.list.max_items = 250;
         completion.list.selection = {
           auto_insert = false;
           preselect = true;
@@ -90,7 +90,7 @@
         fuzzy.implementation = "rust";
         fuzzy.sorts.__raw = ''
           {
-            "exact",
+            -- "exact",
             "score",
             "sort_text",
           }
