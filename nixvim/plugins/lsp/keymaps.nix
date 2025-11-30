@@ -124,12 +124,6 @@
       }
 
       {
-        key = "K";
-        action = "Lspsaga hover_doc";
-        options.cmd = true;
-        options.desc = "Hover Documentation";
-      }
-      {
         key = "gh";
         action = "Lspsaga hover_doc ++keep";
         options.cmd = true;
