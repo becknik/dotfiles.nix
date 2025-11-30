@@ -18,17 +18,6 @@
     # lemminx.enable = true; # TODO fails to build on aarch64-darwin
     jsonls.enable = true;
     marksman.enable = true;
-    marksman.extraOptions.root_dir.__raw = ''
-      function(fname)
-        if fname == "" or vim.bo.buftype ~= "" or not vim.bo.modifiable then
-          return
-        end
-
-        -- https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/configs/marksman.lua
-        return require'lspconfig.util'.root_pattern('.marksman.toml')(fname)
-          or vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
-      end,
-    '';
     taplo.enable = true; # TOML
     yamlls.enable = true;
 
