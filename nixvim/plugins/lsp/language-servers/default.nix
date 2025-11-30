@@ -97,7 +97,7 @@
     ## Frameworks
     astro.enable = true;
     svelte.enable = true;
-    volar.enable = true;
+    vue_ls.enable = true;
 
     # Backend Stuff
 
