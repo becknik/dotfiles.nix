@@ -104,8 +104,8 @@
             "privacy.sanitize.pending" =
               locked "[{\"id\":\"shutdown\",\"itemsToClear\":[\"browsingHistoryAndDownloads\"],\"options\":{}}]";
 
-            "zen.workspaces.continue-where-left-off" = locked true;
-            "zen.view.compact.should-enable-at-startup" = locked true;
+            "zen.workspaces.continue-where-left-off" = locked false;
+            "zen.view.compact.should-enable-at-startup" = locked false;
             "zen.view.use-single-toolbar" = locked false;
             "zen.view.window.scheme" = locked 0;
           };
