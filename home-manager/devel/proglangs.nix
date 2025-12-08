@@ -11,6 +11,7 @@
     with pkgs;
     (lib.lists.optionals (!pkgs.stdenv.isDarwin) [
       tectonic
+      typst
       conda
     ])
 

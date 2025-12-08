@@ -4,6 +4,7 @@
   imports = [
     ./markdown.nix
     ./vimtex.nix
+    ./typst.nix
   ];
 
   extraConfigLuaPost = ''

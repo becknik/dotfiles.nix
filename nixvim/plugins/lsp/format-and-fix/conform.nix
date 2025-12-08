@@ -284,9 +284,6 @@
           # TODO do something about the default format configurations
           # https://github.com/google/yamlfmt/blob/main/docs/config-file.md#configuration-1
           # https://stylelint.io/user-guide/configure/
-          typos.types = "*";
-          typos.priority = 1;
-          typos.command = lib.getExe pkgs.typos;
           trim_whitespace.types = "*";
           trim_newlines.types = "*";
           squeeze_blanks.types = "*";
@@ -294,6 +291,9 @@
 
           markdownlint.types = "markdown"; # markdown-toc unnecessary
           markdownlint.command = lib.getExe pkgs.markdownlint-cli;
+
+          typstyle.types = "typst";
+          typstyle.command = lib.getExe pkgs.typstyle;
 
           # config files
 
