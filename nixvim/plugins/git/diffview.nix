@@ -38,8 +38,14 @@
     }
     {
       key = "<leader>gh";
-      action = "DiffviewFileHistory %";
-      options.cmd = true;
+      action.__raw = ''
+        function()
+          local path = vim.bo.filetype == "oil"
+            and require("oil").get_current_dir()
+            or "%"
+          vim.cmd("DiffviewFileHistory " .. vim.fn.fnameescape(path))
+        end
+      '';
       mode = mapToModeAbbr [
         "normal"
         "visual_select"
