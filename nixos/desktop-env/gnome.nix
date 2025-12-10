@@ -64,18 +64,11 @@ in
 {
   # Basic GNOME Desktop Environment Setup
   services = {
-    xserver = {
+    ## GDM
+    displayManager.gdm.enable = true;
+    desktopManager.gnome = {
       enable = true;
-
-      ## X11
-      xkb.layout = "eu";
-
-      ## GDM
-      displayManager.gdm.enable = true;
-      desktopManager.gnome = {
-        enable = true;
-        sessionPath = [ pkgs.gnome-shell-extensions ];
-      };
+      sessionPath = [ pkgs.gnome-shell-extensions ];
     };
 
     ## GNOME Services

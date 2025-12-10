@@ -2,14 +2,20 @@
   description = "flake for nixos, nix-darwin & more I've running on my desktop & laptops";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    # https://discourse.nixos.org/t/unstable-fails-to-build-stable-ok-flakes/67837
+    lix = {
+      url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
+      flake = false;
+    };
     lix-module = {
-      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.93.2-1.tar.gz";
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.lix.follows = "lix";
     };
     disko = {
       url = "github:nix-community/disko";
@@ -21,12 +27,12 @@
     };
 
     darwin = {
-      url = "github:LnL7/nix-darwin/nix-darwin-25.05";
+      url = "github:LnL7/nix-darwin/nix-darwin-25.11";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
     home-manager = {
-      url = "github:becknik/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
@@ -93,7 +99,7 @@
       ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
 
-      stateVersion = "25.05";
+      stateVersion = "25.11";
 
       # Necessary e.g. for NixOS `config.system.autoUpgrade.flake` with `--commit-lockfile`
       mkFlakeDir =
@@ -261,72 +267,17 @@
               (mkHomeManagerConf {
                 inherit system userName isLaptop;
               })
-
-              inputs.catppuccin.nixosModules.catppuccin
-
-              # DEPRECATED: nixpkgs native build & overlay setup
-              # https://nixos.wiki/wiki/Build_flags#Building_the_whole_system_on_NixOS
               (
-                { pkgs, ... }@module-inputs:
-                let
-                  arch = "alderlake"; # TODO "raptorlake"
-                  tune = arch;
-                  platform = {
-                    inherit system;
-                    gcc = { inherit arch tune; };
-                    #rustc = { inherit arch tune; }; # TODO Research build flag attributes for rustc
-                    # https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/compilers/rust/rustc.nix
-                  };
-                  # https://nix.dev/tutorials/cross-compilation.html
-                  platformConfig = {
-                    # https://github.com/NixOS/nixpkgs/issues/291271
-                    #buildPlatform = platform; # platform where the executables are built
-                    hostPlatform = platform; # platform where the executables will run
-                  };
-
-                  # TODO fastStdenv might not use arch flags if my thinkings not messed up...
-                  config' = {
-                    replaceStdenv = { pkgs }: pkgs.fastStdenv;
-                    #(pkgs.withCFlags [ "-O3" ] pkgs.fastStdenv);
-                    # TODO error: The ‘env’ attribute set cannot contain any attributes passed to derivation.
-                    # The following attributes are overlapping: NIX_CFLAGS_COMPILE
-                  }
-                  // config;
-                  # This for of adding `nixpkgs.config` is necessary due to `replaceStdenv` else shadowing the options
-                  # specified in `config`
-
-                  # Overlay Setup
-                  nixpkgs-unstable-with-platform = final: _prev: {
-                    unstable = import nixpkgs-unstable (
-                      platformConfig
-                      // {
-                        inherit system;
-                        config = config';
-                        overlays = with self.overlays; [
-                          default
-                          modifications
-                          modifications-perf
-                          additions
-                        ];
-                      }
-                    );
-                  };
-                in
+                { lib, pkgs, ... }@module-inputs:
                 {
-                  nixpkgs = # platformConfig //
-                    {
-                      inherit system;
-                      config = config # '
-                      ;
-
-                      overlays =
-                        (defaultOverlays {
-                          # nixpkgs-unstable' = nixpkgs-unstable-with-platform;
-                        })
-                        ++ (with self.overlays; [ modifications-perf ]);
-                    };
+                  nixpkgs = {
+                    inherit system config;
+                    overlays = defaultOverlays { };
+                  };
                 }
               )
+
+              inputs.catppuccin.nixosModules.catppuccin
             ];
         };
 

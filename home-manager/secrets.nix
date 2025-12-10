@@ -30,100 +30,102 @@ in
     defaultSymlinkPath = "%r/secrets";
     age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
     # Secrets to be mounted:
-    secrets =
-      {
-        # NOTE: DON'T FORGET TO RUN `systemctl --user restart sops-nix.service` AFTER CHANGING THE CONFIGURATION OF ONE SECRET!!!
+    secrets = {
+      # NOTE: DON'T FORGET TO RUN `systemctl --user restart sops-nix.service` AFTER CHANGING THE CONFIGURATION OF ONE SECRET!!!
 
-        # The name of the secret file in mount path which must be an element of this secrets sopsFile attribute
-        # (or element of the defaultSopsFile, if it's set above)
+      # The name of the secret file in mount path which must be an element of this secrets sopsFile attribute
+      # (or element of the defaultSopsFile, if it's set above)
 
-        # Source: https://github.com/Mic92/sops-nix/blob/master/modules/home-manager/sops.nix
-        "ssh/github/becknik/public" = {
-          sopsFile = ./secrets/git.yaml;
-          key = "github/becknik/public";
-          path = "${config.home.homeDirectory}/.ssh/github-becknik.pub";
-        };
-        "ssh/github/becknik/private" = {
-          sopsFile = ./secrets/git.yaml;
-          key = "github/becknik/private";
-          path = "${config.home.homeDirectory}/.ssh/github-becknik";
-        };
+      # Source: https://github.com/Mic92/sops-nix/blob/master/modules/home-manager/sops.nix
+      "ssh/github/becknik/public" = {
+        sopsFile = ./secrets/git.yaml;
+        key = "github/becknik/public";
+        path = "${config.home.homeDirectory}/.ssh/github-becknik.pub";
+      };
+      "ssh/github/becknik/private" = {
+        sopsFile = ./secrets/git.yaml;
+        key = "github/becknik/private";
+        path = "${config.home.homeDirectory}/.ssh/github-becknik";
+      };
 
-        "ssh/gitlab/becknik/public" = {
-          sopsFile = ./secrets/git.yaml;
-          key = "gitlab/becknik/public";
-          path = "${config.home.homeDirectory}/.ssh/gitlab-becknik.pub";
-        };
-        "ssh/gitlab/becknik/private" = {
-          sopsFile = ./secrets/git.yaml;
-          key = "gitlab/becknik/private";
-          path = "${config.home.homeDirectory}/.ssh/gitlab-becknik";
-        };
+      "ssh/gitlab/becknik/public" = {
+        sopsFile = ./secrets/git.yaml;
+        key = "gitlab/becknik/public";
+        path = "${config.home.homeDirectory}/.ssh/gitlab-becknik.pub";
+      };
+      "ssh/gitlab/becknik/private" = {
+        sopsFile = ./secrets/git.yaml;
+        key = "gitlab/becknik/private";
+        path = "${config.home.homeDirectory}/.ssh/gitlab-becknik";
+      };
 
-        # Creation of secrets from binaries: `sops -e ./desktop-env/secrets/keepass.key > ./desktop-env/secrets/keepassxc.yaml`
-        # The path must - likewise to the other secret files - match the golang regex-pattern from the `.sops` file
+      # Creation of secrets from binaries: `sops -e ./desktop-env/secrets/keepass.key > ./desktop-env/secrets/keepassxc.yaml`
+      # The path must - likewise to the other secret files - match the golang regex-pattern from the `.sops` file
 
-        "keepassxc.key" = {
-          format = "binary";
-          sopsFile = ./secrets/keepassxc.key;
-        };
+      "keepassxc.key" = {
+        format = "binary";
+        sopsFile = ./secrets/keepassxc.key;
+      };
 
-        "gpg/mail/proton-main/public" = {
-          sopsFile = ./secrets/mail.yaml;
-          key = "proton/main/public";
-          path = "${config.home.homeDirectory}/.gpg/mail/main-public";
-        };
-        "gpg/mail/proton-main/private" = {
-          sopsFile = ./secrets/mail.yaml;
-          key = "proton/main/private";
-          path = "${config.home.homeDirectory}/.gpg/mail/main-private";
-        };
-        "gpg/mail/proton-official/public" = {
-          sopsFile = ./secrets/mail.yaml;
-          key = "proton/official/public";
-          path = "${config.home.homeDirectory}/.gpg/mail/official-public";
-        };
-        "gpg/mail/proton-official/private" = {
-          sopsFile = ./secrets/mail.yaml;
-          key = "proton/official/private";
-          path = "${config.home.homeDirectory}/.gpg/mail/official-private";
-        };
+      "gpg/mail/proton/main-public" = {
+        sopsFile = ./secrets/mail.yaml;
+        key = "proton/main/public";
+        path = "${config.home.homeDirectory}/.gpg/proton/main";
+      };
+      "gpg/mail/proton/main-private" = {
+        sopsFile = ./secrets/mail.yaml;
+        key = "proton/main/private";
+      };
+      "mail/proton" = {
+        sopsFile = ./secrets/mail.yaml;
+        key = "proton/main/password";
+      };
+      "gpg/mail/proton/default-public" = {
+        sopsFile = ./secrets/mail.yaml;
+        key = "proton/default/public";
+        path = "${config.home.homeDirectory}/.gpg/proton/default";
+      };
+      "gpg/mail/proton/default-private" = {
+        sopsFile = ./secrets/mail.yaml;
+        key = "proton/default/private";
+      };
+      "gpg/mail/proton/official-public" = {
+        sopsFile = ./secrets/mail.yaml;
+        key = "proton/official/public";
+        path = "${config.home.homeDirectory}/.gpg/proton/official";
+      };
+      "gpg/mail/proton/official-private" = {
+        sopsFile = ./secrets/mail.yaml;
+        key = "proton/official/private";
+      };
 
-        "gpg/becknik/public" = {
-          sopsFile = ./secrets/git.yaml;
-          key = "becknik/public";
-          path = "${config.home.homeDirectory}/.gpg/becknik/private";
-        };
-        "gpg/becknik/private" = {
-          sopsFile = ./secrets/git.yaml;
-          key = "becknik/private";
-          path = "${config.home.homeDirectory}/.gpg/becknik/public";
-        };
-      }
-      // mail-secret-posteo
-      // mail-secret-gmx
-      // mail-secret-uni;
+      "gpg/becknik/public" = {
+        sopsFile = ./secrets/git.yaml;
+        key = "becknik/public";
+        path = "${config.home.homeDirectory}/.gpg/becknik";
+      };
+      "gpg/becknik/private" = {
+        sopsFile = ./secrets/git.yaml;
+        key = "becknik/private";
+      };
+    }
+    // mail-secret-posteo
+    // mail-secret-gmx
+    // mail-secret-uni;
   };
 
-  programs.gpg = {
-    enable = true;
-
-    publicKeys =
-      map
-        (source: {
-          inherit source;
-          trust = 5;
-        })
-        [
-          "${config.home.homeDirectory}/.gpg/becknik/public"
-          "${config.home.homeDirectory}/.gpg/becknik/private"
-          "${config.home.homeDirectory}/.gpg/mail/main-public"
-          "${config.home.homeDirectory}/.gpg/mail/main-private"
-          "${config.home.homeDirectory}/.gpg/mail/official-public"
-          "${config.home.homeDirectory}/.gpg/mail/official-private"
-        ];
-
-  };
+  programs.gpg.publicKeys =
+    map
+      (source: {
+        inherit source;
+        trust = 5;
+      })
+      [
+        "${config.home.homeDirectory}/.gpg/becknik"
+        "${config.home.homeDirectory}/.gpg/proton/main"
+        "${config.home.homeDirectory}/.gpg/proton/default"
+        "${config.home.homeDirectory}/.gpg/proton/official"
+      ];
 
   systemd.user.services.sops-nix = {
     Service = {

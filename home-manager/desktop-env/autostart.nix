@@ -12,6 +12,8 @@ let
   ];
 in
 {
+  xdg.autostart.readOnly = true;
+
   home.file =
     (builtins.listToAttrs (
       map (pkg: {

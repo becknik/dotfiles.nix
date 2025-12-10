@@ -47,11 +47,10 @@
           };
         })
         (
-          with pkgs;
+          with pkgs.javaPackages.compiler;
           [
-            temurin-bin-17
-            temurin-bin-21
-            unstable.temurin-bin
+            temurin-bin.jdk-21
+            temurin-bin.jdk-25
           ]
         )
     )

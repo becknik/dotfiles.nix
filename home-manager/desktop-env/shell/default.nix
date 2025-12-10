@@ -68,7 +68,7 @@
       completionInit = "";
       initContent =
         let
-          cbonsai = lib.mkBefore "cbonsai --life 42 -m 'It takes strength to resist the dark side. Only the weak embrace it' -p";
+          # cbonsai = lib.mkBefore "cbonsai --life 42 -m 'It takes strength to resist the dark side. Only the weak embrace it' -p";
           extraRc = builtins.readFile ./files/zshrc.zsh;
 
           # at least syntax-highlighting must be placed after compinit, I think
@@ -80,7 +80,7 @@
           '';
         in
         lib.mkMerge [
-          cbonsai
+          # cbonsai
           pluginSource
           extraRc
           # envExtra

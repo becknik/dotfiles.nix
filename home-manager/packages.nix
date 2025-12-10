@@ -93,7 +93,6 @@
       age
       age-plugin-yubikey
       (mkWhenNotDarwin yubioath-flutter)
-      (mkWhenNotDarwin yubikey-personalization-gui)
       tig
 
       ## Benchmarking

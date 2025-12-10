@@ -77,10 +77,7 @@
     extraModulePackages =
       with config.boot.kernelPackages;
       [
-        perf
         turbostat
-        #opensnitch-ebpf # TODO this might cause kernel warning? - tool not really necessary
-        #virtualbox # broken, see `virtualization.nix`
 
       ]
       ++ [ pkgs.system76-scheduler ];
@@ -331,6 +328,10 @@
         keep-outputs = true
       '';
     };
+  services.angrr = {
+    enable = true;
+    enableNixGcIntegration = true;
+  };
 
   # Avoids failing nix rebuilds due to too many open files
   environment.shellInit = "ulimit -n ${builtins.toString (pkgs.lib.custom.pow 2 16)}";

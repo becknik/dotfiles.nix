@@ -29,12 +29,16 @@
     # Source: https://github.com/nix-community/home-manager/blob/master/modules/programs/ssh.nix
     ssh = {
       enable = true;
+
       includes = [ "~/.ssh/config.local" ];
 
-      extraConfig = "AddKeysToAgent confirm"; # addKeysToAgent = "confirm"; isn't working?
-      forwardAgent = true;
-      hashKnownHosts = true;
       matchBlocks = {
+        "*" = {
+          forwardAgent = true;
+          hashKnownHosts = true;
+          addKeysToAgent = "confirm";
+        };
+
         github_personal = {
           host = "github.com";
           user = "git";
@@ -48,18 +52,6 @@
       };
     };
   };
-
-  # GPG-Agent
-  services.gpg-agent = {
-    # TODO use keychain instead of gpg-agent?
-    enable = true;
-    enableSshSupport = true;
-    enableZshIntegration = true;
-    extraConfig = "";
-    pinentry.package = pkgs.pinentry-gnome3;
-    #sshKeys = {}; # Expose GPG-keys as SSH-keys
-  };
-  programs.gpg.enable = true;
 
   # Manual Installations
   home.packages =

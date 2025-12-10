@@ -34,8 +34,7 @@
       # sops .config folder where the keys.txt should live in to decrypt the secrets of sops-nix
       ".config/sops/age"
 
-      ".gpg/becknik"
-      ".gpg/mail"
+      ".gpg"
     ])
     // {
       "ghci" = {

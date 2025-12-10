@@ -8,12 +8,11 @@
   virtualisation = {
     libvirtd = {
       enable = true;
+
       qemu = {
-        ovmf.enable = true; # something with UEFI boot
         swtpm.enable = true; # software tpm emulation
       };
     };
-
 
     # VBox
     virtualbox.host.enable = true;

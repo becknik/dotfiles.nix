@@ -33,7 +33,6 @@
       initContent = lib.mkAfter "ssh-add --apple-load-keychain"; # load keys from previous sessions
     };
     # `ssh-add --apple-use-keychain ~/.ssh/<key>`
-    ssh.extraConfig = "UseKeychain yes";
     librewolf.enable = lib.mkForce false;
 
     git.extraConfig.safe.directory = mkFlakeDir userName config;
