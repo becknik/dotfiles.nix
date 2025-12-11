@@ -33,66 +33,6 @@
         }
         "fallback"
       ];
-      "." = [
-        {
-          __raw = ''
-            function(cmp)
-              local entry = cmp.get_selected_item()
-              if not entry or entry.kind == cmp_kinds.Text then
-                return false
-              end
-
-              cmp.accept()
-              vim.schedule(function()
-                local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-                local line = vim.api.nvim_get_current_line()
-
-                -- if we are in front of ')' (blink just added "()") → jump over it
-                if line:sub(col, col) == '(' then
-                  vim.api.nvim_win_set_cursor(0, { row, col + 1 })
-                end
-                vim.api.nvim_feedkeys(
-                  vim.api.nvim_replace_termcodes('.', true, false, true),
-                  "n",
-                  true
-                )
-              end)
-              return true
-            end
-          '';
-        }
-        "fallback"
-      ];
-      "(" = [
-        {
-          __raw = ''
-            function(cmp)
-              local entry = cmp.get_selected_item()
-              if not entry or entry.kind == cmp_kinds.Text then
-                return false
-              end
-
-              cmp.accept()
-              vim.schedule(function()
-                local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-                local line = vim.api.nvim_get_current_line()
-
-                -- only insert '(' when we are NOT already inside "()"
-                if line:sub(col - 1, col - 1) ~= '(' then
-                  vim.api.nvim_feedkeys(
-                    vim.api.nvim_replace_termcodes("(", true, false, true),
-                    "n",
-                    true
-                  )
-                end
-
-              end)
-              return true
-            end
-          '';
-        }
-        "fallback"
-      ];
 
       "<C-x>" = [
         {
@@ -118,12 +58,15 @@
         {
           __raw = ''
             function(cmp)
-              if cmp.is_visible() then
-                cmp.show { providers = { 'snippets' } }
-                cmp.show_documentation()
+              local shoulntdBeIncluded = vim.tbl_contains({
+                "markdown", "gitcommit"
+              }, vim.bo.filetype)
+              if shoulntdBeIncluded then
                 return true
               end
-              return false
+
+              cmp.show { providers = { 'snippets' } }
+              return true
             end
           '';
         }

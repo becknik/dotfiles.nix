@@ -90,7 +90,7 @@
         fuzzy.implementation = "rust";
         fuzzy.sorts.__raw = ''
           {
-            -- "exact",
+            "exact",
             "score",
             "sort_text",
           }
