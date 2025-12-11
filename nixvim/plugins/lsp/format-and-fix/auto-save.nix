@@ -14,10 +14,9 @@
         return false
       end
 
-      local utils = require("auto-save.utils.data")
-      local shouldBeIncluded = utils.not_in(vim.fn.getbufvar(bufnr, "&filetype"), {
+      local shouldBeIncluded = not vim.list_contains({
         "oil"
-      })
+      }, vim.bo[bufnr].filetype)
       return shouldBeIncluded
     end
   '';

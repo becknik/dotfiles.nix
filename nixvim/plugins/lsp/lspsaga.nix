@@ -20,7 +20,7 @@
       };
 
       # what is this?
-      symbol_in_winbar.enable = false;
+      symbol_in_winbar.enable = true;
 
       ui.code_action = "󰌶";
       lightbulb.sign = false;
@@ -29,8 +29,9 @@
       autoCmd = [
         {
           # quit the lspsaga rename window ONLY when not in insert mode (wtf...)
-          event = [ "FileType" ];
+          event = "FileType";
           pattern = "sagarename";
+          desc = "Lspsaga rename quit keymap";
           callback.__raw = ''
             function(ctx)
               vim.keymap.set('n', 'q',

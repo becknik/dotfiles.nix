@@ -39,7 +39,7 @@
           local buf = args.buf
           local ft_disabled, ft_disabled_reason = require("copilot.client.filetypes").is_ft_disabled(vim.bo.filetype, require("copilot.config").filetypes)
 
-          if vim.fn.getbufvar(buf, "&filetype") ~= "NeogitStatus" then
+          if vim.bo[buf].filetype ~= "NeogitStatus" then
             vim.api.nvim_buf_set_var(buf,
               "copilot_suggestion_auto_trigger",
               true
@@ -47,8 +47,8 @@
             return
           end
 
-          if vim.fn.getbufvar(buf, "&buftype") ~= "" then return
-          elseif vim.fn.getbufvar(buf, "&modifiable") ~= 1 then return
+          if vim.bo[buf].buftype ~= "" then return
+          elseif vim.bo[buf].modifiable ~= 1 then return
           elseif vim.api.nvim_buf_get_name(buf) == "" then return end
 
           vim.api.nvim_buf_set_var(buf,
