@@ -45,10 +45,9 @@
       action = "ConformFormatHunks";
       mode = mapToModeAbbr [
         "normal"
-        "insert"
       ];
       options.cmd = true;
-      options.desc = "Write Buffer after Formatting Hunks";
+      options.desc = "Format Hunks";
     }
     {
       key = "<leader>s";

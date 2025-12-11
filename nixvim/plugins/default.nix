@@ -24,6 +24,7 @@
     ./auto-sessions.nix
 
     ./oil.nix
+    ./nvim-tree.nix
     ./toggle-term.nix
 
     ./refactoring.nix

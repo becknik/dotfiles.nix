@@ -36,6 +36,7 @@
       bypass_save_filetypes = [
         "oil"
         "toggleterm"
+        "NvimTree"
       ];
       post_restore_cmds = [
         {
