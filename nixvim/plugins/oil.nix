@@ -6,11 +6,6 @@
     gx-nvim
   ];
 
-  globals.netrw_nogx = 1;
-  extraConfigLuaPre = ''
-    	require('gx').setup({ });
-  '';
-
   # NOTE: keep in sync with ./auto-sessions.nix if I can solve the issue from rmagatti/auto-session#445 in another way in the future
   plugins.oil = {
     enable = false;
@@ -50,12 +45,6 @@
       action = "Oil";
       options.cmd = true;
       options.desc = "Open Oil";
-    }
-    {
-      key = "gx"; # gx-nvim
-      action = "Browse";
-      options.unique = false; # maybe because it overrides the netrw thing?
-      options.cmd = true;
     }
   ];
 }
