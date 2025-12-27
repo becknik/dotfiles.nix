@@ -35,7 +35,7 @@
         "*" = {
           forwardAgent = true;
           hashKnownHosts = true;
-          addKeysToAgent = "confirm";
+          addKeysToAgent = "yes";
         };
 
         github_personal = {
