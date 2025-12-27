@@ -62,7 +62,7 @@
                 "markdown", "gitcommit"
               }, vim.bo.filetype)
               if shoulntdBeIncluded then
-                return true
+                return false
               end
 
               cmp.show { providers = { 'snippets' } }
