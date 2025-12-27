@@ -155,40 +155,71 @@
   programs.openvpn3.enable = true;
 
   # Firewall
-  networking.nftables.enable = true; # TODO NFTables might (according to wiki) cause trouble with docker and libvirt, test this out
-  networking.firewall =
+  networking.nftables.enable = true;
+  services.firewalld =
     let
-      kdeConnectPortRange = {
-        from = 1714;
-        to = 1764;
-      };
-      localSend = 53317;
+      tcp = port: [
+        {
+          port = port;
+          protocol = "tcp";
+        }
+      ];
+
+      tcpUdp = port: [
+        {
+          port = port;
+          protocol = "tcp";
+        }
+        {
+          port = port;
+          protocol = "udp";
+        }
+      ];
     in
     {
       enable = true;
-      # TODO: necessary for proton vpn?
-      # https://github.com/NixOS/nixpkgs/issues/307462#issuecomment-2750133149
-      checkReversePath = "loose";
 
-      ## Firewall Ports to open
-      allowedTCPPorts = [
-        localSend
-      ];
-      allowedTCPPortRanges = [
-        kdeConnectPortRange
-      ];
+      services = {
+        kdeconnect = {
+          short = "KDE Connect";
+          ports = tcpUdp {
+            from = 1714;
+            to = 1764;
+          };
+        };
+        localsend = {
+          short = "LocalSend";
+          ports = tcpUdp 53317;
+        };
 
-      allowedUDPPorts = [
-        localSend
-      ];
-      allowedUDPPortRanges = [
-        kdeConnectPortRange
-      ];
+        adb-wrieless = {
+          short = "ADB Wireless";
+          ports = tcp 5027;
+        };
+      };
+      zones = {
+        public = {
+          services = [
+            "kdeconnect"
+            "localsend"
 
-      trustedInterfaces = [ "docker0" ];
+            "adb-wrieless"
+          ];
+        };
+      };
     };
-  services.avahi.openFirewall = true;
   services.samba.openFirewall = true;
+
+  networking.firewall = {
+    enable = true;
+    backend = "firewalld";
+    # TODO: necessary for proton vpn?
+    # https://github.com/NixOS/nixpkgs/issues/307462#issuecomment-2750133149
+    checkReversePath = "loose";
+
+    # TODO: is docker0 interface still necessary with firewalld backend?
+    trustedInterfaces = [ "docker0" ];
+  };
 
   # Security & Secrets
   security = {
@@ -211,6 +242,10 @@
 
   services.dbus.apparmor = "enabled";
   security.apparmor.enable = true;
+  environment.systemPackages = with pkgs; [
+    firewalld-gui
+    #firejail # if not included explicitly, `/etc/apparmor.d` wouldn't get symlinked...
+  ];
 
   services.flatpak.enable = true;
   # Doesn't play with apparmor, therefore useless
@@ -335,11 +370,6 @@
 
   # Avoids failing nix rebuilds due to too many open files
   environment.shellInit = "ulimit -n ${builtins.toString (pkgs.lib.custom.pow 2 16)}";
-
-  environment.systemPackages = with pkgs; [
-    #firejail # if not included explicitly, `/etc/apparmor.d` wouldn't get symlinked...
-    #apparmor-parser # aa-enable firejail-default isn't working
-  ];
 
   catppuccin = {
     enable = true;
