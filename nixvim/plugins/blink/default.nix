@@ -46,7 +46,7 @@
       settings = {
         enabled.__raw = ''
           function()
-            return not vim.list_contains({ 'sagarename' }, vim.bo.filetype)
+            return not vim.tbl_contains({ 'sagarename' }, vim.bo.filetype)
               and vim.b.completion ~= false
           end'';
 

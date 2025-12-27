@@ -14,7 +14,7 @@
         return false
       end
 
-      local shouldBeIncluded = not vim.list_contains({
+      local shouldBeIncluded = not vim.tbl_contains({
         "oil"
       }, vim.bo[bufnr].filetype)
       return shouldBeIncluded
