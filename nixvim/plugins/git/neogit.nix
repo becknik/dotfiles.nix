@@ -15,6 +15,7 @@
       graph_style = "unicode";
       kind = "floating";
       commit_view.kind = "floating";
+      rebase_editor.kind = "floating";
       remember_settings = false; # across sessions
       process_spinner = true;
 
