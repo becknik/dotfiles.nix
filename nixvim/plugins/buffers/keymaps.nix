@@ -20,13 +20,47 @@
       action = "buffers theme=ivy sort_mru=true ignore_current_buffer=true";
       options.desc = "Find Buffer";
     };
-    "<leader>B" = {
-      action = "buffers theme=ivy sort_mru=true ignore_current_buffer=false initial_mode=normal";
-      options.desc = "Modify Buffers";
-    };
   };
 
   keymaps = withDefaultKeymapOptions [
+    {
+      key = "L";
+      action.__raw = "
+        function()
+          require'telescope.builtin'.buffers({
+            sort_mru = true,
+            ignore_current_buffer = true,
+            initial_mode = 'normal',
+
+            previewer = false,
+            layout_strategy = 'center',
+            layout_config = {
+              center = {
+                height = 14,
+              },
+            },
+            attach_mappings = function(prompt_bufnr, map)
+              local actions = require('telescope.actions')
+
+              map('n', 'L', function()
+                actions.move_selection_previous(prompt_bufnr)
+              end)
+
+              map('n', 'H', function()
+                actions.move_selection_next(prompt_bufnr)
+              end)
+
+              map('n', 'q', actions.select_default)
+
+              -- Keep default mappings
+              return true
+            end,
+          })
+        end
+      ";
+      options.desc = "LRU Buffer Switcher";
+    }
+
     {
       key = "<leader>q";
       action = "Bdelete";
