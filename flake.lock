@@ -506,26 +506,6 @@
         "type": "github"
       }
     },
-    "nix-vscode-extensions": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1765591065,
-        "narHash": "sha256-IdYRrUhfZHtAI3nOMKVeP0lsfZpaa/wHf2B8qD4VeOk=",
-        "owner": "nix-community",
-        "repo": "nix-vscode-extensions",
-        "rev": "ee90360c87fad52e8c34ef8b9ab3b52017c146a4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nix-vscode-extensions",
-        "type": "github"
-      }
-    },
     "nix-webapps": {
       "inputs": {
         "flake-parts": "flake-parts_2",
@@ -722,7 +702,6 @@
         "lix-module": "lix-module",
         "mac-app-util": "mac-app-util",
         "nix-index-database": "nix-index-database",
-        "nix-vscode-extensions": "nix-vscode-extensions",
         "nix-webapps": "nix-webapps",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_3",

@@ -53,10 +53,6 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
-    nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -134,16 +130,8 @@
             "idea-ultimate"
             "clion"
             "android-studio-stable"
-
-            # Only vscode extension used from official nixpkgs
+            "code"
             "vscode"
-            "vscode-extension-github-copilot-chat"
-            "vscode-extension-ms-vsliveshare-vsliveshare"
-            "vscode-extension-mhutchie-git-graph"
-            "vscode-extension-ms-python-vscode-pylance"
-            "vscode-extension-github-copilot"
-            "vscode-extension-ms-vscode-remote-remote-ssh"
-            "vscode-extension-ms-vscode-remote-remote-containers"
           ];
         joypixels.acceptLicense = true;
       };
@@ -161,7 +149,6 @@
           additions # contents of ./pkgs
         ]
         ++ (with inputs; [
-          nix-vscode-extensions.overlays.default
           nix-webapps.overlays.lib
         ]);
 
@@ -357,7 +344,6 @@
                     default
                     modifications
                     additions
-                    inputs.nix-vscode-extensions.overlays.default
                   ];
                 };
               }

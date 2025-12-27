@@ -8,7 +8,6 @@
     ./devel/proglangs.nix # Installation of some programming languages
 
     ./programs/git.nix
-    ./programs/vscodium
   ];
 
   programs = {
@@ -72,6 +71,8 @@
     in
     jetbrainsTools
     ++ [
+      unstable.vscode-fhs
+
       devenv
       git-crypt
       meld
