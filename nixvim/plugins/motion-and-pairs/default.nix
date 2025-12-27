@@ -3,6 +3,7 @@
 {
   imports = [
     ./harpoon.nix
+    ./spider.nix
   ];
 
   plugins = {
