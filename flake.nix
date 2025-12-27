@@ -128,8 +128,7 @@
 
             "jetbrains-toolbox"
             "idea-ultimate"
-            "clion"
-            "android-studio-stable"
+            "idea"
             "code"
             "vscode"
           ];
