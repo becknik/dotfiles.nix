@@ -78,17 +78,6 @@
         {
           __raw = ''
             function(cmp)
-              if require'luasnip'.locally_jumpable(1) then
-                cmp.snippet_forward()
-                return true
-              end
-              return false
-            end
-          '';
-        }
-        {
-          __raw = ''
-            function(cmp)
               if not cmp.is_visible() then
                 cmp.show {
                   providers = { 'snippets' },
@@ -103,21 +92,20 @@
       ];
       "<C-p>" = [
         "select_prev"
+      ];
+
+      "<Tab>" = [
         {
           __raw = ''
             function(cmp)
-              if require'luasnip'.locally_jumpable(-1) then
-                cmp.snippet_backward()
+              if require'luasnip'.locally_jumpable(1) then
+                cmp.snippet_forward()
                 return true
               end
               return false
             end
           '';
         }
-      ];
-
-      "<Tab>" = [
-        "select_next"
         {
           __raw = ''
             function(cmp)
@@ -132,7 +120,17 @@
         "fallback"
       ];
       "<S-Tab>" = [
-        "select_prev"
+        {
+          __raw = ''
+            function(cmp)
+              if require'luasnip'.locally_jumpable(-1) then
+                cmp.snippet_backward()
+                return true
+              end
+              return false
+            end
+          '';
+        }
         "fallback"
       ];
 
@@ -149,7 +147,6 @@
         "hide_signature"
       ];
 
-      # FIXME: doesn't work any more - since v.1.4.1 update?
       "<C-1>".__raw = "{ function(cmp) cmp.accept({ index = 1 }) end }";
       "<C-2>".__raw = "{ function(cmp) cmp.accept({ index = 2 }) end }";
       "<C-3>".__raw = "{ function(cmp) cmp.accept({ index = 3 }) end }";
