@@ -5,6 +5,7 @@
   config,
   lib,
   pkgs,
+  isLaptop,
   ...
 }:
 
@@ -33,7 +34,18 @@
 
   # Time
   time.timeZone = "Europe/Berlin";
-  services.timesyncd.enable = true; # should be activated by default unless container
+  services.chrony = {
+    enable = true;
+    enableNTS = true;
+    serverOption = if isLaptop then "offline" else "iburst";
+    servers = [
+      "time.cloudflare.com"
+      "ptbtime1.ptb.de"
+      "ptbtime2.ptb.de"
+      "ptbtime3.ptb.de"
+      "ptbtime4.ptb.de"
+    ];
+  };
 
   # Locale Setup
   i18n =
@@ -216,9 +228,6 @@
     # TODO: necessary for proton vpn?
     # https://github.com/NixOS/nixpkgs/issues/307462#issuecomment-2750133149
     checkReversePath = "loose";
-
-    # TODO: is docker0 interface still necessary with firewalld backend?
-    trustedInterfaces = [ "docker0" ];
   };
 
   # Security & Secrets
