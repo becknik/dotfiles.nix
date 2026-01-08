@@ -90,5 +90,13 @@
       ];
       options.desc = "Search Locally";
     }
+    {
+      key = "<leader>fh";
+      action = "\"ly:Telescope help_tags theme=ivy default_text=<C-r>l<CR>";
+      mode = mapToModeAbbr [
+        "visual_select"
+      ];
+      options.desc = "Find Help tags";
+    }
   ];
 }

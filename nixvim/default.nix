@@ -5,7 +5,7 @@
     ./options.nix
 
     ./plugins
-    ./scripts
+    ./snippets
   ];
 
   config.globals.mapleader = " "; # "," "\"
@@ -56,7 +56,7 @@
         nvimRuntime = false;
 
         plugins = true;
-        excludedPlugins = [ ];
+        excludedPlugins = with pkgs.vimPlugins; [ ];
       };
     };
 

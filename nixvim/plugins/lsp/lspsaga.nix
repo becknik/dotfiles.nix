@@ -20,7 +20,7 @@
       };
 
       # what is this?
-      symbol_in_winbar.enable = true;
+      symbol_in_winbar.enable = false;
 
       ui.code_action = "󰌶";
       lightbulb.sign = false;

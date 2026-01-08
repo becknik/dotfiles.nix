@@ -31,6 +31,8 @@
             sort_mru = true,
             ignore_current_buffer = true,
             initial_mode = 'normal',
+            hidden = true,
+            cache_picker = false,
 
             previewer = false,
             layout_strategy = 'center',

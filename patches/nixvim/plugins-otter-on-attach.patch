@@ -1,0 +1,18 @@
+diff --git a/plugins/by-name/otter/default.nix b/plugins/by-name/otter/default.nix
+index ca778db2..04d79b57 100644
+--- a/plugins/by-name/otter/default.nix
++++ b/plugins/by-name/otter/default.nix
+@@ -99,10 +99,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
+           Otter functionality might not work as expected without it. Make sure `${treesitter.highlight.enable}` and `${treesitter.enable}` are enabled.
+         '';
+     };
+ 
+     lsp.onAttach = lib.mkIf cfg.autoActivate ''
+-      require('otter').activate()
++      if vim.bo.buftype ~= "nofile" then
++        require('otter').activate()
++      end
+     '';
+   };
+ 
+ }

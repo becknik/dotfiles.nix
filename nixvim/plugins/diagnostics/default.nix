@@ -20,7 +20,8 @@
     wk.add {
       { "<leader>tD", icon = "  󰊠 " },
       { "<leader>td", icon = " 󰊠 " },
-      }
+      { "<leader>ti", icon = " 󰔌 " },
+    }
   '';
 
   keymaps = [
@@ -66,6 +67,22 @@
         end
       '';
       options.desc = "Toggle virtual diagnostic text";
+    }
+
+    {
+      key = "<leader>ti";
+      action.__raw = ''
+        function()
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+
+          vim.notify(
+            "Inlay hints " .. (vim.lsp.inlay_hint.is_enabled() and "enabled" or "disabled" ),
+            vim.log.levels.INFO,
+            { title = "LSP", render = "compact" }
+          )
+        end
+      '';
+      options.desc = "Toggle LSP inlay hints";
     }
   ];
 }

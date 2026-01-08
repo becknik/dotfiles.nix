@@ -162,7 +162,7 @@
                   vim.log.levels.INFO,
                   { title = "Conform", render = "compact" }
                 )
-                if #hunks > hunks_processing / 2 then 
+                if #hunks > hunks_processing / 2 then
                   -- immediately format the rest if it takes around 3s
                   vim.api.nvim_command("ConformFormat")
                   return
@@ -198,7 +198,7 @@
     {
       key = "<leader>tF";
       action.__raw = ''
-        function() 
+        function()
           local prev = vim.g.disable_autoformat or false
           vim.g.disable_autoformat = not prev
           vim.notify(
@@ -469,4 +469,38 @@
         # TODO does injected conform linting work?
       };
   };
+  plugins.conform-nvim.luaConfig.post = ''
+    require('conform').formatters.injected = {
+      options = {
+        -- Set to true to ignore errors
+        ignore_errors = false,
+        -- Map of treesitter language to filetype
+        lang_to_ft = {
+          bash = "sh",
+        },
+        -- Map of treesitter language to file extension
+        -- A temporary file name with this extension will be generated during formatting
+        -- because some formatters care about the filename.
+        lang_to_ext = {
+          bash = 'sh',
+
+          python = 'py',
+          javascript = 'js',
+          typescript = 'ts',
+
+          c_sharp = 'cs',
+          elixir = 'exs',
+          julia = 'jl',
+          latex = 'tex',
+          markdown = 'md',
+          ruby = 'rb',
+          rust = 'rs',
+          teal = 'tl',
+        },
+        -- Map of treesitter language to formatters to use
+        -- (defaults to the value from formatters_by_ft)
+        lang_to_formatters = {},
+      },
+    }
+  '';
 }

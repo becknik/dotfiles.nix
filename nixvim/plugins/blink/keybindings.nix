@@ -1,11 +1,7 @@
-{ ... }:
+{ withDefaultKeymapOptions, mapToModeAbbr, ... }:
 
 {
   plugins.blink-cmp = {
-    luaConfig.pre = ''
-      local cmp_kinds = require'blink.cmp.types'.CompletionItemKind
-    '';
-
     settings.keymap = {
       preset = "none";
       "<C-space>" = [
@@ -59,13 +55,20 @@
           __raw = ''
             function(cmp)
               local shoulntdBeIncluded = vim.tbl_contains({
-                "markdown", "gitcommit"
+                "markdown", "gitcommit",
               }, vim.bo.filetype)
               if shoulntdBeIncluded then
                 return false
               end
 
-              cmp.show { providers = { 'snippets' } }
+              cmp.show {
+                providers = { 'snippets' },
+                callback = function()
+                  vim.schedule(function()
+                    cmp.show_documentation()
+                  end)
+                end
+              }
               return true
             end
           '';
@@ -75,44 +78,34 @@
 
       "<C-n>" = [
         "select_next"
-        {
-          __raw = ''
-            function(cmp)
-              if not cmp.is_visible() then
-                cmp.show {
-                  providers = { 'snippets' },
-                  completion = { documentation = { auto_show = true } }
-                }
-                return true
-              end
-              return false
-            end
-          '';
-        }
+        "fallback_to_mappings"
       ];
       "<C-p>" = [
         "select_prev"
+        "fallback_to_mappings"
       ];
 
       "<Tab>" = [
         {
           __raw = ''
             function(cmp)
+              -- not sure about this whole thing...
               if require'luasnip'.locally_jumpable(1) then
                 cmp.snippet_forward()
                 return true
               end
-              return false
-            end
-          '';
-        }
-        {
-          __raw = ''
-            function(cmp)
+
+              local current_item = cmp.get_selected_item()
+              if current_item and current_item.kind == vim.lsp.protocol.CompletionItemKind.Snippet then
+                cmp.accept()
+                return true
+              end
+
               if require'copilot.suggestion'.is_visible() then
                 require'copilot.suggestion'.accept()
                 return true
               end
+
               return false
             end
           '';
@@ -159,4 +152,39 @@
       "<C-0>".__raw = "{ function(cmp) cmp.accept({ index = 10 }) end }";
     };
   };
+
+  keymaps = withDefaultKeymapOptions [
+    {
+      key = "<C-n>";
+      action.__raw = ''
+        function()
+          if require'luasnip'.choice_active() then
+            require'luasnip'.change_choice(1)
+          end
+        end
+      '';
+      mode = mapToModeAbbr [
+        "normal"
+        "insert"
+        "select"
+      ];
+      options.desc = "LuaSnip Next Choice";
+    }
+    {
+      key = "<C-p>";
+      action.__raw = ''
+        function()
+          if require'luasnip'.choice_active() then
+            require'luasnip'.change_choice(-1)
+          end
+        end
+      '';
+      mode = mapToModeAbbr [
+        "normal"
+        "insert"
+        "select"
+      ];
+      options.desc = "LuaSnip Prev Choice";
+    }
+  ];
 }

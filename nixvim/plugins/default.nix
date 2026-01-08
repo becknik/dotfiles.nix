@@ -20,7 +20,6 @@
     ./dap.nix
 
     ./which-key.nix
-    ./luasnip.nix
     ./auto-sessions.nix
 
     ./oil.nix

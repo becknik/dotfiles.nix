@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   withDefaultKeymapOptions,
@@ -27,7 +28,7 @@
       sign_priority = 8;
       highlight.multiline_pattern = "^%s+.";
       highlight.after = "";
-      search.cmd = "${lib.getExe pkgs.ripgrep}";
+      search.cmd = "${lib.getExe config.dependencies.ripgrep.package}";
       # TODO: KEYWORDS aren't extended by `alt`
       search.pattern = "(KEYWORDS):?";
     };

@@ -2,6 +2,6 @@
 
 {
   plugins.dap = {
-    enable = true;
+    enable = false;
   };
 }

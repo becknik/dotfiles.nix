@@ -2,6 +2,8 @@
   description = "flake for nixos, nix-darwin & more I've running on my desktop & laptops";
 
   inputs = {
+    flake-input-patcher.url = "github:jfly/flake-input-patcher";
+
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -85,15 +87,22 @@
       nixpkgs-unstable,
       darwin,
       home-manager,
-      nixos-hardware,
       ...
-    }@inputs:
+    }@inputs-unpatched:
     let
       systems = [
         "aarch64-darwin"
         "x86_64-linux"
       ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
+
+      patcher = inputs-unpatched.flake-input-patcher.lib.x86_64-linux;
+
+      inputs = patcher.patch inputs-unpatched {
+        nixvim.patches = [
+          ./patches/nixvim/plugins-otter-on-attach.patch
+        ];
+      };
 
       stateVersion = "25.11";
 
@@ -236,7 +245,7 @@
           };
 
           modules =
-            with nixos-hardware.nixosModules;
+            with inputs.nixos-hardware.nixosModules;
             [
               common-cpu-intel
               common-pc
@@ -280,7 +289,7 @@
           };
 
           modules =
-            with nixos-hardware.nixosModules;
+            with inputs.nixos-hardware.nixosModules;
             [
               common-cpu-amd
               common-cpu-amd-pstate

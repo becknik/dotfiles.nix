@@ -64,6 +64,11 @@
       notify.absolute_path = false;
       # trash.cmd = "gio trash";
 
+      hijack_directories = {
+        enable = false;
+        auto_open = false;
+      };
+
       on_attach = helpers.mkRaw (builtins.readFile ./nvim-tree.lua);
     };
   };

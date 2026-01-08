@@ -2,6 +2,8 @@ indent_type = "Spaces"
 indent_width = 2
 call_parentheses = "None" # neglects for single strings and tables as argument
 collapse_simple_statement = "Always"
+column_width = 80
+syntax = "LuaJIT"
 
 [sort_requires]
 enabled = true

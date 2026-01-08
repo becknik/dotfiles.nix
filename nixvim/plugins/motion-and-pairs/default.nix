@@ -1,9 +1,11 @@
-{ withDefaultKeymapOptions, pkgs, ... }:
+{ ... }:
 
 {
   imports = [
     ./harpoon.nix
     ./spider.nix
+    ./visual-multi.nix
+    ./bufjump.nix
   ];
 
   plugins = {

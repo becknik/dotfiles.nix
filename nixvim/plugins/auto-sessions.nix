@@ -37,6 +37,7 @@
         "oil"
         "toggleterm"
         "NvimTree"
+        "Outline"
       ];
       post_restore_cmds = [
         {
