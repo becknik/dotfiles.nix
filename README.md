@@ -7,41 +7,51 @@ Some nice *bits of knowledge* I came across along the buildup of this flake are 
 ## Project Structure
 
 ```bash
-$ tree -a -I '\.git|\.vscode|\.direnv' . # slightly modified for better context/ overview
+$ tree -a -I '\.git|\.direnv' . # slightly modified for better context/ overview
 .
-├─────────────────────────────────────────── home-manager
-├── flake.nix                                ├── default.nix
-├── flake.lock                               ├── desktop-env.nix
-├── darwin                                   ├── desktop-env
-│   ├── default.nix                          │   ├── autostart.nix
-├── .devenv                                  │   ├── dconf.nix
-├── disko                                    │   ├── folders-and-files.nix
-│   ├── ext4-encrypted.nix                   │   ├── files
-│   └── ext4-unencrypted.nix                 │   │   ├── plasma ── ...
-├── nixos                                    │   │   ├── .zshrc.initExtra.zsh
-│   ├── dnix                                 │   │   └── ...
-│   │   ├── default.nix                      │   ├── plasma.nix
-│   │   └── hardware-configuration.nix       │   ├── shell.nix
-│   ├── lnix ── -- same as dnix --           │   └── xdg-mime.nix
-│   ├── default.nix                          ├── devel.nix
-│   ├── desktop-env.nix                      ├── devel ── proglangs.nix
-│   ├── gnome.nix                            ├── media.nix
-│   ├── packages.nix                         ├── media ── mail.nix (not working ._.)
-│   ├── systemd.nix                          ├── packages.nix
-│   └── virtualisation.nix                   ├── programs
-├── nixvim                                   │   ├── git.nix
-│   ├── default.nix                          │   ├── thunderbird.nix
-│   └── ...                                  │   └── vscodium ── ...
-├── overlays                                 ├── secrets.nix
-│   ├── ~~build-fixes.nix~~                  ├── secrets
-│   ├── ~~build-skips.nix~~                  │   ├── git.yaml
-│   ├── default.nix                          │   ├── gpg-personal.asc
-│   ├── modifications.nix                    │   ├── keepassxc.key
-│   ├── modification ── ...                  │   └── mail.yaml
-│   └── modifications-pref.nix               ├── .sops.yaml
-├── pkgs                                     └── users
-│   └── default.nix                              ├── darwin.nix
-└── README.md                                    └── nixos.nix
+├───────────────────────────────────────────
+├── .devenv
+├── flake.nix
+├── patches # patches for flake inputs
+├── disko
+│   ├── ext4-encrypted.nix
+│   └── ext4-unencrypted.nix
+├── .sops.yaml
+├── home-manager
+│   ├── default.nix
+│   ├── users # home-manager is actually user-based
+│   │   ├── nixos.nix
+│   │   └── darwin.nix # import subset of files that makes sense for my work laptop
+│   ├── secrets # secrets are managed using sops & age stored inside of a yubikey
+│   │   └── ...
+│   ├── packages.nix
+│   ├── desktop-env
+│   │   └── ...
+│   ├── devel
+│   │   └── ...
+│   └── media
+│       └── ...
+├── nixos
+│   ├── dnix
+│   │   ├── default.nix
+│   │   └── hardware-configuration.nix
+│   ├── lnix #  same as dnix
+│   ├── default.nix
+│   ├── desktop-env.nix
+│   ├── gnome.nix
+│   ├── packages.nix
+│   ├── systemd.nix
+│   └── virtualisation.nix
+├── nixvim # see README there
+│   └── ...
+├── overlays
+│   ├── default.nix
+│   ├── modifications.nix
+│   ├── modification # package patches
+│   │   └── ...
+├── darwin
+│   ├── default.nix
+└── pkgs # custom packages (+ nixvim)
 ```
 
 ## Setup
@@ -50,21 +60,6 @@ $ tree -a -I '\.git|\.vscode|\.direnv' . # slightly modified for better context/
   - Configuration for laptop (`lnix`) & desktop (`dnix`)
   - [`nix-hardware`](https://github.com/NixOS/nixos-hardware) setup for each
   - [nix-darwin](https://github.com/lnl7/nix-darwin) setup for work laptop (`wnix`), which uses a subset of the home-managed part
-- ~~Target platform build optimization to alderlake CPU architecture (on desktop only)~~
-
-  > After upgrading this flake to the NixOS 24.05 release on the `dnix` system, I noticed that many packages failed to build due to the `pkgs.fastStdenv` I was using to speed up my system closure's build time - or at least that's what I'm making responsible for it.
-  >
-  > The package build errors were caused by gcc errors like `-Wincompatible-pointer-types` or `-Wimplicit-function-declaration`.
-  > When around 300 of the actual systems packages finally had been built, I had to manually use the "clean", non-optimized package overlays for around 7 dependency packages by adding them to my `overlays/build-fixes.nix` file.
-  > This not only was really annoying when running builds asynchronous like I typically do, but also it reminded me of some concerns I had about the CPU-architecture specific optimization in general.
-  > The CPU-tailored builds not only take way to long - even tho my build machine features a raptorlake i7 -, but they also waste a lot of energy, emit much heat and also kind of revert the beauty of the NixOS system.
-  > I mean in theory, it should be possible to boot my flake from any other machine, or propagate changes from the config into the running system in no time.
-  > For instance, I saw myself waiting around one hour for the steam NixOS module to compile, so that I could simply join some friends on a game they were playing.
-  > I think this should've gone faster on any other OS, perhaps even on a Gentoo system and is in the end just my own perfectionism and maybe a few percent of performance improvements for some packages making my life harder...
-  >
-  > Hence due to all these concerns/ issues and the problems with 24.05 & (perhaps) `fastStdenv`, I decided to just let the architecture-optimization be and based my `dnix` system closure back to the default, stable & non-optimized `stdenv` enabling the caching for most packages :^)
-  > See [here](https://github.com/becknik/dotfiles.nix/releases/tag/cpu-optimization) for working state of optimized build
-
   - Overlays & systemd services to make this a bit more convenient
 - Highly customized GNOME Wayland DE with some KDE tools
 - `home-manager` for managing everything apart from system stuff
@@ -131,12 +126,12 @@ Let's hope this projects break the hours down to minutes
 
 ### Logins
 
-- [ ] Nextcloud, (Dropbox <- broken?)
+- [ ] Nextcloud
 - [ ] Enter Thunderbird mail account passwords (are mounted, but impossible to automatically pass to Thunderbird)
 - [ ] Firefox Account
 - [ ] JetBrains (IDEA, CLion, ...)
 - [ ] Obsidian
-- [ ] Telegram, Signal, Threema; Element
+- [ ] Telegram, Signal, Threema, Element
 - [ ] planify
 - [ ] Anki
 - [ ] cider
