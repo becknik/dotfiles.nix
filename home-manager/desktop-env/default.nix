@@ -8,14 +8,14 @@
 
 {
   imports = [
-    ./desktop-env/shell
+    ./shell
 
-    ./desktop-env/folders-and-files.nix # Creates my basic folder structure
+    ./folders-and-files.nix # Creates my basic folder structure
 
-    ./desktop-env/dconf.nix
-    ./desktop-env/xdg-mime.nix # Default apps - I think this might grow rapidly
+    ./dconf.nix
+    ./xdg-mime.nix # Default apps - I think this might grow rapidly
 
-    ./desktop-env/autostart.nix # Sad try on xdg-autostarting some apps
+    ./autostart.nix # Sad try on xdg-autostarting some apps
   ];
 
   # XDG

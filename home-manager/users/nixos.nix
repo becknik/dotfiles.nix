@@ -15,13 +15,12 @@
   imports = [
     ../default.nix
 
+    ../desktop-env # XDG, GTK-X, Systemd & everything in the desktop-env folder
+    ../devel
+    ../media
+
     ../packages.nix # Installation of User Packages
-    ../desktop-env.nix # XDG, GTK-X, Systemd & everything in the desktop-env folder
-
-    ../secrets.nix # Secrets management with sops-nix
-
-    ../devel.nix
-    ../media.nix
+    ../secrets # Secrets management with sops-nix
   ];
 
   config = {

@@ -59,7 +59,6 @@
       cheat
       tealdeer # tldr in rust
       hyperfine # benchmarking
-      asciinema
       tailspin # log file highlighter
       fastgron # make JSON greppable!
       tokei # loc counter
@@ -74,19 +73,10 @@
       ## Nix(OS)
       nh
       nix-output-monitor
-      (nix-tree.overrideAttrs (oldAttrs: {
-        version = "0.6.3";
-        src = pkgs.fetchFromGitHub {
-          owner = "utdemir";
-          repo = "nix-tree";
-          rev = "v0.6.3";
-          sha256 = "sha256-579p1uqhICfsBl1QntcgyQwTNtbiho1cuNLDjjXQ+sM=";
-        };
-      }))
+      nix-tree
 
       nix-update
       nixpkgs-review
-      comma
 
       ### Secrets Management (1)
       sops
@@ -99,11 +89,10 @@
       speedtest-cli
 
       ## Uni & TeX
-      (mkWhenNotDarwin pandoc)
       (mkWhenNotDarwin qtikz)
 
       ## Trash
-      cbonsai
+      # cbonsai
       # cmatrix
       # fortune
       # (makeWhenNotDarwin oneko)

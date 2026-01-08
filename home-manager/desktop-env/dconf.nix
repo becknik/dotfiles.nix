@@ -96,6 +96,8 @@ with lib.gvariant;
     "org/gnome/desktop/screensaver".lock-delay = 30;
 
     "org/gnome/desktop/wm/keybindings" = {
+      "show-screenshot-ui " = lib.mkForce [ ];
+
       close = [
         "<Super>q"
         "<Alt>F4"
@@ -218,6 +220,7 @@ with lib.gvariant;
     };
 
     "org/gnome/mutter" = {
+      overlay-key = "";
       attach-modal-dialogs = true; # dconf says no schema, but option is set by gnome-tweaks, so...
       center-new-windows = true;
       dynamic-workspaces = false;

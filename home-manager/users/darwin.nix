@@ -16,8 +16,8 @@
     ../desktop-env/folders-and-files.nix # also want the `$HOME/devel/*` folder structure
     # TODO this also includes the manually created plasma config files...
 
-    ../devel.nix
-    ../secrets.nix
+    ../devel
+    ../secrets
   ];
 
   home.homeDirectory = (lib.mkForce "/Users/${userName}"); # mkForce is necessary to prevent `/var/empty`

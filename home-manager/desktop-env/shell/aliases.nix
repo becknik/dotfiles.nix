@@ -29,6 +29,7 @@
       fu = "sudo";
       sduo = "sudo";
       nivm = "nvim";
+      nx = "nvim .";
       seshc = ''${lib.getExe pkgs.sesh} connect "$(${lib.getExe pkgs.sesh} list -i | ${lib.getExe pkgs.fzf} --ansi)"'';
       sehsc = ''${lib.getExe pkgs.sesh} connect "$(${lib.getExe pkgs.sesh} list -i | ${lib.getExe pkgs.fzf} --ansi)"'';
 

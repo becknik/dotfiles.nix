@@ -5,50 +5,18 @@
 
 {
   imports = [
-    ./devel/proglangs.nix # Installation of some programming languages
+    ./proglangs.nix # Installation of some programming languages
 
-    ./programs/git.nix
+    ./git.nix
+    ./ssh.nix
   ];
 
   programs = {
-    # GitHub CLI
-    gh = {
-      enable = true;
-      settings.git_protocol = "ssh";
-    };
-
     # DirEnv Setup
     direnv = {
       enable = true; # nix-direnv gets enabled automatically in NixOS - but not in home-manager...
       nix-direnv.enable = true;
       enableZshIntegration = true;
-    };
-
-    # SSH
-    # Source: https://github.com/nix-community/home-manager/blob/master/modules/programs/ssh.nix
-    ssh = {
-      enable = true;
-
-      includes = [ "~/.ssh/config.local" ];
-
-      matchBlocks = {
-        "*" = {
-          forwardAgent = true;
-          hashKnownHosts = true;
-          addKeysToAgent = "yes";
-        };
-
-        github_personal = {
-          host = "github.com";
-          user = "git";
-          identityFile = "~/.ssh/github-becknik";
-        };
-        gitlab_personal = {
-          host = "gitlab.com";
-          user = "git";
-          identityFile = "~/.ssh/gitlab-becknik";
-        };
-      };
     };
   };
 
@@ -72,14 +40,10 @@
       unstable.vscode-fhs
 
       devenv
-      git-crypt
       meld
       wiggle
       watchman # necessary for some npm scripts
       (if !pkgs.stdenv.isDarwin then distrobox else hello)
-
-      # LLM (ChatGPT)
-      shell-gpt
 
       ## Testing
       httpie
@@ -88,10 +52,6 @@
       ## OCI Containers
       dive # https://github.com/wagoodman/dive
       trivy
-
-      ## CI / CD
-      kubectl
-      act
     ]
     ++ [ nixvim ];
 

@@ -43,6 +43,4 @@
     };
 
   modifications = (import ./modifications.nix { inherit inputs; });
-
-  modifications-perf = (import ./modifications-perf.nix { inherit inputs; });
 }

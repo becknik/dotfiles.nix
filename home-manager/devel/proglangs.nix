@@ -14,10 +14,7 @@
       typst
       conda
     ])
-
     ++ [
-      unstable.amber-lang
-
       # JS / TypeScript
       unstable.nodejs_latest
       unstable.pnpm
@@ -32,7 +29,7 @@
   # JDK Setup (https://whichjdk.com/)
   programs.java = {
     enable = true;
-    package = pkgs.unstable.temurin-bin-21;
+    package = pkgs.javaPackages.compiler.temurin-bin.jdk-21;
   };
 
   home.sessionPath = [ "${config.home.homeDirectory}/.jdks" ];
