@@ -123,6 +123,7 @@
         module = "blink-cmp-git";
         name = "git";
         should_show_items.__raw = "is_in_string_like_node";
+        min_keyword_length = 7;
       };
       emoji = {
         # https://github.com/moyiz/blink-emoji.nvim
@@ -130,9 +131,6 @@
         name = "emoji";
         score_offset = 100;
         should_show_items.__raw = "is_in_string_like_node";
-        fallbacks = [
-          "git"
-        ];
       };
       spell = {
         # https://github.com/ribru17/blink-cmp-spell
