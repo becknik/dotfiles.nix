@@ -1,13 +1,4 @@
-local ts_repeat_move = require "nvim-treesitter.textobjects.repeatable_move"
-
-vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move)
-vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_opposite)
-
--- Make builtin f, F, t, T also repeatable with ; and ,
-vim.keymap.set({ "n", "x", "o" }, "f", ts_repeat_move.builtin_f_expr, { expr = true })
-vim.keymap.set({ "n", "x", "o" }, "F", ts_repeat_move.builtin_F_expr, { expr = true })
-vim.keymap.set({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t_expr, { expr = true })
-vim.keymap.set({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
+local ts_repeat_move = require "nvim-treesitter-textobjects.repeatable_move"
 
 local next_diag_error, prev_diag_error = ts_repeat_move.make_repeatable_move_pair(
   function() vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR } end,

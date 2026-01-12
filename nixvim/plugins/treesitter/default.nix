@@ -12,7 +12,7 @@
   plugins.treesitter = {
     enable = true;
 
-    folding = true;
+    folding.enable = true;
     nixvimInjections = true;
 
     settings = {
@@ -25,11 +25,5 @@
       highlight.enable = true;
       indent.enable = true;
     };
-  };
-
-  plugins.treesitter-refactor = {
-    enable = true;
-
-    settings.highlightDefinitions.enable = true;
   };
 }

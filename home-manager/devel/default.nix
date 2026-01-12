@@ -28,7 +28,7 @@
         lib.lists.optionals (!pkgs.stdenv.isDarwin) (
           with unstable.jetbrains;
           [
-            idea-ultimate
+            idea
           ]
         )
         # not using unstable.jetbrains-toolbox because it depends on too much & I'm not using it that often

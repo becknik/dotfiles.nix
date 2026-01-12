@@ -336,7 +336,7 @@
           # pg_format
 
           nixfmt.types = "nix";
-          nixfmt.command = lib.getExe pkgs.nixfmt-rfc-style;
+          nixfmt.command = lib.getExe pkgs.nixfmt;
 
           shfmt.types = "bash";
           shfmt.command = lib.getExe pkgs.shfmt;

@@ -136,7 +136,6 @@
             "steam-run"
 
             "jetbrains-toolbox"
-            "idea-ultimate"
             "idea"
             "code"
             "vscode"
