@@ -10,6 +10,55 @@
     sesh
   ];
 
+  systemd.user.services.tmux = {
+    Unit = {
+      Description = "tmux default session (detached)";
+      Documentation = [ "man:tmux(1)" ];
+    };
+
+    Service =
+      let
+        resurrectScriptPath = "${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts";
+      in
+      {
+        Type = "forking";
+        Environment = [
+          "DISPLAY=:0"
+          "TMUX_TMPDIR=/run/user/1000"
+          "PATH=$PATH:${
+            lib.makeBinPath (
+              with pkgs;
+              [
+                coreutils
+                hostname
+                gnused
+                gnugrep
+                gnutar
+                gzip
+                gawk
+                ps
+                diffutils
+              ]
+              ++ [ config.programs.tmux.package ]
+            )
+          }"
+        ];
+        ExecStart = "${lib.getExe config.programs.tmux.package} start-server";
+        ExecStartPost = [
+          "${resurrectScriptPath}/restore.sh"
+        ];
+        ExecStop = [
+          "${resurrectScriptPath}/save.sh"
+        ];
+        KillMode = "control-group";
+        RestartSec = 2;
+      };
+
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+  };
+
   programs.tmux = {
     enable = true;
 
@@ -78,8 +127,9 @@
 
         bind -N "last-session (via sesh) " L run-shell "${lib.getExe pkgs.sesh} last"
       ''
-      "set-option -g default-terminal \"tmux-256color\""
+      /* tmux */ ''set-option -g default-terminal "tmux-256color"''
       # Undercurl & undercurl color support
+      /* tmux */
       ''
         set -as terminal-overrides ',*:Smulx=\E[4::%p1%dm' # undercurl support
         set -as terminal-overrides ',*:Setulc=\E[58::2::%p1%{65536}%/%d::%p1%{256}%/%{255}%&%d::%p1%{255}%&%d%;m' # underscore colours - needs tmux-3.0
@@ -92,7 +142,7 @@
       tmux-fzf
       {
         plugin = resurrect;
-        extraConfig = ''
+        extraConfig = /* tmux */ ''
           set -g default-shell "${lib.getExe config.programs.zsh.package}"
           set -g default-command "exec ${lib.getExe config.programs.zsh.package}"
           set-option -g update-environment "DISPLAY SSH_ASKPASS SSH_AUTH_SOCK SSH_AGENT_PID SSH_TTY PATH"
@@ -111,7 +161,7 @@
       }
       {
         plugin = continuum;
-        extraConfig = ''
+        extraConfig = /* tmux */ ''
           set -g @continuum-restore 'on'
           set -g @continuum-boot 'on'
           set -g @continuum-save-interval '10' # minutes
