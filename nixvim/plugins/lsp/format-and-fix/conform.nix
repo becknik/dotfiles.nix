@@ -34,7 +34,6 @@
                 elseif (did_edit) then
                   vim.notify("Done formatting", vim.log.levels.INFO, { title = "Conform All", render = "compact" })
                   vim.cmd("silent noautocmd write")
-                  vim.cmd('silent GuessIndent')
                 else
                   vim.notify("Nothing to format", vim.log.levels.INFO, { title = "Conform All", render = "compact" })
                   vim.cmd("silent noautocmd write")

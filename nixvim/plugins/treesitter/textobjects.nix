@@ -1,4 +1,7 @@
-{ ... }:
+{
+  withDefaultKeymapOptions,
+  ...
+}:
 
 {
   # extraConfigLua = builtins.readFile ./textobjects.lua;
@@ -10,200 +13,173 @@
       { "<leader>.", icon = "󰆾  ", desc = "Textobject Movement"  },
       { "<leader>,", icon = "󰆾 󰁍 ", desc = "Textobject Movement"  },
     }
-
-    local ts_repeat_move = require "nvim-treesitter-textobjects.repeatable_move"
-
-    vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_next)
-    vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_previous)
-
-    -- Make builtin f, F, t, T also repeatable with ; and ,
-    vim.keymap.set({ "n", "x", "o" }, "f", ts_repeat_move.builtin_f_expr, { expr = true })
-    vim.keymap.set({ "n", "x", "o" }, "F", ts_repeat_move.builtin_F_expr, { expr = true })
-    vim.keymap.set({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t_expr, { expr = true })
-    vim.keymap.set({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
   '';
+
+  extraConfigLua = builtins.readFile ./textobjects.lua;
 
   plugins.treesitter-textobjects = {
     enable = true;
     settings = {
-      # don't find this very useful - maybe I just don't get it tho
-      lsp_interop.enable = false;
-
-      swap = {
-        enable = true;
-        swap_next = {
-          "<leader>.p" = "@parameter.inner";
-          "<leader>.=" = "@assignment.outer";
-          "<leader>.a" = "@attribute.outer";
-          "<leader>.s" = "@statement.outer";
-        };
-        swap_previous = {
-          "<leader>,p" = "@parameter.inner";
-          "<leader>,=" = "@assignment.outer";
-          "<leader>,a" = "@attribute.outer";
-          "<leader>,s" = "@statement.outer";
-        };
-      };
-
-      move = {
-        enable = true;
-        set_jumps = true;
-        # pre-occupied by extension to other plugins from ./textobjects.lua:
-        # ]d, ]D, ]s, ]h
-
-        goto_next_start = {
-          "]<" = "@assignment.lhs";
-          "]>" = "@assignment.rhs";
-          "]=" = "@assignment.inner";
-          # "]=" = "@assignment.outer";
-
-          "]a" = "@attribute.inner";
-          "]A" = "@attribute.outer";
-
-          "]k" = "@block.inner";
-          "]K" = "@block.outer";
-
-          "](" = "@call.inner";
-          "]." = "@call.outer";
-
-          # "]c" = "@class.inner";
-          "]C" = "@class.outer";
-
-          "]c" = "@comment.inner";
-
-          "]i" = "@conditional.inner";
-          "]I" = "@conditional.outer";
-
-          "]f" = "@function.inner";
-          "]F" = "@function.outer";
-
-          "]l" = "@loop.inner";
-          "]L" = "@loop.outer";
-
-          "]n" = "@number.inner";
-
-          "]p" = "@parameter.inner";
-          "]P" = "@parameter.outer";
-
-          "]x" = "@regex.inner";
-
-          "]r" = "@return.inner";
-          "]R" = "@return.outer";
-
-          "]S" = "@statement.outer";
-        };
-        goto_previous_start = {
-          "[<" = "@assignment.lhs";
-          "[>" = "@assignment.rhs";
-          "[=" = "@assignment.inner";
-          #"[=" = "@assignment.outer";
-
-          "[a" = "@attribute.inner";
-          "[A" = "@attribute.outer";
-
-          "[k" = "@block.inner";
-          "[K" = "@block.outer";
-
-          "[(" = "@call.inner";
-          "[." = "@call.outer";
-
-          #"[c" = "@class.inner";
-          "[C" = "@class.outer";
-
-          "[c" = "@comment.inner";
-
-          "[i" = "@conditional.inner";
-          "[I" = "@conditional.outer";
-
-          "[f" = "@function.inner";
-          "[F" = "@function.outer";
-
-          "[l" = "@loop.inner";
-          "[L" = "@loop.outer";
-
-          "[n" = "@number.inner";
-
-          "[p" = "@parameter.inner";
-          "[P" = "@parameter.outer";
-
-          "[x" = "@regex.inner";
-
-          "[r" = "@return.inner";
-          "[R" = "@return.outer";
-
-          "[S" = "@statement.outer";
-        };
-      };
+      move.set_jumps = false;
 
       select = {
         enable = true;
         lookahead = true;
-        selection_modes = {
-          "@parameter.outer" = "v";
-          "@function.outer" = "V";
-          "@class.outer" = "<c-v>";
-        };
-
-        keymaps =
-          let
-            generatePairs = suffix: textObjName: {
-              "a${suffix}" = "@${textObjName}.outer";
-              "i${suffix}" = "@${textObjName}.inner";
-            };
-          in
-          builtins.foldl' (acc: x: acc // x) { } [
-            (generatePairs "=" "assignment")
-            {
-              "i<" = "@assignment.rhs";
-              "i>" = "@assignment.lhs";
-            }
-
-            (generatePairs "a" "attribute")
-            (generatePairs "k" "block")
-
-            (generatePairs "." "call")
-            (generatePairs "(" "call")
-
-            (generatePairs "C" "class")
-            (generatePairs "c" "comment")
-
-            (generatePairs "i" "conditional")
-            # {
-            #   "ii" = "@conditional.inner";
-            #   "aI" = "@conditional.outer";
-            # }
-            (generatePairs "f" "function")
-            # {
-            #   "if" = "@function.inner";
-            #   "aF" = "@function.outer";
-            # }
-            (generatePairs "l" "loop")
-            # {
-            #   "il" = "@loop.inner";
-            #   "aL" = "@loop.outer";
-            # }
-
-            {
-              "n" = "@number.inner";
-            }
-            (generatePairs "P" "parameter")
-            # {
-            #   "ip" = "@parameter.inner";
-            #   "aP" = "@parameter.outer";
-            # }
-
-            (generatePairs "x" "regex")
-
-            (generatePairs "r" "return")
-            # {
-            #   "ir" = "@return.inner";
-            #   "aR" = "@return.outer";
-            # }
-
-            (generatePairs "S" "statement")
-          ];
-
+        # selection_modes = {
+        #   "@parameter.outer" = "v";
+        #   "@function.outer" = "V";
+        #   "@class.outer" = "<c-v>";
+        # };
+        include_surrounding_whitespace = false;
       };
     };
   };
+
+  keymaps =
+    let
+      binding = key: actionLua: desc: mode: {
+        key = key;
+        action.__raw = ''
+          function()
+            ${actionLua}
+          end
+        '';
+        mode = mode;
+        options.desc = desc;
+      };
+
+      swapBinding =
+        key: action: target:
+        (binding key (
+          "require 'nvim-treesitter-textobjects.swap'." + action + "'" + target + "'"
+        ) target "n");
+      selectBinding =
+        key: action:
+        (binding key
+          ("require 'nvim-treesitter-textobjects.select'.select_textobject('" + action + "', 'textobjects')")
+          action
+          [
+            "o"
+            "x"
+          ]
+        );
+      moveBinding =
+        key: action: target:
+        (binding key
+          ("require 'nvim-treesitter-textobjects.move'." + action + "('" + target + "', 'textobjects')")
+          target
+          [
+            "n"
+            "o"
+            "x"
+          ]
+        );
+    in
+    withDefaultKeymapOptions [
+      # swaps
+
+      (swapBinding "<leader>.p" "swap_next" "@parameter.inner")
+      (swapBinding "<leader>,p" "swap_previous" "@parameter.inner")
+
+      (swapBinding "<leader>.a" "swap_next" "@attribute.outer")
+      (swapBinding "<leader>,a" "swap_previous" "@attribute.outer")
+
+      (swapBinding "<leader>.s" "swap_next" "@statement.outer")
+      (swapBinding "<leader>,s" "swap_previous" "@statement.outer")
+
+      # TODO: make one for boolean conditionals
+
+      # selects
+
+      (selectBinding "af" "@function.outer")
+      (selectBinding "if" "@function.inner")
+
+      (selectBinding "aS" "@statement.outer")
+      (selectBinding "iS" "@statement.inner")
+
+      (selectBinding "a=" "@assignment.outer")
+      (selectBinding "i=" "@assignment.inner")
+      (selectBinding "i<" "@assignment.lhs")
+      (selectBinding "i>" "@assignment.rhs")
+
+      (selectBinding "i." "@call.inner")
+      (selectBinding "a." "@call.outer")
+
+      (selectBinding "iP" "@parameter.inner")
+      (selectBinding "aP" "@parameter.outer")
+
+      (selectBinding "ix" "@regex.inner")
+      (selectBinding "ax" "@regex.outer")
+
+      (selectBinding "in" "@number.inner")
+      (selectBinding "an" "@number.inner")
+
+      (selectBinding "ir" "@return.inner")
+      (selectBinding "ar" "@return.outer")
+
+      (selectBinding "ia" "@attribute.inner")
+      (selectBinding "aa" "@attribute.outer")
+
+      (selectBinding "ic" "@comment.inner")
+      (selectBinding "ac" "@comment.outer")
+
+      (selectBinding "il" "@loop.inner")
+      (selectBinding "al" "@loop.outer")
+
+      (selectBinding "ii" "@conditional.inner")
+      (selectBinding "ai" "@conditional.outer")
+
+      (selectBinding "iC" "@class.inner")
+      (selectBinding "aC" "@class.outer")
+
+      # moves
+
+      (moveBinding "]f" "goto_next_start" "@function.outer")
+      (moveBinding "[f" "goto_previous_start" "@function.outer")
+
+      (moveBinding "]=" "goto_next_start" "@assignment.outer")
+      (moveBinding "[=" "goto_previous_start" "@assignment.outer")
+      (moveBinding "]<" "goto_next_start" "@assignment.lhs")
+      (moveBinding "[<" "goto_previous_start" "@assignment.lhs")
+      (moveBinding "]>" "goto_next_start" "@assignment.rhs")
+      (moveBinding "[>" "goto_previous_start" "@assignment.rhs")
+
+      (moveBinding "]." "goto_next_start" "@call.outer")
+      (moveBinding "[." "goto_previous_start" "@call.outer")
+      (moveBinding "](" "goto_next_start" "@call.inner")
+      (moveBinding "[(" "goto_previous_start" "@call.inner")
+      (moveBinding "])" "goto_next_start" "@call.inner")
+      (moveBinding "[)" "goto_previous_start" "@call.inner")
+
+      (moveBinding "]P" "goto_next_start" "@parameter.inner")
+      (moveBinding "[P" "goto_previous_start" "@parameter.inner")
+      (moveBinding "]p" "goto_next_start" "@parameter.inner")
+      (moveBinding "[p" "goto_previous_start" "@parameter.inner")
+
+      (moveBinding "]x" "goto_next_start" "@regex.inner")
+      (moveBinding "[x" "goto_previous_start" "@regex.inner")
+
+      (moveBinding "]n" "goto_next_end" "@number.inner")
+      (moveBinding "[n" "goto_previous_end" "@number.inner")
+
+      (moveBinding "]r" "goto_next_start" "@return.inner")
+      (moveBinding "[r" "goto_previous_start" "@return.inner")
+
+      (moveBinding "]a" "goto_next_end" "@attribute.inner")
+      (moveBinding "[a" "goto_previous_end" "@attribute.inner")
+      (moveBinding "]A" "goto_next_start" "@attribute.outer")
+      (moveBinding "[A" "goto_previous_start" "@attribute.outer")
+
+      (moveBinding "]c" "goto_next_start" "@comment.outer")
+      (moveBinding "[c" "goto_previous_start" "@comment.outer")
+
+      (moveBinding "]l" "goto_next_start" "@loop.inner")
+      (moveBinding "[l" "goto_previous_start" "@loop.inner")
+
+      (moveBinding "]i" "goto_next_start" "@conditional.inner")
+      (moveBinding "[i" "goto_previous_start" "@conditional.inner")
+
+      (moveBinding "]C" "goto_next_start" "@class.inner")
+      (moveBinding "[C" "goto_previous_start" "@class.inner")
+    ];
 }

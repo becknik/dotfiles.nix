@@ -17,7 +17,6 @@
     };
     # https://github.com/HiPhish/rainbow-delimiters.nvim
     rainbow-delimiters.enable = true;
-    indent-blankline.enable = true;
   };
 
   plugins.notify.luaConfig.post = ''

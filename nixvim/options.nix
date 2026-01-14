@@ -38,12 +38,6 @@
       mouse = "a"; # Enable mouse mode for modes: normal, visual, insert, command-line
 
       # Indentation
-      tabstop = 2;
-      smartindent = true;
-      shiftwidth = 2;
-      expandtab = true;
-
-      # Indentation
       # shiftwidth = 2; # indent with 4 spaces
       # shiftround = true; # round indents of >,< to shiftwidth
       # smartindent = true; # enable smart indenting by using context of previous line
