@@ -1,4 +1,5 @@
 {
+  inputs,
   pkgs-unstable,
   nixvim,
   pkgs,
@@ -26,7 +27,7 @@
                 keymap
                 // {
                   action = "<cmd>${keymap.action}<CR>";
-                  options = builtins.removeAttrs keymap.options [ "cmd" ];
+                  options = removeAttrs keymap.options [ "cmd" ];
                 }
               else
                 keymap;
@@ -64,12 +65,12 @@
       };
       mapToModeAbbr =
         modes:
-        builtins.map (
+        map (
           m:
           if builtins.hasAttr m neovimModePrimitives then
             neovimModePrimitives.${m}
           else
-            builtins.throw "Unknown mode ‘${m}’"
+            throw "Unknown mode ‘${m}’"
         ) modes;
 
       pkgs-stable = pkgs;
@@ -86,6 +87,7 @@
           fetchFromGitHub
           pkgs-stable
           ;
+        inherit (inputs) neovim-nightly-overlay;
       };
     };
 

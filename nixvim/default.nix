@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ neovim-nightly-overlay, pkgs, ... }:
 
 {
   imports = [
@@ -11,6 +11,8 @@
   config.globals.mapleader = " "; # "," "\"
 
   config = {
+    package = neovim-nightly-overlay.packages.${pkgs.system}.default;
+
     clipboard.providers.wl-copy.enable = pkgs.stdenv.isLinux;
 
     # colorschemes.kanagawa.enable = true;

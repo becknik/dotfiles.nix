@@ -50,6 +50,7 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -223,7 +224,14 @@
           pkgs-unstable = import nixpkgs-unstable { inherit system; };
           nixvim = inputs.nixvim.legacyPackages.${system};
         in
-        import ./pkgs { inherit pkgs pkgs-unstable nixvim; }
+        import ./pkgs {
+          inherit
+            pkgs
+            pkgs-unstable
+            nixvim
+            inputs
+            ;
+        }
       );
 
       overlays = import ./overlays { inherit inputs config; };
