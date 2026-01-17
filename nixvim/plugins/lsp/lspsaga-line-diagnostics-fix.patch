@@ -1,0 +1,32 @@
+diff --git a/lua/lspsaga/diagnostic/show.lua b/lua/lspsaga/diagnostic/show.lua
+index d6b6fa9..5e7f3cf 100644
+--- a/lua/lspsaga/diagnostic/show.lua
++++ b/lua/lspsaga/diagnostic/show.lua
+@@ -212,11 +212,11 @@ function sd:layout_float(opt)
+         end
+         api.nvim_del_autocmd(args.id)
+         clean_ctx()
+       end,
+     })
+-  end, 0)
++  end, 25)
+ end
+
+ function sd:write_line(message, severity, virt_line, srow, erow)
+   local indent = (' '):rep(3)
+   srow = srow or -1
+@@ -383,15 +383,10 @@ function sd:show(opt)
+     self:toggle_or_jump(opt.entrys_list)
+   end)
+ end
+
+ function sd:show_diagnostics(opt)
+-  local has_jump_win = require('lspsaga.diagnostic').winid
+-  if has_jump_win and api.nvim_win_is_valid(has_jump_win) then
+-    return
+-  end
+-
+   local entrys = diag:get_diagnostic(opt)
+   if next(entrys) == nil then
+     return
+   end

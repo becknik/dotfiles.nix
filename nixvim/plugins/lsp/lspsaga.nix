@@ -1,10 +1,15 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   # https://nix-community.github.io/nixvim/plugins/lspsaga/index.html
   # https://nvimdev.github.io/lspsaga/
   plugins.lspsaga = {
     enable = true;
+    package = pkgs.vimPlugins.lspsaga-nvim.overrideAttrs (old: {
+      patches = old.patches or [ ] ++ [
+        ./lspsaga-line-diagnostics-fix.patch
+      ];
+    });
 
     settings = {
       code_action = {
