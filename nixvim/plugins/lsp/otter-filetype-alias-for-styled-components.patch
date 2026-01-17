@@ -1,0 +1,17 @@
+diff --git a/lua/otter/init.lua b/lua/otter/init.lua
+index 8fad8d9..40f0a97 100644
+--- a/lua/otter/init.lua
++++ b/lua/otter/init.lua
+@@ -231,11 +231,12 @@ M.activate = function(languages, completion, diagnostics, tsquery, preambles, po
+       )
+     end
+ 
+     -- or if requested set the filetype
+     if OtterConfig.buffers.set_filetype then
+-      api.nvim_set_option_value("filetype", lang, { buf = otter_nr })
++      local filetype = OtterConfig.filetype_aliases[lang] or lang
++      api.nvim_set_option_value("filetype", filetype, { buf = otter_nr })
+     else
+       local function get_aucmds(group)
+         return api.nvim_get_autocmds({ group = group, pattern = lang })
+       end

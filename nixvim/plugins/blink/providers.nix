@@ -66,10 +66,10 @@
     (pkgs.vimUtils.buildVimPlugin {
       name = "cmp-tw2css.nvim";
       src = pkgs.fetchFromGitHub {
-        owner = "jcha0713";
+        owner = "becknik";
         repo = "cmp-tw2css";
-        rev = "1abe0eebcb57fcbd5538d054f0db61f4e4a1302b";
-        hash = "sha256-K66TsMbgG3BAFFkSn/1cTgFHKr4EzPuyTQGuyGMj+sg=";
+        rev = "2e92ebe25d1999e6a0e3eae32682e0f6add7445f";
+        hash = "sha256-17p4E3N/h2p1lnKguS27/me68IDVrAwTMgPlEz3kZK4=";
       };
       nvimSkipModule = [
         "cmp-tw2css"

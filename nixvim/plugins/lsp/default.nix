@@ -13,6 +13,7 @@
     ./glance.nix
     ./ecolog.nix
     ./classy.nix
+    ./otter.nix
   ];
 
   # https://github.com/neovim/nvim-lspconfig
@@ -32,8 +33,6 @@
     # add pictrograms to lsp
     # configured manually in cmp.lua
     lspkind.enable = false;
-
-    otter.enable = true;
   };
 
   autoCmd = [
