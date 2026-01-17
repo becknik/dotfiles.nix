@@ -42,8 +42,8 @@
         function()
           local path = vim.bo.filetype == "oil"
             and require("oil").get_current_dir()
-            or "%"
-          vim.cmd("DiffviewFileHistory " .. vim.fn.fnameescape(path))
+            or nil
+          vim.cmd("DiffviewFileHistory " .. (path and vim.fn.fnameescape(path) or "%"))
         end
       '';
       mode = mapToModeAbbr [
