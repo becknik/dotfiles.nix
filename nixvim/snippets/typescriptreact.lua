@@ -27,7 +27,9 @@ local parse = require("luasnip.util.parser").parse_snippet
 local ms = ls.multi_snippet
 local k = require("luasnip.nodes.key_indexer").new_key
 
-package.path = debug.getinfo(1, "S").source:match "@(.*/)" .. "?.lua;" .. package.path
+package.path = debug.getinfo(1, "S").source:match "@(.*/)"
+  .. "?.lua;"
+  .. package.path
 
 ---@class SnippetUtils
 local utils = require ".snippet-utils"
@@ -53,7 +55,6 @@ snippet_rec_props = function(_, _, _, start_index)
     d(3, snippet_rec_props, {}, {
       user_args = { (start_index or 1) + 1 },
     }),
-
   })
 
   if start_index ~= 1 and start_index ~= nil then
@@ -97,7 +98,8 @@ vim.list_extend(snippets, {
         }),
         dl(3, l.TM_FILENAME:gsub("%.tsx", "")),
         d(4, function(args)
-          local params = utils.typescript_function_params_to_type_props(args[1], nil, true)
+          local params =
+            utils.typescript_function_params_to_type_props(args[1], nil, true)
           return sn(nil, params)
         end, { 2 }, {
           user_args = { 2 },
@@ -112,6 +114,13 @@ vim.list_extend(snippets, {
     t { "<>", "" },
     l(l.TM_SELECTED_TEXT),
     t { "", "</>" },
+  }),
+  s({ trig = "w&", name = "react && wrapper" }, {
+    t { "{" },
+    i(1, "condition"),
+    t { " && (" },
+    l(l.TM_SELECTED_TEXT),
+    t { "", ")}" },
   }),
 
   s(
@@ -134,7 +143,13 @@ vim.list_extend(snippets, {
       ]],
       {
         i(1, "handleSomething"),
-        c(2, utils.select_snippets(globals_js.functions, { "fn", "fnr", "fna", "fnra" })),
+        c(
+          2,
+          utils.select_snippets(
+            globals_js.functions,
+            { "fn", "fnr", "fna", "fnra" }
+          )
+        ),
         i(3),
       }
     )
@@ -223,10 +238,8 @@ vim.list_extend(snippets, {
       i(1, ""),
       f(function(args)
         local name = args[1][1]
-        if not name or name == "" then
-          return ""
-        end
-        return "use" .. string.upper(name:sub(0, 1)) .. name:sub(2)
+        if not name or name == "" then return "" end
+        return "set" .. string.upper(name:sub(0, 1)) .. name:sub(2)
       end, 1),
       c(3, {
         t "",

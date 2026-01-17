@@ -47,7 +47,6 @@ function M.nearest_var_declaration(call_number)
     end
 
     if not node then
-      vim.print "no statement block"
       return sn(nil, i(1, '"variable"'))
     end
 
