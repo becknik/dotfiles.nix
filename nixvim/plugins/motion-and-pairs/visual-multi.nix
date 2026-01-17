@@ -45,7 +45,7 @@
     {
       key = "<leader>vt";
       action = "<Plug>(VM-Toggle-Mappings)";
-      options.desc = "VM: Add cursor at position";
+      options.desc = "VM: Toggle";
     }
   ];
 }
