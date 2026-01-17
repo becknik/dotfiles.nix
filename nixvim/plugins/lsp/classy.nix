@@ -10,10 +10,10 @@
     (pkgs.vimUtils.buildVimPlugin {
       name = "classy.nvim";
       src = pkgs.fetchFromGitHub {
-        owner = "jcha0713";
+        owner = "becknik";
         repo = "classy.nvim";
-        rev = "f6bd04918699fefd22272b11ca80f5be55a51ab5";
-        hash = "sha256-Vrcsg676cBY/fnDOuN6ScRQ13eG5MyNQ9fn1wT/ABVA=";
+        rev = "3b0e29198ed192c48781a56083802880c61a735d";
+        hash = "sha256-49Y8p9URl2VY++TQtHJfDcbQ6arXVAaMrU3vLVkraFM=";
       };
       nvimSkipModule = [
         "classy.config"
