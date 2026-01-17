@@ -311,9 +311,6 @@
 
           # frontend
 
-          html_beautify.types = "html";
-          # html.command = lib.getExe pkgs.markdownlint-cli;
-
           stylelint.types = "css";
           stylelint.priority = -1;
           stylelint.command = lib.getExe pkgs.stylelint;
@@ -364,6 +361,17 @@
 
           ## js/ts
 
+          biome-check.types = [
+            "javascript"
+            "javascriptreact"
+            "typescript"
+            "typescriptreact"
+            "graphql"
+            "css"
+            "html"
+          ];
+          biome-check.command = lib.getExe pkgs.biome;
+          biome-check.priority = 1;
           prettierd.types = [
             "javascript"
             "javascriptreact"
@@ -372,6 +380,7 @@
             "vue"
             "graphql"
             "css"
+            "html"
           ];
           prettierd.command = lib.getExe pkgs.prettierd;
 
