@@ -20,7 +20,7 @@
   plugins.treesitter-textobjects = {
     enable = true;
     settings = {
-      move.set_jumps = false;
+      move.set_jumps = true;
 
       select = {
         enable = true;
@@ -159,8 +159,8 @@
       (moveBinding "]x" "goto_next_start" "@regex.inner")
       (moveBinding "[x" "goto_previous_start" "@regex.inner")
 
-      (moveBinding "]n" "goto_next_end" "@number.inner")
-      (moveBinding "[n" "goto_previous_end" "@number.inner")
+      (moveBinding "]n" "goto_next_start" "@number.inner")
+      (moveBinding "[n" "goto_previous_start" "@number.inner")
 
       (moveBinding "]r" "goto_next_start" "@return.inner")
       (moveBinding "[r" "goto_previous_start" "@return.inner")

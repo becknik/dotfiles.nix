@@ -7,7 +7,8 @@
   ];
 
   # disable tree-sitter to fold the code on startup
-  opts.foldenable = false;
+  opts.foldenable = true;
+  opts.foldlevelstart = 99;
 
   plugins.treesitter = {
     enable = true;
