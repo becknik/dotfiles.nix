@@ -1,7 +1,7 @@
 -- on_attach function for nvim-tree
 function(bufnr)
   local api = require "nvim-tree.api"
-  local ts_repeat_move = require "nvim-treesitter.textobjects.repeatable_move"
+  local ts_repeat_move = require "nvim-treesitter-textobjects.repeatable_move"
 
   api.config.mappings.default_on_attach(bufnr)
 
@@ -11,19 +11,78 @@ function(bufnr)
     function(file) vim.cmd("edit " .. vim.fn.fnameescape(file.fname)) end
   )
 
-  local opts = function(desc) return { buffer = bufnr, noremap = true, silent = true, desc = desc } end
+  local opts = function(desc)
+    return { buffer = bufnr, noremap = true, silent = true, desc = desc }
+  end
+
+  local set_last_move = function(move_fn, opts, ...)
+    if type(move_fn) ~= "function" then
+      vim.notify(
+        "nvim-treesitter-textobjects: move_fn has to be a function but got "
+          .. vim.inspect(move_fn),
+        vim.log.levels.ERROR
+      )
+      return false
+    end
+
+    if type(opts) ~= "table" then
+      vim.notify(
+        "nvim-treesitter-textobjects: opts has to be a table but got "
+          .. vim.inspect(opts),
+        vim.log.levels.ERROR
+      )
+      return false
+    elseif opts.forward == nil then
+      vim.notify(
+        "nvim-treesitter-textobjects: opts has to include a `forward` boolean but got "
+          .. vim.inspect(opts),
+        vim.log.levels.ERROR
+      )
+      return false
+    end
+
+    ts_repeat_move.last_move =
+      { func = move_fn, opts = vim.deepcopy(opts), additional_args = { ... } }
+    return true
+  end
+
+  local make_repeatable_move_pair = function(forward_move_fn, backward_move_fn)
+    local general_repeatable_move_fn = function(opts, ...)
+      if opts.forward then
+        forward_move_fn(...)
+      else
+        backward_move_fn(...)
+      end
+    end
+
+    local repeatable_forward_move_fn = function(...)
+      set_last_move(general_repeatable_move_fn, { forward = true }, ...)
+      forward_move_fn(...)
+    end
+
+    local repeatable_backward_move_fn = function(...)
+      set_last_move(general_repeatable_move_fn, { forward = false }, ...)
+      backward_move_fn(...)
+    end
+
+    return repeatable_forward_move_fn, repeatable_backward_move_fn
+  end
 
   vim.keymap.del("n", "]e", { buffer = bufnr })
   vim.keymap.del("n", "[e", { buffer = bufnr })
-  local next_diag, prev_diag =
-    ts_repeat_move.make_repeatable_move_pair(api.node.navigate.diagnostics.next, api.node.navigate.diagnostics.prev)
+  local next_diag, prev_diag = make_repeatable_move_pair(
+    api.node.navigate.diagnostics.next,
+    api.node.navigate.diagnostics.prev
+  )
   vim.keymap.set("n", "]d", next_diag, opts "Next Diagnostic")
   vim.keymap.set("n", "[d", prev_diag, opts "Previous Diagnostic")
 
   vim.keymap.del("n", "]c", { buffer = bufnr })
   vim.keymap.del("n", "[c", { buffer = bufnr })
-  local next_git, prev_git =
-    ts_repeat_move.make_repeatable_move_pair(api.node.navigate.git.next, api.node.navigate.git.prev)
+  local next_git, prev_git = make_repeatable_move_pair(
+    api.node.navigate.git.next,
+    api.node.navigate.git.prev
+  )
   vim.keymap.set("n", "]h", next_git, opts "Next Git")
   vim.keymap.set("n", "[h", prev_git, opts "Previous Git")
 
@@ -80,7 +139,9 @@ function(bufnr)
     -- If the current node is a directory get children status
     if gs == nil then
       gs = (node.git_status.dir.direct ~= nil and node.git_status.dir.direct[1])
-        or (node.git_status.dir.indirect ~= nil and node.git_status.dir.indirect[1])
+        or (
+          node.git_status.dir.indirect ~= nil and node.git_status.dir.indirect[1]
+        )
     end
 
     -- If the file is untracked, unstaged or partially staged, we stage it
