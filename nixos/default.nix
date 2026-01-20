@@ -133,7 +133,7 @@
   # source: https://man7.org/linux/man-pages/man5/journald.conf.5.html
   services.journald.extraConfig =
     # Initialized with 10% of the file system
-    "SystemMaxUse=200MB\n"
+    "SystemMaxUse=200M\n"
     + "MaxRetentionSec=7d\n"
     +
       # Initialized with 4G

@@ -59,7 +59,7 @@
             "general.smoothScroll" = locked true;
             "intl.accept_languages" = locked "en-us,de,en";
             "intl.locale.requested" = locked "en-US,de,en-GB";
-            "layout.css.prefers-color-scheme.content-override" = locked 0;
+            "layout.css.prefers-color-scheme.content-override" = locked 1;
 
             "network.trr.mode" = locked 3;
             "network.trr.uri" = locked "https://mozilla.cloudflare-dns.com/dns-query";

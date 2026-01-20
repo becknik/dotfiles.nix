@@ -1,0 +1,20 @@
+diff --git a/nixos/modules/i18n/input-method/ibus.nix b/nixos/modules/i18n/input-method/ibus.nix
+index aec11b236..6090a29b7 100644
+--- a/nixos/modules/i18n/input-method/ibus.nix
++++ b/nixos/modules/i18n/input-method/ibus.nix
+@@ -73,16 +73,10 @@ in
+ 
+     services.dbus.packages = [
+       ibusPackage
+     ];
+ 
+-    environment.variables = {
+-      GTK_IM_MODULE = "ibus";
+-      QT_IM_MODULE = "ibus";
+-      XMODIFIERS = "@im=ibus";
+-    };
+-
+     xdg.portal.extraPortals = lib.mkIf config.xdg.portal.enable [
+       ibusPackage
+     ];
+   };

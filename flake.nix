@@ -82,28 +82,33 @@
   };
 
   outputs =
-    {
-      self,
-      nixpkgs,
-      nixpkgs-unstable,
-      darwin,
-      home-manager,
-      ...
-    }@inputs-unpatched:
+    inputs-unpatched:
     let
-      systems = [
-        "aarch64-darwin"
-        "x86_64-linux"
-      ];
-      forAllSystems = nixpkgs.lib.genAttrs systems;
-
       patcher = inputs-unpatched.flake-input-patcher.lib.x86_64-linux;
 
       inputs = patcher.patch inputs-unpatched {
         nixvim.patches = [
           ./patches/nixvim/plugins-otter-on-attach.patch
         ];
+
+        nixpkgs.patches = [
+          ./patches/nixpkgs/ibus-xorg-crashes.patch
+        ];
       };
+
+      inherit (inputs)
+        self
+        nixpkgs
+        nixpkgs-unstable
+        darwin
+        home-manager
+        ;
+
+      systems = [
+        "aarch64-darwin"
+        "x86_64-linux"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
 
       stateVersion = "25.11";
 
