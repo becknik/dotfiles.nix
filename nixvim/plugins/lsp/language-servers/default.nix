@@ -69,16 +69,16 @@
     cssls.package = pkgs.buildNpmPackage rec {
       name = "vscode-css-languageservice";
       packageName = "vscode-css-languageservice";
-      version = "6.3.7";
+      version = "6.3.9";
       src = (
         pkgs.fetchFromGitHub {
           owner = "microsoft";
           repo = "vscode-css-languageservice";
           rev = "v${version}";
-          hash = "sha256-llBkseQgIPtzGkYl92s9IrKPIL9RRq7/V11AlK36UtA=";
+          hash = "sha256-BVfNesWL0m9g1cBP+JfQ/gA8ZqJ6ma337RCfSO0jkDg=";
         }
       );
-      npmDepsHash = "sha256-DICiBn8fRqJl8A5NimAFOHzvQYvP3j4mIvGrji2svOc=";
+      npmDepsHash = "sha256-4FCzXJc+AcuRhC4MaaTmiKs0ag/G/gHG0W1hVx7BoEg=";
       npmBuildScript = "test";
     };
     tailwindcss.enable = true;

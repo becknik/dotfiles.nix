@@ -77,11 +77,11 @@
       ];
 
       "<C-n>" = [
-        "select_next"
+        { __raw = "function(cmp) cmp.select_next({ auto_insert = false }) end"; }
         "fallback_to_mappings"
       ];
       "<C-p>" = [
-        "select_prev"
+        { __raw = "function(cmp) cmp.select_prev({ auto_insert = false }) end"; }
         "fallback_to_mappings"
       ];
 

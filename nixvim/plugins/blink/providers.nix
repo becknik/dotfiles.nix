@@ -152,12 +152,21 @@
         name = "cmp-tw2css";
         module = "blink.compat.source";
         transform_items.__raw = ''
-          function(ctx, items)
+          function(_, items)
             for _, item in ipairs(items) do
               item.kind_icon = '󱏿'
               item.kind_name = 'tw2css'
             end
             return items
+          end
+        '';
+        should_show_items.__raw = ''
+          function()
+            local success, node = pcall(vim.treesitter.get_node)
+            if not success or not node then return false end
+
+            -- vim.notify(node:type(), vim.log.levels.INFO, { title = "tw2css", render = "compact" })
+            return vim.tbl_contains({ "block", "stylesheet", "descendant_selector" }, node:type())
           end
         '';
       };
