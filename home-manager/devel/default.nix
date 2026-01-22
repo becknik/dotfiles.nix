@@ -24,6 +24,8 @@
   home.packages =
     with pkgs;
     let
+      mkWhenNotDarwin = pkg: (if pkgs.stdenv.isDarwin then pkgs.hello else pkg);
+
       jetbrainsTools =
         lib.lists.optionals (!pkgs.stdenv.isDarwin) (
           with unstable.jetbrains;
@@ -37,7 +39,7 @@
     in
     jetbrainsTools
     ++ [
-      unstable.vscode-fhs
+      (mkWhenNotDarwin unstable.vscode-fhs)
 
       devenv
       meld

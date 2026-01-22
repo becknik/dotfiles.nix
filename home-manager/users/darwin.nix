@@ -45,7 +45,6 @@
         })
         [
           "${config.home.homeDirectory}/.gpg/becknik/public"
-          "${config.home.homeDirectory}/.gpg/becknik/private"
         ]
     );
   };
