@@ -20,7 +20,7 @@
           local current_base = vim.fn.expand("%:t");
 
           if current_ext == "css" and current_base:match("%.module%.css$") then
-            vim.keymap.set("n", "<leader>lc", function()
+            vim.keymap.set("n", "H", function()
               local base_name = vim.fn.expand("%:r:r")
               local target_file = base_name .. ".jsx"
 
@@ -35,7 +35,7 @@
               end
             end, { buffer = bufnr, silent = true, desc = "Switch to component" })
           else
-            vim.keymap.set("n", "<leader>lc", function()
+            vim.keymap.set("n", "H", function()
               local base_name = vim.fn.expand("%:r")
               local target_file = base_name .. ".module.css"
               vim.cmd("edit " .. vim.fn.fnameescape(target_file))

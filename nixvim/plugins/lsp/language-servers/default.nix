@@ -43,20 +43,24 @@
     # Frontend Stuff
     vtsls.enable = true;
     cssmodules_ls.enable = true;
+    cssmodules_ls.onAttach.function = /* lua */ ''
+      -- avoid accepting `definitionProvider` responses from this LSP
+      client.server_capabilities.definitionProvider = false
+    '';
     # https://github.com/antonk52/cssmodules-language-server
     cssmodules_ls.package = pkgs.buildNpmPackage rec {
       name = "cssmodules-language-server";
       packageName = "cssmodules-language-server";
-      version = "1.5.1";
+      version = "1.5.2";
       src = (
         pkgs.fetchFromGitHub {
           owner = "antonk52";
           repo = "cssmodules-language-server";
           rev = "v${version}";
-          hash = "sha256-MpUZn+UaelnCoyokPszc+Q566zs0BzKFAytWdRuOJ8U=";
+          hash = "sha256-9RZNXdmBP4OK7k/0LuuvqxYGG2fESYTCFNCkAWZQapk=";
         }
       );
-      npmDepsHash = "sha256-qvQtWMGKRU7CcAE/ozv1cr+tlDrdp+PfQrh8ouTmX2A=";
+      npmDepsHash = "sha256-1CnCgut0Knf97+YHVJGUZqnRId/BwHw+jH1YPIrDPCA=";
       # npmBuildScript = "test";
     };
     cssls.enable = true;
