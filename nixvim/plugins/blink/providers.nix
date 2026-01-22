@@ -162,10 +162,9 @@
         '';
         should_show_items.__raw = ''
           function()
-            local success, node = pcall(vim.treesitter.get_node)
+            local success, node = pcall(vim.treesitter.get_node, { ignore_injections = false })
             if not success or not node then return false end
 
-            -- vim.notify(node:type(), vim.log.levels.INFO, { title = "tw2css", render = "compact" })
             return vim.tbl_contains({ "block", "stylesheet", "descendant_selector" }, node:type())
           end
         '';
