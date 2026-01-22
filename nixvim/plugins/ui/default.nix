@@ -4,6 +4,7 @@
   imports = [
     ./lualine.nix
     ./ccc.nix
+    ./indent-blankline.nix
   ];
 
   plugins = {
@@ -15,8 +16,7 @@
         timeout = 2500;
       };
     };
-    # https://github.com/HiPhish/rainbow-delimiters.nvim
-    rainbow-delimiters.enable = true;
+
   };
 
   plugins.notify.luaConfig.post = ''
