@@ -17,7 +17,7 @@
 
   keymaps = withDefaultKeymapOptions [
     {
-      key = "<leader>gg$";
+      key = "<leader>ggH";
       action = "AdvancedGitSearch search_log_content";
       options.cmd = true;
       options.desc = "Git Grep in History";
