@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./keybindings.nix
+    ./keymaps.nix
     ./kinds.nix
     ./providers.nix
   ];

@@ -38,6 +38,10 @@
                 cmp.hide()
                 return true
               end
+              if require'luasnip'.choice_active() then
+                require'luasnip'.unlink_current()
+                return true
+              end
               if require'copilot.suggestion'.is_visible() then
                 require'copilot.suggestion'.dismiss()
                 return true
