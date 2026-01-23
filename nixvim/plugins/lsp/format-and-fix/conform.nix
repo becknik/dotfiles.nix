@@ -35,7 +35,6 @@
                   vim.notify("Done formatting", vim.log.levels.INFO, { title = "Conform All", render = "compact" })
                   vim.cmd("silent noautocmd write")
                 else
-                  vim.notify("Nothing to format", vim.log.levels.INFO, { title = "Conform All", render = "compact" })
                   vim.cmd("silent noautocmd write")
                 end
               end
