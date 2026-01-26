@@ -1,10 +1,10 @@
 { ... }:
 
 {
-  plugins.lsp.servers.nixd = {
+  lsp.servers.nixd = {
     enable = true;
 
-    settings = {
+    config.settings = {
       # https://github.com/nix-community/nixd/blob/main/nixd/docs/configuration.md
       nixpkgs.expr = "import (builtins.getFlake (\"git+file://\" + toString ./.)).inputs.nixpkgs { }";
       options = {

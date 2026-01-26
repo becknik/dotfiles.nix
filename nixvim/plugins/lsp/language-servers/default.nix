@@ -7,8 +7,9 @@
   ];
 
   plugins.schemastore.enable = true;
+  plugins.lspconfig.enable = true;
 
-  plugins.lsp.servers = {
+  lsp.servers = {
     typos_lsp.enable = true; # Source code spell checker for Visual Studio Code
 
     # I programmed in HTML stuff
@@ -25,8 +26,6 @@
 
     dockerls.enable = true;
     docker_compose_language_service.enable = true;
-    gh_actions_ls.enable = true;
-    gh_actions_ls.package = null;
 
     # Domain-specific Scripting Stuff
 
@@ -36,33 +35,10 @@
     tinymist.enable = true;
 
     # General Scripting Stuff
-
-    pyright.enable = true;
-    pyright.package = pkgs.basedpyright;
+    basedpyright.enable = true;
 
     # Frontend Stuff
     vtsls.enable = true;
-    cssmodules_ls.enable = true;
-    cssmodules_ls.onAttach.function = /* lua */ ''
-      -- avoid accepting `definitionProvider` responses from this LSP
-      client.server_capabilities.definitionProvider = false
-    '';
-    # https://github.com/antonk52/cssmodules-language-server
-    cssmodules_ls.package = pkgs.buildNpmPackage rec {
-      name = "cssmodules-language-server";
-      packageName = "cssmodules-language-server";
-      version = "1.5.2";
-      src = (
-        pkgs.fetchFromGitHub {
-          owner = "antonk52";
-          repo = "cssmodules-language-server";
-          rev = "v${version}";
-          hash = "sha256-9RZNXdmBP4OK7k/0LuuvqxYGG2fESYTCFNCkAWZQapk=";
-        }
-      );
-      npmDepsHash = "sha256-1CnCgut0Knf97+YHVJGUZqnRId/BwHw+jH1YPIrDPCA=";
-      # npmBuildScript = "test";
-    };
     cssls.enable = true;
     # newer than the version in vsocde-languageservers-extracted
     # https://github.com/microsoft/vscode-css-languageservice
@@ -84,7 +60,7 @@
     tailwindcss.enable = true;
 
     eslint.enable = true;
-    eslint.settings.run = "onSave";
+    eslint.config.settings.codeActionOnSave.enable = true;
     stylelint_lsp.enable = true;
 
     ## Frameworks
@@ -95,14 +71,36 @@
     # Backend Stuff
 
     clangd.enable = true;
-    rust_analyzer = {
-      enable = true;
-      installCargo = false; # TODO is working with rustup?
-      installRustc = false;
-    };
+    rust_analyzer.enable = true;
     hls.enable = true;
-    hls.installGhc = true;
     # zls.enable = true;
     gopls.enable = true;
+  };
+
+  plugins.lsp.servers = {
+    gh_actions_ls.enable = true;
+    gh_actions_ls.package = null;
+
+    cssmodules_ls.enable = true;
+    cssmodules_ls.onAttach.function = /* lua */ ''
+      -- avoid accepting `definitionProvider` responses from this LSP
+      client.server_capabilities.definitionProvider = false
+    '';
+    # https://github.com/antonk52/cssmodules-language-server
+    cssmodules_ls.package = pkgs.buildNpmPackage rec {
+      name = "cssmodules-language-server";
+      packageName = "cssmodules-language-server";
+      version = "1.5.2";
+      src = (
+        pkgs.fetchFromGitHub {
+          owner = "antonk52";
+          repo = "cssmodules-language-server";
+          rev = "v${version}";
+          hash = "sha256-9RZNXdmBP4OK7k/0LuuvqxYGG2fESYTCFNCkAWZQapk=";
+        }
+      );
+      npmDepsHash = "sha256-1CnCgut0Knf97+YHVJGUZqnRId/BwHw+jH1YPIrDPCA=";
+      # npmBuildScript = "test";
+    };
   };
 }
