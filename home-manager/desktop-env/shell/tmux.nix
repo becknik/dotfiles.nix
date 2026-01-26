@@ -38,6 +38,7 @@
                 gawk
                 ps
                 diffutils
+                findutils
               ]
               ++ [ config.programs.tmux.package ]
             )

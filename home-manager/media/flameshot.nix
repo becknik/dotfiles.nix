@@ -1,12 +1,11 @@
 { lib, pkgs, ... }:
 
 let
-  flameshotCommand = "sh -c '${lib.getExe pkgs.flameshot} gui --raw | wl-copy'";
+  flameshotCommand = "sh -c '${lib.getExe pkgs.flameshot} gui --raw --path $XDG_PICTURES_DIR/Screenshots | ${lib.getExe pkgs.wl-clipboard}'}";
   flameshotCommandName = "Flameshot";
 in
 {
   services.flameshot.enable = true;
-  home.packages = with pkgs; [ wl-clipboard ];
 
   dconf.settings = {
     "org/gnome/shell/keybindings" = {
