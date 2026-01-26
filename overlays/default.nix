@@ -39,7 +39,7 @@
     import ../pkgs {
       pkgs = final;
       pkgs-unstable = final.unstable;
-      nixvim = inputs.nixvim.legacyPackages.${final.system};
+      nixvim' = inputs.nixvim.legacyPackages.${final.system};
       inputs = inputs;
     };
 

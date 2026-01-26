@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, css-variables-language-server, ... }:
 
 {
   imports = [
@@ -102,5 +102,8 @@
       npmDepsHash = "sha256-1CnCgut0Knf97+YHVJGUZqnRId/BwHw+jH1YPIrDPCA=";
       # npmBuildScript = "test";
     };
+
+    css_variables.enable = true;
+    css_variables.package = css-variables-language-server;
   };
 }

@@ -1,12 +1,12 @@
 {
   inputs,
   pkgs-unstable,
-  nixvim,
+  nixvim',
   pkgs,
   ...
 }:
 
-{
+rec {
   nixvim =
     let
       defaultKeymapOptions = {
@@ -75,7 +75,7 @@
 
       pkgs-stable = pkgs;
     in
-    nixvim.makeNixvimWithModule {
+    nixvim'.makeNixvimWithModule {
       pkgs = pkgs-unstable;
 
       module = ../nixvim;
@@ -86,10 +86,13 @@
           mapToModeAbbr
           fetchFromGitHub
           pkgs-stable
+          css-variables-language-server
           ;
         inherit (inputs) neovim-nightly-overlay;
       };
     };
 
   chromium-app-t3-chat = pkgs.callPackage ./t3-chat/package.nix { inherit pkgs; };
+
+  css-variables-language-server = pkgs.callPackage ./css-variables-language-server/package.nix { };
 }

@@ -227,13 +227,13 @@
             # overlays = builtins.attrValues inputs.nix-webapps.overlays;
           };
           pkgs-unstable = import nixpkgs-unstable { inherit system; };
-          nixvim = inputs.nixvim.legacyPackages.${system};
+          nixvim' = inputs.nixvim.legacyPackages.${system};
         in
         import ./pkgs {
           inherit
             pkgs
             pkgs-unstable
-            nixvim
+            nixvim'
             inputs
             ;
         }
