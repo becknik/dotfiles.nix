@@ -31,93 +31,65 @@ vim.keymap.set(
   { expr = true }
 )
 
--- https://github.com/kiyoon/dotfiles/blob/master/nvim/lua/kiyoon/ts_textobjs_main_extended.lua
-local set_last_move = function(move_fn, opts, ...)
-  if type(move_fn) ~= "function" then
-    vim.notify(
-      "nvim-treesitter-textobjects: move_fn has to be a function but got "
-        .. vim.inspect(move_fn),
-      vim.log.levels.ERROR
+local repeat_move = require "repeatable_move"
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function()
+
+    local next_error, prev_error = repeat_move.make_repeatable_move_pair(
+      function()
+        vim.diagnostic.jump {
+          count = 1,
+          severity = vim.diagnostic.severity.ERROR,
+        }
+      end,
+      function()
+        vim.diagnostic.jump {
+          count = -1,
+          severity = vim.diagnostic.severity.ERROR,
+        }
+      end
     )
-    return false
-  end
-
-  if type(opts) ~= "table" then
-    vim.notify(
-      "nvim-treesitter-textobjects: opts has to be a table but got "
-        .. vim.inspect(opts),
-      vim.log.levels.ERROR
+    vim.keymap.set(
+      { "n", "x", "o" },
+      "]d",
+      next_error,
+      { desc = "Next Diagnostic Error" }
     )
-    return false
-  elseif opts.forward == nil then
-    vim.notify(
-      "nvim-treesitter-textobjects: opts has to include a `forward` boolean but got "
-        .. vim.inspect(opts),
-      vim.log.levels.ERROR
+    vim.keymap.set(
+      { "n", "x", "o" },
+      "[d",
+      prev_error,
+      { desc = "Previous Diagnostic Error" }
     )
-    return false
-  end
 
-  ts_repeat_move.last_move =
-    { func = move_fn, opts = vim.deepcopy(opts), additional_args = { ... } }
-  return true
-end
-
-local make_repeatable_move_pair = function(forward_move_fn, backward_move_fn)
-  local general_repeatable_move_fn = function(opts, ...)
-    if opts.forward then
-      forward_move_fn(...)
-    else
-      backward_move_fn(...)
-    end
-  end
-
-  local repeatable_forward_move_fn = function(...)
-    set_last_move(general_repeatable_move_fn, { forward = true }, ...)
-    forward_move_fn(...)
-  end
-
-  local repeatable_backward_move_fn = function(...)
-    set_last_move(general_repeatable_move_fn, { forward = false }, ...)
-    backward_move_fn(...)
-  end
-
-  return repeatable_forward_move_fn, repeatable_backward_move_fn
-end
-
-local next_diag_error, prev_diag_error = make_repeatable_move_pair(
-  function()
-    vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR }
+    local next_warn, prev_warn = repeat_move.make_repeatable_move_pair(
+      function()
+        vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.WARN }
+      end,
+      function()
+        vim.diagnostic.jump {
+          count = -1,
+          severity = vim.diagnostic.severity.WARN,
+        }
+      end
+    )
+    vim.keymap.set(
+      { "n", "x", "o" },
+      "]D",
+      next_warn,
+      { desc = "Next Warning" }
+    )
+    vim.keymap.set(
+      { "n", "x", "o" },
+      "[D",
+      prev_warn,
+      { desc = "Previous Warning" }
+    )
   end,
-  function()
-    vim.diagnostic.jump { count = -1, severity = vim.diagnostic.severity.ERROR }
-  end
-)
-vim.keymap.set(
-  { "n", "x", "o" },
-  "]d",
-  next_diag_error,
-  { desc = "Next Diagnostic Error" }
-)
-vim.keymap.set(
-  { "n", "x", "o" },
-  "[d",
-  prev_diag_error,
-  { desc = "Previous Diagnostic Error" }
-)
-local next_diag, prev_diag = make_repeatable_move_pair(
-  function() vim.diagnostic.jump { count = 1 } end,
-  function() vim.diagnostic.jump { count = -1 } end
-)
-vim.keymap.set({ "n", "x", "o" }, "]D", next_diag, { desc = "Next Diagnostic" })
-vim.keymap.set(
-  { "n", "x", "o" },
-  "[D",
-  prev_diag,
-  { desc = "Previous Diagnostic" }
-)
+})
 
-local next_spell, prev_spell = make_repeatable_move_pair(
+local next_spell, prev_spell = repeat_move.make_repeatable_move_pair(
   function() vim.cmd "normal! ]s" end,
   function() vim.cmd "normal! [s" end
 )
@@ -134,10 +106,9 @@ vim.keymap.set(
   { desc = "Previous Spelling Error" }
 )
 
-local gs = require "gitsigns"
-local hunk_repeat_next, hunk_repeat_prev = make_repeatable_move_pair(
-  function() gs.nav_hunk "next" end,
-  function() gs.nav_hunk "prev" end
+local hunk_repeat_next, hunk_repeat_prev = repeat_move.make_repeatable_move_pair(
+  function() require("gitsigns").nav_hunk "next" end,
+  function() require("gitsigns").nav_hunk "prev" end
 )
 vim.keymap.set(
   { "n", "x", "o" },
@@ -152,9 +123,10 @@ vim.keymap.set(
   { desc = "Previous Hunk" }
 )
 
-local todo = require "todo-comments"
-local todo_next, todo_prev =
-  make_repeatable_move_pair(todo.jump_next, todo.jump_prev)
+local todo_next, todo_prev = repeat_move.make_repeatable_move_pair(
+  require("todo-comments").jump_next,
+  require("todo-comments").jump_prev
+)
 vim.keymap.set(
   { "n", "x", "o" },
   "]t",

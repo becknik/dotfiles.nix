@@ -1,4 +1,5 @@
 {
+  pkgs,
   withDefaultKeymapOptions,
   ...
 }:
@@ -8,12 +9,28 @@
 
   # https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 
-  plugins.lsp.luaConfig.post = ''
+  plugins.treesitter.luaConfig.post = ''
     wk.add {
       { "<leader>.", icon = "󰆾  ", desc = "Textobject Movement"  },
       { "<leader>,", icon = "󰆾 󰁍 ", desc = "Textobject Movement"  },
     }
   '';
+
+  extraPlugins = [
+    (pkgs.vimUtils.buildVimPlugin {
+      name = "repeatable-move.nvim";
+      src = pkgs.fetchFromGitHub {
+        owner = "kiyoon";
+        repo = "repeatable-move.nvim";
+        rev = "0dbb062dcb41b50643e2bc62c3a42ff7e28fb835";
+        hash = "sha256-MM/L4OAkHZDDgTdCUdj4vVwDI+FZaBIZ+a1sKp8oZIA=";
+      };
+      nvimSkipModule = [
+        "repeatable_move"
+        "repeatable_move.notify"
+      ];
+    })
+  ];
 
   extraConfigLua = builtins.readFile ./textobjects.lua;
 
