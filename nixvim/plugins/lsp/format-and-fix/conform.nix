@@ -313,6 +313,7 @@
           stylelint.types = "css";
           stylelint.priority = -1;
           stylelint.command = lib.getExe pkgs.stylelint;
+          stylelint.require_cwd = true;
           css_beautify.types = "css";
           css_beautify.priority = -2;
           css_beautify.command = "${pkgs.nodePackages_latest.js-beautify}/bin/css-beautify";
@@ -371,6 +372,7 @@
           ];
           biome-check.command = lib.getExe pkgs.biome;
           biome-check.priority = 1;
+          biome-check.require_cwd = true;
           prettierd.types = [
             "javascript"
             "javascriptreact"
@@ -382,6 +384,7 @@
             "html"
           ];
           prettierd.command = lib.getExe pkgs.prettierd;
+          prettierd.require_cwd = true;
 
           # "heavy" programming languages
 
