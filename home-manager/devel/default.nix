@@ -15,6 +15,10 @@
     # DirEnv Setup
     direnv = {
       enable = true; # nix-direnv gets enabled automatically in NixOS - but not in home-manager...
+      package = pkgs.direnv.overrideAttrs (oldAttrs: {
+        patches = (oldAttrs.patches or [ ]) ++ [ ./direnv-use-flake-crash-fix.patch ];
+        version = "2.37.1-patched";
+      });
       nix-direnv.enable = true;
       enableZshIntegration = true;
     };

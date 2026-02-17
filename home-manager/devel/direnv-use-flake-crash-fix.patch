@@ -1,0 +1,37 @@
+diff --git a/GNUmakefile b/GNUmakefile
+index b7fc1fa..249de7f 100644
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -44,17 +44,25 @@ build: direnv ## Build the direnv binary
+ clean: ## Remove build artifacts
+ 	rm -rf \
+ 		.gopath \
+ 		direnv
+ 
++# Disable cgo. Direnv doesn't need it, and enabling it causes
++# pthread_create failures when RLIMIT_STACK is unlimited (e.g. in nix shells).
++# Use = (not ?=) to override CGO_ENABLED=1 from build environments like nixpkgs.
++CGO_ENABLED = 0
++export CGO_ENABLED
++
+ GO_LDFLAGS =
+ 
++ifeq ($(CGO_ENABLED), 1)
+ ifeq ($(shell uname), Darwin)
+ 	# Fixes DYLD_INSERT_LIBRARIES issues
+ 	# See https://github.com/direnv/direnv/issues/194
+ 	GO_LDFLAGS += -linkmode=external
+ endif
++endif
+ 
+ ifdef BASH_PATH
+ 	GO_LDFLAGS += -X main.bashPath=$(BASH_PATH)
+ endif
+ 
+diff --git a/version.txt b/version.txt
+index ae75a51..92a1a2b 100644
+--- a/version.txt
++++ b/version.txt
+@@ -1 +1 @@
+-2.37.1
++2.37.1-patched
