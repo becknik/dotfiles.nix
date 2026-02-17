@@ -68,8 +68,8 @@
       src = pkgs.fetchFromGitHub {
         owner = "becknik";
         repo = "cmp-tw2css";
-        rev = "a4c034d618418d0536f1d3f71881aea0b65b816c";
-        hash = "sha256-c96i15h6eBEdhv7EE0xCYE4LiqleyPIG/LTjdggBlXY=";
+        rev = "42dd245bc73f6a5749cbed7f682c062baf05433e";
+        hash = "sha256-dM4DLoGILCXTOc19Cs21x/vMtAotDZBG+ke+q537OkE=";
       };
       nvimSkipModule = [
         "cmp-tw2css"

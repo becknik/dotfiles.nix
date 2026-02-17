@@ -12,12 +12,18 @@
       blink-cmp = pkgs.vimPlugins.blink-cmp;
 
       blink-cmp-fuzzy-lib-native = blink-cmp.passthru.blink-fuzzy-lib.overrideAttrs (prev: {
-        patches = [
+        patches = (prev.patches or [ ]) ++ [
+          ./blink-fuzzy-optimization.patch
+        ];
+        cargoPatches = (prev.cargoPatches or [ ]) ++ [
           ./blink-fuzzy-optimization.patch
         ];
 
+        cargoHash = "";
+
         env = (prev.env or { }) // {
           RUSTFLAGS = pkgs.lib.concatStringsSep " " [
+            (prev.env.RUSTFLAGS or "")
             "-C"
             "target-cpu=native"
           ];
