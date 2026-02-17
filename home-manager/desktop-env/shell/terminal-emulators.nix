@@ -70,6 +70,7 @@
 
         mouse_hide_wait = 1.0; # seconds
         strip_trailing_spaces = "smart";
+        clipboard_control = " write-clipboard read-clipboard write-primary read-primary";
 
         # performance
         repaint_delay = 7; # ms - yields ~144Hz
