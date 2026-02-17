@@ -1,0 +1,349 @@
+diff --git a/src/constants/window.ts b/src/constants/window.ts
+index 88a310d..4122716 100644
+--- a/src/constants/window.ts
++++ b/src/constants/window.ts
+@@ -1,11 +1,16 @@
+ import type { BrowserWindowConstructorOptions } from "electron";
++import { isWayland } from "Utils/Common";
++
++// On Wayland, BrowserView doesn't work well with frameless windows
++// Use native frame on Wayland, frameless on X11
++const shouldUseFrame = isWayland();
+ 
+ export const WINDOW_DEFAULT_OPTIONS: BrowserWindowConstructorOptions = {
+   width: 1200,
+   height: 900,
+-  frame: false,
++  frame: shouldUseFrame,
+   resizable: true,
+   webPreferences: {
+     sandbox: true,
+     zoomFactor: 1,
+     nodeIntegration: false,
+diff --git a/src/main/Ui/Window.ts b/src/main/Ui/Window.ts
+index d24d3fd..f08b71c 100644
+--- a/src/main/Ui/Window.ts
++++ b/src/main/Ui/Window.ts
+@@ -11,11 +11,11 @@ import {
+   WINDOW_DEFAULT_OPTIONS,
+   TOPPANELHEIGHT,
+   NEW_PROJECT_TAB_URL,
+   NEW_FILE_TAB_TITLE,
+ } from "Const";
+-import { isDev, isCommunityUrl, isAppAuthRedeem, normalizeUrl, parseURL } from "Utils/Common";
++import { isDev, isCommunityUrl, isAppAuthRedeem, normalizeUrl, parseURL, isWayland } from "Utils/Common";
+ import { panelUrlDev, panelUrlProd, toggleDetachedDevTools } from "Utils/Main";
+ import Tab from "./Tab";
+ 
+ export default class Window {
+   private window: BrowserWindow;
+@@ -26,11 +26,11 @@ export default class Window {
+   private _userId: string;
+ 
+   constructor(state: Types.WindowState) {
+     // Migrate UI3 settings on startup
+     Ui3SettingsMigration.migrate();
+-    
++
+     this.window = new BrowserWindow(WINDOW_DEFAULT_OPTIONS);
+     this.tabManager = new TabManager(this.window.id);
+     this.settingsView = new SettingsView();
+     this.state = state;
+ 
+@@ -167,15 +167,21 @@ export default class Window {
+       });
+     }, 100);
+   }
+   public calcBoundsForTabView(): Rectangle {
+     const panelHeight = storage.settings.app.panelHeight;
++    const contentBounds = this.window.getContentBounds();
++    
++    // On Wayland with native frame, the panel is part of the content area
++    // On X11 frameless, the panel overlays the content
++    const useNativeFrame = isWayland();
++    
+     return {
+       x: 0,
+-      y: panelHeight,
+-      width: this.window.getContentBounds().width,
+-      height: this.window.getContentBounds().height - panelHeight,
++      y: useNativeFrame ? panelHeight : panelHeight,
++      width: contentBounds.width,
++      height: contentBounds.height - panelHeight,
+     };
+   }
+ 
+   public handleUrl(path: string) {
+     this.tabManager.handleUrl(path);
+@@ -579,11 +585,12 @@ export default class Window {
+ 
+     if (args[2]) {
+       url = `${url}${args[2]}`;
+     }
+ 
+-    this.addTab(url);
++    const tab = this.addTab(url);
++    this.setTabFocus(tab.id);
+   }
+   public closeCommunityTab() {
+     this.window.removeBrowserView(this.tabManager.communityTab.view);
+     this.tabManager.closeCommunityTab();
+     this.setFocusToMainTab();
+@@ -637,15 +644,15 @@ export default class Window {
+   public openProductSurface(event: IpcMainEvent, surfaceType: string, args: any) {
+     const tab = this.tabManager.getTabByWebContentsId(event.sender.id);
+     if (tab) {
+       // Update tab metadata with new surface information
+       tab.openProductSurface(surfaceType, args);
+-      
++
+       // Extract and update surface metadata
+       const metadata = this.extractSurfaceMetadata(surfaceType, args);
+       this.updateTabSurfaceMetadata(tab.id, metadata);
+-      
++
+       // Forward to renderer for UI updates
+       this.window.webContents.send("surfaceChanged", {
+         tabId: tab.id,
+         surfaceType,
+         metadata,
+@@ -656,18 +663,18 @@ export default class Window {
+ 
+   public setBottomNavState(event: IpcMainEvent, state: Types.BottomNavState) {
+     const tab = this.tabManager.getTabByWebContentsId(event.sender.id);
+     if (tab) {
+       tab.setBottomNavState(state);
+-      
++
+       // Forward to renderer panel for chrome updates
+       this.window.webContents.send("bottomNavStateUpdate", {
+         tabId: tab.id,
+         state,
+         timestamp: Date.now()
+       });
+-      
++
+       // Update tab metadata
+       if (tab.metadata) {
+         tab.metadata.bottomNavState = state;
+       }
+     }
+@@ -689,11 +696,11 @@ export default class Window {
+ 
+   public exportVariables(event: IpcMainEvent, variables: any) {
+     const tab = this.tabManager.getTabByWebContentsId(event.sender.id);
+     if (tab) {
+       tab.exportVariables(variables);
+-      
++
+       // Update tab metadata to indicate variables export
+       if (tab.metadata) {
+         tab.metadata.hasVariables = true;
+         this.window.webContents.send("variablesExported", {
+           tabId: tab.id,
+@@ -706,11 +713,11 @@ export default class Window {
+ 
+   public devModeReady(event: IpcMainEvent, ready: boolean) {
+     const tab = this.tabManager.getTabByWebContentsId(event.sender.id);
+     if (tab) {
+       tab.devModeReady(ready);
+-      
++
+       // Update tab metadata and notify renderer
+       if (tab.metadata) {
+         tab.metadata.isDevMode = ready;
+         this.window.webContents.send("devModeStateChange", {
+           tabId: tab.id,
+@@ -735,19 +742,19 @@ export default class Window {
+   }
+ 
+   // UI3 Utility Methods
+   private extractSurfaceMetadata(surfaceType: string, args: any): Types.Ui3TabMetadata {
+     const surfaceIcons: Record<string, string> = {
+-      'design': 'figma-design',
+-      'figjam': 'figma-figjam', 
+-      'draw': 'figma-draw',
+-      'sites': 'figma-sites',
+-      'make': 'figma-make',
+-      'buzz': 'figma-buzz',
+-      'slides': 'figma-slides',
+-      'dev-mode': 'dev-mode-icon',
+-      'prototype': 'prototype-icon'
++      design: "figma-design",
++      figjam: "figma-figjam",
++      draw: "figma-draw",
++      sites: "figma-sites",
++      make: "figma-make",
++      buzz: "figma-buzz",
++      slides: "figma-slides",
++      "dev-mode": "dev-mode-icon",
++      prototype: "prototype-icon",
+     };
+ 
+     return {
+       surfaceType: surfaceType as Types.ProductSurfaceType,
+       productIcon: surfaceIcons[surfaceType] || 'default-surface',
+diff --git a/src/renderer/DesktopAPI/webBinding.ts b/src/renderer/DesktopAPI/webBinding.ts
+index 504be74..b2a2f4c 100644
+--- a/src/renderer/DesktopAPI/webBinding.ts
++++ b/src/renderer/DesktopAPI/webBinding.ts
+@@ -426,38 +426,38 @@ const publicAPI: any = {
+     const fonts = await E.ipcRenderer.invoke("getFonts");
+     return { data: fonts };
+   },
+ 
+   async getFontFile(args: WebApi.GetFontFile) {
+-   const fontBuffer = await E.ipcRenderer.invoke("getFontFile", args);
++    const fontBuffer = await E.ipcRenderer.invoke("getFontFile", args);
+ 
+-   return { data: fontBuffer, transferList: [fontBuffer] };
++    return { data: fontBuffer, transferList: [fontBuffer] };
+   },
+ 
+   // UI3 specific methods
+   openProductSurface(args: any) {
+-   sendMsgToMain("openProductSurface", args.surfaceType, args);
++    sendMsgToMain("openProductSurface", args.surfaceType, args);
+   },
+ 
+   setBottomNavState(args: any) {
+-   sendMsgToMain("setBottomNavState", args.state);
++    sendMsgToMain("setBottomNavState", args.state);
+   },
+ 
+   requestAiCredits(args: any) {
+-   sendMsgToMain("requestAiCredits", args.request);
++    sendMsgToMain("requestAiCredits", args.request);
+   },
+ 
+   exportVariables(args: any) {
+-   sendMsgToMain("exportVariables", args.variables);
++    sendMsgToMain("exportVariables", args.variables);
+   },
+ 
+   devModeReady(args: any) {
+-   sendMsgToMain("devModeReady", args.ready);
++    sendMsgToMain("devModeReady", args.ready);
+   },
+ 
+   webhooksV2Update(args: any) {
+-   sendMsgToMain("webhooksV2Update", args.update);
++    sendMsgToMain("webhooksV2Update", args.update);
+   },
+ 
+   getClipboardData(args: any) {
+     return new Promise((resolve, reject) => {
+       if (E.clipboard.has("org.nspasteboard.ConcealedType")) {
+@@ -520,10 +520,76 @@ const publicAPI: any = {
+   },
+ 
+   async writeFiles(args: WebApi.WriteFiles) {
+     await E.ipcRenderer.invoke("writeFiles", args);
+   },
++
++  // Stub handlers for Figma web content messages
++  // These prevent warnings for messages we don't need to handle yet
++  initLivegraph(args: any) {
++    // Livegraph initialization - not needed for basic functionality
++  },
++
++  setThemePreference(args: any) {
++    // Theme preference from web content - handled separately by our theme system
++  },
++
++  setLocales(args: any) {
++    // Locale settings - could be implemented for internationalization
++  },
++
++  getKeyboardLayout() {
++    // Keyboard layout detection - return empty/default for now
++    return { data: {} };
++  },
++
++  getActiveNSScreens() {
++    // macOS screen information - not applicable on Linux
++    return { data: [] };
++  },
++
++  setTabColor(args: any) {
++    // Tab color indicator - visual feature not yet implemented
++  },
++
++  setTabPreviewData(args: any) {
++    // Tab preview/thumbnail data - not yet implemented
++  },
++
++  setEditorType(args: any) {
++    // Editor type (design/figjam) - could be used for tab metadata
++    // sendMsgToMain("setEditorType", args.editorType);
++  },
++
++  spellingGetLanguages() {
++    // Spell check languages - return empty list
++    return { data: [] };
++  },
++
++  updateColorProfile(args: any) {
++    // Color profile updates - advanced feature for color accuracy
++  },
++
++  setIsLibrary(args: any) {
++    // Library file indicator - could be used for tab metadata
++  },
++
++  setIsTeamTemplate(args: any) {
++    // Team template indicator - could be used for tab metadata
++  },
++
++  setRealtimeToken(args: any) {
++    // Realtime collaboration token - not needed for basic functionality
++  },
++
++  setEditFilePermissions(args: any) {
++    // File permission updates - could be used to show read-only state
++  },
++
++  updateViewport(args: any) {
++    // Viewport updates from canvas - could be used for optimizations
++  },
+ };
+ 
+ const init = (fileBrowser: boolean): void => {
+   window.addEventListener(
+     "message",
+diff --git a/src/utils/Common/displayServer.ts b/src/utils/Common/displayServer.ts
+new file mode 100644
+index 0000000..e506d77
+--- /dev/null
++++ b/src/utils/Common/displayServer.ts
+@@ -0,0 +1,19 @@
++/**
++ * Detects if the application is running on Wayland
++ */
++export function isWayland(): boolean {
++  const sessionType = process.env.XDG_SESSION_TYPE;
++  const waylandDisplay = process.env.WAYLAND_DISPLAY;
++  
++  return sessionType === 'wayland' || !!waylandDisplay;
++}
++
++/**
++ * Checks if running on X11
++ */
++export function isX11(): boolean {
++  const sessionType = process.env.XDG_SESSION_TYPE;
++  const display = process.env.DISPLAY;
++  
++  return sessionType === 'x11' || (!isWayland() && !!display);
++}
+diff --git a/src/utils/Common/index.ts b/src/utils/Common/index.ts
+index e349b91..bfb49b6 100644
+--- a/src/utils/Common/index.ts
++++ b/src/utils/Common/index.ts
+@@ -5,5 +5,6 @@ export * from "./url";
+ export * from "./wait";
+ export * from "./isDev";
+ export * from "./themes";
+ export * from "./object";
+ export * from "./extensions";
++export * from "./displayServer";

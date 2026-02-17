@@ -54,6 +54,7 @@
       ## OCI Containers
       dive # https://github.com/wagoodman/dive
       trivy
+      figma-linux
     ]
     ++ [ nixvim ];
 

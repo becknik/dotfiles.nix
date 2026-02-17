@@ -93,6 +93,7 @@ rec {
     };
 
   chromium-app-t3-chat = pkgs.callPackage ./t3-chat/package.nix { inherit pkgs; };
+  figma-linux = pkgs.callPackage ./figma-linux/package.nix { };
 
   css-variables-language-server = pkgs.callPackage ./css-variables-language-server/package.nix { };
 }
