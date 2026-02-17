@@ -131,6 +131,8 @@
           pkg:
           builtins.elem (nixpkgs.lib.getName pkg) [
             "brgenml1lpr"
+            "brscan5"
+            "brscan5-etc-files"
             "joypixels"
 
             "obsidian"

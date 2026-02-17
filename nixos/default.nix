@@ -74,6 +74,7 @@
   services.fstrim.interval = "weekly"; # enabled by nixos-hardware
   #services.hardware.bolt.enable = true; # implied by gnome.core-os-services
   hardware.sane.enable = true;
+  hardware.sane.brscan5.enable = true;
 
   hardware.bluetooth = {
     enable = true;
