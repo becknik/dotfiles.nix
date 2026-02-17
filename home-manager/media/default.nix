@@ -60,7 +60,6 @@
     ## Media
     kooha
     helvum
-    vlc
     system-config-printer # graphical ui for CUPS
     transmission_4-gtk
     yt-dlp

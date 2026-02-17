@@ -40,8 +40,8 @@
       "image/webp" = [ "org.kde.gwenview.desktop" ];
       "image/svg+xml" = [ "org.kde.gwenview.desktop" ];
 
-      "video/*" = [ "vlc.desktop" ];
-      "audio/*" = [ "vlc.desktop" ];
+      "video/*" = [ "mpv.desktop" ];
+      "audio/*" = [ "mpv.desktop" ];
 
       "application/pdf" = [ "org.kde.okular.desktop" ];
       "application/zip" = [ "org.kde.ark.desktop" ];
