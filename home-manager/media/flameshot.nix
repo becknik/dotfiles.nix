@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 
 let
-  flameshotCommand = "sh -c '${lib.getExe pkgs.flameshot} gui --raw --path $XDG_PICTURES_DIR/Screenshots | ${lib.getExe pkgs.wl-clipboard}'}";
+  flameshotCommand = "sh -c '${lib.getExe pkgs.flameshot} gui --raw --path $XDG_PICTURES_DIR/Screenshots | ${pkgs.wl-clipboard}/bin/wl-copy'";
   flameshotCommandName = "Flameshot";
 in
 {
