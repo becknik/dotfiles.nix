@@ -1,0 +1,17 @@
+diff --git a/lua/ibl/hooks.lua b/lua/ibl/hooks.lua
+index 56b7972..d9709fe 100644
+--- a/lua/ibl/hooks.lua
++++ b/lua/ibl/hooks.lua
+@@ -216,11 +216,11 @@ M.builtin = {
+ 
+         local function inspect_pos(pos)
+             return vim.api.nvim_buf_get_extmarks(bufnr, -1, pos, pos, {
+                 type = "highlight",
+                 details = true,
+-            })
++            }) or {}
+         end
+ 
+         if end_line then
+             end_pos = inspect_pos { end_row, (end_line:find "%S" or 0) - 1 }
+             end_pos_scope = inspect_pos { end_row, end_col - 1 }

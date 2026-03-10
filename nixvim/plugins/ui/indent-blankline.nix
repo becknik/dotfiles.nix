@@ -12,13 +12,17 @@
 
     indent-blankline = {
       enable = true;
-      package = pkgs.vimPlugins.indent-blankline-nvim.overrideAttrs (old: {
+      package = pkgs.vimPlugins.indent-blankline-nvim.overrideAttrs (oldAttrs: {
         src = pkgs.fetchFromGitHub {
           owner = "MomePP";
           repo = "indent-blankline.nvim";
-          rev = "da3c95952be0d7082d4212b40bfc00890c9282fa";
-          sha256 = "sha256-drSw6AYC6+X89F9SNOU1v3PePgiJEaSYRPmSv2QwZU8=";
+          rev = "c3d7f63b5a625654b016c3ac2cbfb1f0ed02f028";
+          sha256 = "sha256-WZP/GtR9dDtUuen3vEiS+aUUUikWOLCtBnDT9nqo9s4=";
         };
+
+        patches = (oldAttrs.patches or [ ]) ++ [
+          ./indent-blankline-error-fix.patch
+        ];
       });
 
       luaConfig = {
