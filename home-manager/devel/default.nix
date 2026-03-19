@@ -58,7 +58,7 @@
       ## OCI Containers
       dive # https://github.com/wagoodman/dive
       trivy
-      figma-linux
+      (mkWhenNotDarwin figma-linux)
     ]
     ++ [ nixvim ];
 
