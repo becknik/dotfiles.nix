@@ -19,9 +19,18 @@
 
         # https://github.com/nvim-telescope/telescope.nvim/blob/master/doc/telescope.txt
         # https://github.com/nvim-telescope/telescope.nvim/tree/master?tab=readme-ov-file#default-mappings
-        mappings = {
+        mappings = rec {
           n."q" = "close";
           n."dd" = "delete_buffer";
+
+          # fix quickfix setup in tmux
+          n."<C-q>" = false;
+          i."<C-q>" = false;
+          n."<C-l>".__raw =
+            ''require("telescope.actions").smart_send_to_qflist + require("telescope.actions").open_qflist'';
+          i."<C-l>" = n."<C-l>";
+          n."<C-a>".__raw = ''require("telescope.actiond_to_qflist'';
+          i."<C-a>" = n."<C-a>";
         };
       };
     };
