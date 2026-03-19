@@ -17,7 +17,7 @@
     gc.automatic = true;
     optimise.automatic = true;
     settings = {
-      max-jobs = 2;
+      max-jobs = 3;
       cores = 4;
       trusted-users = [
         "root"
