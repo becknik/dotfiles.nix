@@ -40,7 +40,7 @@
       options.desc = "Diagnostic List";
     }
     {
-      key = "<leader>du";
+      key = "<leader>dq";
       action = "Trouble quickfix";
       options.cmd = true;
       options.desc = "Quick Fix List";
