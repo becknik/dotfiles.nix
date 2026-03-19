@@ -39,6 +39,34 @@
 
     # Frontend Stuff
     vtsls.enable = true;
+    vtsls.config = {
+      settings = rec {
+        vtsls = {
+          autoUseWorkspaceTsdk = true;
+          enableMoveToFileCodeAction = true;
+
+          experimental.completion.enableServerSideFuzzyMatch = true;
+        };
+
+        typescript = {
+          preferences = {
+            # fixes relative import aliases not being applied
+            importModuleSpecifier = "non-relative"; # for monorepos: "project-relative"
+            importModuleSpecifierEnding = "minimal";
+
+            includePackageJsonAutoImports = "auto";
+            renameMatchingJsxTags = true;
+            quoteStyle = "auto";
+          };
+
+          updateImportsOnFileMove.enabled = "always";
+          tsserver.maxTsServerMemory = 4096;
+        };
+
+        javascript.preferences = typescript.preferences;
+        javascript.updateImportsOnFileMove.enabled = "always";
+      };
+    };
     cssls.enable = true;
     # newer than the version in vsocde-languageservers-extracted
     # https://github.com/microsoft/vscode-css-languageservice
