@@ -26,10 +26,9 @@
           # fix quickfix setup in tmux
           n."<C-q>" = false;
           i."<C-q>" = false;
-          n."<C-l>".__raw =
-            ''require("telescope.actions").smart_send_to_qflist + require("telescope.actions").open_qflist'';
+          n."<C-l>".__raw = "require'telescope.actions'.smart_send_to_qflist";
           i."<C-l>" = n."<C-l>";
-          n."<C-a>".__raw = ''require("telescope.actiond_to_qflist'';
+          n."<C-a>".__raw = "require'telescope.actions'.add_to_qflist";
           i."<C-a>" = n."<C-a>";
         };
       };
