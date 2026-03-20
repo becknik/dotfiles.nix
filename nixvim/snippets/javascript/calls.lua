@@ -54,7 +54,7 @@ snippet_rec_ternary = function(_, _, _, call_number)
       }),
       fmta("\n\n<><> ? <> :<>", {
         f(function() return string.rep(" ", 2 * call_number) end),
-        i(1, "condition"),
+        i(1, "/* condition */"),
         i(2, "true"),
         d(3, snippet_rec_ternary, {}, { user_args = { call_number + 1 } }),
       }),
@@ -77,8 +77,8 @@ local snippets_calls = utils.insert_snippets(snippets, {
       return maybe_wrap_with_sn(
         params,
         fmta("new <>(<>)", {
-          i(1, "Type"),
-          i(2, "arguments"),
+          i(1, "Date"),
+          i(2),
         })
       )
     end,
@@ -89,7 +89,7 @@ local snippets_calls = utils.insert_snippets(snippets, {
       return maybe_wrap_with_sn(
         params,
         fmta("<> ? <> :<>", {
-          i(1, "condition"),
+          i(1, "true"),
           i(2, "true"),
           d(3, snippet_rec_ternary, {}, { user_args = { 1 } }),
         })
@@ -115,7 +115,7 @@ local snippets_calls = utils.insert_snippets(snippets, {
       return maybe_wrap_with_sn(
         params,
         fmta("Object.keys(<>)", {
-          i(1, "object"),
+          i(1),
         })
       )
     end,
@@ -127,7 +127,7 @@ local snippets_calls = utils.insert_snippets(snippets, {
       return maybe_wrap_with_sn(
         params,
         fmta("Object.values(<>)", {
-          i(1, "object"),
+          i(1),
         })
       )
     end,
@@ -138,7 +138,7 @@ local snippets_calls = utils.insert_snippets(snippets, {
       return maybe_wrap_with_sn(
         params,
         fmta("Object.entries(<>)", {
-          i(1, "object"),
+          i(1),
         })
       )
     end,
@@ -150,7 +150,7 @@ local snippets_calls = utils.insert_snippets(snippets, {
       return maybe_wrap_with_sn(
         params,
         fmta("JSON.stringify(<>)", {
-          i(1, "value"),
+          i(1),
         })
       )
     end,
@@ -161,7 +161,7 @@ local snippets_calls = utils.insert_snippets(snippets, {
       return maybe_wrap_with_sn(
         params,
         fmta("JSON.parse(<>)", {
-          i(1, "value"),
+          i(1),
         })
       )
     end,
@@ -191,20 +191,20 @@ vim.list_extend(snippets, {
   s(
     { trig = "apa", name = "await Promise.all" },
     fmta("await Promise.all(<>);", {
-      i(1, "items"),
+      i(1, "[]"),
     })
   ),
   s(
     { trig = "apad", name = "await Promise.all (destructured)" },
     fmta("const [<>] = await Promise.all(<>);", {
-      i(1, "items"),
-      i(2, "vars"),
+      i(2, "/* vars */"),
+      i(1),
     })
   ),
   s(
     { trig = "apam", name = "await Promise.all (map)" },
     fmta("await Promise.all(<>.map(<>));", {
-      i(1, "items"),
+      i(1, "[]"),
       c(2, utils.select_snippets(globals.functions, { "fni", "fnr" })),
     })
   ),

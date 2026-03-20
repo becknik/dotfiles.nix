@@ -104,7 +104,7 @@ vim.list_extend(snippets, {
         end, { 2 }, {
           user_args = { 2 },
         }),
-        i(0, "body"),
+        i(0, "// body"),
         f(function(args) return args[1][1] end, 3),
       }
     )
@@ -115,9 +115,9 @@ vim.list_extend(snippets, {
     l(l.TM_SELECTED_TEXT),
     t { "", "</>" },
   }),
-  s({ trig = "w&", name = "react && wrapper" }, {
+  s({ trig = "w7", name = "react && wrapper" }, {
     t { "{" },
-    i(1, "condition"),
+    i(1, "true"),
     t { " && (" },
     l(l.TM_SELECTED_TEXT),
     t { "", ")}" },
@@ -227,8 +227,8 @@ vim.list_extend(snippets, {
         })
       ]],
       {
-        i(2, ""),
-        i(1, ""),
+        i(2),
+        i(1),
       }
     )
   ),
@@ -245,7 +245,7 @@ vim.list_extend(snippets, {
         t "",
         fmt("<{}>", { i(1, "null") }),
       }),
-      i(2, ""),
+      i(2),
     })
   ),
   s(
@@ -262,7 +262,7 @@ vim.list_extend(snippets, {
   s(
     { trig = "uct", name = "react useContext" },
     fmta("const {<>} = useContext(<>);", {
-      i(1, ""),
+      i(1),
       i(2, "/* context */"),
     })
   ),
@@ -317,12 +317,12 @@ vim.list_extend(snippets, {
     { trig = "ac", name = "react Activity component" },
     fmt(
       [[
-        <Activity mode={{{}}}>
+        <Activity mode={{{}}  ? 'visible' : 'hidden'}>
           {}
         </Activity>
       ]],
       {
-        i(2, "isVisible ? 'visible' : 'hidden'"),
+        i(2, "true"),
         d(1, function(_, snip)
           if
             #snip.env.TM_SELECTED_TEXT == 0

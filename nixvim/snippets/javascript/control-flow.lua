@@ -59,7 +59,7 @@ snippet_rec_elseif = function(start_index)
         } <>
       ]],
       {
-        i(1, "condition"),
+        i(1, "true"),
         i(2),
         d(3, snippet_rec_elseif, {}),
       }
@@ -75,13 +75,13 @@ end
 vim.list_extend(snippets, {
   s(
     { trig = "r", name = "return" },
-    fmta("return <>", {
+    fmta("return <>;", {
       c(
         1,
         utils.select_snippets(
           globals.functions,
           { "fn", "fni", "fnr", "fna", "fnia", "fnra" },
-          { i(1, "value") }
+          { i(1, "/* value */") }
         )
       ),
     })
@@ -96,7 +96,7 @@ vim.list_extend(snippets, {
         } <>
       ]],
       {
-        i(1, "condition"),
+        i(1, "true"),
         i(2),
         snippet_rec_elseif(3),
       }
@@ -117,7 +117,7 @@ vim.list_extend(snippets, {
         } <>
       ]],
       {
-        i(1, "condition"),
+        i(1),
         i(2),
         c(3, {
           t "",
@@ -137,22 +137,22 @@ vim.list_extend(snippets, {
     { trig = "te", name = "throw new Error" },
     fmta('throw new <>("<>")', {
       i(1, "Error"),
-      i(2, "message"),
+      i(2, 'message'),
     })
   ),
 
   s(
     { trig = "io", name = "instanceof" },
     fmta("<> instanceof <>", {
-      i(1, "value"),
-      i(2, "class"),
+      i(1, "/* value */"),
+      i(2, "/* Class */"),
     })
   ),
   s(
     { trig = "to", name = "typeof" },
     fmta("typeof <> === <>", {
-      i(1, "value"),
-      i(2, "type"),
+      i(1, "/* value */"),
+      i(2, "/* Type */"),
     })
   ),
 
@@ -168,9 +168,9 @@ vim.list_extend(snippets, {
       {
         i(1, "i"),
         l(l._1, 1),
-        i(2, "array.length"),
+        i(2, "[].length"),
         l(l._1 .. "++", 1),
-        i(3, "element"),
+        i(3, "/* element */"),
         dl(4, l._1:match "^(.*)%.", 2),
         l(l._1, 1),
         i(5),
@@ -205,7 +205,7 @@ vim.list_extend(snippets, {
         }
       ]],
       {
-        i(1, "condition"),
+        i(1, "true"),
         i(2),
       }
     )
@@ -220,7 +220,7 @@ vim.list_extend(snippets, {
       ]],
       {
         i(2),
-        i(1, "condition"),
+        i(1, "true"),
       }
     )
   ),
