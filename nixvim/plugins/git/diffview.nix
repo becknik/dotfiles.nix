@@ -1,8 +1,26 @@
-{ withDefaultKeymapOptions, mapToModeAbbr, ... }:
+{
+  pkgs,
+  withDefaultKeymapOptions,
+  mapToModeAbbr,
+  ...
+}:
 
 {
   plugins.diffview = {
     enable = true;
+
+    package = (
+      pkgs.vimUtils.buildVimPlugin {
+        name = "diffview-nvim";
+        src = pkgs.fetchFromGitHub {
+          owner = "dlyongemallo";
+          repo = "diffview.nvim";
+          rev = "c84ba7ae3f0eaa856f4e94807dddf3d767ef9581";
+          hash = "sha256-57YPw5VZaRoJvRsnPO2nEZt/0WNALpFRFwTL8Tz+HzY=";
+        };
+        doCheck = false;
+      }
+    );
 
     settings = {
       enhanced_diff_hl = true;
