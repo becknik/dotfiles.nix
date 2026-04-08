@@ -382,7 +382,7 @@
       devShells = forAllSystems (
         system:
         let
-          pkgs = inputs-unpatched.nixpkgs.legacyPackages.${system};
+          pkgs = nixpkgs.legacyPackages.${system};
         in
         {
           default = inputs.devenv.lib.mkShell {
