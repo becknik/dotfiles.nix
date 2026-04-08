@@ -1,8 +1,52 @@
+diff --git a/lua/otter/config.lua b/lua/otter/config.lua
+index ea6cb02..4bb8178 100644
+--- a/lua/otter/config.lua
++++ b/lua/otter/config.lua
+@@ -3,11 +3,11 @@ local M = {}
+ ---@class OtterLSPConfig
+ ---@field diagnostic_update_events string[]
+ ---@field root_dir fun(fname: string, bufnr: number): string
+ 
+ ---@class OtterBufferConfig
+----@field set_filetype boolean 
++---@field set_filetype boolean
+ ---@field write_to_disk boolean
+ ---@field preambles table<string, string[]>
+ ---@field postambles table<string, string[]>
+ ---@field ignore_pattern table<string, string>
+ 
+@@ -17,10 +17,11 @@ local M = {}
+ ---@class OtterConfig
+ ---@field lsp OtterLSPConfig
+ ---@field buffers OtterBufferConfig
+ ---@field handle_leading_whitespace boolean
+ ---@field extensions table<string, string>
++---@field filetype_aliases table<string, string>
+ ---@field debug boolean
+ ---@field verbose OtterVerboseConfig|boolean
+ ---@field injectable_languages string[]
+ OtterConfig = {
+   lsp = {
+@@ -111,10 +112,14 @@ OtterConfig = {
+     webc = "webc",
+     webr = "R",
+     yaml = "yml",
+     zig = "zig",
+   },
++  -- mapping of language names to filetypes for otter buffers
++  -- useful when the injected language differs from an LSP filetype
++  -- e.g. { styled = "css" }
++  filetype_aliases = {},
+   -- add event listeners for LSP events for debugging
+   debug = false,
+   verbose = { -- set to false to disable all verbose messages
+     no_code_found = false, -- warn if otter.activate is called, but no injected code was found
+   },
 diff --git a/lua/otter/init.lua b/lua/otter/init.lua
-index 8fad8d9..40f0a97 100644
+index 838f76a..7735a3f 100644
 --- a/lua/otter/init.lua
 +++ b/lua/otter/init.lua
-@@ -231,11 +231,12 @@ M.activate = function(languages, completion, diagnostics, tsquery, preambles, po
+@@ -238,11 +238,12 @@ M.activate = function(languages, completion, diagnostics, tsquery, preambles, po
        )
      end
  
@@ -15,3 +59,20 @@ index 8fad8d9..40f0a97 100644
        local function get_aucmds(group)
          return api.nvim_get_autocmds({ group = group, pattern = lang })
        end
+ 
+diff --git a/lua/otter/lsp/handlers.lua b/lua/otter/lsp/handlers.lua
+index b09a8ad..31d614c 100644
+--- a/lua/otter/lsp/handlers.lua
++++ b/lua/otter/lsp/handlers.lua
+@@ -232,10 +232,11 @@ end
+ ---@param ctx lsp.HandlerContext
+ ---@return lsp.ResponseError
+ ---@return vim.lsp.CompletionResult?
+ ---@return lsp.HandlerContext
+ M[ms.textDocument_completion] = function(err, response, ctx)
++  -- vim.print("M[ms.textDocument_completion]", err, response, ctx)
+   if not response then
+     return err, response, ctx
+   end
+   ctx.params.textDocument.uri = ctx.params.otter.main_uri
+   ctx.bufnr = ctx.params.otter.main_nr

@@ -63,20 +63,20 @@
         hash = "sha256-tKT6Q3mJfhU+ApyWZQ12PJOcAAHHma+K+1Q3/VzxAXQ=";
       };
     })
-    (pkgs.vimUtils.buildVimPlugin {
-      name = "cmp-tw2css.nvim";
-      src = pkgs.fetchFromGitHub {
-        owner = "becknik";
-        repo = "cmp-tw2css";
-        rev = "42dd245bc73f6a5749cbed7f682c062baf05433e";
-        hash = "sha256-dM4DLoGILCXTOc19Cs21x/vMtAotDZBG+ke+q537OkE=";
-      };
-      nvimSkipModule = [
-        "cmp-tw2css"
-        "cmp-tw2css.items"
-        "cmp-tw2css.generate"
-      ];
-    })
+    # (pkgs.vimUtils.buildVimPlugin {
+    #   name = "cmp-tw2css.nvim";
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "becknik";
+    #     repo = "cmp-tw2css";
+    #     rev = "67b2c3f58731d1fb1780981e8ee97cce2e9d263e";
+    #     hash = "sha256-CHfswop9rle/+92voeMNyamHUefWLyV7r+BuEK1K0q8=";
+    #   };
+    #   nvimSkipModule = [
+    #     "cmp-tw2css"
+    #     "cmp-tw2css.items"
+    #     "cmp-tw2css.generate"
+    #   ];
+    # })
     pkgs.vimPlugins.blink-cmp-conventional-commits
   ];
 
@@ -90,7 +90,7 @@
       "git"
       "ecolog"
       "choice"
-      "tw2css"
+      # "tw2css"
     ];
     per_filetype.__raw = ''
       {
@@ -148,27 +148,27 @@
         name = "ecolog";
         module = "ecolog.integrations.cmp.blink_cmp";
       };
-      tw2css = {
-        name = "cmp-tw2css";
-        module = "blink.compat.source";
-        transform_items.__raw = ''
-          function(_, items)
-            for _, item in ipairs(items) do
-              item.kind_icon = '󱏿'
-              item.kind_name = 'tw2css'
-            end
-            return items
-          end
-        '';
-        should_show_items.__raw = ''
-          function()
-            local success, node = pcall(vim.treesitter.get_node, { ignore_injections = false })
-            if not success or not node then return false end
-
-            return vim.tbl_contains({ "block", "stylesheet", "descendant_selector" }, node:type())
-          end
-        '';
-      };
+      # tw2css = {
+      #   name = "cmp-tw2css";
+      #   module = "blink.compat.source";
+      #   transform_items.__raw = ''
+      #     function(_, items)
+      #       for _, item in ipairs(items) do
+      #         item.kind_icon = '󱏿'
+      #         item.kind_name = 'tw2css'
+      #       end
+      #       return items
+      #     end
+      #   '';
+      #   should_show_items.__raw = ''
+      #     function()
+      #       local success, node = pcall(vim.treesitter.get_node, { ignore_injections = false })
+      #       if not success or not node then return false end
+      #
+      #       return vim.tbl_contains({ "block", "stylesheet", "descendant_selector" }, node:type())
+      #     end
+      #   '';
+      # };
       conv_commits = {
         name = "Conventional Commits";
         module = "blink-cmp-conventional-commits";
