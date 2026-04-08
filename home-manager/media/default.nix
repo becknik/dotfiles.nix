@@ -35,7 +35,8 @@
     obsidian
     logseq
     unstable.anki
-    planify
+    # https://github.com/alainm23/planify/issues/2232
+    unstable.planify
     nextcloud-client # Basically redundant, but still necessary for .desktop file in NIX_PATH...
 
     ## Privacy
