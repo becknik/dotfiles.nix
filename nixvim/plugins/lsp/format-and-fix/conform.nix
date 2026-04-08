@@ -306,7 +306,7 @@
             "json"
             "jsonc"
           ];
-          fixjson.command = lib.getExe pkgs.nodePackages_latest.fixjson;
+          fixjson.command = lib.getExe pkgs.fixjson;
 
           # frontend
 
@@ -316,7 +316,7 @@
           stylelint.require_cwd = true;
           css_beautify.types = "css";
           css_beautify.priority = -2;
-          css_beautify.command = "${pkgs.nodePackages_latest.js-beautify}/bin/css-beautify";
+          css_beautify.command = "${pkgs.js-beautify}/bin/css-beautify";
           css_beautify.prepend_args = [
             "--type"
             "css"
