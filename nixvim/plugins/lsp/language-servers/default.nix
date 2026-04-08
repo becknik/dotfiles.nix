@@ -4,6 +4,7 @@
   imports = [
     ./lua_ls.nix
     ./nix.nix
+    ./tinymist.nix
   ];
 
   plugins.schemastore.enable = true;
@@ -32,7 +33,6 @@
     sqls.enable = true;
     texlab.enable = true;
     bashls.enable = true;
-    tinymist.enable = true;
 
     # General Scripting Stuff
     basedpyright.enable = true;
