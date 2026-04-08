@@ -111,7 +111,6 @@
           tool = "codium";
           conflictstyle = "zdiff3";
         };
-        mergetool."codium".cmd = "${pkgs.unstable.vscodium}/bin/codium --wait $MERGED";
 
         url."git@github.com:".insteadOf = "https://github.com/";
 
