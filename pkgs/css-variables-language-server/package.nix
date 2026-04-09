@@ -18,9 +18,18 @@ pkgs.buildNpmPackage rec {
     pkg-config
     python3 # needed by node-gyp
   ];
-  buildInputs = with pkgs; [
-    libsecret
-  ];
+  buildInputs = lib.optionals pkgs.stdenv.hostPlatform.isLinux (
+    with pkgs;
+    [
+      libsecret
+    ]
+  );
+
+  # keytar (deprecated native keychain addon) fails to compile on macOS
+  # with newer clang; it is not needed by the language server at runtime.
+  # npm reads npm_config_* env vars as config; this skips install lifecycle
+  # scripts (preinstall/install/postinstall) but not explicit `npm run build`.
+  npm_config_ignore_scripts = lib.optionalString pkgs.stdenv.hostPlatform.isDarwin "true";
 
   preBuild = ''
     wrapNodeBinSymlinks() {
