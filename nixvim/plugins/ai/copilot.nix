@@ -76,52 +76,6 @@
     }
 
     {
-      key = "<C-c>t";
-      action.__raw = "function() require'copilot.panel'.toggle() end";
-      mode = mapToModeAbbr [
-        "insert"
-        "normal"
-      ];
-      options.desc = "Toggle Copilot Panel";
-    }
-    {
-      key = "<C-c>oa";
-      action.__raw = "function() require'copilot.panel'.accept() end";
-      mode = mapToModeAbbr [
-        "insert"
-        "normal"
-      ];
-      options.desc = "Copilot Panel Accept";
-    }
-    {
-      key = "<C-c>or";
-      action.__raw = "function() require'copilot.panel'.refresh() end";
-      mode = mapToModeAbbr [
-        "insert"
-        "normal"
-      ];
-      options.desc = "Copilot Panel Refresh";
-    }
-    {
-      key = "<C-c>on";
-      action.__raw = "function() require'copilot.panel'.jump_next() end";
-      mode = mapToModeAbbr [
-        "insert"
-        "normal"
-      ];
-      options.desc = "Copilot Panel Next";
-    }
-    {
-      key = "<C-c>op";
-      action.__raw = "function() require'copilot.panel'.jump_prev() end";
-      mode = mapToModeAbbr [
-        "insert"
-        "normal"
-      ];
-      options.desc = "Copilot Panel Prev";
-    }
-
-    {
       key = "<C-c>c";
       action.__raw = "function() require'copilot.suggestion'.toggle_auto_trigger() end";
       mode = mapToModeAbbr [
