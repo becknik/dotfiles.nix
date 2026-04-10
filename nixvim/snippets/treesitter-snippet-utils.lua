@@ -82,8 +82,9 @@ end
 
 --- @return LuaSnip.SnippetNode
 function M.last_var_declaration_in_function(args)
-  if args[1][1] == "body" then
-    return sn(nil, i(1, "variable"))
+  -- TODO: what's that branch for again? :(
+  if args[1][1] == "/* body */" then
+    return sn(nil, i(1, "null"))
   end
 
   local parser = vim.treesitter.get_parser(0)
@@ -100,7 +101,7 @@ function M.last_var_declaration_in_function(args)
   end
 
   if not node then
-    return sn(nil, i(1, "variable"))
+    return sn(nil, i(1, "null"))
   end
 
   local query = vim.treesitter.query.get(parser:lang(), "LuaSnip_JS_var-declaration-in-function")
@@ -114,7 +115,7 @@ function M.last_var_declaration_in_function(args)
     local declaration_name = vim.treesitter.get_node_text(last_captured_node, 0)
     return sn(nil, i(1, declaration_name))
   else
-    return sn(nil, i(1, "variable"))
+    return sn(nil, i(1, "null"))
   end
 end
 

@@ -27,7 +27,9 @@ local parse = require("luasnip.util.parser").parse_snippet
 local ms = ls.multi_snippet
 local k = require("luasnip.nodes.key_indexer").new_key
 
-package.path = debug.getinfo(1, "S").source:match "@(..*/)" .. "?.lua;" .. package.path
+package.path = debug.getinfo(1, "S").source:match "@(..*/)"
+  .. "?.lua;"
+  .. package.path
 
 ---@class SnippetUtils
 local utils = require "..snippet-utils"
@@ -54,7 +56,7 @@ snippet_rec_ternary = function(_, _, _, call_number)
       }),
       fmta("\n\n<><> ? <> :<>", {
         f(function() return string.rep(" ", 2 * call_number) end),
-        i(1, "/* condition */"),
+        i(1, "true"),
         i(2, "true"),
         d(3, snippet_rec_ternary, {}, { user_args = { call_number + 1 } }),
       }),
@@ -119,7 +121,6 @@ local snippets_calls = utils.insert_snippets(snippets, {
         })
       )
     end,
-
   },
   {
     { trig = "ov", name = "Object.values" },
@@ -166,7 +167,6 @@ local snippets_calls = utils.insert_snippets(snippets, {
       )
     end,
   },
-
 }, { const_declaration = true })
 
 local snippet_rec_params
@@ -217,7 +217,7 @@ vim.list_extend(snippets, {
         })
       ]],
       {
-        i(1, "body"),
+        i(1, "// body"),
       }
     )
   ),
@@ -291,7 +291,13 @@ vim.list_extend(snippets, {
     { trig = "cfn", name = "function declaration inline" },
     fmta("const <> = <>;", {
       i(1, "name"),
-      c(2, utils.select_snippets(globals.functions, { "fn", "fni", "fnr", "fna", "fnia", "fnra" })),
+      c(
+        2,
+        utils.select_snippets(
+          globals.functions,
+          { "fn", "fni", "fnr", "fna", "fnia", "fnra" }
+        )
+      ),
     })
   ),
   s(
@@ -334,7 +340,7 @@ vim.list_extend(snippets, {
 
   s(
     { trig = "cl", name = "console.log" },
-    fmta('console.log("<>", <><>)', {
+    fmta("console.log('<>', <><>)", {
       dl(2, l._1, 1),
       d(1, ts_utils.nearest_var_declaration(1)),
       c(3, {
@@ -346,8 +352,14 @@ vim.list_extend(snippets, {
     })
   ),
   s(
+    { trig = "cls", name = "console.log('')" },
+    fmta("console.log('<>')", {
+      i(1),
+    })
+  ),
+  s(
     { trig = "ci", name = "console.info" },
-    fmta('console.info("<>"<>)', {
+    fmta("console.info('<>'<>)", {
       i(1, "info text"),
       c(2, {
         t "",
@@ -359,7 +371,7 @@ vim.list_extend(snippets, {
   ),
   s(
     { trig = "cw", name = "console.warn" },
-    fmta('console.warn("<>"<>)', {
+    fmta("console.warn('<>'<>)", {
       i(1, "text"),
       c(2, {
         t "",
@@ -371,7 +383,7 @@ vim.list_extend(snippets, {
   ),
   s(
     { trig = "ce", name = "console.error" },
-    fmta('console.error("<>"<>)', {
+    fmta("console.error('<>'<>)", {
       i(1, "error text"),
       c(2, {
         t "",

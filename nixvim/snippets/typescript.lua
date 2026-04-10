@@ -245,6 +245,7 @@ vim.list_extend(snippets, {
       }
     )
   ),
+  s({ trig = "tp", name = "PropertyKey" }, t "PropertyKey"),
 })
 
 ls.filetype_extend("typescript", { "javascript" })

@@ -23,7 +23,7 @@ local function get_last_node(params)
 
       if not env or #env.TM_SELECTED_TEXT == 0 or env.TM_SELECTED_TEXT == "$TM_SELECTED_TEXT" then
         -- 0 sadly isn't possible any more
-        return sn(nil, i(params.last_index or 1, "body"))
+        return sn(nil, i(params.last_index or 1, "/* body */"))
       else
         return sn(nil, i(1, env.TM_SELECTED_TEXT))
       end

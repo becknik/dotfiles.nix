@@ -115,9 +115,9 @@ vim.list_extend(snippets, {
     l(l.TM_SELECTED_TEXT),
     t { "", "</>" },
   }),
-  s({ trig = "w7", name = "react && wrapper" }, {
+  s({ trig = "w&", name = "react && wrapper" }, {
     t { "{" },
-    i(1, "true"),
+    i(1, "Math.random() > 0.5"),
     t { " && (" },
     l(l.TM_SELECTED_TEXT),
     t { "", ")}" },
@@ -147,7 +147,7 @@ vim.list_extend(snippets, {
           2,
           utils.select_snippets(
             globals_js.functions,
-            { "fn", "fnr", "fna", "fnra" }
+            { "fn", "fnr", "fna", "fnra", "fni" }
           )
         ),
         i(3),
@@ -262,7 +262,7 @@ vim.list_extend(snippets, {
   s(
     { trig = "uct", name = "react useContext" },
     fmta("const {<>} = useContext(<>);", {
-      i(1),
+      i(1, ""),
       i(2, "/* context */"),
     })
   ),
@@ -317,7 +317,7 @@ vim.list_extend(snippets, {
     { trig = "ac", name = "react Activity component" },
     fmt(
       [[
-        <Activity mode={{{}}  ? 'visible' : 'hidden'}>
+        <Activity mode={{{} ?  'visible' : 'hidden'}}>
           {}
         </Activity>
       ]],
@@ -336,6 +336,16 @@ vim.list_extend(snippets, {
       }
     )
   ),
+
+  -- types
+
+  s(
+    { trig = "tds", name = "Dispatch<SetActionState<>>" },
+    fmt("Dispatch<SetActionState<{}>>", {
+      i(2, "/* Type */"),
+    })
+  ),
+  s({ trig = "trn", name = "ReactNode" }, t "React.ReactNode"),
 })
 
 ls.filetype_extend("typescriptreact", { "javascript", "typescript" })
