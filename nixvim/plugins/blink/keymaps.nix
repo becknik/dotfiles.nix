@@ -9,6 +9,24 @@
         "show_documentation"
         "hide_documentation"
       ];
+      "<A-space>" = [
+        {
+          __raw = ''
+            function(cmp)
+              cmp.show {
+                providers = { 'snippets' },
+                callback = function()
+                  vim.schedule(function()
+                    cmp.show_documentation()
+                  end)
+                end
+              }
+              return true
+            end
+          '';
+        }
+        "fallback"
+      ];
       "<CR>" = [
         "accept"
         "fallback"
