@@ -53,6 +53,26 @@
       options.desc = "Definitions";
     }
     {
+      key = "g-";
+      action.__raw = ''
+        function()
+          require'glance'.actions.open("definitions", {
+            hooks = {
+              before_open = function(results, open, jump, method)
+                if (method == "definitions" or method == "implementations") and #results == 1 then
+                  vim.cmd("split")
+                  jump(results[1])
+                else
+                  open(results)
+                end
+              end,
+            },
+          })
+        end
+      '';
+      options.desc = "Definitions";
+    }
+    {
       key = "gr";
       action = "Glance references";
       options.cmd = true;
