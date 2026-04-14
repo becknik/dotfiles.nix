@@ -14,6 +14,8 @@
         tinymist = "${lib.getExe config.dependencies.tinymist.package}";
         websocat = "${lib.getExe config.dependencies.websocat.package}";
       };
+      follow_cursor = false;
+
       get_main_file.__raw = ''
         function()
           -- figure out lsp root dir for this buffer
