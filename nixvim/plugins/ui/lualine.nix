@@ -1,27 +1,6 @@
 { ... }:
 
 {
-  autoCmd = [
-    {
-      event = "BufWinEnter";
-      pattern = "oil://*";
-      callback.__raw = ''
-        function()
-          vim.o.laststatus = 2
-        end
-      '';
-    }
-    {
-      event = "BufWinLeave";
-      pattern = "oil://*";
-      callback.__raw = ''
-        function()
-          vim.o.laststatus = 0
-        end
-      '';
-    }
-  ];
-
   plugins.lualine = {
     enable = true;
 
@@ -42,7 +21,6 @@
           m.a.fg = z_fg
         end
       end
-      vim.o.laststatus = 0
     '';
 
     settings = {
@@ -57,13 +35,7 @@
 
       globalstatus = true;
 
-      options.disabled_filetypes.winbar = [
-        "codecompanion"
-        "toggleterm"
-        "gitcommit"
-      ];
-
-      winbar = {
+      sections = {
         lualine_a = [ "progress" ];
         lualine_b = [
           "fileformat"
