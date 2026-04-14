@@ -1,0 +1,277 @@
+diff --git a/README.md b/README.md
+index afffcd0..2fe76e9 100644
+--- a/README.md
++++ b/README.md
+@@ -80,11 +80,11 @@ All commands are prefixed with `<Leader>a` followed by a single letter:
+ |--------|---------|-------------|
+ | `<Leader>ac` | `:InoCheck` | Compile and verify current sketch |
+ | `<Leader>au` | `:InoUpload` | Upload sketch to board |
+ | `<Leader>ar` | `:InoUploadReset` | Upload with manual reset (for UNO R4 WiFi) |
+ | `<Leader>am` | `:InoMonitor` | Open serial monitor with configuration display |
+-| `<Leader>as` | `:InoStatus` | Display current board, port, and FQBN status |
++| `<Leader>at` | `:InoStatus` | Display current board, port, and FQBN status |
+ | `<Leader>al` | `:InoLib` | Open library manager (Telescope interface) |
+ | `<Leader>ag` | `:InoGUI` | Open GUI for setting board and port |
+ | `<Leader>ap` | `:InoSelectPort` | Select Arduino port from available ports |
+ | `<Leader>ab` | `:InoSelectBoard` | Select Arduino board from available boards |
+
+@@ -172,11 +172,11 @@ sketch/
+    - Try `<Leader>ar` for reset-based upload
+    - Check USB connection
+    - Verify board selection with `<Leader>ag`
+
+ 2. **Monitor connection issues**
+-   - Check baudrate setting with `<Leader>as`
++   - Check baudrate setting with `<Leader>at`
+    - Ensure correct port selection
+    - Try `:InoDebugUpload` for diagnostics
+
+ 3. **LSP not working**
+    - Ensure `arduino-language-server` is installed
+diff --git a/lua/Arduino-Nvim/init.lua b/lua/Arduino-Nvim/init.lua
+index 8ecafaf..fd6cf29 100644
+--- a/lua/Arduino-Nvim/init.lua
++++ b/lua/Arduino-Nvim/init.lua
+@@ -1,5 +1,17 @@
++local telescope_custom = require("Arduino-Nvim.telescopeCustomizations")
++
++local function cursor_at_buffer_bottom(win, buf)
++	if not (vim.api.nvim_win_is_valid(win) and vim.api.nvim_buf_is_valid(buf)) then
++		return false
++	end
++
++	local cursor_line = vim.api.nvim_win_get_cursor(win)[1]
++	local last_line = vim.api.nvim_buf_line_count(buf)
++	return cursor_line >= last_line
++end
++
+ local M = {}
+
+ -- Load dependencies
+ require("Arduino-Nvim.remap")
+ require("Arduino-Nvim.libGetter")
+@@ -91,17 +103,64 @@ function M.create_floating_cli_monitor()
+ 		border = "rounded", -- Optional: add border for visual separation
+ 	}
+
+ 	-- Create the floating window and store its ID
+ 	local win = vim.api.nvim_open_win(buf, true, opts)
+-	vim.api.nvim_buf_set_keymap(
+-		buf,
+-		"n",
+-		"<CR>",
+-		"<cmd>lua vim.api.nvim_win_close(" .. win .. ", false)<CR>",
+-		{ noremap = true, silent = true }
+-	)
++
++	vim.keymap.set("n", "q", function()
++		vim.api.nvim_win_close(win, true)
++	end, { buffer = buf, noremap = true, silent = true })
++
++	vim.keymap.set("n", "<CR>", function()
++		vim.api.nvim_win_close(win, true)
++	end, { buffer = buf, noremap = true, silent = true })
++
++	local group = vim.api.nvim_create_augroup("ArduinoCliMonitor_" .. buf, { clear = true })
++
++	local state = {
++		follow_bottom = true,
++	}
++
++	local function scroll_to_bottom()
++		if not vim.api.nvim_win_is_valid(win) then
++			return
++		end
++		local last_line = vim.api.nvim_buf_line_count(buf)
++		vim.api.nvim_win_set_cursor(win, { math.max(last_line, 1), 0 })
++	end
++
++	vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
++		group = group,
++		buffer = buf,
++		callback = function()
++			state.follow_bottom = cursor_at_buffer_bottom(win, buf)
++		end,
++	})
++
++	vim.api.nvim_buf_attach(buf, false, {
++		on_lines = function()
++			if not (vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_win_is_valid(win)) then
++				return true
++			end
++
++			if state.follow_bottom then
++				vim.schedule(function()
++					if vim.api.nvim_win_is_valid(win) and vim.api.nvim_buf_is_valid(buf) then
++						scroll_to_bottom()
++					end
++				end)
++			end
++		end,
++	})
++
++	vim.api.nvim_create_autocmd({ "WinClosed", "BufWipeout" }, {
++		group = group,
++		buffer = buf,
++		callback = function()
++			pcall(vim.api.nvim_del_augroup_by_id, group)
++		end,
++	})
+
+ 	return buf, win, opts
+ end
+
+ -- Function to dynamically adjust the floating window height based on buffer content
+@@ -110,11 +169,13 @@ local function adjust_window_height(win, buf, opts)
+ 	local new_height = math.min(line_count, vim.o.lines - 2) -- Max height limited to screen size
+
+ 	-- Update window height and reposition if necessary to keep it at the bottom
+ 	opts.height = new_height
+ 	opts.row = vim.o.lines - new_height - 2
+-	vim.api.nvim_win_set_config(win, opts)
++	if vim.api.nvim_win_is_valid(win) then
++		pcall(vim.api.nvim_win_set_config, win, opts)
++	end
+ end
+
+ -- Function to set the COM port and save config
+ function M.set_com(port)
+ 	M.port = Trim(port)
+@@ -154,11 +215,15 @@ function M.check()
+
+ 	-- Create the output window buffer and window
+ 	local buf, win, opts = M.create_floating_cli_monitor()
+
+ 	-- Command to compile in the current directory
+-	local cmd = "arduino-cli compile --fqbn " .. M.board .. " " .. vim.fn.expand("%:p:h")
++	local cmd = "arduino-cli compile --fqbn "
++		.. M.board
++		.. " "
++		.. vim.fn.expand("%:p:h")
++		.. ' --build-property "compiler.optimization_flags=-Ofast"'
+
+ 	-- Run the command asynchronously
+ 	vim.fn.jobstart(cmd, {
+ 		stdout_buffered = false,
+ 		on_stdout = function(_, data)
+@@ -230,11 +295,15 @@ function M.upload()
+
+ 	-- Create the CLI monitor buffer and window
+ 	local buf, win, opts = M.create_floating_cli_monitor()
+
+ 	-- Commands for compiling and uploading
+-	local compile_cmd = "arduino-cli compile --fqbn " .. M.board .. " " .. vim.fn.expand("%:p:h")
++	local compile_cmd = "arduino-cli compile --fqbn "
++		.. M.board
++		.. " "
++		.. vim.fn.expand("%:p:h")
++		.. ' --verbose --build-property "compiler.optimization_flags=-O3"'
+
+ 	-- For UNO R4 WiFi, try using arduino-cli's built-in reset handling
+ 	local upload_cmd = "arduino-cli upload -p "
+ 		.. M.port
+ 		.. " --fqbn "
+@@ -263,11 +332,16 @@ function M.upload()
+ 					)
+ 				end
+ 			end,
+ 			on_exit = function(_, exit_code)
+ 				if exit_code == 0 then
++					local was_at_bottom = cursor_at_buffer_bottom(win, buf)
+ 					M.append_to_buffer({ "--- Upload Complete ---" }, buf, win, opts)
++					if was_at_bottom then
++						vim.cmd("q")
++						M.monitor()
++					end
+ 				else
+ 					M.append_to_buffer({ "--- Upload Failed ---" }, buf, win, opts)
+ 					-- Suggest checking available ports
+ 					M.append_to_buffer({
+ 						"Hint: Run ':InoList' to check available ports or ':InoSelectPort' to choose a different port",
+@@ -354,12 +428,12 @@ function M.select_board_gui(callback)
+ 	if #boards == 0 then
+ 		print("No Arduino boards found in the list.")
+ 		return
+ 	end
+
+-	require("telescope.pickers")
+-		.new({}, {
++	telescope_custom
++		.new_picker({}, {
+ 			prompt_title = "Select Arduino Board",
+ 			finder = require("telescope.finders").new_table({
+ 				results = boards,
+ 				entry_maker = function(entry)
+ 					return {
+@@ -421,12 +495,12 @@ function M.select_port_gui()
+ 		vim.notify("No connected COM ports found.", vim.log.levels.ERROR)
+ 		return
+ 	end
+
+ 	-- Use Telescope to display the list of available ports
+-	require("telescope.pickers")
+-		.new({}, {
++	telescope_custom
++		.new_picker({}, {
+ 			prompt_title = "Select Arduino Port",
+ 			finder = require("telescope.finders").new_table({ results = ports }),
+ 			sorter = require("telescope.config").values.generic_sorter({}),
+ 			attach_mappings = function(prompt_bufnr, map)
+ 				map("i", "<CR>", function()
+diff --git a/lua/Arduino-Nvim/libGetter.lua b/lua/Arduino-Nvim/libGetter.lua
+index 9c1fb94..26e0932 100644
+--- a/lua/Arduino-Nvim/libGetter.lua
++++ b/lua/Arduino-Nvim/libGetter.lua
+@@ -1,5 +1,7 @@
++local telescope_custom = require("Arduino-Nvim.telescopeCustomizations")
++
+ -- Use vim.json directly (available in Neovim 0.9+)
+ -- This eliminates the need for custom JSON implementation
+ local json = vim.json
+ 	or {
+ 		decode = function(_)
+@@ -179,12 +181,12 @@ function M.library_manager()
+ 				vim.notify("Error: entry or entry.display_name or entry.lib_name is nil", vim.log.levels.ERROR)
+ 				return nil
+ 			end
+ 		end
+
+-		require("telescope.pickers")
+-			.new({}, {
++		telescope_custom
++			.new_picker({}, {
+ 				prompt_title = "Available Arduino Libraries",
+ 				finder = require("telescope.finders").new_table({
+ 					results = library_names,
+ 					entry_maker = entry_maker,
+ 				}),
+diff --git a/lua/Arduino-Nvim/remap.lua b/lua/Arduino-Nvim/remap.lua
+index 8da6eb1..b8afc7c 100644
+--- a/lua/Arduino-Nvim/remap.lua
++++ b/lua/Arduino-Nvim/remap.lua
+@@ -1,8 +1,8 @@
+ vim.keymap.set("n", "<Leader>au", ":InoUpload<CR>", { silent = true })  -- Upload code
+ vim.keymap.set("n", "<Leader>ac", ":InoCheck<CR>", { silent = true })   -- Compile/check code
+-vim.keymap.set("n", "<Leader>as", ":InoStatus<CR>", { silent = true })  -- Show current board and port status
++vim.keymap.set("n", "<Leader>at", ":InoStatus<CR>", { silent = true })  -- Show current board and port status
+ vim.keymap.set("n", "<Leader>ag", ":InoGUI<CR>", { silent = true })     -- Open GUI for setting board and port
+ vim.keymap.set("n", "<Leader>am", ":InoMonitor<CR>", { silent = true })     -- Open Serial monitor with default port and baud rate
+ vim.keymap.set("n", "<Leader>al", ":InoLib<CR>", { silent = true })
+ vim.keymap.set("n", "<Leader>ab", ":InoSelectBoard<CR>", { silent = true })     -- open board selection gui
+ vim.keymap.set("n", "<Leader>ap", ":InoSelectPort<CR>", { silent = true }) -- open board selection gui
+diff --git a/lua/Arduino-Nvim/telescopeCustomizations.lua b/lua/Arduino-Nvim/telescopeCustomizations.lua
+new file mode 100644
+index 0000000..f7a10e8
+--- /dev/null
++++ b/lua/Arduino-Nvim/telescopeCustomizations.lua
+@@ -0,0 +1,10 @@
++local M = {}
++
++function M.new_picker(opts, defaults)
++	opts = opts or {}
++	opts = require("telescope.themes").get_ivy(opts)
++
++	return require("telescope.pickers").new(opts, defaults)
++end
++
++return M

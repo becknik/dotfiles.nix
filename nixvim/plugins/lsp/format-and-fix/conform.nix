@@ -404,7 +404,10 @@
           rustfmt.types = "rust";
           rustfmt.command = lib.getExe pkgs.rustfmt;
 
-          clang_format.types = "cpp";
+          clang_format.types = [
+            "cpp"
+            "arduino"
+          ];
           gersemi.types = "cmake";
           gersemi.command = lib.getExe pkgs.gersemi;
         };

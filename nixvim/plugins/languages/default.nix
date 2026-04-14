@@ -6,6 +6,7 @@
     ./vimtex.nix
     ./typst.nix
     ./css-modules.nix
+    ./arduino.nix
   ];
 
   extraConfigLuaPost = ''
