@@ -108,7 +108,7 @@
 
     wk.add {
       { "<leader>o", icon = "󰃁" },
-      { "<leader>of", icon = "󰃁  " },
+      { "<leader>fo", icon = " 󰃁" },
     }
   '';
 
@@ -120,7 +120,7 @@
       options.desc = "Bookmark current line";
     }
     {
-      key = "<leader>of";
+      key = "<leader>fo";
       action = "BookmarksGoto";
       options.cmd = true;
       options.desc = "Find Bookmark";

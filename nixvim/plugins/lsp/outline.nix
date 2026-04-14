@@ -9,18 +9,25 @@
     wk.add {
       { "go", icon = "󱉯 " },
       { "gO", icon = "󱉯 " },
+      { "<leader>of", icon = "󱉯  󰋱" },
     }
 
     -- https://github.com/hedyhli/outline.nvim?tab=readme-ov-file#default-options
     require('outline').setup {
       outline_window = {
-        win_width = 25,
         auto_close = false,
         show_numbers = true,
-        show_relative_numbers = true,
+        show_numbers_relative = false,
+        show_cursorline = true,
+        hide_cursor = true,
+      },
+      auto_width = {
+        enabled = true,
       },
       outline_items = {
         show_symbol_lineno = true,
+        show_symbol_details = false,
+        auto_set_cursor = false,
       },
       keymaps = {
         hover_symbol = 'K',
@@ -42,6 +49,30 @@
     }
   '';
 
+  autoCmd = [
+    {
+      event = "BufEnter";
+      callback.__raw = ''
+        function()
+          local function count_normal_windows()
+            local count = 0
+            for _, win in ipairs(vim.api.nvim_list_wins()) do
+              local config = vim.api.nvim_win_get_config(win)
+              if config.relative == "" then -- Non-floating windows
+                count = count + 1
+              end
+            end
+            return count
+          end
+
+          if vim.bo.filetype == "Outline" and count_normal_windows() == 1 then
+            vim.cmd "q!"
+          end
+        end
+      '';
+    }
+  ];
+
   keymaps = withDefaultKeymapOptions [
     {
       key = "gO";
@@ -52,6 +83,13 @@
       key = "go";
       action.__raw = "function() require'outline'.open() end";
       options.desc = "Outline";
+    }
+
+    {
+      key = "<leader>of";
+      action = "OutlineFollow";
+      options.desc = "Outline Follow";
+      options.cmd = true;
     }
   ];
 }

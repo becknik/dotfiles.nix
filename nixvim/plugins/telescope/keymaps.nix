@@ -6,7 +6,6 @@
       { "<leader>f", desc = "Find & Search", icon = "󰭎 " },
       { "<leader>fa", icon = "  " },
       { "<leader>fu", icon = " 󰗧" },
-      { "<leader>fo", icon = " 󰋚 " },
       { "<leader>fh", icon = " 󰋖" },
       { "<leader>fc", icon = "  " },
       { "<leader>fk", icon = "  " },
@@ -41,10 +40,6 @@
 
     # Vim Pickers
     # https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#vim-pickers
-    "<leader>fo" = {
-      action = "oldfiles";
-      options.desc = "Find previously Opened file";
-    };
     "<leader>fl" = {
       action = "current_buffer_fuzzy_find";
       options.desc = "Search Locally";
