@@ -9,7 +9,7 @@ index ca778db2..04d79b57 100644
  
      lsp.onAttach = lib.mkIf cfg.autoActivate ''
 -      require('otter').activate()
-+      if vim.bo.buftype ~= "nofile" then
++      if vim.bo.buftype ~= "nofile" and vim.bo.buftype ~= "help" then
 +        require('otter').activate()
 +      end
      '';
