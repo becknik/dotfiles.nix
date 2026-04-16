@@ -1,4 +1,4 @@
-{ helpers, withDefaultKeymapOptions, ... }:
+{ lib, withDefaultKeymapOptions, ... }:
 
 {
   # globals.loaded_netrw = 1;
@@ -68,7 +68,7 @@
         auto_open = false;
       };
 
-      on_attach = helpers.mkRaw (builtins.readFile ./nvim-tree.lua);
+      on_attach = lib.nixvim.mkRaw (builtins.readFile ./nvim-tree.lua);
     };
   };
 

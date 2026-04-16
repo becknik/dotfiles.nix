@@ -6,7 +6,7 @@
     settings = {
       preset = "modern";
       triggers = [
-        # (helpers.mkRaw ''{ "<auto>", mode = "nisotc" }'') # not "nixsotc"
+        # (__raw  = ''{ "<auto>", mode = "nisotc" }'') # not "nixsotc"
       ];
       sort = [ "alphanum" ];
     };
