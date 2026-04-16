@@ -41,6 +41,32 @@
         passthru = old.passthru // {
           blink-fuzzy-lib = blink-cmp-fuzzy-lib-native;
         };
+
+        patches = (old.patches or [ ]) ++ [
+          (pkgs.writeText "blink-cmp-luasnip-choice-cmp-source-patch" ''
+            diff --git a/lua/blink/cmp/lib/text_edits.lua b/lua/blink/cmp/lib/text_edits.lua
+            index 93b3d9d..7b124b8 100644
+            --- a/lua/blink/cmp/lib/text_edits.lua
+            +++ b/lua/blink/cmp/lib/text_edits.lua
+            @@ -16,11 +16,14 @@ function text_edits.apply(text_edit, additional_text_edits)
+                 'Unsupported mode for text edits: ' .. mode
+               )
+
+               if mode == 'default' or mode == 'cmdwin' then
+                 -- writing to dot repeat may fail in command-line window
+            -    if mode == 'default' and config.completion.accept.dot_repeat then text_edits.write_to_dot_repeat(text_edit) end
+            +    -- complete() requires insert mode, so skip dot repeat when not in insert mode (e.g. select mode in snippets)
+            +    if mode == 'default' and config.completion.accept.dot_repeat and vim.fn.mode() == 'i' then
+            +      text_edits.write_to_dot_repeat(text_edit)
+            +    end
+
+                 local all_edits = utils.shallow_copy(additional_text_edits)
+                 table.insert(all_edits, text_edit)
+
+                 local cur_bufnr = vim.api.nvim_get_current_buf()
+
+          '')
+        ];
       });
 
     in

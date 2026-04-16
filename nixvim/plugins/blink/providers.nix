@@ -59,8 +59,8 @@
       src = pkgs.fetchFromGitHub {
         owner = "becknik";
         repo = "blink-cmp-luasnip-choice";
-        rev = "c99512e2be8bb96fa3a43ce4b4f581151ff3138e";
-        hash = "sha256-tKT6Q3mJfhU+ApyWZQ12PJOcAAHHma+K+1Q3/VzxAXQ=";
+        rev = "bf13c6169d541a42ef7d2b98f24f0b1fb9badbdc";
+        hash = "sha256-rVuqTDbeQHI8chRd9KO8bM7Fra27NtqUIKU/+1/r+gk=";
       };
     })
     (pkgs.vimUtils.buildVimPlugin {

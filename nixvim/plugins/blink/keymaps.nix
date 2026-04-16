@@ -174,39 +174,4 @@
       "<C-0>".__raw = "{ function(cmp) cmp.accept({ index = 10 }) end }";
     };
   };
-
-  keymaps = withDefaultKeymapOptions [
-    {
-      key = "<C-n>";
-      action.__raw = ''
-        function()
-          if require'luasnip'.choice_active() then
-            require'luasnip'.change_choice(1)
-          end
-        end
-      '';
-      mode = mapToModeAbbr [
-        "normal"
-        "insert"
-        "select"
-      ];
-      options.desc = "LuaSnip Next Choice";
-    }
-    {
-      key = "<C-p>";
-      action.__raw = ''
-        function()
-          if require'luasnip'.choice_active() then
-            require'luasnip'.change_choice(-1)
-          end
-        end
-      '';
-      mode = mapToModeAbbr [
-        "normal"
-        "insert"
-        "select"
-      ];
-      options.desc = "LuaSnip Prev Choice";
-    }
-  ];
 }
