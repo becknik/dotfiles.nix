@@ -222,13 +222,15 @@ vim.list_extend(snippets, {
     { trig = "um", name = "react useMemo" },
     fmta(
       [[
-        const {<>} = useMemo(() =>> {
-          <>
-        })
+        const <> = useMemo(<>, [<>])
       ]],
       {
-        i(2),
-        i(1),
+        c(1, {
+          fmta("{<>}", { i(1) }),
+          t "values",
+        }),
+        c(2, utils.select_snippets(globals_js.functions, { "fnr", "fni" })),
+        i(3),
       }
     )
   ),
@@ -262,8 +264,8 @@ vim.list_extend(snippets, {
   s(
     { trig = "uct", name = "react useContext" },
     fmta("const {<>} = useContext(<>);", {
-      i(1, ""),
-      i(2, "/* context */"),
+      i(2),
+      i(1, "/* Context */"),
     })
   ),
   s(

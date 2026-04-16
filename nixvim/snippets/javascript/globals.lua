@@ -42,7 +42,7 @@ M.functions = utils.insert_snippets({ "javascript" }, {
 (<>) =>> {
   <>
 }
-]], { i(1, "params"), last_node() })
+]], { i(1), last_node() })
     end,
   },
   {
@@ -54,7 +54,7 @@ M.functions = utils.insert_snippets({ "javascript" }, {
 function (<>) {
   <>
 }
-]], { i(1, "params"), last_node() })
+]], { i(1), last_node() })
     end,
   },
   {
@@ -64,7 +64,7 @@ function (<>) {
 
       return fmta(
         (params.async and "async " or "") .. "(<>) =>> <>",
-        { i(1, "params"), last_node() }
+        { i(1), last_node() }
       )
     end,
   },
@@ -81,7 +81,7 @@ function (<>) {
   return <>;
 }
 ]], {
-        i(1, "params"),
+        i(1),
         second_node(),
         d(3, ts_utils.last_var_declaration_in_function, { 2 }),
       })

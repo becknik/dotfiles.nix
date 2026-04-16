@@ -160,7 +160,7 @@ vim.list_extend(snippets, {
     { trig = "fori", name = "for loop" },
     fmta(
       [[
-        for (let <> = 0; <> <= <>; <>) {
+        for (let <> = 0; <> <<= <>; <>) {
           const <> = <>[<>];
           <>
         }
