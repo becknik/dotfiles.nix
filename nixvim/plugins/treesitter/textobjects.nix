@@ -95,8 +95,8 @@
     withDefaultKeymapOptions [
       # swaps
 
-      (swapBinding "<leader>.p" "swap_next" "@parameter.inner")
-      (swapBinding "<leader>,p" "swap_previous" "@parameter.inner")
+      (swapBinding "<leader>.P" "swap_next" "@parameter.inner")
+      (swapBinding "<leader>,P" "swap_previous" "@parameter.inner")
 
       (swapBinding "<leader>.a" "swap_next" "@attribute.outer")
       (swapBinding "<leader>,a" "swap_previous" "@attribute.outer")

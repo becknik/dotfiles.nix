@@ -53,6 +53,7 @@
               end)
 
               map('n', 'q', actions.select_default)
+              map('n', 'Q', actions.select_default)
 
               -- Keep default mappings
               return true
