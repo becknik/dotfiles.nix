@@ -38,6 +38,18 @@ local globals_js = require "..javascript.globals"
 
 local snippets = {}
 
+local function addMissingImports(node)
+  vim.lsp.buf.code_action {
+    context = { only = { "source.addMissingImports" } },
+    apply = true,
+    filter = function(_, client_id)
+      local client = vim.lsp.get_client_by_id(client_id)
+      return client and (client.name == "tsserver" or client.name == "vtsls")
+        or false
+    end,
+  }
+end
+
 -- NOTE: snippets start here
 
 local snippet_rec_props
@@ -152,7 +164,14 @@ vim.list_extend(snippets, {
         ),
         i(3),
       }
-    )
+    ),
+    {
+      callbacks = {
+        [1] = {
+          [events.leave] = addMissingImports,
+        },
+      },
+    }
   ),
   s(
     { trig = "ue", name = "react useEffect" },
@@ -180,7 +199,14 @@ vim.list_extend(snippets, {
         }),
         i(3),
       }
-    )
+    ),
+    {
+      callbacks = {
+        [1] = {
+          [events.leave] = addMissingImports,
+        },
+      },
+    }
   ),
   s(
     { trig = "uea", name = "react useEffect async" },
@@ -202,7 +228,14 @@ vim.list_extend(snippets, {
         i(4),
         i(5),
       }
-    )
+    ),
+    {
+      callbacks = {
+        [1] = {
+          [events.leave] = addMissingImports,
+        },
+      },
+    }
   ),
   s(
     { trig = "uee", name = "react useEffectEvent" },
@@ -216,7 +249,14 @@ vim.list_extend(snippets, {
         i(1, "effectEvent"),
         i(2),
       }
-    )
+    ),
+    {
+      callbacks = {
+        [1] = {
+          [events.leave] = addMissingImports,
+        },
+      },
+    }
   ),
   s(
     { trig = "um", name = "react useMemo" },
@@ -232,7 +272,14 @@ vim.list_extend(snippets, {
         c(2, utils.select_snippets(globals_js.functions, { "fnr", "fni" })),
         i(3),
       }
-    )
+    ),
+    {
+      callbacks = {
+        [1] = {
+          [events.leave] = addMissingImports,
+        },
+      },
+    }
   ),
   s(
     { trig = "ust", name = "react useSate" },
@@ -248,7 +295,14 @@ vim.list_extend(snippets, {
         fmt("<{}>", { i(1, "null") }),
       }),
       i(2),
-    })
+    }),
+    {
+      callbacks = {
+        [1] = {
+          [events.leave] = addMissingImports,
+        },
+      },
+    }
   ),
   s(
     { trig = "ur", name = "react useRef" },
@@ -259,18 +313,47 @@ vim.list_extend(snippets, {
         fmt("<{}>", { i(1, "| null") }),
       }),
       i(2, "null"),
-    })
+    }),
+    {
+      callbacks = {
+        [1] = {
+          [events.leave] = addMissingImports,
+        },
+      },
+    }
   ),
   s(
     { trig = "uct", name = "react useContext" },
     fmta("const {<>} = useContext(<>);", {
       i(2),
       i(1, "/* Context */"),
+    }),
+    {
+      callbacks = {
+        [1] = {
+          [events.leave] = addMissingImports,
+        },
+      },
+    }
+  ),
+  s(
+    { trig = "ucc", name = "react use<CutoomHook>" },
+    fmta("const {<>} = use<>(<>);", {
+      i(3),
+      i(1, "CustomHook"),
+      i(2, "/* Context */"),
     })
   ),
   s(
     { trig = "ut", name = "react useTransition" },
-    t "const [isPending, startTransition] = useTransition();"
+    { t "const [isPending, startTransition] = useTransition();", i(0) },
+    {
+      callbacks = {
+        [0] = {
+          [events.enter] = addMissingImports,
+        },
+      },
+    }
   ),
 
   -- calls
@@ -287,7 +370,14 @@ vim.list_extend(snippets, {
         t "",
         t "async ",
       }), i(2, "// actions") }
-    )
+    ),
+    {
+      callbacks = {
+        [1] = {
+          [events.leave] = addMissingImports,
+        },
+      },
+    }
   ),
 
   -- components
@@ -313,7 +403,14 @@ vim.list_extend(snippets, {
           end
         end),
       }
-    )
+    ),
+    {
+      callbacks = {
+        [1] = {
+          [events.leave] = addMissingImports,
+        },
+      },
+    }
   ),
   s(
     { trig = "ac", name = "react Activity component" },
@@ -336,16 +433,30 @@ vim.list_extend(snippets, {
           end
         end),
       }
-    )
+    ),
+    {
+      callbacks = {
+        [1] = {
+          [events.leave] = addMissingImports,
+        },
+      },
+    }
   ),
 
   -- types
 
   s(
-    { trig = "tds", name = "Dispatch<SetActionState<>>" },
+    { trig = "tdsa", name = "Dispatch<SetActionState<>>" },
     fmt("Dispatch<SetActionState<{}>>", {
       i(2, "/* Type */"),
-    })
+    }),
+    {
+      callbacks = {
+        [1] = {
+          [events.leave] = addMissingImports,
+        },
+      },
+    }
   ),
   s({ trig = "trn", name = "ReactNode" }, t "React.ReactNode"),
 })
