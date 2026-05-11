@@ -25,12 +25,12 @@
       "x-scheme-handler/sms" = [ "org.gnome.Shell.Extensions.GSConnect.desktop" ];
       "x-scheme-handler/tel" = [ "org.gnome.Shell.Extensions.GSConnect.desktop" ];
 
-      "x-scheme-handler/http" = [ "zen-bet.desktop" ];
-      "x-scheme-handler/https" = [ "zen-bet.desktop" ];
-      "application/xhtml+xml" = [ "zen-bet.desktop" ];
-      "x-scheme-handler/about" = [ "zen-bet.desktop" ];
-      "x-scheme-handler/unknown" = [ "zen-bet.desktop" ];
-      "text/html" = [ "zen-bet.desktop" ];
+      "x-scheme-handler/http" = [ "zen-beta.desktop" ];
+      "x-scheme-handler/https" = [ "zen-beta.desktop" ];
+      "application/xhtml+xml" = [ "zen-beta.desktop" ];
+      "x-scheme-handler/about" = [ "zen-beta.desktop" ];
+      "x-scheme-handler/unknown" = [ "zen-beta.desktop" ];
+      "text/html" = [ "zen-beta.desktop" ];
 
       "x-scheme-handler/mailto" = [ "thunderbird.desktop" ];
 
