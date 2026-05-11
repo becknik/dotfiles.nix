@@ -73,4 +73,11 @@
     icon-theme = lib.mkForce "Tela-dark";
   };
   home.packages = with pkgs; [ tela-icon-theme ];
+
+  fonts.fontconfig = {
+    enable = true;
+    antialiasing = true;
+    subpixelRendering = "rgb";
+    hinting = "slight";
+  };
 }
