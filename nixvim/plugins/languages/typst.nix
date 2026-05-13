@@ -15,6 +15,8 @@
         websocat = "${lib.getExe config.dependencies.websocat.package}";
       };
       follow_cursor = false;
+      extra_args = [ "--partial-rendering=true" ];
+      port = 8000;
 
       get_main_file.__raw = ''
         function()
@@ -70,7 +72,7 @@
     }
     {
       key = "<leader>lT";
-      action = "TypstPreviewFollowCursor";
+      action = "TypstPreviewFollowCursorToggle";
       options.cmd = true;
       options.desc = "typst Preview Follow Cursor";
     }
