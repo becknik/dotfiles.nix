@@ -217,7 +217,7 @@
           };
         };
     in
-    {
+    rec {
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
 
       # using standalone variant of nixvim to enable "bleeding edge" features & plugins, hence nixos stable stateVersion
@@ -225,11 +225,11 @@
         system:
         let
           pkgs = import nixpkgs {
-            inherit system;
+            inherit system config;
             overlays = [ inputs.nix-webapps.overlays.lib ];
             # overlays = builtins.attrValues inputs.nix-webapps.overlays;
           };
-          pkgs-unstable = import nixpkgs-unstable { inherit system; };
+          pkgs-unstable = import nixpkgs-unstable { inherit system config; };
           nixvim' = inputs.nixvim.legacyPackages.${system};
         in
         import ./pkgs {
