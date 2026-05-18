@@ -147,6 +147,7 @@
             "idea"
             "code"
             "vscode"
+            "blink-cmp-spell"
           ];
         joypixels.acceptLicense = true;
       };
