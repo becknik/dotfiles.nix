@@ -179,24 +179,4 @@
 
     };
   };
-
-  autoCmd = [
-    {
-      event = "User";
-      pattern = [
-        "NeogitCommitComplete"
-        "NeogitPullComplete"
-        "NeogitFetchComplete"
-        "NeogitRebase"
-        "NeogitReset"
-        "NeogitMerge"
-      ];
-      desc = "Refersh the blink-cmp-git cache on every commit";
-      callback.__raw = ''
-        function()
-          vim.api.nvim_command('BlinkCmpGitReloadCache')
-        end
-      '';
-    }
-  ];
 }
