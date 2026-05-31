@@ -59,6 +59,10 @@
       dive # https://github.com/wagoodman/dive
       trivy
       (mkWhenNotDarwin figma-linux)
+
+      ## Arduino
+      arduino-cli
+      arduino-ide
     ]
     ++ [ nixvim ];
 

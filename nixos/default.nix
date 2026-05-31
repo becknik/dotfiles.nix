@@ -306,6 +306,7 @@
       "docker"
       "vboxusers"
       "video"
+      "dialout"
     ]
     ++ [
       "lp"
