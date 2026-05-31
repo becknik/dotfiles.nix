@@ -12,6 +12,7 @@
 
   config = {
     # package = neovim-nightly-overlay.packages.${pkgs.system}.default;
+    version.enableNixpkgsReleaseCheck = false;
 
     clipboard.providers.wl-copy.enable = pkgs.stdenv.isLinux;
 
