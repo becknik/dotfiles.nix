@@ -1,12 +1,11 @@
-{
-  inputs,
-  stateVersion,
-  userName,
-  config,
-  lib,
-  pkgs,
-  isLaptop,
-  ...
+{ inputs
+, stateVersion
+, userName
+, config
+, lib
+, pkgs
+, isLaptop
+, ...
 }:
 
 {
@@ -87,13 +86,9 @@
   # Boot Process
   boot = {
     ## Shared Kernel Config
-    extraModulePackages =
-      with config.boot.kernelPackages;
-      [
-        turbostat
-
-      ]
-      ++ [ pkgs.system76-scheduler ];
+    extraModulePackages = with config.boot.kernelPackages; [
+      turbostat
+    ];
 
     kernelParams = [
       "nowatchdog"
@@ -110,6 +105,26 @@
     };
 
     plymouth.enable = true;
+  };
+
+  services.system76-scheduler = {
+    enable = true;
+
+    # default configuration: https://github.com/pop-os/system76-scheduler/blob/master/data/config.kdl
+    settings = { };
+
+    # docs: https://github.com/pop-os/system76-scheduler#process-priority-assignments
+    # example: https://github.com/pop-os/system76-scheduler/blob/master/data/pop_os.kdl
+    assignments = {
+      nix-builds = {
+        nice = 15;
+        class = "batch";
+        ioClass = "idle";
+        matchers = [
+          "nix-daemon"
+        ];
+      };
+    };
   };
 
   # Sysctl
@@ -137,8 +152,8 @@
     "SystemMaxUse=200M\n"
     + "MaxRetentionSec=7d\n"
     +
-      # Initialized with 4G
-      "RuntimeMaxFileSize=128M";
+    # Initialized with 4G
+    "RuntimeMaxFileSize=128M";
 
   ## Networking
   networking = {
@@ -157,13 +172,16 @@
   ];
   services.resolved = {
     enable = true;
-    dnssec = "true";
-    domains = [ "~." ];
-    fallbackDns = [
-      "1.1.1.1#one.one.one.one"
-      "1.0.0.1#one.one.one.one"
-    ];
-    dnsovertls = "true";
+
+    settings.Resolve = {
+      DNSOverTLS = "true";
+      Domains = [ "~." ];
+      FallbackDns = [
+        "1.1.1.1#one.one.one.one"
+        "1.0.0.1#one.one.one.one"
+      ];
+      DNSSEC = "true";
+    };
   };
   programs.openvpn3.enable = true;
 
@@ -219,6 +237,11 @@
             "adb-wrieless"
           ];
         };
+        docker = {
+          target = "ACCEPT";
+          interfaces = [ "docker0" ];
+          masquerade = true;
+        };
       };
     };
   services.samba.openFirewall = true;
@@ -229,6 +252,7 @@
     # TODO: necessary for proton vpn?
     # https://github.com/NixOS/nixpkgs/issues/307462#issuecomment-2750133149
     checkReversePath = "loose";
+    logRefusedConnections = true;
   };
 
   # Security & Secrets
@@ -254,6 +278,7 @@
   security.apparmor.enable = true;
   environment.systemPackages = with pkgs; [
     firewalld-gui
+    nftables
     #firejail # if not included explicitly, `/etc/apparmor.d` wouldn't get symlinked...
   ];
 
@@ -291,7 +316,7 @@
   };
 
   # Documentation
-  documentation.man.generateCaches = true; # for `apropos` & `man -k` utilities
+  documentation.man.cache.enable = true; # for `apropos` & `man -k` utilities
 
   # User Setup
   users.mutableUsers = false;
