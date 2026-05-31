@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -158,8 +157,7 @@ in
     Unit =
       let
         deps = [
-          "dbus-user-session.service"
-          "graphical-session.target"
+          "dbus.socket"
           "gpg-agent.socket"
           "pcscd.socket"
         ];
