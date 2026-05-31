@@ -82,17 +82,42 @@
   };
 
   outputs =
-    inputs-unpatched:
+    unpatchedInputs:
     let
-      patcher = inputs-unpatched.flake-input-patcher.lib.x86_64-linux;
+      patcher = unpatchedInputs.flake-input-patcher.lib.x86_64-linux;
 
-      inputs = patcher.patch inputs-unpatched {
-        nixvim.patches = [
-          ./patches/nixvim/plugins-otter-on-attach.patch
-        ];
+      # Make flake=false inputs look like regular flake inputs for the patcher.
+      normalizeInput =
+        input:
+        if builtins.isAttrs input then
+          if input ? sourceInfo then
+            input
+          else
+            input
+            // {
+              sourceInfo = input;
+              outPath = input.outPath or input;
+            }
+        else
+          {
+            sourceInfo = input;
+            outPath = input;
+          };
 
-        nixpkgs.patches = [
-        ];
+      normalizedInputs = builtins.mapAttrs (_: value: normalizeInput value) unpatchedInputs;
+
+      inputs = patcher.patch {
+        unpatchedInputs = normalizedInputs;
+        flakePath = ./.;
+
+        patchSpec = {
+          nixvim.patches = [
+            ./patches/nixvim/plugins-otter-on-attach.patch
+          ];
+
+          nixpkgs.patches = [
+          ];
+        };
       };
 
       inherit (inputs)
@@ -153,19 +178,19 @@
 
       # `nixpkgs-unstable'` varies between hosts due to target platform modification config on `dnix`
       defaultOverlays =
-        {
-          nixpkgs-unstable' ? self.overlays.nixpkgs-unstable,
+        { nixpkgs-unstable' ? self.overlays.nixpkgs-unstable
+        ,
         }:
-        with self.overlays;
-        [
-          default # Additions to `nixpkgs.lib`
-          nixpkgs-unstable'
-          modifications
-          additions # contents of ./pkgs
-        ]
-        ++ (with inputs; [
-          nix-webapps.overlays.lib
-        ]);
+          with self.overlays;
+          [
+            default # Additions to `nixpkgs.lib`
+            nixpkgs-unstable'
+            modifications
+            additions # contents of ./pkgs
+          ]
+          ++ (with inputs; [
+            nix-webapps.overlays.lib
+          ]);
 
       # Default system specialArgs
       args = userName: {
@@ -182,11 +207,10 @@
 
       # home-manager config generation function
       mkHomeManagerConf =
-        {
-          system,
-          isLaptop,
-          userName,
-          ...
+        { system
+        , isLaptop
+        , userName
+        , ...
         }:
         {
           home-manager = {
@@ -398,8 +422,9 @@
 
                   languages.nix.enable = true;
 
+                  # https://devenv.sh/reference/options/#git-hookshooks
                   git-hooks.hooks = {
-                    nixfmt-rfc-style.enable = true;
+                    nixpkgs-fmt.enable = true;
                   };
 
                   scripts.update-fetchgit.exec = builtins.readFile ./update-fetchgit.sh;
