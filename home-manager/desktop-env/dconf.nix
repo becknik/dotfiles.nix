@@ -180,6 +180,8 @@ with lib.gvariant;
       switch-input-source-backward = [ "<Shift><Control><Super>space" ];
 
       always-on-top = [ "<Super>z" ];
+
+      activate-window-menu = [ ];
     };
 
     "org/gnome/desktop/wm/preferences" = {
