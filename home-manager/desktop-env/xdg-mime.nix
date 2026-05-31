@@ -34,18 +34,64 @@
 
       "x-scheme-handler/mailto" = [ "thunderbird.desktop" ];
 
-      "image/png" = [ "org.kde.gwenview.desktop" ];
-      "image/jpg" = [ "org.kde.gwenview.desktop" ];
-      "image/jpeg" = [ "org.kde.gwenview.desktop" ];
-      "image/webp" = [ "org.kde.gwenview.desktop" ];
-      "image/svg+xml" = [ "org.kde.gwenview.desktop" ];
+      "image/png" = [
+        # "re.sonny.Junction.desktop"
+        "org.kde.gwenview.desktop"
+      ];
+      "image/jpg" = [
+        # "re.sonny.Junction.desktop"
+        "org.kde.gwenview.desktop"
+      ];
+      "image/jpeg" = [
+        # "re.sonny.Junction.desktop"
+        "org.kde.gwenview.desktop"
+      ];
+      "image/webp" = [
+        # "re.sonny.Junction.desktop"
+        "org.kde.gwenview.desktop"
+      ];
+      "image/svg+xml" = [
+        # "re.sonny.Junction.desktop"
+        "org.kde.gwenview.desktop"
+      ];
 
-      "video/*" = [ "mpv.desktop" ];
+      "video/webm" = [
+        # "re.sonny.Junction.desktop"
+        "mpv.desktop"
+      ];
+      "video/vp9" = [
+        # "re.sonny.Junction.desktop"
+        "mpv.desktop"
+      ];
+      "video/vp8" = [
+        # "re.sonny.Junction.desktop"
+        "mpv.desktop"
+      ];
+      "video/ogg" = [
+        # "re.sonny.Junction.desktop"
+        "mpv.desktop"
+      ];
+      "video/mpeg" = [
+        # "re.sonny.Junction.desktop"
+        "mpv.desktop"
+      ];
+      "video/mpv" = [
+        # "re.sonny.Junction.desktop"
+        "mpv.desktop"
+      ];
+      "video/mp4" = [
+        # "re.sonny.Junction.desktop"
+        "mpv.desktop"
+      ];
       "audio/*" = [ "mpv.desktop" ];
 
       "application/pdf" = [ "org.gnome.Papers.desktop" ];
 
       "application/zip" = [ "org.kde.ark.desktop" ];
+      "application/zstd" = [ "org.kde.ark.desktop" ];
+      "application/gzip" = [ "org.kde.ark.desktop" ];
+
+      "x-scheme-handler/file" = [ "re.sonny.Junction.desktop" ];
     };
   };
 }
