@@ -92,7 +92,6 @@
         ];
 
         nixpkgs.patches = [
-          ./patches/nixpkgs/ibus-xorg-crashes.patch
         ];
       };
 
@@ -125,7 +124,7 @@
       # Default nixpkgs config
       config = {
         permittedInsecurePackages = [
-          "mbedtls-2.28.10" # openrgb
+          "electron-39.8.10"
         ];
         allowUnfreePredicate =
           pkg:
