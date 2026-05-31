@@ -1,9 +1,8 @@
-{
-  userName,
-  isLaptop,
-  config,
-  lib,
-  ...
+{ userName
+, isLaptop
+, config
+, lib
+, ...
 }:
 
 let
@@ -96,8 +95,6 @@ with lib.gvariant;
     "org/gnome/desktop/screensaver".lock-delay = 30;
 
     "org/gnome/desktop/wm/keybindings" = {
-      "show-screenshot-ui " = lib.mkForce [ ];
-
       close = [
         "<Super>q"
         "<Alt>F4"
@@ -271,8 +268,6 @@ with lib.gvariant;
         "org.gnome.Pomodoro.desktop"
         "librewolf.desktop"
         "code.desktop"
-        "Alacritty.desktop"
-        "cider.desktop"
       ];
     };
 

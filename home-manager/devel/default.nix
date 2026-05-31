@@ -1,6 +1,5 @@
-{
-  pkgs,
-  ...
+{ pkgs
+, ...
 }:
 
 {
@@ -15,10 +14,6 @@
     # DirEnv Setup
     direnv = {
       enable = true; # nix-direnv gets enabled automatically in NixOS - but not in home-manager...
-      package = pkgs.direnv.overrideAttrs (oldAttrs: {
-        patches = (oldAttrs.patches or [ ]) ++ [ ./direnv-use-flake-crash-fix.patch ];
-        version = "2.37.1-patched";
-      });
       nix-direnv.enable = true;
       enableZshIntegration = true;
     };
@@ -31,12 +26,13 @@
       mkWhenNotDarwin = pkg: (if pkgs.stdenv.isDarwin then pkgs.hello else pkg);
 
       jetbrainsTools =
-        lib.lists.optionals (!pkgs.stdenv.isDarwin) (
-          with unstable.jetbrains;
-          [
-            idea
-          ]
-        )
+        lib.lists.optionals (!pkgs.stdenv.isDarwin)
+          (
+            with unstable.jetbrains;
+            [
+              idea
+            ]
+          )
         # not using unstable.jetbrains-toolbox because it depends on too much & I'm not using it that often
         ++ lib.lists.optionals (!pkgs.stdenv.isDarwin) [ jetbrains-toolbox ] # used for experiments
         ++ lib.lists.optionals (!pkgs.stdenv.isDarwin) [ android-tools ];
@@ -59,6 +55,7 @@
       dive # https://github.com/wagoodman/dive
       trivy
       (mkWhenNotDarwin figma-linux)
+      unstable.cook-cli
 
       ## Arduino
       arduino-cli

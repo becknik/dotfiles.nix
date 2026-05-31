@@ -1,8 +1,7 @@
-{
-  pkgs,
-  lib,
-  isLaptop,
-  ...
+{ pkgs
+, lib
+, isLaptop
+, ...
 }:
 
 let
@@ -24,6 +23,16 @@ let
       simple-scan
       snapshot
       nautilus # necessary for file selection dialog
+
+      # Gnome Circle
+      gradia # screenshot editing tool
+      constrict # compress videos to match a file size
+      curtail
+      bustle
+      video-trimmer
+      junction # setup necessary?
+      hieroglyphic
+      eyedropper # does this work
     ]
     ++ lib.lists.optionals isLaptop (with pkgs; [ gnome-power-manager ]);
 
@@ -57,7 +66,7 @@ let
     #org.kde.dolphin.desktop[294371]: kf.service.services: KApplicationTrader: mimeType "x-scheme-handler/dav" not found
     #kf.kio.core: couldn't create worker: "Unknown protocol 'dav'
     gwenview
-    okular
+    # okular
     ark # archive manager
   ];
 in
@@ -108,7 +117,6 @@ in
   environment.gnome.excludePackages = with pkgs; [
     evince
     eog
-    geary
     sushi
     gnome-tour
     gnome-photos
@@ -136,6 +144,7 @@ in
     yelp
     yelp-xsl
     # folks gnome-calendar gnome-mimeapps grilo grilo-plugins libdmapsharing gtk-frdp liboauth libspelling
+    showtime # video player
   ];
 
   environment.variables = {

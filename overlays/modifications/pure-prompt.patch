@@ -2,24 +2,18 @@
 # https://github.com/sindresorhus/pure/pull/537
 
 diff --git a/pure.zsh b/pure.zsh
-index ddb0e30..3dad87d 100644
+index 984ece8..8be8736 100644
 --- a/pure.zsh
 +++ b/pure.zsh
-@@ -163,6 +163,8 @@ prompt_pure_preprompt_render() {
-
- 	# Execution time.
- 	[[ -n $prompt_pure_cmd_exec_time ]] && preprompt_parts+=('%F{$prompt_pure_colors[execution_time]}${prompt_pure_cmd_exec_time}%f')
-+	# Print non-zero exit code
-+	preprompt_parts+=('%F{red}%(?..✘ $?)%f')
-
- 	local cleaned_ps1=$PROMPT
- 	local -H MATCH MBEGIN MEND
-@@ -176,7 +176,7 @@ prompt_pure_preprompt_render() {
-
- 	if [[ $1 == precmd ]]; then
- 		# Initial newline, for spaciousness.
--		print
-+		# print
- 	elif [[ $prompt_pure_last_prompt != $expanded_prompt ]]; then
- 		# Redraw the prompt.
- 		prompt_pure_reset_prompt
+@@ -867,10 +867,11 @@ prompt_pure_setup() {
+ 	PROMPT+='%(14V. %F{${prompt_pure_git_branch_color}}%14v%(15V.%F{$prompt_pure_colors[git:dirty]}%15v.)%f.)'
+ 	PROMPT+='%(16V. %F{$prompt_pure_colors[git:action]}%16v%f.)'
+ 	PROMPT+='%(17V. %F{$prompt_pure_colors[git:arrow]}%17v%f.)'
+ 	PROMPT+='%(18V. %F{$prompt_pure_colors[git:stash]}${PURE_GIT_STASH_SYMBOL:-≡}%f.)'
+ 	PROMPT+='%(19V. %F{$prompt_pure_colors[execution_time]}%19v%f.)'
++	PROMPT+='%(?.. %F{$prompt_pure_colors[prompt:error]}✘ %?%f)'
+ 
+ 	# Newline separating preprompt from prompt.
+ 	PROMPT+='${prompt_newline}'
+ 
+ 	# Prompt line: virtualenv and prompt symbol.

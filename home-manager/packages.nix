@@ -1,6 +1,5 @@
-{
-  pkgs,
-  ...
+{ pkgs
+, ...
 }:
 
 {
@@ -87,9 +86,6 @@
 
       ## Benchmarking
       speedtest-cli
-
-      ## Uni & TeX
-      (mkWhenNotDarwin qtikz)
 
       ## Trash
       # cbonsai

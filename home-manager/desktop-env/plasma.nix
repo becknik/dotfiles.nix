@@ -9,11 +9,6 @@
       # mutable = true; # TODO ???
     };
 
-    okularpartrc = {
-      target = "okularpartrc";
-      source = ./files/plasma/okularpartrc.ini;
-    };
-
     gwenviewrc = {
       target = "gwenviewrc";
       source = ./files/plasma/gwenviewrc.ini;

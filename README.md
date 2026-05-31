@@ -134,11 +134,11 @@ Let's hope this projects break the hours down to minutes
 - [ ] Telegram, Signal, Threema, Element
 - [ ] planify
 - [ ] Anki
-- [ ] cider
 
 ### Autostart must be manually Enabled
 
 - [ ] keepassxc
+- [ ] Nextcloud
 - [ ] telegram-desktop
 - [ ] planify
 - [x] element-desktop (manually created in `autostart.nix`)

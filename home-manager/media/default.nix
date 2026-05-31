@@ -1,6 +1,5 @@
-{
-  pkgs,
-  ...
+{ pkgs
+, ...
 }:
 
 {
@@ -10,18 +9,9 @@
     ./thunderbird.nix
 
     ./gpg.nix
-
-    ./flameshot.nix
   ];
 
   # Sync
-  services = {
-    nextcloud-client = {
-      enable = true;
-      startInBackground = true;
-    };
-  };
-
   programs.mpv.enable = true;
 
   home.packages = with pkgs; [
@@ -32,7 +22,7 @@
 
     ## Daily Software
     libreoffice-fresh
-    obsidian
+    unstable.obsidian
     logseq
     unstable.anki
     # https://github.com/alainm23/planify/issues/2232
@@ -54,25 +44,23 @@
     vesktop
     chromium-app-t3-chat
 
-    protonmail-bridge-gui
-    protonmail-desktop
-    protonvpn-gui
+    unstable.protonmail-bridge-gui
+    unstable.protonmail-desktop
+    unstable.proton-vpn
 
     ## Media
     kooha
-    helvum
+    crosspipe
     system-config-printer # graphical ui for CUPS
     transmission_4-gtk
     yt-dlp
     media-downloader # for yt-dlp
-    cider
     localsend
 
     ## Images
     krita
 
     ### PDF
-    pdfslicer
     qpdf
   ];
 }

@@ -43,7 +43,8 @@
       "video/*" = [ "mpv.desktop" ];
       "audio/*" = [ "mpv.desktop" ];
 
-      "application/pdf" = [ "org.kde.okular.desktop" ];
+      "application/pdf" = [ "org.gnome.Papers.desktop" ];
+
       "application/zip" = [ "org.kde.ark.desktop" ];
     };
   };
