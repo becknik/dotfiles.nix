@@ -62,6 +62,13 @@ local function selection_or(text, transformation_callback)
   end
 end
 
+local function convert_reference_to_label(text)
+  if not text or not text[1] or text[1]:len() <= 2 then return "" end
+
+  local minus_at = text[1]:sub(2, text[1]:len())
+  return "<" .. minus_at .. ">"
+end
+
 -- NOTE: snippets start here
 
 vim.list_extend(snippets, {
@@ -104,15 +111,20 @@ vim.list_extend(snippets, {
   s(
     { trig = "cite", name = "cite" },
     fmta("#cite(<>)", {
-      d(
-        1,
-        selection_or(nil, function(text)
-          if not text or not text[1] or text[1]:len() <= 2 then return "" end
-
-          local minus_at = text[1]:sub(2, text[1]:len())
-          return "<" .. minus_at .. ">"
-        end)
-      ),
+      d(1, selection_or(nil, convert_reference_to_label)),
+    })
+  ),
+  s(
+    { trig = "citef", name = "cite with form" },
+    fmta('#cite(<>, form: "<>")', {
+      d(1, selection_or(nil, convert_reference_to_label)),
+      i(2, "author"),
+    })
+  ),
+  s(
+    { trig = "ref", name = "ref" },
+    fmta("#ref(<>)", {
+      d(1, selection_or(nil, convert_reference_to_label)),
     })
   ),
 })
