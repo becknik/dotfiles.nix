@@ -47,6 +47,7 @@
     unstable.protonmail-bridge-gui
     unstable.protonmail-desktop
     unstable.proton-vpn
+    unstable.proton-vpn-cli
 
     ## Media
     kooha
