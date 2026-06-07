@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  withDefaultKeymapOptions,
-  ...
+{ config
+, lib
+, pkgs
+, withDefaultKeymapOptions
+, ...
 }:
 
 {
@@ -66,7 +65,7 @@
       key = "gco";
       action.__raw = ''
         function()
-          return "o.<esc>" .. require("vim._comment").operator() .. "_$s"
+          return "o.<esc>" .. require("vim._comment").operator() .. "_f.s"
         end'';
       options.expr = true;
       options.desc = "Toggle Comment Below";
@@ -75,7 +74,7 @@
       key = "gcOO";
       action.__raw = ''
         function()
-          return "O.<esc>" .. require("vim._comment").operator() .. "_$s"
+          return "O.<esc>" .. require("vim._comment").operator() .. "_f.s"
         end'';
       options.expr = true;
       options.desc = "Toggle Comment Above";
@@ -85,7 +84,7 @@
       key = "gcOt";
       action.__raw = ''
         function()
-          return "OTODO: <esc>" .. require("vim._comment").operator() .. "_A"
+          return "OTODO:<esc>" .. require("vim._comment").operator() .. "_$F:a "
         end'';
       options.expr = true;
       options.desc = "Toggle TODO Comment Above";
@@ -94,7 +93,7 @@
       key = "gcOf";
       action.__raw = ''
         function()
-          return "OFIXME: <esc>" .. require("vim._comment").operator() .. "_A"
+          return "OFIXME:<esc>" .. require("vim._comment").operator() .. "_$F:a "
         end'';
       options.expr = true;
       options.desc = "Toggle FIXME Comment Above";
@@ -103,7 +102,7 @@
       key = "gcOh";
       action.__raw = ''
         function()
-          return "OHACK: <esc>" .. require("vim._comment").operator() .. "_A"
+          return "OHACK:<esc>" .. require("vim._comment").operator() .. "_$F:a "
         end'';
       options.expr = true;
       options.desc = "Toggle HACK Comment Above";
@@ -112,7 +111,7 @@
       key = "gcOw";
       action.__raw = ''
         function()
-          return "OWARN: <esc>" .. require("vim._comment").operator() .. "_A"
+          return "OWARN:<esc>" .. require("vim._comment").operator() .. "_$F:a "
         end'';
       options.expr = true;
       options.desc = "Toggle WARN Comment Above";
@@ -121,7 +120,7 @@
       key = "gcOn";
       action.__raw = ''
         function()
-          return "ONOTE: <esc>" .. require("vim._comment").operator() .. "_A"
+          return "ONOTE:<esc>" .. require("vim._comment").operator() .. "_$F:a "
         end'';
       options.expr = true;
       options.desc = "Toggle NOTE Comment Above";
