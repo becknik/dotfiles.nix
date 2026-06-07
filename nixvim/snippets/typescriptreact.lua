@@ -177,13 +177,19 @@ vim.list_extend(snippets, {
     { trig = "ue", name = "react useEffect" },
     fmta(
       [[
-        useEffect(() =>> {
+        useEffect(<> {
           <><>
         }, [<>]);
       ]],
       {
-        i(1),
-        c(2, {
+        c(1, {
+          t "() =>",
+          fmta("function <>()", {
+            i(1, "fetchSomething"),
+          }),
+        }),
+        i(2),
+        c(3, {
           t "",
           fmta(
             [[
@@ -197,7 +203,7 @@ vim.list_extend(snippets, {
             }
           ),
         }),
-        i(3),
+        i(4),
       }
     ),
     {

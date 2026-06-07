@@ -221,6 +221,31 @@ vim.list_extend(snippets, {
       }
     )
   ),
+  s(
+    { trig = "pt", name = "Promise.try", desc = "ES2025" },
+    fmta(
+      [[
+        Promise.try(<>).then(<>).catch(<>)
+      ]],
+      {
+        c(1, utils.select_snippets(globals.functions, { "fn", "fni" })),
+        c(2, utils.select_snippets(globals.functions, { "fn", "fni" })),
+        c(3, utils.select_snippets(globals.functions, { "fn", "fni" })),
+        c(4, {
+          t "",
+          fmta(
+            [[
+
+            .finally(<>)
+          ]],
+            {
+              c(1, utils.select_snippets(globals.functions, { "fn", "fni" })),
+            }
+          ),
+        })
+      }
+    )
+  ),
 
   -- DOM Events
 
@@ -400,7 +425,7 @@ vim.list_extend(snippets, {
     { trig = "af", name = "Array.from" },
     fmta("Array.from(<><>)", {
       c(1, {
-        i(1, "iterable"),
+        i(1, "/* iterable */"),
         sn(
           nil,
           fmta("{ length: <> }", {
@@ -417,6 +442,12 @@ vim.list_extend(snippets, {
           })
         ),
       }),
+    })
+  ),
+  s(
+    { trig = "afa", name = "Array.fromAsync", desc = "ES2026" },
+    fmta("Array.fromAsync(<>)", {
+      i(1, "/* async iterable */"),
     })
   ),
 

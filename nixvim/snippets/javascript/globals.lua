@@ -34,7 +34,7 @@ end
 ---@type SnippetTuples
 M.functions = utils.insert_snippets({ "javascript" }, {
   {
-    { trig = "fn", name = "function inline {}" },
+    { trig = "fn", name = "function inline => {}" },
     function(params)
       local last_node = get_last_node(params)
 
@@ -58,7 +58,7 @@ function (<>) {
     end,
   },
   {
-    { trig = "fni", name = "function inline" },
+    { trig = "fni", name = "function inline =>" },
     function(params)
       local last_node = get_last_node(params)
 
@@ -69,7 +69,7 @@ function (<>) {
     end,
   },
   {
-    { trig = "fnr", name = "function with return" },
+    { trig = "fnr", name = "function => {} with return" },
     function(params)
       params.last_index = 2
       local second_node = get_last_node(params)

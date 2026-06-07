@@ -140,19 +140,25 @@ vim.list_extend(snippets, {
       i(2, 'message'),
     })
   ),
+  s(
+    { trig = "ie", name = "Error.isError", desc = "ES2026" },
+    fmta("Error.isError(<>)", {
+      i(1, "/* error type */"),
+    })
+  ),
 
   s(
     { trig = "io", name = "instanceof" },
     fmta("<> instanceof <>", {
-      i(1, "/* value */"),
-      i(2, "/* Class */"),
+      i(1, '"value"'),
+      i(2, "String"),
     })
   ),
   s(
     { trig = "to", name = "typeof" },
     fmta("typeof <> === <>", {
-      i(1, "/* value */"),
-      i(2, "/* Type */"),
+      i(1, '"value"'),
+      i(2, "String"),
     })
   ),
 
