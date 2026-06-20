@@ -87,9 +87,10 @@ function(bufnr)
   vim.keymap.set("n", "[h", prev_git, opts "Previous Git")
 
   vim.keymap.del("n", "F", { buffer = bufnr })
-  vim.keymap.set("n", "f", api.tree.search_node, opts "Find")
+  vim.keymap.set("n", "/", api.tree.search_node, opts "Find")
   vim.keymap.set("n", "q", api.tree.close, opts "Close")
   vim.keymap.set("n", "gn", api.fs.rename, opts "Rename")
+  vim.keymap.set("n", "?", api.tree.toggle_help, opts "Help")
 
   local function reset()
     local api = require "nvim-tree.api"
