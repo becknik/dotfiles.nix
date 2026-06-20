@@ -104,7 +104,6 @@
         tag.sort = "-taggerdate";
         branch.sort = "-committerdate";
         column.ui = "auto";
-        rerere.enabled = true;
         # https://andrewlock.net/working-with-stacked-branches-in-git-is-easier-with-update-refs/
         rebase.updateRefs = true;
         merge = {
@@ -123,8 +122,6 @@
       };
 
       ignores = [
-        ".idea"
-        ".vscode"
         ".DS_Store"
         "node_modules"
         "target"
