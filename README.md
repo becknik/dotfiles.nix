@@ -73,8 +73,6 @@ $ tree -a -I '\.git|\.direnv' . # slightly modified for better context/ overview
 - [disko](https://github.com/nix-community/disko): For NixOS partitioning & deployment
 - [Flockenzeit](https://github.com/balsoft/Flockenzeit): Date & time parsing and formatting in native Nix. Awesome!
   - Used in conjunction with flake's `inputs.self.sourceInfo.lastModified` for systemd NixOS automatic rebuild logs :^)
-- [mac-app-util](https://github.com/hraban/mac-app-util): Automatically creating trampoline symlinks for home-managed Mac software
-  - I really hate MacOS, but this lib makes me hate using it with nix-darwin a bit less
 - [nix-vscode-extensions](https://github.com/nix-community/nix-vscode-extensions): The few extensions being available in `nixpkgs` (some of which being outdated) replaced by the latest & all available on `open-vsx` & marketplace!
 
 ### Features

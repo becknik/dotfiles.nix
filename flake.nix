@@ -41,10 +41,6 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    mac-app-util = {
-      url = "github:hraban/mac-app-util";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     nixvim = {
       url = "github:nix-community/nixvim";
@@ -221,15 +217,12 @@
             useUserPackages = true;
 
             # enabled for all users, not just one:
-            sharedModules =
-              with inputs;
-              [
-                sops-nix.homeManagerModules.sops
-                nix-index-database.homeModules.nix-index
-                catppuccin.homeModules.catppuccin
-                inputs.zen-browser.homeModules.beta
-              ]
-              ++ nixpkgs.lib.optional (inputs.nixpkgs.lib.strings.hasInfix "darwin" system) mac-app-util.homeManagerModules.default;
+            sharedModules = with inputs; [
+              sops-nix.homeManagerModules.sops
+              nix-index-database.homeModules.nix-index
+              catppuccin.homeModules.catppuccin
+              inputs.zen-browser.homeModules.beta
+            ];
 
             # home-manager on darwin doesn't support all options
             users.${userName} = nixpkgs.lib.concatStringsSep "/" [
@@ -369,7 +362,6 @@
           specialArgs = (args userName);
 
           modules = [
-            inputs.mac-app-util.darwinModules.default
             home-manager.darwinModules.home-manager
 
             (
