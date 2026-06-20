@@ -225,7 +225,7 @@ vim.list_extend(snippets, {
     { trig = "pt", name = "Promise.try", desc = "ES2025" },
     fmta(
       [[
-        Promise.try(<>).then(<>).catch(<>)
+        Promise.try(<>).then(<>).catch(<>)<>
       ]],
       {
         c(1, utils.select_snippets(globals.functions, { "fn", "fni" })),
