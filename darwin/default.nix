@@ -37,7 +37,6 @@
     # brew tap homebrew/cask-fonts
     casks = [
       "ungoogled-chromium"
-      "firefox"
       "font-fira-code-nerd-font"
       "font-fira-code"
     ];
