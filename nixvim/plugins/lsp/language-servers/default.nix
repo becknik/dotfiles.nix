@@ -1,4 +1,10 @@
-{ pkgs, css-variables-language-server, ... }:
+{
+  lib,
+  pkgs,
+  css-variables-language-server,
+  cooklang-language-server,
+  ...
+}:
 
 {
   imports = [
@@ -73,16 +79,16 @@
     cssls.package = pkgs.buildNpmPackage rec {
       name = "vscode-css-languageservice";
       packageName = "vscode-css-languageservice";
-      version = "6.3.9";
+      version = "6.3.10";
       src = (
         pkgs.fetchFromGitHub {
           owner = "microsoft";
           repo = "vscode-css-languageservice";
           rev = "v${version}";
-          hash = "sha256-BVfNesWL0m9g1cBP+JfQ/gA8ZqJ6ma337RCfSO0jkDg=";
+          hash = "sha256-qge3QBsExNL3FTTD3PdK+pl0BSPquBQJrb4MI6VQbN4=";
         }
       );
-      npmDepsHash = "sha256-4FCzXJc+AcuRhC4MaaTmiKs0ag/G/gHG0W1hVx7BoEg=";
+      npmDepsHash = "sha256-H77mfAC5RfQidF/u7begp5BxDgh4tYL98Rhif4DLfF8=";
       npmBuildScript = "test";
     };
     tailwindcss.enable = true;
