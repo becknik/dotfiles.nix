@@ -1,78 +1,316 @@
 diff --git a/lua/otter/config.lua b/lua/otter/config.lua
-index ea6cb02..4bb8178 100644
+index ea6cb02..1c946c0 100644
 --- a/lua/otter/config.lua
 +++ b/lua/otter/config.lua
-@@ -3,11 +3,11 @@ local M = {}
- ---@class OtterLSPConfig
- ---@field diagnostic_update_events string[]
- ---@field root_dir fun(fname: string, bufnr: number): string
- 
- ---@class OtterBufferConfig
-----@field set_filetype boolean 
-+---@field set_filetype boolean
- ---@field write_to_disk boolean
- ---@field preambles table<string, string[]>
- ---@field postambles table<string, string[]>
- ---@field ignore_pattern table<string, string>
- 
-@@ -17,10 +17,11 @@ local M = {}
+@@ -17,10 +17,18 @@ local M = {}
  ---@class OtterConfig
  ---@field lsp OtterLSPConfig
  ---@field buffers OtterBufferConfig
  ---@field handle_leading_whitespace boolean
  ---@field extensions table<string, string>
-+---@field filetype_aliases table<string, string>
++--- Maps a treesitter-injected language name (as produced by the injections
++--- query) to the otter language whose language server should back the embedded
++--- code. This is used when the injected language is a dedicated grammar for a
++--- host language but the user wants an LSP for a different (usually equivalent)
++--- language. The classic example is `styled` (tree-sitter-styled) which is
++--- injected into `styled.div\`...\`` template strings; map it to `css` so a CSS
++--- language server attaches to the otter buffer.
++---@field aliases table<string, string>
  ---@field debug boolean
  ---@field verbose OtterVerboseConfig|boolean
  ---@field injectable_languages string[]
  OtterConfig = {
    lsp = {
-@@ -111,10 +112,14 @@ OtterConfig = {
+@@ -111,10 +119,20 @@ OtterConfig = {
      webc = "webc",
      webr = "R",
      yaml = "yml",
      zig = "zig",
    },
-+  -- mapping of language names to filetypes for otter buffers
-+  -- useful when the injected language differs from an LSP filetype
-+  -- e.g. { styled = "css" }
-+  filetype_aliases = {},
++  -- map treesitter-injected language names to the otter language whose
++  -- language server should back the embedded code. Keys are the language
++  -- names produced by the treesitter injections query, values are the
++  -- otter language (must be present in `extensions`).
++  -- The default maps the `styled` parser (injected by nvim-treesitter into
++  -- styled-components/linaria `styled.div\`...\`` template strings) to `css`,
++  -- so a CSS language server attaches to those regions.
++  aliases = {
++    styled = "css",
++  },
    -- add event listeners for LSP events for debugging
    debug = false,
    verbose = { -- set to false to disable all verbose messages
      no_code_found = false, -- warn if otter.activate is called, but no injected code was found
    },
-diff --git a/lua/otter/init.lua b/lua/otter/init.lua
-index 838f76a..7735a3f 100644
---- a/lua/otter/init.lua
-+++ b/lua/otter/init.lua
-@@ -238,11 +238,12 @@ M.activate = function(languages, completion, diagnostics, tsquery, preambles, po
-       )
+diff --git a/lua/otter/keeper.lua b/lua/otter/keeper.lua
+index 479cd3a..93d9a04 100644
+--- a/lua/otter/keeper.lua
++++ b/lua/otter/keeper.lua
+@@ -24,10 +24,20 @@ end
+ 
+ local function range_contains(outer, inner)
+   return pos_le(outer.from, inner.from) and pos_le(inner.to, outer.to)
+ end
+ 
++---Resolve a treesitter-injected language name to the otter language that
++---should back it. This allows specialized injected parsers (e.g. `styled`
++---for styled-components/linaria CSS-in-JS) to be backed by a general-purpose
++---language server (e.g. `css`) via `OtterConfig.aliases`.
++---@param lang string injected treesitter language
++---@return string otter_lang
++local function resolve_lang(lang)
++  return (OtterConfig.aliases and OtterConfig.aliases[lang]) or lang
++end
++
+ ---@class Raft
+ ---@field languages string[]
+ ---@field buffers table<string, integer>
+ ---@field paths table<string, string>
+ ---@field preambles table<string, string[]>
+@@ -152,17 +162,23 @@ keeper.extract_code_chunks = function(main_nr, target_lang, exclude_eval_false,
+   local lang_trees = {}
+   collect_injected_trees(parser, lang_trees)
+ 
+   -- Process each injected language
+   for lang, tree in pairs(lang_trees) do
++    -- Resolve to the otter language that should back this injection.
++    -- Specialized injected grammars (e.g. `styled`) can be aliased to a
++    -- general-purpose language (e.g. `css`) via `OtterConfig.aliases`.
++    local olang = resolve_lang(lang)
++
+     -- Skip if we're filtering for a specific language and this isn't it
+-    if target_lang ~= nil and lang ~= target_lang then
++    -- (compare against the resolved otter language)
++    if target_lang ~= nil and olang ~= target_lang then
+       goto continue_lang
      end
  
-     -- or if requested set the filetype
-     if OtterConfig.buffers.set_filetype then
--      api.nvim_set_option_value("filetype", lang, { buf = otter_nr })
-+      local filetype = OtterConfig.filetype_aliases[lang] or lang
-+      api.nvim_set_option_value("filetype", filetype, { buf = otter_nr })
-     else
-       local function get_aucmds(group)
-         return api.nvim_get_autocmds({ group = group, pattern = lang })
-       end
+     -- Skip if this language isn't in our injectable languages list
+-    if not fn.contains(OtterConfig.injectable_languages, lang) then
++    if not fn.contains(OtterConfig.injectable_languages, olang) then
+       goto continue_lang
+     end
  
-diff --git a/lua/otter/lsp/handlers.lua b/lua/otter/lsp/handlers.lua
-index b09a8ad..31d614c 100644
---- a/lua/otter/lsp/handlers.lua
-+++ b/lua/otter/lsp/handlers.lua
-@@ -232,10 +232,11 @@ end
- ---@param ctx lsp.HandlerContext
- ---@return lsp.ResponseError
- ---@return vim.lsp.CompletionResult?
- ---@return lsp.HandlerContext
- M[ms.textDocument_completion] = function(err, response, ctx)
-+  -- vim.print("M[ms.textDocument_completion]", err, response, ctx)
-   if not response then
-     return err, response, ctx
+     -- Process all trees for this language
+     for _, lang_tree in ipairs(tree) do
+@@ -200,18 +216,18 @@ keeper.extract_code_chunks = function(main_nr, target_lang, exclude_eval_false,
+             table.remove(lines, #lines)
+           end
+ 
+           local result = {
+             range = { from = { start_row, start_col }, to = { end_row, end_col } },
+-            lang = lang,
++            lang = olang,
+             text = lines,
+           }
+ 
+-          if code_chunks[lang] == nil then
+-            code_chunks[lang] = {}
++          if code_chunks[olang] == nil then
++            code_chunks[olang] = {}
+           end
+-          table.insert(code_chunks[lang], result)
++          table.insert(code_chunks[olang], result)
+ 
+           ::continue_region::
+         end
+       end
+     end
+@@ -335,12 +351,17 @@ keeper.get_current_language_context = function(main_nr, position)
+   if lang == main_lang then
+     -- We're in the main document, not in an injected region
+     return nil
    end
-   ctx.params.textDocument.uri = ctx.params.otter.main_uri
-   ctx.bufnr = ctx.params.otter.main_nr
+ 
++  -- Resolve the injected language to the otter language that should back it.
++  -- Specialized injected grammars (e.g. `styled`) can be aliased to a
++  -- general-purpose language (e.g. `css`) via `OtterConfig.aliases`.
++  local olang = resolve_lang(lang)
++
+   -- Check if this language is in our injectable languages list
+-  if not fn.contains(OtterConfig.injectable_languages, lang) then
++  if not fn.contains(OtterConfig.injectable_languages, olang) then
+     return nil
+   end
+ 
+   -- Find the specific region containing this position
+   local regions = lang_tree:included_regions()
+@@ -361,19 +382,19 @@ keeper.get_current_language_context = function(main_nr, position)
+         end
+ 
+         if in_region then
+           -- Adjust end_col for leading whitespace handling if needed
+           if OtterConfig.handle_leading_whitespace then
+-            local buf = keeper.rafts[main_nr].buffers[lang]
++            local buf = keeper.rafts[main_nr].buffers[olang]
+             if buf then
+               local lines = vim.api.nvim_buf_get_lines(buf, end_row - 1, end_row, false)
+               if lines[1] then
+                 end_col = #lines[1]
+               end
+             end
+           end
+-          return lang, start_row, start_col, end_row - 1, end_col
++          return olang, start_row, start_col, end_row - 1, end_col
+         end
+       end
+     end
+   end
+ 
+@@ -701,12 +722,15 @@ keeper.get_language_lines_around_cursor = function()
+   local main_lang = parser:lang()
+   if lang == main_lang then
+     return nil
+   end
+ 
++  -- Resolve the injected language to the otter language that should back it.
++  local olang = resolve_lang(lang)
++
+   -- Check if this language is in our injectable languages list
+-  if not fn.contains(OtterConfig.injectable_languages, lang) then
++  if not fn.contains(OtterConfig.injectable_languages, olang) then
+     return nil
+   end
+ 
+   -- Find the specific region containing this position and return its text
+   local regions = lang_tree:included_regions()
+diff --git a/lua/otter/lsp/init.lua b/lua/otter/lsp/init.lua
+index 96d58b4..d103a27 100644
+--- a/lua/otter/lsp/init.lua
++++ b/lua/otter/lsp/init.lua
+@@ -16,10 +16,62 @@ end
+ ---@field main_uri string?
+ ---@field otter_uri string?
+ 
+ local otterls = {}
+ 
++---Merge two LSP results returned by different language servers attached to the
++---same otter buffer. Completion lists are merged item-by-item (preserving the
++---isIncomplete flag so clients keep fetching). All other methods return a list
++---of locations/symbols/edits, so their results are concatenated. A non-list
++---result (e.g. a single Hover object) wins over a list and is kept as-is; if
++---both are non-list, the first one is kept.
++---@param method string lsp method
++---@param a table first result
++---@param b table second result
++---@return table merged
++local function merge_results(method, a, b)
++  if method == ms.textDocument_completion then
++    -- Normalize both into { isIncomplete = bool, items = [...] }
++    local function normalize(res)
++      if res.isIncomplete ~= nil then
++        return { isIncomplete = res.isIncomplete == true, items = res.items or {} }
++      elseif type(res) == "table" then
++        return { isIncomplete = false, items = res }
++      end
++      return { isIncomplete = false, items = {} }
++    end
++    local na = normalize(a)
++    local nb = normalize(b)
++    local items = {}
++    for _, item in ipairs(na.items) do
++      table.insert(items, item)
++    end
++    for _, item in ipairs(nb.items) do
++      table.insert(items, item)
++    end
++    return { isIncomplete = na.isIncomplete or nb.isIncomplete, items = items }
++  end
++
++  -- For list-returning methods (definition, references, documentSymbol, ...)
++  -- concatenate the results. If either side is not a list, keep the first
++  -- non-list result (e.g. Hover, or a single Location).
++  local function is_list(t)
++    return type(t) == "table" and (vim.islist(t) or t[1] ~= nil)
++  end
++  if is_list(a) and is_list(b) then
++    local merged = {}
++    for _, v in ipairs(a) do
++      table.insert(merged, v)
++    end
++    for _, v in ipairs(b) do
++      table.insert(merged, v)
++    end
++    return merged
++  end
++  return a
++end
++
+ --- @param main_nr integer main buffer
+ --- @param completion boolean should completion be enabled?
+ --- @return integer? client_id
+ otterls.start = function(main_nr, completion)
+   local main_uri = vim.uri_from_bufnr(main_nr)
+@@ -167,14 +219,54 @@ otterls.start = function(main_nr, completion)
+               includeDeclaration = true,
+             }
+           end
+           -- take care of potential indents
+           keeper.modify_position(params, main_nr, true, true)
+-          -- send the request to the otter buffer
++          -- send the request to the otter buffer and aggregate the responses
++          -- from all language servers attached to it before replying.
++          --
++          -- We must use buf_request_all (single aggregated callback) instead of
++          -- buf_request (per-client callback). Several language servers can be
++          -- attached to the same otter buffer (e.g. a css otter buffer may be
++          -- backed by cssls, tailwindcss and css_variables at once). With
++          -- buf_request the handler -- and therefore the client that issued the
++          -- request (e.g. blink.cmp) -- would be invoked once per responding
++          -- server. Completion clients resolve their async task on the first
++          -- invocation, so a fast server returning an empty list would win over
++          -- a slower server (e.g. cssls) that actually has the completions,
++          -- yielding no autocompletion at all. Aggregating all responses and
++          -- replying a single time fixes this.
++          --
+           -- modification of the response is done by our handler
+           -- and then passed on to the default handler or user-defined handler
+-          vim.lsp.buf_request(otter_nr, method, params, function(err, result, ctx)
++          vim.lsp.buf_request_all(otter_nr, method, params, function(responses)
++            -- responses is a table mapping client_id -> { err, result }
++            local merged_result = nil
++            local first_client_id = nil
++            for client_id, res in pairs(responses) do
++              if first_client_id == nil then
++                first_client_id = client_id
++              end
++              if res and res.result ~= nil then
++                if merged_result == nil then
++                  merged_result = res.result
++                else
++                  merged_result = merge_results(method, merged_result, res.result)
++                end
++              end
++            end
++
++            -- synthesize a handler context from the request params.
++            -- handlers rely on ctx.params.otter.* and ctx.params.textDocument
++            local ctx = {
++              params = params,
++              bufnr = otter_nr,
++              client_id = first_client_id,
++            }
++
++            local err = nil
++            local result = merged_result
+             if handlers[method] ~= nil then
+               err, result, ctx = handlers[method](err, result, ctx)
+             end
+             handler(err, result, ctx)
+           end)
+diff --git a/tests/init.lua b/tests/init.lua
+index f099fd8..d9bb004 100644
+--- a/tests/init.lua
++++ b/tests/init.lua
+@@ -41,10 +41,11 @@ function M.ensure_parsers()
+     "html",
+     "css",
+     "rust",
+     "nix",
+     "vim",
++    "styled",
+     -- norg parser is provided by tree-sitter-norg plugin, not nvim-treesitter
+   }
+ 
+   -- Check which parsers need to be installed
+   local to_install = {}

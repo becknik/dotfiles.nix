@@ -10,13 +10,10 @@
     });
 
     settings = {
-      extensions.styled = "css";
-      filetype_aliases.styled = "css";
       buffers = {
-        preambles.styled = [ "_ {" ];
-        postambles.styled = [ "}" ];
+        preambles.css = [ "_ {" ];
+        postambles.css = [ "}" ];
       };
     };
   };
-
 }
