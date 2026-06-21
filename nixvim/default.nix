@@ -61,6 +61,20 @@
         plugins = true;
         excludedPlugins = with pkgs.vimPlugins; [ ];
       };
+
+      combinePlugins = {
+        enable = true;
+        standalonePlugins = [
+          "telescope.nvim"
+          "typst-preview.nvim"
+          "nvim-tree.lua"
+          "conform.nvim"
+          "oil.nvim"
+          "mini.nvim"
+          "async.nvim"
+          "copilot.lua"
+        ];
+      };
     };
 
     editorconfig.enable = true;
