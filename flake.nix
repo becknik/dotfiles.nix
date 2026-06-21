@@ -9,13 +9,15 @@
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    # https://discourse.nixos.org/t/unstable-fails-to-build-stable-ok-flakes/67837
     lix = {
-      url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
+      # https://git.lix.systems/lix-project/lix/tags
+      url = "https://git.lix.systems/lix-project/lix/archive/2.95.3.tar.gz";
       flake = false;
     };
     lix-module = {
-      url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
+      # https://git.lix.systems/lix-project/nixos-module/commits/branch/main
+      # url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/1688100bba140492658d597f6b307c327f35c780.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.lix.follows = "lix";
     };
