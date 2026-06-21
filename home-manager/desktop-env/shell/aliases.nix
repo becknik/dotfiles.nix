@@ -1,10 +1,9 @@
-{
-  mkFlakeDir,
-  userName,
-  config,
-  lib,
-  pkgs,
-  ...
+{ mkFlakeDir
+, userName
+, config
+, lib
+, pkgs
+, ...
 }:
 
 {
@@ -79,6 +78,6 @@
       sgds = "sgd --staged";
 
       # Commands
-      initlua = "tail -c 59 /etc/profiles/per-user/${userName}/bin/nvim | cut -d\" \" -f1";
+      initlua = ''tail -c 306 /etc/profiles/per-user/${userName}/bin/nvim | cut -d "'" -f3 | head -1 | cut -c 1-52'';
     };
 }
