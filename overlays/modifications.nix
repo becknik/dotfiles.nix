@@ -10,7 +10,7 @@ final: prev: {
     }
   );
 
-  pure-prompt-patched = prev.pure-prompt.overrideAttrs (oldAttrs: {
+  pure-prompt-patched = prev.unstable.pure-prompt.overrideAttrs (oldAttrs: {
     patches = [ ./modifications/pure-prompt.patch ];
   });
 
@@ -56,6 +56,50 @@ final: prev: {
   # FIXME remove when tests are working again
   gxml = prev.gxml.overrideAttrs (oldAttrs: {
     doCheck = false;
+  });
+  brscan5 = prev.brscan5.overrideAttrs (old: rec {
+    version = "1.5.1-0";
+
+    src =
+      {
+        "x86_64-linux" = prev.fetchurl {
+          url = "https://download.brother.com/welcome/dlf104033/brscan5-${version}.amd64.deb";
+          hash = "sha256-f/G+bkBycoQ7Qd2/BYieoQzxa4MHKkKfj7RD9N2kGtg=";
+        };
+      }
+      ."${prev.stdenv.hostPlatform.system}"
+        or (throw "Unsupported system: ${prev.stdenv.hostPlatform.system}");
+
+    postPatch =
+      let
+        system = prev.stdenv.hostPlatform.system;
+        myPatchElf = file: ''
+          patchelf --set-interpreter \
+            ${prev.stdenv.cc.libc}/lib/ld-linux${prev.lib.optionalString prev.stdenv.hostPlatform.is64bit "-x86-64"}.so.2 \
+            ${file}
+        '';
+        patchOffsetBytes =
+          if system == "x86_64-linux" then 87056 else throw "Unsupported system: ${system}";
+      in
+      ''
+        ${myPatchElf "opt/brother/scanner/brscan5/brsaneconfig5"}
+        ${myPatchElf "opt/brother/scanner/brscan5/brscan_cnetconfig"}
+        ${myPatchElf "opt/brother/scanner/brscan5/brscan_gnetconfig"}
+
+        for file in opt/brother/scanner/brscan5/*.so.* opt/brother/scanner/brscan5/brscan_[cg]netconfig; do
+          if ! test -L $file; then
+            patchelf --set-rpath ${prev.lib.makeLibraryPath old.buildInputs} $file
+          fi
+        done
+
+        printf '/etc/opt/brother/scanner/models\x00' | dd of=opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 bs=1 seek=${toString patchOffsetBytes} conv=notrunc
+
+        sed -i -e '/^SYSFS/d' opt/brother/scanner/brscan5/udev-rules/*.rules
+      '';
+
+    installPhase =
+      builtins.replaceStrings [ "libLxBsScanCoreApi.so.3.2.0" ] [ "libLxBsScanCoreApi.so.3.2.1" ]
+        old.installPhase;
   });
 
   # Own Packages
