@@ -1,6 +1,6 @@
 { inputs, config, ... }:
 
-{
+rec {
   default = final: prev: {
     lib = prev.lib // {
       custom = rec {
@@ -27,9 +27,15 @@
   };
 
   nixpkgs-unstable = final: _prev: {
+    # Apply the overlays to the unstable nixpkgs import so that packages consumed by nixvim also receive them
     unstable = import inputs.nixpkgs-unstable {
       inherit config;
       system = final.system;
+      overlays = [
+        default
+        modifications
+        neovim
+      ];
     };
   };
 
@@ -44,4 +50,6 @@
     };
 
   modifications = (import ./modifications.nix { inherit inputs; });
+
+  neovim = import ./neovim;
 }

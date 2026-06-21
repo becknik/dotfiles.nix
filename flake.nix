@@ -246,7 +246,14 @@
             overlays = [ inputs.nix-webapps.overlays.lib ];
             # overlays = builtins.attrValues inputs.nix-webapps.overlays;
           };
-          pkgs-unstable = import nixpkgs-unstable { inherit system config; };
+          pkgs-unstable = import nixpkgs-unstable {
+            inherit system config;
+            overlays = with self.overlays; [
+              default
+              modifications
+              neovim
+            ];
+          };
           nixvim' = inputs.nixvim.legacyPackages.${system};
         in
         import ./pkgs {

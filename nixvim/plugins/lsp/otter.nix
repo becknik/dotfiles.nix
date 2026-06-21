@@ -3,11 +3,7 @@
 {
   plugins.otter = {
     enable = true;
-    package = pkgs.vimPlugins.otter-nvim.overrideAttrs (old: {
-      patches = old.patches or [ ] ++ [
-        ./otter-filetype-alias-for-styled-components.patch
-      ];
-    });
+    package = pkgs.vimPlugins.otter-nvim;
 
     settings = {
       buffers = {

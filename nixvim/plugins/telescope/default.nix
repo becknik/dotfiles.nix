@@ -8,9 +8,7 @@
 
   plugins.telescope = {
     enable = true;
-    package = pkgs.vimPlugins.telescope-nvim.overrideAttrs (oldAttrs: {
-      patches = [ ./telescope-fname.patch ];
-    });
+    package = pkgs.vimPlugins.telescope-nvim;
 
     settings = {
       defaults = {

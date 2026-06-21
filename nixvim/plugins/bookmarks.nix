@@ -1,4 +1,9 @@
-{ pkgs, withDefaultKeymapOptions, ... }:
+{
+  config,
+  pkgs,
+  withDefaultKeymapOptions,
+  ...
+}:
 
 {
   # https://github.com/LintaoAmons/bookmarks.nvim?tab=readme-ov-file#install-and-config
@@ -11,11 +16,13 @@
         rev = "df3ff61bd1feb978a14e0591b53a126d5360a011";
         hash = "sha256-kO/n8JABYSq/tV0o82Sk+EivsVMe3oC8hGcvS8y2U2s=";
       };
-      dependencies = with pkgs.vimPlugins; [
-        sqlite-lua
-        plenary-nvim
-        telescope-nvim
-      ];
+      dependencies =
+        with pkgs.vimPlugins;
+        [
+          sqlite-lua
+          plenary-nvim
+        ]
+        ++ [ config.plugins.telescope.package ];
     })
   ];
 

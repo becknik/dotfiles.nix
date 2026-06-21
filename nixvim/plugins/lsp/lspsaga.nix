@@ -5,11 +5,7 @@
   # https://nvimdev.github.io/lspsaga/
   plugins.lspsaga = {
     enable = true;
-    package = pkgs.vimPlugins.lspsaga-nvim.overrideAttrs (old: {
-      patches = old.patches or [ ] ++ [
-        ./lspsaga-line-diagnostics-fix.patch
-      ];
-    });
+    package = pkgs.vimPlugins.lspsaga-nvim;
 
     settings = {
       code_action = {
