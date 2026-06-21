@@ -174,19 +174,19 @@
 
       # `nixpkgs-unstable'` varies between hosts due to target platform modification config on `dnix`
       defaultOverlays =
-        { nixpkgs-unstable' ? self.overlays.nixpkgs-unstable
-        ,
+        {
+          nixpkgs-unstable' ? self.overlays.nixpkgs-unstable,
         }:
-          with self.overlays;
-          [
-            default # Additions to `nixpkgs.lib`
-            nixpkgs-unstable'
-            modifications
-            additions # contents of ./pkgs
-          ]
-          ++ (with inputs; [
-            nix-webapps.overlays.lib
-          ]);
+        with self.overlays;
+        [
+          default # Additions to `nixpkgs.lib`
+          nixpkgs-unstable'
+          modifications
+          additions # contents of ./pkgs
+        ]
+        ++ (with inputs; [
+          nix-webapps.overlays.lib
+        ]);
 
       # Default system specialArgs
       args = userName: {
@@ -203,10 +203,11 @@
 
       # home-manager config generation function
       mkHomeManagerConf =
-        { system
-        , isLaptop
-        , userName
-        , ...
+        {
+          system,
+          isLaptop,
+          userName,
+          ...
         }:
         {
           home-manager = {
@@ -416,7 +417,7 @@
 
                   # https://devenv.sh/reference/options/#git-hookshooks
                   git-hooks.hooks = {
-                    nixpkgs-fmt.enable = true;
+                    nixfmt.enable = true;
                   };
 
                   scripts.update-fetchgit.exec = builtins.readFile ./update-fetchgit.sh;

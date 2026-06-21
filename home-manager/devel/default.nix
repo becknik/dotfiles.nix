@@ -1,5 +1,6 @@
-{ pkgs
-, ...
+{
+  pkgs,
+  ...
 }:
 
 {
@@ -26,13 +27,12 @@
       mkWhenNotDarwin = pkg: (if pkgs.stdenv.isDarwin then pkgs.hello else pkg);
 
       jetbrainsTools =
-        lib.lists.optionals (!pkgs.stdenv.isDarwin)
-          (
-            with unstable.jetbrains;
-            [
-              idea
-            ]
-          )
+        lib.lists.optionals (!pkgs.stdenv.isDarwin) (
+          with unstable.jetbrains;
+          [
+            idea
+          ]
+        )
         # not using unstable.jetbrains-toolbox because it depends on too much & I'm not using it that often
         ++ lib.lists.optionals (!pkgs.stdenv.isDarwin) [ jetbrains-toolbox ] # used for experiments
         ++ lib.lists.optionals (!pkgs.stdenv.isDarwin) [ android-tools ];
