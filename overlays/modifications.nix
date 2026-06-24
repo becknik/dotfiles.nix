@@ -102,6 +102,48 @@ final: prev: {
         old.installPhase;
   });
 
+  # `vscode-langservers-extracted` bundles the css/html/json language servers via
+  # `npx babel`, which produces hybrid CJS+ESM files: they use `require(...)` at the
+  # top but also reference `import.meta.url` / `import.meta.dirname`. Node 22+ detects
+  # the ESM-only `import.meta` syntax and loads these files as ES modules, where
+  # `require` is undefined -> the server crashes immediately with
+  # `ReferenceError: require is not defined in ES module scope` (exit code 1, signal 0).
+  # In Neovim's lsp.log this surfaces as a giant dump of the minified server source
+  # followed by `Node.js v<version>`.
+  #
+  # Fix: rewrite the ESM-only `import.meta.*` references to their CJS equivalents so
+  # Node loads the files as plain CommonJS, and rename them to `.cjs` to make the
+  # intent explicit. The `eslint` server is pure CJS already and is left untouched.
+  # Upstream is unmaintained (last release 4.10.0, 2024), so this is patched locally.
+  vscode-langservers-extracted = prev.vscode-langservers-extracted.overrideAttrs (old: {
+    preInstall = (old.preInstall or "") + ''
+      # Only the babel-generated css/html/json server mains use `import.meta`.
+      for entry in \
+        lib/css-language-server/node/cssServerMain.js \
+        lib/html-language-server/node/htmlServerMain.js \
+        lib/json-language-server/node/jsonServerMain.js
+      do
+        [ -f "$entry" ] || continue
+        # `import.meta.url`     -> a `file://` URL, which is what `createRequire` expects
+        substituteInPlace "$entry" \
+          --replace "import.meta.url" "require(\"url\").pathToFileURL(__filename).href"
+        # `import.meta.dirname` -> the CJS directory of the current file
+        substituteInPlace "$entry" \
+          --replace "import.meta.dirname" "__dirname"
+        # Force CommonJS loading so Node never routes through `loadESMFromCJS`.
+        mv "$entry" "''${entry%.js}.cjs"
+      done
+
+      # Point the bin shims at the renamed `.cjs` entry files.
+      substituteInPlace bin/vscode-css-language-server \
+        --replace "cssServerMain.js" "cssServerMain.cjs"
+      substituteInPlace bin/vscode-html-language-server \
+        --replace "htmlServerMain.js" "htmlServerMain.cjs"
+      substituteInPlace bin/vscode-json-language-server \
+        --replace "jsonServerMain.js" "jsonServerMain.cjs"
+    '';
+  });
+
   # Own Packages
 
   ## Linux Kernel
