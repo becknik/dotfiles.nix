@@ -1,0 +1,99 @@
+diff --git a/lua/glance/lsp.lua b/lua/glance/lsp.lua
+index b2f81d5..751fd59 100644
+--- a/lua/glance/lsp.lua
++++ b/lua/glance/lsp.lua
+@@ -2,51 +2,63 @@ local utils = require('glance.utils')
+ 
+ local M = {}
+ 
+ local function create_handler(method)
+   return function(bufnr, params, cb)
+-    local _client_request_ids, cancel_all_requests, client_request_ids
++    -- Initialize to safe defaults so that an in-process LSP client
++    -- (e.g. one with a Lua `cmd` that calls back synchronously) cannot
++    -- observe nil upvalues before vim.lsp.buf_request returns.
++    local _client_request_ids = {}
++    local cancel_all_requests = function() end
++    local client_request_ids
+ 
+     _client_request_ids, cancel_all_requests = vim.lsp.buf_request(
+       bufnr,
+       method.lsp_method,
+       params,
+       function(err, result, ctx)
+-        if not client_request_ids then
+-          -- do a copy of the table we don't want
+-          -- to mutate the original table
+-          client_request_ids =
+-            vim.tbl_deep_extend('keep', _client_request_ids, {})
+-        end
++        -- Defer so that this handler always runs after buf_request
++        -- has finished iterating every client attached to the buffer.
++        -- Without this, an in-process client responding synchronously
++        -- could trigger `cb({})` (no-results) prematurely, before
++        -- other (async) clients have a chance to respond.
++        vim.schedule(function()
++          if not client_request_ids then
++            -- do a copy of the table we don't want
++            -- to mutate the original table
++            client_request_ids =
++              vim.tbl_deep_extend('keep', _client_request_ids, {})
++          end
+ 
+-        -- Don't log an error when LSP method is non-standard
+-        if err and not method.non_standard then
+-          utils.error(
+-            ('An error happened requesting %s: %s'):format(
+-              method.label,
+-              err.message
++          -- Don't log an error when LSP method is non-standard
++          if err and not method.non_standard then
++            utils.error(
++              ('An error happened requesting %s: %s'):format(
++                method.label,
++                err.message
++              )
+             )
+-          )
+-        end
++          end
+ 
+-        if result == nil or vim.tbl_isempty(result) then
+-          client_request_ids[ctx.client_id] = nil
+-        else
+-          cancel_all_requests()
+-          result = (
+-            vim.fn.has('nvim-0.10.0') == 1 and vim.islist(result)
+-            or vim.tbl_islist(result)
+-          )
+-              and result
+-            or { result }
++          if result == nil or vim.tbl_isempty(result) then
++            client_request_ids[ctx.client_id] = nil
++          else
++            cancel_all_requests()
++            result = (
++              vim.fn.has('nvim-0.10.0') == 1 and vim.islist(result)
++              or vim.tbl_islist(result)
++            )
++                and result
++              or { result }
+ 
+-          return cb(result, ctx)
+-        end
++            return cb(result, ctx)
++          end
+ 
+-        if vim.tbl_isempty(client_request_ids) then
+-          cb({})
+-        end
++          if vim.tbl_isempty(client_request_ids) then
++            cb({})
++          end
++        end)
+       end
+     )
+   end
+ end
+ 
+

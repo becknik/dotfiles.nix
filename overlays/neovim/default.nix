@@ -31,6 +31,12 @@ final: prev: {
         ];
       });
 
+      glance-nvim = super.glance-nvim.overrideAttrs (old: {
+        patches = old.patches or [ ] ++ [
+          ./glance-otter-lsp-interplay.patch
+        ];
+      });
+
       indent-blankline-nvim = super.indent-blankline-nvim.overrideAttrs (oldAttrs: {
         src = prev.fetchFromGitHub {
           owner = "MomePP";
