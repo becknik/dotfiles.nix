@@ -341,6 +341,9 @@
           # shellharden.types = [ "bash"];
           # shellharden.command = lib.getExe pkgs.shellharden;
 
+          dockerfmt.types = "dockerfile";
+          dockerfmt.command = lib.getExe pkgs.dockerfmt;
+
           # general purpose scripting
 
           stylua.types = "lua";
