@@ -30,8 +30,10 @@
     enable = true;
     onActivation = {
       autoUpdate = true;
-      cleanup = "zap";
       upgrade = true;
+      # https://github.com/nix-darwin/nix-darwin/issues/1787
+      # cleanup = "zap";
+      # extraFlags = [ "--force-cleanup" ];
     };
     # nix packages sadly not working with x86_64-darwin
     # brew tap homebrew/cask-fonts

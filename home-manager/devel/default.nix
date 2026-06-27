@@ -49,7 +49,7 @@
 
       ## Testing
       httpie
-      pgadmin4-desktopmode
+      (mkWhenNotDarwin pgadmin4-desktopmode)
 
       ## OCI Containers
       dive # https://github.com/wagoodman/dive
@@ -58,8 +58,8 @@
       unstable.cook-cli
 
       ## Arduino
-      arduino-cli
-      arduino-ide
+      (mkWhenNotDarwin arduino-cli)
+      (mkWhenNotDarwin arduino-ide)
     ]
     ++ [ nixvim ];
 

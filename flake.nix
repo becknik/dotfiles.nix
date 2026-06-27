@@ -384,6 +384,7 @@
                       unstable = import inputs.nixpkgs-unstable {
                         inherit config;
                         system = final.system;
+                        overlays = with self.overlays; [ default neovim ];
                       };
                     })
                     # error: A definition for option `nixpkgs.overlays."[definition 1-entry 1]"' is not of type `nixpkgs overlay'. Definition values:
