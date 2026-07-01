@@ -501,8 +501,10 @@
           bash = 'sh',
 
           python = 'py',
+
           javascript = 'js',
           typescript = 'ts',
+          styled = 'css',
 
           c_sharp = 'cs',
           elixir = 'exs',

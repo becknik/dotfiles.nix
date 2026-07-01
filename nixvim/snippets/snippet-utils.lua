@@ -70,8 +70,10 @@ function M.insert_snippets(snippets, snippet_tuples, options)
     end
 
     if options.const_declaration then
-      local snip_context =
-        { trig = ("c" .. snip[1].trig), name = ("declaration with" .. snip[1].name) }
+      local snip_context = {
+        trig = ("c" .. snip[1].trig),
+        name = ("declaration with" .. snip[1].name),
+      }
       local snip_const = function()
         return fmta("const <> = <>;", {
           i(1, "name"),
@@ -106,14 +108,19 @@ end
 -- @param snip: string[]
 -- @param callback? fun(): any
 -- @param to_props: boolean
-function M.typescript_function_params_to_type_props(content, callback, from_props)
+function M.typescript_function_params_to_type_props(
+  content,
+  callback,
+  from_props
+)
   local index = 1
   local params = {}
 
   for parameter, type in
     string.gmatch(
       table.concat(content, "\n"),
-      '([%l_][%w_]*)%s*:%s*([%w_%[%]{}<>|,?" ]+)' .. (not from_props and "," or ";")
+      '([%l_][%w_]*)%s*:%s*([%w_%[%]{}<>|,?" ]+)'
+        .. (not from_props and "," or ";")
     )
   do
     if not from_props then
@@ -139,6 +146,40 @@ function M.typescript_function_params_to_type_props(content, callback, from_prop
   end
 
   return params
+end
+
+function M.addMissingImports(node)
+  vim.lsp.buf.code_action {
+    context = { only = { "source.addMissingImports" } },
+    apply = true,
+    filter = function(_, client_id)
+      local client = vim.lsp.get_client_by_id(client_id)
+      return client and (client.name == "tsserver" or client.name == "vtsls")
+        or false
+    end,
+  }
+end
+
+function M.selection_or(text, transformation_callback)
+  return function(_, snip)
+    local snippets_text = text
+    local fn = i
+
+    if
+      #snip.env.TM_SELECTED_TEXT ~= 0
+      and snip.env.TM_SELECTED_TEXT ~= "$TM_SELECTED_TEXT"
+    then
+      snippets_text = snip.env.TM_SELECTED_TEXT
+      fn = t
+    end
+
+    snippets_text = transformation_callback
+        and transformation_callback(snippets_text)
+      or snippets_text
+
+    return not snippets_text and sn(nil, i(1, snippets_text))
+      or sn(nil, { fn(snippets_text), i(1) })
+  end
 end
 
 return M

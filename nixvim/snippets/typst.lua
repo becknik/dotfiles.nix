@@ -2,15 +2,6 @@
 -- https://github.com/rafamadriz/friendly-snippets/blob/main/snippets/javascript/react-ts.json
 -- https://github.com/rafamadriz/friendly-snippets/blob/main/snippets/javascript/javascript.json
 
-package.path = debug.getinfo(1, "S").source:match "@(.*/)"
-  .. "?.lua;"
-  .. package.path
-
----@class SnippetUtils
-local utils = require ".snippet-utils"
----@class TreesitterUtils
-local ts_utils = require ".treesitter-snippet-utils"
-
 local ls = require "luasnip"
 local s = ls.snippet
 local sn = ls.snippet_node
@@ -40,27 +31,14 @@ local parse = require("luasnip.util.parser").parse_snippet
 local ms = ls.multi_snippet
 local k = require("luasnip.nodes.key_indexer").new_key
 
+package.path = debug.getinfo(1, "S").source:match "@(.*/)"
+  .. "?.lua;"
+  .. package.path
+
+---@class SnippetUtils
+local utils = require ".snippet-utils"
+
 local snippets = {}
-
-local function selection_or(text, transformation_callback)
-  return function(_, snip)
-    local snippets_text = text
-
-    if
-      #snip.env.TM_SELECTED_TEXT ~= 0
-      and snip.env.TM_SELECTED_TEXT ~= "$TM_SELECTED_TEXT"
-    then
-      snippets_text = snip.env.TM_SELECTED_TEXT
-    end
-
-    snippets_text = transformation_callback
-        and transformation_callback(snippets_text)
-      or snippets_text
-
-    return not snippets_text and sn(nil, i(1, snippets_text))
-      or sn(nil, { t(snippets_text), i(1) })
-  end
-end
 
 local function convert_reference_to_label(text)
   if not text or not text[1] or text[1]:len() <= 2 then return "" end
@@ -78,7 +56,7 @@ vim.list_extend(snippets, {
   s(
     { trig = "c", name = "comment inline" },
     fmta("/* <> */", {
-      d(1, selection_or "comment"),
+      d(1, utils.selection_or "comment"),
     })
   ),
 
@@ -87,44 +65,44 @@ vim.list_extend(snippets, {
   s(
     { trig = "em", name = "emph" },
     fmta("#emph[<>]", {
-      d(1, selection_or()),
+      d(1, utils.selection_or()),
     })
   ),
   s(
     { trig = "it", name = "emph (alias)" },
     fmta("#emph[<>]", {
-      d(1, selection_or()),
+      d(1, utils.selection_or()),
     })
   ),
   s(
     { trig = "quote", name = "quote" },
     fmta("#quote[<>]", {
-      d(1, selection_or()),
+      d(1, utils.selection_or()),
     })
   ),
   s(
     { trig = "enquote", name = "quote (alias)" },
     fmta("#quote[<>]", {
-      d(1, selection_or()),
+      d(1, utils.selection_or()),
     })
   ),
   s(
     { trig = "cite", name = "cite" },
     fmta("#cite(<>)", {
-      d(1, selection_or(nil, convert_reference_to_label)),
+      d(1, utils.selection_or(nil, convert_reference_to_label)),
     })
   ),
   s(
     { trig = "citef", name = "cite with form" },
     fmta('#cite(<>, form: "<>")', {
-      d(1, selection_or(nil, convert_reference_to_label)),
+      d(1, utils.selection_or(nil, convert_reference_to_label)),
       i(2, "author"),
     })
   ),
   s(
     { trig = "ref", name = "ref" },
     fmta("#ref(<>)", {
-      d(1, selection_or(nil, convert_reference_to_label)),
+      d(1, utils.selection_or(nil, convert_reference_to_label)),
     })
   ),
 })

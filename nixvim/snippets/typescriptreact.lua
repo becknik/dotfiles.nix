@@ -27,6 +27,8 @@ local parse = require("luasnip.util.parser").parse_snippet
 local ms = ls.multi_snippet
 local k = require("luasnip.nodes.key_indexer").new_key
 
+local helpers = require("luasnip.nodes.key_indexer").new_key
+
 package.path = debug.getinfo(1, "S").source:match "@(.*/)"
   .. "?.lua;"
   .. package.path
@@ -37,18 +39,6 @@ local utils = require ".snippet-utils"
 local globals_js = require "..javascript.globals"
 
 local snippets = {}
-
-local function addMissingImports(node)
-  vim.lsp.buf.code_action {
-    context = { only = { "source.addMissingImports" } },
-    apply = true,
-    filter = function(_, client_id)
-      local client = vim.lsp.get_client_by_id(client_id)
-      return client and (client.name == "tsserver" or client.name == "vtsls")
-        or false
-    end,
-  }
-end
 
 -- NOTE: snippets start here
 
@@ -168,7 +158,7 @@ vim.list_extend(snippets, {
     {
       callbacks = {
         [1] = {
-          [events.leave] = addMissingImports,
+          [events.leave] = utils.addMissingImports,
         },
       },
     }
@@ -209,7 +199,7 @@ vim.list_extend(snippets, {
     {
       callbacks = {
         [1] = {
-          [events.leave] = addMissingImports,
+          [events.leave] = utils.addMissingImports,
         },
       },
     }
@@ -238,7 +228,7 @@ vim.list_extend(snippets, {
     {
       callbacks = {
         [1] = {
-          [events.leave] = addMissingImports,
+          [events.leave] = utils.addMissingImports,
         },
       },
     }
@@ -259,7 +249,7 @@ vim.list_extend(snippets, {
     {
       callbacks = {
         [1] = {
-          [events.leave] = addMissingImports,
+          [events.leave] = utils.addMissingImports,
         },
       },
     }
@@ -282,7 +272,7 @@ vim.list_extend(snippets, {
     {
       callbacks = {
         [1] = {
-          [events.leave] = addMissingImports,
+          [events.leave] = utils.addMissingImports,
         },
       },
     }
@@ -305,7 +295,7 @@ vim.list_extend(snippets, {
     {
       callbacks = {
         [1] = {
-          [events.leave] = addMissingImports,
+          [events.leave] = utils.addMissingImports,
         },
       },
     }
@@ -323,7 +313,7 @@ vim.list_extend(snippets, {
     {
       callbacks = {
         [1] = {
-          [events.leave] = addMissingImports,
+          [events.leave] = utils.addMissingImports,
         },
       },
     }
@@ -337,7 +327,7 @@ vim.list_extend(snippets, {
     {
       callbacks = {
         [1] = {
-          [events.leave] = addMissingImports,
+          [events.leave] = utils.addMissingImports,
         },
       },
     }
@@ -356,7 +346,7 @@ vim.list_extend(snippets, {
     {
       callbacks = {
         [0] = {
-          [events.enter] = addMissingImports,
+          [events.enter] = utils.addMissingImports,
         },
       },
     }
@@ -380,7 +370,7 @@ vim.list_extend(snippets, {
     {
       callbacks = {
         [1] = {
-          [events.leave] = addMissingImports,
+          [events.leave] = utils.addMissingImports,
         },
       },
     }
@@ -413,7 +403,7 @@ vim.list_extend(snippets, {
     {
       callbacks = {
         [1] = {
-          [events.leave] = addMissingImports,
+          [events.leave] = utils.addMissingImports,
         },
       },
     }
@@ -443,7 +433,7 @@ vim.list_extend(snippets, {
     {
       callbacks = {
         [1] = {
-          [events.leave] = addMissingImports,
+          [events.leave] = utils.addMissingImports,
         },
       },
     }
@@ -459,7 +449,7 @@ vim.list_extend(snippets, {
     {
       callbacks = {
         [1] = {
-          [events.leave] = addMissingImports,
+          [events.leave] = utils.addMissingImports,
         },
       },
     }

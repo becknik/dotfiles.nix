@@ -9,6 +9,8 @@ in
 
     settings = {
       enable_autosnippets = true;
+      # https://github.com/L3MON4D3/LuaSnip/issues/1386
+      ft_func.__raw = "require('luasnip.extras.filetype_functions').from_cursor_pos";
     };
 
     fromLua = [
