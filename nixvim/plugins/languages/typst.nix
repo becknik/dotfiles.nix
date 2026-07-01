@@ -15,8 +15,7 @@
         websocat = "${lib.getExe config.dependencies.websocat.package}";
       };
       follow_cursor = false;
-      extra_args = [ "--partial-rendering=true" ];
-      port = 8000;
+      extra_args = [ "--verbose" ];
 
       get_main_file.__raw = ''
         function()
