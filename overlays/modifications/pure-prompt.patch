@@ -5,19 +5,6 @@ diff --git a/pure.zsh b/pure.zsh
 index 0f287cb..e606192 100644
 --- a/pure.zsh
 +++ b/pure.zsh
-@@ -226,11 +226,11 @@ prompt_pure_preprompt_render() {
- 	)
- 	local prompt_fingerprint="${(pj:|:)${(@qqq)prompt_fingerprint_parts}}"
- 
- 	if [[ $1 == precmd ]]; then
- 		# Initial newline, for spaciousness.
--		print
-+		# print
- 	elif [[ $prompt_pure_last_prompt != $prompt_fingerprint ]]; then
- 		# Redraw the prompt.
- 		prompt_pure_reset_prompt
- 	fi
- 
 @@ -1181,10 +1181,11 @@ prompt_pure_setup() {
  	PROMPT+='%(16V. %F{$prompt_pure_colors[git:action]}%16v%f.)'
  	PROMPT+='%(17V. %F{$prompt_pure_colors[git:arrow]}%17v%f.)'
