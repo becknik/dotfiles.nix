@@ -11,13 +11,14 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     lix = {
       # https://git.lix.systems/lix-project/lix/tags
-      url = "https://git.lix.systems/lix-project/lix/archive/2.95.3.tar.gz";
+      url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
+      # url = "https://git.lix.systems/lix-project/lix/archive/2.95.3.tar.gz";
       flake = false;
     };
     lix-module = {
       # https://git.lix.systems/lix-project/nixos-module/commits/branch/main
-      # url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
-      url = "https://git.lix.systems/lix-project/nixos-module/archive/1688100bba140492658d597f6b307c327f35c780.tar.gz";
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
+      # url = "https://git.lix.systems/lix-project/nixos-module/archive/1688100bba140492658d597f6b307c327f35c780.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.lix.follows = "lix";
     };
@@ -148,6 +149,7 @@
       config = {
         permittedInsecurePackages = [
           "electron-39.8.10"
+          "pnpm-9.15.9"
         ];
         allowUnfreePredicate =
           pkg:
@@ -169,6 +171,7 @@
             "idea"
             "code"
             "vscode"
+            "copilot-language-server"
             "blink-cmp-spell"
           ];
         joypixels.acceptLicense = true;
@@ -384,7 +387,10 @@
                       unstable = import inputs.nixpkgs-unstable {
                         inherit config;
                         system = final.system;
-                        overlays = with self.overlays; [ default neovim ];
+                        overlays = with self.overlays; [
+                          default
+                          neovim
+                        ];
                       };
                     })
                     # error: A definition for option `nixpkgs.overlays."[definition 1-entry 1]"' is not of type `nixpkgs overlay'. Definition values:
