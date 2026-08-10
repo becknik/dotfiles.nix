@@ -1,7 +1,8 @@
-{ config
-, pkgs
-, lib
-, ...
+{
+  config,
+  pkgs,
+  lib,
+  ...
 }:
 
 let
@@ -36,26 +37,36 @@ in
       # (or element of the defaultSopsFile, if it's set above)
 
       # Source: https://github.com/Mic92/sops-nix/blob/master/modules/home-manager/sops.nix
-      "ssh/github/becknik/public" = {
+      "ssh/github/becknik.pub" = {
         sopsFile = ./git.yaml;
         key = "github/becknik/public";
         path = "${config.home.homeDirectory}/.ssh/github-becknik.pub";
       };
-      "ssh/github/becknik/private" = {
+      "ssh/github/becknik" = {
         sopsFile = ./git.yaml;
         key = "github/becknik/private";
         path = "${config.home.homeDirectory}/.ssh/github-becknik";
       };
 
-      "ssh/gitlab/becknik/public" = {
+      "ssh/gitlab/becknik.pub" = {
         sopsFile = ./git.yaml;
         key = "gitlab/becknik/public";
         path = "${config.home.homeDirectory}/.ssh/gitlab-becknik.pub";
       };
-      "ssh/gitlab/becknik/private" = {
+      "ssh/gitlab/becknik" = {
         sopsFile = ./git.yaml;
         key = "gitlab/becknik/private";
         path = "${config.home.homeDirectory}/.ssh/gitlab-becknik";
+      };
+
+      "gpg/becknik.pub" = {
+        sopsFile = ./git.yaml;
+        key = "becknik/public";
+        path = "${config.home.homeDirectory}/.gpg/becknik";
+      };
+      "gpg/becknik.asc" = {
+        sopsFile = ./git.yaml;
+        key = "becknik/private";
       };
 
       # Creation of secrets from binaries: `sops -e ./desktop-env/gkeepass.key > ./desktop-env/secrets/keepassxc.yaml`
@@ -66,46 +77,41 @@ in
         sopsFile = ./keepassxc.key;
       };
 
-      "gpg/mail/proton/main-public" = {
+      "gpg/mail/proton/main.pub" = {
         sopsFile = ./mail.yaml;
         key = "proton/main/public";
-        path = "${config.home.homeDirectory}/.gpg/proton/main";
+        path = "${config.home.homeDirectory}/.gpg/proton/main.pub";
       };
-      "gpg/mail/proton/main-private" = {
+      "gpg/mail/proton/main.asc" = {
         sopsFile = ./mail.yaml;
         key = "proton/main/private";
       };
-      "mail/proton" = {
-        sopsFile = ./mail.yaml;
-        key = "proton/main/password";
-      };
-      "gpg/mail/proton/default-public" = {
+      "gpg/mail/proton/default.pub" = {
         sopsFile = ./mail.yaml;
         key = "proton/default/public";
-        path = "${config.home.homeDirectory}/.gpg/proton/default";
+        path = "${config.home.homeDirectory}/.gpg/proton/default.pub";
       };
-      "gpg/mail/proton/default-private" = {
+      "gpg/mail/proton/default.asc" = {
         sopsFile = ./mail.yaml;
         key = "proton/default/private";
       };
-      "gpg/mail/proton/official-public" = {
+      "gpg/mail/proton/official.pub" = {
         sopsFile = ./mail.yaml;
         key = "proton/official/public";
-        path = "${config.home.homeDirectory}/.gpg/proton/official";
+        path = "${config.home.homeDirectory}/.gpg/proton/official.pub";
       };
-      "gpg/mail/proton/official-private" = {
+      "gpg/mail/proton/official.asc" = {
         sopsFile = ./mail.yaml;
         key = "proton/official/private";
       };
 
-      "gpg/becknik/public" = {
-        sopsFile = ./git.yaml;
-        key = "becknik/public";
-        path = "${config.home.homeDirectory}/.gpg/becknik";
+      "backup/neo/secret.pub" = {
+        sopsFile = ./backup.yaml;
+        key = "neo-backup/public";
       };
-      "gpg/becknik/private" = {
-        sopsFile = ./git.yaml;
-        key = "becknik/private";
+      "backup/neo/secret.asc" = {
+        sopsFile = ./backup.yaml;
+        key = "neo-backup/private";
       };
     }
     // mail-secret-posteo
@@ -121,9 +127,9 @@ in
       })
       [
         "${config.home.homeDirectory}/.gpg/becknik"
-        "${config.home.homeDirectory}/.gpg/proton/main"
-        "${config.home.homeDirectory}/.gpg/proton/default"
-        "${config.home.homeDirectory}/.gpg/proton/official"
+        "${config.home.homeDirectory}/.gpg/proton/main.pub"
+        "${config.home.homeDirectory}/.gpg/proton/default.pub"
+        "${config.home.homeDirectory}/.gpg/proton/official.pub"
       ];
 
   systemd.user.services.sops-nix = {

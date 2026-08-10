@@ -59,6 +59,8 @@
           "nvim *"
           "gcmsg *" # oh-my-zsh `git commit -m` alias
           "export *"
+          "*sops *"
+          "*/run/user*"
         ];
         ignoreSpace = true; # Don'd add commands to history if first character is a space
         #save = 10000; # Amount of lines to save, the default
