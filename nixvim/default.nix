@@ -18,8 +18,15 @@
 
     # colorschemes.kanagawa.enable = true;
     colorschemes.rose-pine.enable = false;
-    colorschemes.oxocarbon.enable = true;
-    colorschemes.github-theme.enable = false;
+    colorschemes.oxocarbon.enable = false;
+    colorschemes.onedark = {
+      enable = true;
+      settings = {
+        # https://github.com/navarasu/onedark.nvim/#default-configuration
+        style = "darker";
+        lualine.transparent = true;
+      };
+    };
     # https://github.com/nyoom-engineering/nyoom.nvim
     # https://github.com/mcchrish/vim-no-color-collections
     extraConfigLua = ''
@@ -73,6 +80,7 @@
           "mini.nvim"
           "async.nvim"
           "copilot.lua"
+          "lualine.nvim"
         ];
       };
     };
