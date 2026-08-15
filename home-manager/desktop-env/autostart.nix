@@ -69,14 +69,16 @@ in
         '';
       };
 
-      "${protonmail-bridge-gui.pname}" = {
+      "${protonmail-bridge.pname}" = {
         enable = true;
-        target = ".config/autostart/${protonmail-bridge-gui.pname}.desktop";
+        target = ".config/autostart/${protonmail-bridge.pname}.desktop";
         text = ''
           [Desktop Entry]
           Type=Application
-          Name=${protonmail-bridge-gui.pname}
-          Exec=env QT_PLUGIN_PATH=${kdePackages.qtwayland}/lib/qt-6/plugins QML_IMPORT_PATH=${kdePackages.qtdeclarative}/lib/qt-6/qml:${kdePackages.qtquicktimeline}/lib/qt-6/qml/${kdePackages.qtsvg}:/lib/qt-6/plugins ${protonmail-bridge-gui}/lib/bridge-gui --no-window
+          Name=${protonmail-bridge.pname}
+          Exec=${lib.getExe protonmail-bridge} --noninteractive
+          StartupNotify=false
+          Terminal=false
           X-GNOME-Autostart-enabled=true
         '';
       };

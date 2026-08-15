@@ -1,5 +1,6 @@
-{ pkgs
-, ...
+{
+  pkgs,
+  ...
 }:
 
 {
@@ -44,9 +45,8 @@
     vesktop
     chromium-app-t3-chat
 
-    unstable.protonmail-bridge-gui
+    unstable.protonmail-bridge
     unstable.protonmail-desktop
-    unstable.proton-vpn
     unstable.proton-vpn-cli
 
     ## Media
