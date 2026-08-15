@@ -44,7 +44,6 @@
     threema-desktop
     teams-for-linux
     vesktop
-    chromium-app-t3-chat
 
     unstable.protonmail-bridge
     unstable.protonmail-desktop

@@ -1,8 +1,9 @@
-{ userName
-, isLaptop
-, config
-, lib
-, ...
+{
+  userName,
+  isLaptop,
+  config,
+  lib,
+  ...
 }:
 
 let
@@ -261,7 +262,6 @@ with lib.gvariant;
         "kitty.desktop"
         "org.kde.dolphin.desktop"
         "zen-beta.desktop"
-        "t3-chat.desktop"
         "chromium-browser.desktop"
         "org.keepassxc.KeePassXC.desktop"
         "obsidian.desktop"

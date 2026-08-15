@@ -54,7 +54,6 @@
       ## OCI Containers
       dive # https://github.com/wagoodman/dive
       trivy
-      (mkWhenNotDarwin figma-linux)
       unstable.cook-cli
 
       ## Arduino
