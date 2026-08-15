@@ -3,7 +3,6 @@
 {
   imports = [
     ./markdown.nix
-    ./vimtex.nix
     ./typst.nix
     ./css-modules.nix
     ./arduino.nix
