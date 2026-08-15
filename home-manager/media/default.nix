@@ -35,6 +35,7 @@
     tor-browser
     gpa
     magic-wormhole
+    qbittorrent-nox
 
     ## Chat Clients
     element-desktop
@@ -53,7 +54,6 @@
     kooha
     crosspipe
     system-config-printer # graphical ui for CUPS
-    transmission_4-gtk
     yt-dlp
     media-downloader # for yt-dlp
     localsend
